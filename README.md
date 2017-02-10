@@ -16,6 +16,7 @@ Try rebuilding the project on your programming environment, once you are done fi
 Once your project is ready here are some static variables you can change as per your Apps requirement.
 
 #### Permission variables
+
 ```java
 ASWP_JSCRIPT     = true;     // enable JavaScript for webview
 ASWP_FUPLOAD     = true;     // upload file from webview
@@ -38,3 +39,20 @@ Use "image/*" for image types; check file type references on web for more
 ```java
 ASWV_F_TYPE   = "*/*";
 ```
+
+## Author
+This project is initially developed by **Ghazi Khan**.
+
+Public Profiles:
+* [Infeeds](https://infeeds.com/@mgks)
+* [GitHub](https://github.com/mgks)
+* [Facebook](https://www.facebook.com/imgks)
+* [Twitter](https://twitter.com/getmgks)
+
+## License
+This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
+
+## Acknowledgment
+Rating method used in this app is developed by another author, whom I was unable to find on github as files were non-credited. Thanks to the programmer who did it.
+
+**A little note:** *You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming, that's the beauty of it. So, all the best for your next creation.*
