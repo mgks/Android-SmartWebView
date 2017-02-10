@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     static boolean ASWP_SFORM       = false;    //save form cache and auto-fill information
 
     //Configuration variables
-    private static String ASWV_URL      = "file:///android_res/raw/front.html"; //complete URL of your website or webpage
+    private static String ASWV_URL      = "http://mgks.infeeds.com"; //complete URL of your website or webpage
     private static String ASWV_F_TYPE   = "*/*";    //to upload any file type using "*/*"; check file type references for more
 
     //Careful with these variable names if altering
