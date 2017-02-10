@@ -12,6 +12,18 @@ The project requires minimum Android API 16+ (4.1 JellyBean) SDK to test. And yo
 ### Test Run
 Try rebuilding the project on your programming environment, once you are done fixing any error (incase if one came up), you'll be ready to look into the project.
 
+### Permissions
+You can remove any of the following requests if you do not need them or you can disable any feature using easy setup variables.
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.VIBRATE" />
+```
+`INTERNET` permission is required if you are requesting a weburl or webpage and `WRITE_EXTERNAL_STORAGE` is required for camera photo creation, if you have enabled `ASWP_FUPLOAD` and `ASWP_CAMUPLOAD` to upload image files.
+
 ### Easy Setup
 Once your project is ready here are some static variables you can change as per your Apps requirement.
 
@@ -40,6 +52,13 @@ Use "image/*" for image types; check file type references on web for more
 ASWV_F_TYPE   = "*/*";
 ```
 
+## Getting GPS Location
+If `ASWP_LOCATION = true` then the app will start requesting GPS locations of the device on regular basis and all of the recorded data will be sent to the webpage in terms of cookies, updating along with locations.
+```java
+COOKIE "lat" for latitude
+COOKIE "long" for longitude
+```
+
 ## Author
 This project is initially developed by **Ghazi Khan**.
 
@@ -54,5 +73,7 @@ This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) fi
 
 ## Acknowledgment
 Rating method used in this app is developed by another author, whom I was unable to find on github as files were non-credited. Thanks to the programmer who did it.
+
+Post any issue if you got any problem handling the project and if you want to contribute, you're most welcome to help me make it smarter than what it is. Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
 
 **A little note:** *You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming, that's the beauty of it. So, all the best for your next creation.*
