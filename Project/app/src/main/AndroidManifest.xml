@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* Android Smart WebView is an Open Source.
+* Developed by Ghazi Khan (http://mgks.infeeds.com) under MIT Open Source License.
+* This program is free to use for private and commercial purposes.
+* As long as the source is mentioned under application's License Wiki.
+* Please do not remove these comments, As the author has licensed it under such terms.
+* For queries, email: getmgks@gmail.com
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="mgks.infeeds.webview"
+    android:installLocation="auto">
+
+    <supports-screens
+        android:anyDensity="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:xlargeScreens="true" />
+    <!--
+        Remove permissions that your app doesn't require, asking for authority over unwanted information can cause damage to your reputation among your users
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- remove location.gps feature if not using permission ACCESS_FINE_LOCATION -->
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/SplashTheme"
+        tools:ignore="AllowBackup">
+        <activity
+            android:name="mgks.infeeds.webview.SplashScreen"
+            android:launchMode="singleTask"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="mgks.infeeds.webview.MainActivity"
+            android:screenOrientation="portrait" > <!-- remove or alter as your apps requirement -->
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="infeeds.com"
+                    android:pathPrefix="/d/" /> <!-- if you want only a specific directory from your website to be opened in the app through external links -->
+            </intent-filter>
+        </activity>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="9452000" />
+    </application>
+</manifest>
