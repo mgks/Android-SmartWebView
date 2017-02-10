@@ -76,4 +76,6 @@ Rating method used in this app is developed by another author, whom I was unable
 
 Post any issue if you got any problem handling the project and if you want to contribute, you're most welcome to help me make it smarter than what it is. Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
 
+**This project on Infeeds - [Android Smart WebView open source to upload files, get GPS locations and more advanced features](https://infeeds.com/d/CODEmgks/25019/android-smart-webview-open-source-upload)**
+
 **A little note:** *You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming, that's the beauty of it. So, all the best for your next creation.*
