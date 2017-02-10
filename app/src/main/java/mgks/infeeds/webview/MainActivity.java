@@ -447,12 +447,12 @@ public class MainActivity extends AppCompatActivity {
         return File.createTempFile(new_name, ".jpg", sd_directory);
     }
 
-    //Launching app rating dialogue
+    //Launching app rating dialoge
     public void get_rating() {
         if (DetectConnection.isInternetAvailable(MainActivity.this)) {
             AppRate.with(this)
                 .setStoreType(StoreType.GOOGLEPLAY)     //default is Google Play, other option is Amazon App Store
-                .setInstallDays(3)                      //after how many days would you like to show the dialogue
+                .setInstallDays(3)                      //after how many days would you like to show the dialoge
                 .setLaunchTimes(10)                     //overall request launch times being ignored
                 .setRemindInterval(2)                   //reminding users to rate after days interval
                 .setTitle(R.string.rate_dialog_title)
