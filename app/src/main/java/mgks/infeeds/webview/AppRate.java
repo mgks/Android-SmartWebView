@@ -28,7 +28,7 @@ public final class AppRate {
 
     private int remindInterval = 1;
 
-    private boolean isDebug = true;
+    private boolean isDebug = false;
 
     private AppRate(Context context) {
         this.context = context.getApplicationContext();
