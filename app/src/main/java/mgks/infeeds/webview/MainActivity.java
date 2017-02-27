@@ -56,7 +56,6 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,10 +68,12 @@ public class MainActivity extends AppCompatActivity {
     static boolean ASWP_PBAR        = true;     //show progress bar in app
     static boolean ASWP_ZOOM        = false;    //zoom in webview
     static boolean ASWP_SFORM       = false;    //save form cache and auto-fill information
+	static boolean ASWP_EXTURL		= true;		//open external url with default browser instead of app webview
 
     //Configuration variables
     private static String ASWV_URL      = "https://infeeds.com/@mgks"; //complete URL of your website or webpage
     private static String ASWV_F_TYPE   = "*/*";    //to upload any file type using "*/*"; check file type references for more
+	public static String ASWV_HOST		= aswm_host(ASWV_URL);
 
     //Careful with these variable names if altering
     WebView asw_view;
@@ -363,9 +364,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
             //Opening external URLs in android default web browser
-            } else if (!url.startsWith(ASWV_URL)) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
+            } else if (ASWP_EXTURL && aswm_host(ASWV_URL)!=ASWV_HOST) {
+				aswm_view(url,true);
 
             } else {
                 a = false;
@@ -407,6 +407,25 @@ public class MainActivity extends AppCompatActivity {
             asw_view.loadUrl(url+"?rid="+random_id());
         }
     }
+
+	//Getting host name
+	public static String aswm_host(String url){
+		if (url == null || url.length() == 0) {
+			return "";
+		}
+		int dslash = url.indexOf("//");
+		if (dslash == -1) {
+			dslash = 0;
+		} else {
+			dslash += 2;
+		}
+		int end = url.indexOf('/', dslash);
+		end = end >= 0 ? end : url.length();
+		int port = url.indexOf(':', dslash);
+		end = (port > 0 && port < end) ? port : end;
+		Log.w("URL Host: ",url.substring(dslash, end));
+		return url.substring(dslash, end);
+	}
 
     //Using cookies to update user locations
     public void get_location(){
