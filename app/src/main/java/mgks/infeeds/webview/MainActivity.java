@@ -357,6 +357,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
                 }
 
+			//Sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
             } else if (url.startsWith("share:")) {
 				Intent intent = new Intent(Intent.ACTION_SEND);
 				intent.setType("text/plain");
