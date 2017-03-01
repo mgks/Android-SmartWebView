@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean ASWP_JSCRIPT     = true;     //enable JavaScript for webview
     static boolean ASWP_FUPLOAD     = true;     //upload file from webview
     static boolean ASWP_CAMUPLOAD   = true;     //enable upload from camera for photos
-    static boolean ASWP_LOCATION    = true;     //track GPS locations
+//	static boolean ASWP_MULFILE     = false;    //upload multiple files in webview
+	static boolean ASWP_LOCATION    = true;     //track GPS locations
     static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
     static boolean ASWP_PBAR        = true;     //show progress bar in app
     static boolean ASWP_ZOOM        = false;    //zoom in webview
@@ -356,8 +357,15 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
                 }
 
-            //Use this in a hyperlink to exit your app :: href="exit:android"
-            } else if (url.startsWith("exit:")) {
+            } else if (url.startsWith("share:")) {
+				Intent intent = new Intent(Intent.ACTION_SEND);
+				intent.setType("text/plain");
+				intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
+				intent.putExtra(Intent.EXTRA_TEXT, view.getTitle()+"\nVisit: "+(Uri.parse(url).toString()).replace("share:",""));
+				startActivity(Intent.createChooser(intent, "Share with your Friends"));
+
+			//Use this in a hyperlink to exit your app :: href="exit:android"
+			} else if (url.startsWith("exit:")) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -367,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (ASWP_EXTURL && aswm_host(ASWV_URL)!=ASWV_HOST) {
 				aswm_view(url,true);
 
-            } else {
+			} else {
                 a = false;
             }
             return a;
