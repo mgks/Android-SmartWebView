@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     static boolean ASWP_FUPLOAD     = true;     //upload file from webview
     static boolean ASWP_CAMUPLOAD   = true;     //enable upload from camera for photos
 //	static boolean ASWP_MULFILE     = false;    //upload multiple files in webview
-	static boolean ASWP_LOCATION    = true;     //track GPS locations
+    static boolean ASWP_LOCATION    = true;     //track GPS locations
     static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
     static boolean ASWP_PBAR        = true;     //show progress bar in app
     static boolean ASWP_ZOOM        = false;    //zoom in webview
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     //Configuration variables
     private static String ASWV_URL      = "https://infeeds.com/@mgks"; //complete URL of your website or webpage
     private static String ASWV_F_TYPE   = "*/*";    //to upload any file type using "*/*"; check file type references for more
-	public static String ASWV_HOST		= aswm_host(ASWV_URL);
+    public static String ASWV_HOST		= aswm_host(ASWV_URL);
 
     //Careful with these variable names if altering
     WebView asw_view;
@@ -357,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
                 }
 
-			//Sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
+            //Sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
             } else if (url.startsWith("share:")) {
 				Intent intent = new Intent(Intent.ACTION_SEND);
 				intent.setType("text/plain");
@@ -365,8 +365,8 @@ public class MainActivity extends AppCompatActivity {
 				intent.putExtra(Intent.EXTRA_TEXT, view.getTitle()+"\nVisit: "+(Uri.parse(url).toString()).replace("share:",""));
 				startActivity(Intent.createChooser(intent, "Share with your Friends"));
 
-			//Use this in a hyperlink to exit your app :: href="exit:android"
-			} else if (url.startsWith("exit:")) {
+            //Use this in a hyperlink to exit your app :: href="exit:android"
+            } else if (url.startsWith("exit:")) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
