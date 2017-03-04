@@ -9,6 +9,7 @@ package mgks.infeeds.webview;
 */
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -69,11 +70,12 @@ public class MainActivity extends AppCompatActivity {
     static boolean ASWP_PBAR        = true;     //show progress bar in app
     static boolean ASWP_ZOOM        = false;    //zoom in webview
     static boolean ASWP_SFORM       = false;    //save form cache and auto-fill information
+	static boolean ASWP_OFFLINE		= true;		//whether the loading webpages are offline or online
 	static boolean ASWP_EXTURL		= true;		//open external url with default browser instead of app webview
 
     //Configuration variables
     private static String ASWV_URL      = "https://infeeds.com/@mgks"; //complete URL of your website or webpage
-    private static String ASWV_F_TYPE   = "*/*";    //to upload any file type using "*/*"; check file type references for more
+    private static String ASWV_F_TYPE   = "*/*";  //to upload any file type using "*/*"; check file type references for more
     public static String ASWV_HOST		= aswm_host(ASWV_URL);
 
     //Careful with these variable names if altering
@@ -87,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
     private ValueCallback<Uri> asw_file_message;
     private ValueCallback<Uri[]> asw_file_path;
     private final static int asw_file_req = 1;
+
+	private final static int loc_perm = 1;
+	private final static int file_perm = 2;
 
     private SecureRandom random = new SecureRandom();
 
@@ -147,39 +152,29 @@ public class MainActivity extends AppCompatActivity {
             handler.postDelayed(new Runnable() { public void run() { get_rating(); }}, 1000 * 60); //running request after few moments
         }
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            //Checking for location permissions
-            if (ASWP_LOCATION) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    get_location();
-                } else {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                    show_notification(2, 2);
-                }
-            }
-            //Checking for storage permission to write images for upload
-            if (ASWP_FUPLOAD) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
-                }
-            }
-        } else {
-            if (ASWP_LOCATION) { get_location(); }
-        }
+        //Getting basic device information
+		get_info();
+
+		//Getting GPS location of device if given permission
+		get_location();
+
         asw_view = (WebView) findViewById(R.id.msw_view);
 
         //Webview settings; defaults are customized for best performance
         WebSettings webSettings = asw_view.getSettings();
-        webSettings.setJavaScriptEnabled(ASWP_JSCRIPT);
-        webSettings.setSaveFormData(ASWP_SFORM);
-        webSettings.setSupportZoom(ASWP_ZOOM);
-        webSettings.setGeolocationEnabled(ASWP_LOCATION);
-        webSettings.setAllowFileAccess(true);
-        webSettings.setAllowFileAccessFromFileURLs(true);
-        webSettings.setAllowUniversalAccessFromFileURLs(true);
-        webSettings.setUseWideViewPort(true);
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+
+		if(!ASWP_OFFLINE){
+			webSettings.setJavaScriptEnabled(ASWP_JSCRIPT);
+		}
+		webSettings.setSaveFormData(ASWP_SFORM);
+		webSettings.setSupportZoom(ASWP_ZOOM);
+		webSettings.setGeolocationEnabled(ASWP_LOCATION);
+		webSettings.setAllowFileAccess(true);
+		webSettings.setAllowFileAccessFromFileURLs(true);
+		webSettings.setAllowUniversalAccessFromFileURLs(true);
+		webSettings.setUseWideViewPort(true);
+		webSettings.setDomStorageEnabled(true);
+		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -188,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         } else if (Build.VERSION.SDK_INT >= 19) {
             asw_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        } else if (Build.VERSION.SDK_INT >= 11 && Build.VERSION.SDK_INT < 19) {
+        } else if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 19) {
             asw_view.requestFocus();
             asw_view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
@@ -211,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
             }
             //Handling input[type="file"] requests for android API 21+
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,WebChromeClient.FileChooserParams fileChooserParams){
+				get_file();
                 if(ASWP_FUPLOAD) {
                     if (asw_file_path != null) {
                         asw_file_path.onReceiveValue(null);
@@ -293,23 +289,8 @@ public class MainActivity extends AppCompatActivity {
         get_location();
     }
 
-    //Checking if users allowed the requested permissions or not
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults){
-        switch (requestCode){
-            case 1: {
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    get_location();
-                }else{
-                    show_notification(2, 2);
-                    Toast.makeText(MainActivity.this, R.string.loc_req, Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
-
     //Setting activity layout visibility
-    public class Callback extends WebViewClient {
+	private class Callback extends WebViewClient {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             get_location();
         }
@@ -319,6 +300,8 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.msw_view).setVisibility(View.VISIBLE);
         }
         //For android below API 23
+		@SuppressWarnings("deprecation")
+		@Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             Toast.makeText(getApplicationContext(), "Something Went Wrong!", Toast.LENGTH_SHORT).show();
             aswm_view("file:///android_res/raw/error.html", false);
@@ -331,74 +314,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Overriding webview URLs
+		@SuppressWarnings("deprecation")
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            boolean a = true;
-
-            //Show toast error if not connected to the network
-            if (!DetectConnection.isInternetAvailable(MainActivity.this)) {
-                Toast.makeText(getApplicationContext(), "Please check your Network Connection!", Toast.LENGTH_SHORT).show();
-
-            //Use this in a hyperlink to redirect back to default URL :: href="refresh:android"
-            } else if (url.startsWith("refresh:")) {
-                aswm_view(ASWV_URL, false);
-
-            //Use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
-            } else if (url.startsWith("tel:")) {
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
-                startActivity(intent);
-
-            //Use this to open your apps page on google play store app :: href="rate:android"
-            } else if (url.startsWith("rate:")) {
-                final String app_package = getPackageName(); //requesting app package name from Context or Activity object
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + app_package)));
-                } catch (ActivityNotFoundException anfe) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
-                }
-
-            //Sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
-            } else if (url.startsWith("share:")) {
-				Intent intent = new Intent(Intent.ACTION_SEND);
-				intent.setType("text/plain");
-				intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
-				intent.putExtra(Intent.EXTRA_TEXT, view.getTitle()+"\nVisit: "+(Uri.parse(url).toString()).replace("share:",""));
-				startActivity(Intent.createChooser(intent, "Share with your Friends"));
-
-            //Use this in a hyperlink to exit your app :: href="exit:android"
-            } else if (url.startsWith("exit:")) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-
-            //Opening external URLs in android default web browser
-            } else if (ASWP_EXTURL && aswm_host(ASWV_URL)!=ASWV_HOST) {
-				aswm_view(url,true);
-
-			} else {
-                a = false;
-            }
-            return a;
+			return url_actions(view, url);
         }
-    }
 
-
-    //Action on back key tap/click
-    @Override
-    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_BACK:
-                if (asw_view.canGoBack()) {
-                    asw_view.goBack();
-                } else {
-                    finish();
-                }
-                return true;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
+		//Overriding webview URLs for API 23+ [suggested by github.com/JakePou]
+		@TargetApi(Build.VERSION_CODES.N)
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+			return url_actions(view, request.getUrl().toString());
+		}
     }
 
     //Random ID creation function to help get fresh cache every-time webview reloaded
@@ -416,6 +343,56 @@ public class MainActivity extends AppCompatActivity {
             asw_view.loadUrl(url+"?rid="+random_id());
         }
     }
+
+	//Actions based on shouldOverrideUrlLoading
+	public boolean url_actions(WebView view, String url){
+		boolean a = true;
+		//Show toast error if not connected to the network
+		if (!ASWP_OFFLINE && !DetectConnection.isInternetAvailable(MainActivity.this)) {
+			Toast.makeText(getApplicationContext(), "Please check your Network Connection!", Toast.LENGTH_SHORT).show();
+
+			//Use this in a hyperlink to redirect back to default URL :: href="refresh:android"
+		} else if (url.startsWith("refresh:")) {
+			aswm_view(ASWV_URL, false);
+
+			//Use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
+		} else if (url.startsWith("tel:")) {
+			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
+			startActivity(intent);
+
+			//Use this to open your apps page on google play store app :: href="rate:android"
+		} else if (url.startsWith("rate:")) {
+			final String app_package = getPackageName(); //requesting app package name from Context or Activity object
+			try {
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + app_package)));
+			} catch (ActivityNotFoundException anfe) {
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
+			}
+
+			//Sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
+		} else if (url.startsWith("share:")) {
+			Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setType("text/plain");
+			intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
+			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle()+"\nVisit: "+(Uri.parse(url).toString()).replace("share:",""));
+			startActivity(Intent.createChooser(intent, "Share with your Friends"));
+
+			//Use this in a hyperlink to exit your app :: href="exit:android"
+		} else if (url.startsWith("exit:")) {
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
+
+			//Opening external URLs in android default web browser
+		} else if (ASWP_EXTURL && aswm_host(ASWV_URL)!=ASWV_HOST) {
+			aswm_view(url,true);
+
+		} else {
+			a = false;
+		}
+		return a;
+	}
 
 	//Getting host name
 	public static String aswm_host(String url){
@@ -436,15 +413,42 @@ public class MainActivity extends AppCompatActivity {
 		return url.substring(dslash, end);
 	}
 
+	//Getting device basic information
+	public void get_info(){
+		CookieManager cookieManager = CookieManager.getInstance();
+		cookieManager.setAcceptCookie(true);
+		cookieManager.setCookie(ASWV_URL, "DEVICE=android");
+		cookieManager.setCookie(ASWV_URL, "DEV_API=" + Build.VERSION.SDK_INT);
+	}
+
+	//Checking permission for storage and camera for writing and uploading images
+	public void get_file(){
+		String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+
+		//Checking for storage permission to write images for upload
+		if (ASWP_FUPLOAD && ASWP_CAMUPLOAD && !check_permission(2) && !check_permission(3)) {
+			ActivityCompat.requestPermissions(MainActivity.this, perms, file_perm);
+
+		//Checking for WRITE_EXTERNAL_STORAGE permission
+		} else if (ASWP_FUPLOAD && !check_permission(2)) {
+			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, file_perm);
+
+		//Checking for CAMERA permissions
+		} else if (ASWP_CAMUPLOAD && !check_permission(3)) {
+			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, file_perm);
+		}
+	}
+
     //Using cookies to update user locations
     public void get_location(){
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.setAcceptCookie(true);
-        cookieManager.setCookie(ASWV_URL, "DEVICE=android");
-        cookieManager.setCookie(ASWV_URL, "DEV_API=" + Build.VERSION.SDK_INT);
+		CookieManager cookieManager = CookieManager.getInstance();
+		cookieManager.setAcceptCookie(true);
         if(ASWP_LOCATION) {
-            if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                show_notification(2, 2);
+			//Checking for location permissions
+			if (Build.VERSION.SDK_INT >= 23 && !check_permission(1)) {
+				ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, loc_perm);
+				show_notification(2, 2);
+
             } else {
                 GPSTrack gps;
                 gps = new GPSTrack(MainActivity.this);
@@ -454,7 +458,7 @@ public class MainActivity extends AppCompatActivity {
                     if (latitude != 0 || longitude != 0) {
                         cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
                         cookieManager.setCookie(ASWV_URL, "long=" + longitude);
-                        //Log.w("New Updated Location:", latitude + "," + longitude);
+                        //Log.w("New Updated Location:", latitude + "," + longitude);  //enable to test dummy latitude and longitude
                     } else {
                         Log.w("New Updated Location:", "NULL");
                     }
@@ -466,7 +470,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Creating image file for upload
+	//Checking if particular permission is given or not
+	public boolean check_permission(int permission){
+		switch(permission){
+			case 1:
+				return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+			case 2:
+				return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+			case 3:
+				return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+
+		}
+		return false;
+	}
+
+	//Creating image file for upload
     private File create_image() throws IOException {
         @SuppressLint("SimpleDateFormat")
         String file_name    = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
@@ -475,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
         return File.createTempFile(new_name, ".jpg", sd_directory);
     }
 
-    //Launching app rating dialoge
+    //Launching app rating dialoge [developed by github.com/hotchemi]
     public void get_rating() {
         if (DetectConnection.isInternetAvailable(MainActivity.this)) {
             AppRate.with(this)
@@ -546,6 +566,38 @@ public class MainActivity extends AppCompatActivity {
         asw_notification_new = builder.getNotification();
         asw_notification.notify(id, asw_notification_new);
     }
+
+	//Checking if users allowed the requested permissions or not
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults){
+		switch (requestCode){
+			case 1: {
+				if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+					get_location();
+				}else{
+					show_notification(2, 2);
+					Toast.makeText(MainActivity.this, R.string.loc_req, Toast.LENGTH_LONG).show();
+				}
+			}
+		}
+	}
+
+	//Action on back key tap/click
+	@Override
+	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+		if (event.getAction() == KeyEvent.ACTION_DOWN) {
+			switch (keyCode) {
+				case KeyEvent.KEYCODE_BACK:
+					if (asw_view.canGoBack()) {
+						asw_view.goBack();
+					} else {
+						finish();
+					}
+					return true;
+			}
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
     @Override
     protected void onStart() {
