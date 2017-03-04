@@ -19,6 +19,7 @@ You can remove any of the following requests if you do not need them or you can 
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.CAMERA"/>
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.VIBRATE" />
 ```
@@ -30,20 +31,22 @@ Once your project is ready here are some static variables you can change as per 
 #### Permission variables
 
 ```java
-ASWP_JSCRIPT     = true;     // enable JavaScript for webview
-ASWP_FUPLOAD     = true;     // upload file from webview
-ASWP_CAMUPLOAD   = true;     // enable upload from camera for photos
-ASWP_LOCATION    = true;     // track device locations with GPS
-ASWP_RATINGS     = true;     // ask user for app ratings; edit method get_rating() for dialogue customizations
-ASWP_PBAR        = true;     // show page load progress (progess bar) in app
-ASWP_ZOOM        = false;    // ability to zoom view content
-ASWP_SFORM       = false;    // save form cache and auto-fill information
+static boolean ASWP_JSCRIPT     = true;     //enable JavaScript for webview
+static boolean ASWP_FUPLOAD     = true;     //upload file from webview
+static boolean ASWP_CAMUPLOAD   = true;     //enable upload from camera for photos
+static boolean ASWP_LOCATION    = true;     //track GPS locations
+static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
+static boolean ASWP_PBAR        = true;     //show progress bar in app
+static boolean ASWP_ZOOM        = false;    //zoom in webview
+static boolean ASWP_SFORM       = false;    //save form cache and auto-fill information
+static boolean ASWP_OFFLINE		= false;	//whether the loading webpages are offline or online
+static boolean ASWP_EXTURL		= true;		//open external url with default browser instead of app webview
 ```
 
 #### Configuration variables
-Complete URL of your website, landing page or local file as (file:///android_res/dir/file)
+Complete URL of your website, landing page or local file as (file:///android_res/dir/file.html)
 ```java
-ASWV_URL      = "http://mgks.infeeds.com";
+ASWV_URL      = "https://infeeds.com/@mgks";	//domain, or directory or locating to any root file
 ```
 If file upload enabled, you can define its extention type, default is "\*/\*" for all file types;
 
@@ -68,8 +71,13 @@ Public Profiles:
 * [Facebook](https://www.facebook.com/imgks)
 * [Twitter](https://twitter.com/getmgks)
 
+### Thanks to
+* hotchemi [for Android-Rate script]
+
+
 ## License
 This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
+
 
 ## Acknowledgment
 Rating method used in this app is developed by another author, whom I was unable to find on github as files were non-credited. Thanks to the programmer who did it.
