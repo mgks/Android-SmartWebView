@@ -71,19 +71,17 @@ Public Profiles:
 * [Facebook](https://www.facebook.com/imgks)
 * [Twitter](https://twitter.com/getmgks)
 
-### Thanks to
-* hotchemi [for Android-Rate script]
-
 
 ## License
 This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
 
 
 ## Acknowledgment
-Rating method used in this app is developed by another author, whom I was unable to find on github as files were non-credited. Thanks to the programmer who did it.
+Rating method (Android-Rate) used in this app is developed by [hotchemi](https://github.com/hotchemi) and thanks to other programmers who contributed to this project.
 
-Post any issue if you got any problem handling the project and if you want to contribute, you're most welcome to help me make it smarter than what it is. Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
+Post any issue if you got any problem handling the project and if you want to contribute, you're most welcome to help me make a smarter project than what it is.
+Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
 
 **This project on Infeeds - [Android Smart WebView open source to upload files, get GPS locations and more advanced features](https://infeeds.com/d/CODEmgks/25019/android-smart-webview-open-source-upload)**
 
-**A little note:** *You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming, that's the beauty of it. So, all the best for your next creation.*
+**A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming, that's the beauty of it. So, all the best for your next creation.`
