@@ -71,6 +71,8 @@ Public Profiles:
 * [Facebook](https://www.facebook.com/imgks)
 * [Twitter](https://twitter.com/getmgks)
 
+### Would you like to buy me a cup of coffee?
+#### I'd appreciate even your little contribution to my work, it helps me keep this Open Source updated. Send your Donations at Paypal - getmgks@gmail.com
 
 ## License
 This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
