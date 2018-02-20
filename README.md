@@ -7,7 +7,7 @@ Android Smart WebView gathers all necessary information needed to make an Advanc
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Requirement
-The project requires minimum Android API 16+ (4.1 JellyBean) SDK to test. And you can use any development software of your choice, I used Android Studio making this.
+The project requires minimum Android API 19+ (4.4 KitKat) SDK to test. And you can use any development software of your choice, I used Android Studio making this.
 
 ### Test Run
 Try rebuilding the project on your programming environment, once you are done fixing any error (incase if one came up), you'll be ready to look into the project.
