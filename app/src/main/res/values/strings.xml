@@ -2,7 +2,7 @@
     <string name="app_name">Android Smart WebView</string>
     <string name="image_view">Image View</string>
     <string name="loading">Loading</string>
-    <string name="mgks_promo">infeeds.com/@mgks\ngithub.com/mgks</string>
+    <string name="mgks_promo">mgks.infeeds.com\ngithub.com/mgks</string>
     <string name="rate_dialog_title">Rate</string>
     <string name="rate_dialog_message">If you like our app, would you mind taking a moment to rate it? It won\'t take more than a minute. Thanks!</string>
     <string name="rate_dialog_ok">RATE</string>

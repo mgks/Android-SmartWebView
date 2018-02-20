@@ -1,4 +1,4 @@
-package mgks.infeeds.webview;
+package mgks.os.webview;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

@@ -1,11 +1,11 @@
-package mgks.infeeds.webview;
+package mgks.os.webview;
 
 import android.content.Context;
 import android.content.Intent;
 
-import static mgks.infeeds.webview.UriHelper.getGooglePlay;
-import static mgks.infeeds.webview.UriHelper.getAmazonAppstore;
-import static mgks.infeeds.webview.UriHelper.isPackageExists;
+import static mgks.os.webview.UriHelper.getGooglePlay;
+import static mgks.os.webview.UriHelper.getAmazonAppstore;
+import static mgks.os.webview.UriHelper.isPackageExists;
 
 final class IntentHelper {
 

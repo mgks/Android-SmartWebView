@@ -1,4 +1,4 @@
-package mgks.infeeds.webview;
+package mgks.os.webview;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,11 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 
-import static mgks.infeeds.webview.IntentHelper.createIntentForAmazonAppstore;
-import static mgks.infeeds.webview.IntentHelper.createIntentForGooglePlay;
-import static mgks.infeeds.webview.PreferenceHelper.setAgreeShowDialog;
-import static mgks.infeeds.webview.PreferenceHelper.setRemindInterval;
-import static mgks.infeeds.webview.Utils.getDialogBuilder;
+import static mgks.os.webview.IntentHelper.createIntentForAmazonAppstore;
+import static mgks.os.webview.IntentHelper.createIntentForGooglePlay;
+import static mgks.os.webview.PreferenceHelper.setAgreeShowDialog;
+import static mgks.os.webview.PreferenceHelper.setRemindInterval;
+import static mgks.os.webview.Utils.getDialogBuilder;
 
 final class DialogManager {
 

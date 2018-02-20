@@ -1,4 +1,4 @@
-package mgks.infeeds.webview;
+package mgks.os.webview;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,13 +6,13 @@ import android.view.View;
 
 import java.util.Date;
 
-import static mgks.infeeds.webview.DialogManager.create;
-import static mgks.infeeds.webview.PreferenceHelper.getInstallDate;
-import static mgks.infeeds.webview.PreferenceHelper.getIsAgreeShowDialog;
-import static mgks.infeeds.webview.PreferenceHelper.getLaunchTimes;
-import static mgks.infeeds.webview.PreferenceHelper.getRemindInterval;
-import static mgks.infeeds.webview.PreferenceHelper.isFirstLaunch;
-import static mgks.infeeds.webview.PreferenceHelper.setInstallDate;
+import static mgks.os.webview.DialogManager.create;
+import static mgks.os.webview.PreferenceHelper.getInstallDate;
+import static mgks.os.webview.PreferenceHelper.getIsAgreeShowDialog;
+import static mgks.os.webview.PreferenceHelper.getLaunchTimes;
+import static mgks.os.webview.PreferenceHelper.getRemindInterval;
+import static mgks.os.webview.PreferenceHelper.isFirstLaunch;
+import static mgks.os.webview.PreferenceHelper.setInstallDate;
 
 public final class AppRate {
 

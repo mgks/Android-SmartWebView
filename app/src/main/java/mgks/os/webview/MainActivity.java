@@ -1,11 +1,10 @@
-package mgks.infeeds.webview;
+package mgks.os.webview;
 /*
-* Android Smart WebView is an Open Source.
+* Android Smart WebView is an Open Source Project available on GitHub.
 * Developed by Ghazi Khan (http://mgks.infeeds.com) under MIT Open Source License.
 * This program is free to use for private and commercial purposes.
-* As long as the source is mentioned under application's License Wiki.
-* Please do not remove these comments, As the author has licensed it under such terms.
-* For queries, email: getmgks@gmail.com
+* Please mention project source or developer credits in your Application's License(s) Wiki.
+* Giving right credit to developers encourages them to create better projects, just want you to know that :)
 */
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -70,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
     static boolean ASWP_PBAR        = true;     //show progress bar in app
     static boolean ASWP_ZOOM        = false;    //zoom in webview
     static boolean ASWP_SFORM       = false;    //save form cache and auto-fill information
-	static boolean ASWP_OFFLINE		= true;		//whether the loading webpages are offline or online
+	static boolean ASWP_OFFLINE		= false;	//whether the loading webpages are offline or online
 	static boolean ASWP_EXTURL		= true;		//open external url with default browser instead of app webview
 
     //Configuration variables
-    private static String ASWV_URL      = "https://infeeds.com/@mgks"; //complete URL of your website or webpage
+    private static String ASWV_URL      = "http://mgks.infeeds.com/"; //complete URL of your website or webpage
     private static String ASWV_F_TYPE   = "*/*";  //to upload any file type using "*/*"; check file type references for more
     public static String ASWV_HOST		= aswm_host(ASWV_URL);
 
@@ -385,9 +384,8 @@ public class MainActivity extends AppCompatActivity {
 			startActivity(intent);
 
 			//Opening external URLs in android default web browser
-		} else if (ASWP_EXTURL && aswm_host(ASWV_URL)!=ASWV_HOST) {
+		} else if (ASWP_EXTURL && !aswm_host(url).equals(ASWV_HOST)) {
 			aswm_view(url,true);
-
 		} else {
 			a = false;
 		}
