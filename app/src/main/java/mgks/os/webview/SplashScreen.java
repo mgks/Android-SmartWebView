@@ -7,15 +7,13 @@ import android.os.Handler;
 
 public class SplashScreen extends Activity {
 
-    // Splash screen timer
-    private static int SPLASH_TIME_OUT = 5000;
-
-    @Override
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        new Handler().postDelayed(new Runnable() {
+		int SPLASH_TIME_OUT = 5000;
+		new Handler().postDelayed(new Runnable() {
 
             /*
              * Showing splash screen with a timer. This will be useful when you
