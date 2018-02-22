@@ -1,4 +1,5 @@
 package mgks.os.webview;
+
 /*
 * Android Smart WebView is an Open Source Project available on GitHub.
 * Developed by Ghazi Khan (http://mgks.infeeds.com) under MIT Open Source License.
@@ -6,6 +7,7 @@ package mgks.os.webview;
 * Please mention project source or developer credits in your Application's License(s) Wiki.
 * Giving right credit to developers encourages them to create better projects, just want you to know that :)
 */
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -59,22 +61,22 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    //Permission variables
-    static boolean ASWP_JSCRIPT     = true;     //enable JavaScript for webview
-    static boolean ASWP_FUPLOAD     = true;     //upload file from webview
-    static boolean ASWP_CAMUPLOAD   = true;     //enable upload from camera for photos
-//	static boolean ASWP_MULFILE     = false;    //upload multiple files in webview
-    static boolean ASWP_LOCATION    = true;     //track GPS locations
-    static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
-    static boolean ASWP_PBAR        = true;     //show progress bar in app
-    static boolean ASWP_ZOOM        = false;    //zoom in webview
-    static boolean ASWP_SFORM       = false;    //save form cache and auto-fill information
-	static boolean ASWP_OFFLINE		= false;	//whether the loading webpages are offline or online
-	static boolean ASWP_EXTURL		= true;		//open external url with default browser instead of app webview
+	static boolean ASWP_JSCRIPT     = SmartWebView.ASWP_JSCRIPT;
+	static boolean ASWP_FUPLOAD     = SmartWebView.ASWP_FUPLOAD;
+	static boolean ASWP_CAMUPLOAD   = SmartWebView.ASWP_CAMUPLOAD;
+	static boolean ASWP_MULFILE     = SmartWebView.ASWP_MULFILE;
+	static boolean ASWP_LOCATION    = SmartWebView.ASWP_LOCATION;
+	static boolean ASWP_RATINGS     = SmartWebView.ASWP_RATINGS;
+	static boolean ASWP_PBAR        = SmartWebView.ASWP_PBAR;
+	static boolean ASWP_ZOOM        = SmartWebView.ASWP_ZOOM;
+	static boolean ASWP_SFORM       = SmartWebView.ASWP_SFORM;
+	static boolean ASWP_OFFLINE		= SmartWebView.ASWP_OFFLINE;
+	static boolean ASWP_EXTURL		= SmartWebView.ASWP_EXTURL;
 
-    //Configuration variables
-    private static String ASWV_URL      = "http://mgks.infeeds.com/"; //complete URL of your website or webpage
-    private static String ASWV_F_TYPE   = "*/*";  //to upload any file type using "*/*"; check file type references for more
+	//Configuration variables
+	private static String ASWV_URL      = SmartWebView.ASWV_URL;
+	private static String ASWV_F_TYPE   = SmartWebView.ASWV_F_TYPE;
+
     public static String ASWV_HOST		= aswm_host(ASWV_URL);
 
     //Careful with these variable names if altering
@@ -182,9 +184,6 @@ public class MainActivity extends AppCompatActivity {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         } else if (Build.VERSION.SDK_INT >= 19) {
             asw_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        } else if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 19) {
-            asw_view.requestFocus();
-            asw_view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         asw_view.setVerticalScrollBarEnabled(false);
         asw_view.setWebViewClient(new Callback());
@@ -498,9 +497,9 @@ public class MainActivity extends AppCompatActivity {
         if (DetectConnection.isInternetAvailable(MainActivity.this)) {
             AppRate.with(this)
                 .setStoreType(StoreType.GOOGLEPLAY)     //default is Google Play, other option is Amazon App Store
-                .setInstallDays(3)                      //after how many days would you like to show the dialoge
-                .setLaunchTimes(10)                     //overall request launch times being ignored
-                .setRemindInterval(2)                   //reminding users to rate after days interval
+                .setInstallDays(SmartWebView.ASWR_DAYS)
+                .setLaunchTimes(SmartWebView.ASWR_TIMES)
+				.setRemindInterval(SmartWebView.ASWR_INTERVAL)
                 .setTitle(R.string.rate_dialog_title)
                 .setMessage(R.string.rate_dialog_message)
                 .setTextLater(R.string.rate_dialog_cancel)
@@ -509,7 +508,7 @@ public class MainActivity extends AppCompatActivity {
                 .monitor();
             AppRate.showRateDialogIfMeetsConditions(this);
         }
-        //for more customizations, edit AppRate and DialogOptions
+        //for more customizations, look for AppRate and DialogManager
     }
 
     //Creating custom notifications with IDs
@@ -535,7 +534,7 @@ public class MainActivity extends AppCompatActivity {
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this);
         switch(type){
             case 1:
                 builder.setTicker(getString(R.string.app_name));
