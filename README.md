@@ -1,3 +1,7 @@
+[![Java](https://forthebadge.com/images/badges/made-with-java.svg)](https://github.com/mgks/Android-SmartWebView)
+
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+
 # Android Smart WebView
 This project is developed to help you create Hybrid Android applications with just webview. Hybrid app comes in between webview and native forms, with this project you can embed any existing webpage or setup an Offline HTML/CSS/Javascript based project.
 
@@ -87,3 +91,5 @@ Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
 **This project on Infeeds - [Android Smart WebView open source to upload files, get GPS locations and more advanced features](https://infeeds.com/d/CODEmgks/25019/android-smart-webview-open-source-upload)**
 
 **A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
+
+[![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
