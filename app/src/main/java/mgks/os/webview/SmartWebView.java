@@ -24,7 +24,7 @@ class SmartWebView {
 	static boolean ASWP_EXTURL      = true;     //open external url with default browser instead of app webview
 
 	//Configuration variables
-	static String ASWV_URL          = "https://github.com/mgks"; //complete URL of your website or webpage
+	static String ASWV_URL          = "http://mgks.infeeds.com/"; //complete URL of your website or webpage
 	static String ASWV_F_TYPE       = "*/*";  //to upload any file type using "*/*"; check file type references for more
 
 	//Rating system variables
