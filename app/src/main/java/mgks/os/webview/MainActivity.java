@@ -35,7 +35,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -157,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
 		get_info();
 
 		//Getting GPS location of device if given permission
+		if(!check_permission(1)){
+			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, loc_perm);
+		}
 		get_location();
 
         asw_view = (WebView) findViewById(R.id.msw_view);
@@ -438,33 +441,27 @@ public class MainActivity extends AppCompatActivity {
 
     //Using cookies to update user locations
     public void get_location(){
-		CookieManager cookieManager = CookieManager.getInstance();
-		cookieManager.setAcceptCookie(true);
-        if(ASWP_LOCATION) {
-			//Checking for location permissions
-			if (Build.VERSION.SDK_INT >= 23 && !check_permission(1)) {
-				ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, loc_perm);
-				show_notification(2, 2);
-
-            } else {
-                GPSTrack gps;
-                gps = new GPSTrack(MainActivity.this);
-                double latitude = gps.getLatitude();
-                double longitude = gps.getLongitude();
-                if (gps.canGetLocation()) {
-                    if (latitude != 0 || longitude != 0) {
-                        cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
-                        cookieManager.setCookie(ASWV_URL, "long=" + longitude);
-                        //Log.w("New Updated Location:", latitude + "," + longitude);  //enable to test dummy latitude and longitude
-                    } else {
-                        Log.w("New Updated Location:", "NULL");
-                    }
-                } else {
-                    show_notification(1, 1);
-                    Log.w("New Updated Location:", "FAIL");
-                }
-            }
-        }
+		//Checking for location permissions
+		if (ASWP_LOCATION && (Build.VERSION.SDK_INT >= 23 && check_permission(1)) || Build.VERSION.SDK_INT < 23) {
+			CookieManager cookieManager = CookieManager.getInstance();
+			cookieManager.setAcceptCookie(true);
+			GPSTrack gps;
+			gps = new GPSTrack(MainActivity.this);
+			double latitude = gps.getLatitude();
+			double longitude = gps.getLongitude();
+			if (gps.canGetLocation()) {
+				if (latitude != 0 || longitude != 0) {
+					cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
+					cookieManager.setCookie(ASWV_URL, "long=" + longitude);
+					//Log.w("New Updated Location:", latitude + "," + longitude);  //enable to test dummy latitude and longitude
+				} else {
+					Log.w("New Updated Location:", "NULL");
+				}
+			} else {
+				show_notification(1, 1);
+				Log.w("New Updated Location:", "FAIL");
+			}
+		}
     }
 
 	//Checking if particular permission is given or not
@@ -571,9 +568,6 @@ public class MainActivity extends AppCompatActivity {
 			case 1: {
 				if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
 					get_location();
-				}else{
-					show_notification(2, 2);
-					Toast.makeText(MainActivity.this, R.string.loc_req, Toast.LENGTH_LONG).show();
 				}
 			}
 		}
