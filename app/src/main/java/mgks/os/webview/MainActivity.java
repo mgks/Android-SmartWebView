@@ -2,7 +2,7 @@ package mgks.os.webview;
 
 /*
 * Android Smart WebView is an Open Source Project available on GitHub.
-* Developed by Ghazi Khan (http://mgks.infeeds.com) under MIT Open Source License.
+* Developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
 * This program is free to use for private and commercial purposes.
 * Please mention project source or developer credits in your Application's License(s) Wiki.
 * Giving right credit to developers encourages them to create better projects, just want you to know that :)
@@ -13,6 +13,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.DownloadManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -41,6 +42,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
+import android.webkit.DownloadListener;
+import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -180,6 +183,26 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setDomStorageEnabled(true);
 		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
+		asw_view.setDownloadListener(new DownloadListener() {
+			@Override
+			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
+				DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+				request.setMimeType(mimeType);
+				String cookies = CookieManager.getInstance().getCookie(url);
+				request.addRequestHeader("cookie", cookies);
+				request.addRequestHeader("User-Agent", userAgent);
+				request.setDescription(getString(R.string.dl_downloading));
+				request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
+				request.allowScanningByMediaScanner();
+				request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType));
+				DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+				dm.enqueue(request);
+				Toast.makeText(getApplicationContext(), getString(R.string.dl_downloading2), Toast.LENGTH_LONG).show();
+			}
+		});
+
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -202,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                     i.addCategory(Intent.CATEGORY_OPENABLE);
                     i.setType(ASWV_F_TYPE);
-                    startActivityForResult(Intent.createChooser(i, "File Chooser"), asw_file_req);
+                    startActivityForResult(Intent.createChooser(i, getString(R.string.fl_chooser)), asw_file_req);
                 }
             }
             //Handling input[type="file"] requests for android API 21+
@@ -304,13 +327,13 @@ public class MainActivity extends AppCompatActivity {
 		@SuppressWarnings("deprecation")
 		@Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            Toast.makeText(getApplicationContext(), "Something Went Wrong!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.went_wrong), Toast.LENGTH_SHORT).show();
             aswm_view("file:///android_res/raw/error.html", false);
         }
 
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-            Toast.makeText(getApplicationContext(), "Something Went Wrong!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.went_wrong), Toast.LENGTH_SHORT).show();
             aswm_view("file:///android_res/raw/error.html", false);
         }
 
@@ -350,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
 		boolean a = true;
 		//Show toast error if not connected to the network
 		if (!ASWP_OFFLINE && !DetectConnection.isInternetAvailable(MainActivity.this)) {
-			Toast.makeText(getApplicationContext(), "Please check your Network Connection!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), getString(R.string.check_connection), Toast.LENGTH_SHORT).show();
 
 			//Use this in a hyperlink to redirect back to default URL :: href="refresh:android"
 		} else if (url.startsWith("refresh:")) {
@@ -376,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
 			intent.setType("text/plain");
 			intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
 			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle()+"\nVisit: "+(Uri.parse(url).toString()).replace("share:",""));
-			startActivity(Intent.createChooser(intent, "Share with your Friends"));
+			startActivity(Intent.createChooser(intent, getString(R.string.share_w_friends)));
 
 			//Use this in a hyperlink to exit your app :: href="exit:android"
 		} else if (url.startsWith("exit:")) {
