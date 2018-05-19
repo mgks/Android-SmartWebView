@@ -15,4 +15,10 @@
     <string name="loc_perm">Allow Permission for Location</string>
     <string name="loc_perm_text">Give this app permission to check your location.</string>
     <string name="loc_perm_more">Please allow this app to know your location for better overall experience.</string>
+	<string name="dl_downloading">Downloading file…</string>
+	<string name="dl_downloading2">Downloading File</string>
+	<string name="fl_chooser">File Chooser</string>
+	<string name="went_wrong">Something Went Wrong!</string>
+	<string name="check_connection">Please check your Network Connection!</string>
+	<string name="share_w_friends">Share with your Friends</string>
 </resources>
