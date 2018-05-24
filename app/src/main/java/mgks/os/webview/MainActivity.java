@@ -141,6 +141,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Prevent the app from being started again when it is still alive in the background
+        if (!isTaskRoot()) {
+        finish();
+        return;
+        }
+
         setContentView(R.layout.activity_main);
 
         if (ASWP_PBAR) {
