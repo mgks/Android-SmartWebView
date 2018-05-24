@@ -144,8 +144,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Prevent the app from being started again when it is still alive in the background
         if (!isTaskRoot()) {
-        finish();
-        return;
+        	finish();
+        	return;
         }
 
         setContentView(R.layout.activity_main);
