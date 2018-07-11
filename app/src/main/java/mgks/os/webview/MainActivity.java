@@ -121,7 +121,19 @@ public class MainActivity extends AppCompatActivity {
                         String dataString = intent.getDataString();
                         if (dataString != null) {
                             results = new Uri[]{ Uri.parse(dataString) };
-                        }
+                        } else {
+			    if (Build.VERSION.SDK_INT >= 18 && ASWP_MULFILE) {
+                                if (intent.getClipData() != null) {
+                                    final int numSelectedFiles = intent.getClipData().getItemCount();
+
+                                    results = new Uri[numSelectedFiles];
+
+                                    for (int i = 0; i < numSelectedFiles; i++) {
+                                        results[i] = intent.getClipData().getItemAt(i).getUri();
+                                    }
+                                }
+                            }
+			}
                     }
                 }
             }
@@ -232,6 +244,9 @@ public class MainActivity extends AppCompatActivity {
                     Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                     i.addCategory(Intent.CATEGORY_OPENABLE);
                     i.setType(ASWV_F_TYPE);
+		    if (Build.VERSION.SDK_INT >= 18 && ASWP_MULFILE) {
+                        i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    }
                     startActivityForResult(Intent.createChooser(i, getString(R.string.fl_chooser)), asw_file_req);
                 }
             }
@@ -246,6 +261,9 @@ public class MainActivity extends AppCompatActivity {
                     Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
                     contentSelectionIntent.setType(ASWV_F_TYPE);
+		    if (Build.VERSION.SDK_INT >= 18 && ASWP_MULFILE) {
+                        contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    }
                     Intent[] intentArray;
                     if (ASWP_CAMUPLOAD) {
                         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
