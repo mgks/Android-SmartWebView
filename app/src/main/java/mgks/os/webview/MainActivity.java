@@ -141,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+		Log.w("READ_PERM = ",Manifest.permission.READ_EXTERNAL_STORAGE);
+		Log.w("WRITE_PERM = ",Manifest.permission.WRITE_EXTERNAL_STORAGE);
         //Prevent the app from being started again when it is still alive in the background
         if (!isTaskRoot()) {
         	finish();
@@ -453,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
 
 	//Checking permission for storage and camera for writing and uploading images
 	public void get_file(){
-		String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+		String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
 		//Checking for storage permission to write images for upload
 		if (ASWP_FUPLOAD && ASWP_CAMUPLOAD && !check_permission(2) && !check_permission(3)) {
@@ -461,7 +462,7 @@ public class MainActivity extends AppCompatActivity {
 
 		//Checking for WRITE_EXTERNAL_STORAGE permission
 		} else if (ASWP_FUPLOAD && !check_permission(2)) {
-			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, file_perm);
+			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, file_perm);
 
 		//Checking for CAMERA permissions
 		} else if (ASWP_CAMUPLOAD && !check_permission(3)) {
