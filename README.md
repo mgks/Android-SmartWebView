@@ -67,24 +67,22 @@ COOKIE "lat" for latitude
 COOKIE "long" for longitude
 ```
 
-## Author
-This project is initially developed by **Ghazi Khan**.
-
-Public Profiles:
-* [Personal Blog](https://mgks.infeeds.com)
-* [Facebook](https://www.facebook.com/getmgks)
-* [Twitter](https://twitter.com/getmgks)
-
-### Would you like to buy me a cup of coffee?
-#### I'd appreciate even your little contribution to my work, it helps me keep this Open Source updated. If this project helped you or your business and if you feel like donating some bucks, you can Paypal me - getmgks@gmail.com
-
-<a href='https://ko-fi.com/Z8Z4BPQ6' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
-
-<a href="https://www.patreon.com/bePatron?c=1575504" target="_blank" title="Become a Patron"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"></a>
-
-
 ## License
 This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Buy Android Smart WebView Pro
+```
+ADDITIONAL FEATURES:
+- Firebase Push Notifications
+- AdMob
+- Navigation Drawer
+- Search Bar
+- Action Menu
+- Chrome Tab for External URLs
+- And more
+```
+**Or need a Custom and Smarter WebView for your Business? Contact me at - getmgks@gmail.com**
 
 
 ## Acknowledgment
@@ -96,5 +94,7 @@ Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
 **This project on Infeeds - [Android Smart WebView open source to upload files, get GPS locations and more advanced features](https://infeeds.com/d/CODEmgks/25019/android-smart-webview-open-source-upload)**
 
 **A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
+
+This project is initially developed by **[Ghazi Khan](https://mgks.infeeds.com)**.
 
 [![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
