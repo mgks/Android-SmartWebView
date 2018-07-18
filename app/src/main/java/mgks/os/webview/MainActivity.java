@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                         if (dataString != null) {
                             results = new Uri[]{ Uri.parse(dataString) };
                         } else {
-			    if (Build.VERSION.SDK_INT >= 18 && ASWP_MULFILE) {
+			    			if(ASWP_MULFILE) {
                                 if (intent.getClipData() != null) {
                                     final int numSelectedFiles = intent.getClipData().getItemCount();
 
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }
                             }
-			}
+						}
                     }
                 }
             }
@@ -164,11 +164,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (ASWP_PBAR) {
-            asw_progress = (ProgressBar) findViewById(R.id.msw_progress);
+            asw_progress = findViewById(R.id.msw_progress);
         } else {
             findViewById(R.id.msw_progress).setVisibility(View.GONE);
         }
-        asw_loading_text = (TextView) findViewById(R.id.msw_loading_text);
+        asw_loading_text = findViewById(R.id.msw_loading_text);
         Handler handler = new Handler();
 
         //Launching app rating request
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 		get_location();
 
-        asw_view = (WebView) findViewById(R.id.msw_view);
+        asw_view = findViewById(R.id.msw_view);
 
         //Webview settings; defaults are customized for best performance
         WebSettings webSettings = asw_view.getSettings();
@@ -201,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setAllowUniversalAccessFromFileURLs(true);
 		webSettings.setUseWideViewPort(true);
 		webSettings.setDomStorageEnabled(true);
-		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
 		asw_view.setDownloadListener(new DownloadListener() {
 			@Override
@@ -218,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
 				request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType));
 				DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+				assert dm != null;
 				dm.enqueue(request);
 				Toast.makeText(getApplicationContext(), getString(R.string.dl_downloading2), Toast.LENGTH_LONG).show();
 			}
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                     i.addCategory(Intent.CATEGORY_OPENABLE);
                     i.setType(ASWV_F_TYPE);
-		    if (Build.VERSION.SDK_INT >= 18 && ASWP_MULFILE) {
+		    		if(ASWP_MULFILE) {
                         i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                     }
                     startActivityForResult(Intent.createChooser(i, getString(R.string.fl_chooser)), asw_file_req);
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
                     contentSelectionIntent.setType(ASWV_F_TYPE);
-		    if (Build.VERSION.SDK_INT >= 18 && ASWP_MULFILE) {
+		    		if(ASWP_MULFILE) {
                         contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                     }
                     Intent[] intentArray;
@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
         //Coloring the "recent apps" tab header; doing it onResume, as an insurance
         if (Build.VERSION.SDK_INT >= 23) {
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-            ActivityManager.TaskDescription taskDesc = null;
+            ActivityManager.TaskDescription taskDesc;
             taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, getColor(R.color.colorPrimary));
             MainActivity.this.setTaskDescription(taskDesc);
         }
@@ -580,7 +580,7 @@ public class MainActivity extends AppCompatActivity {
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "");
         switch(type){
             case 1:
                 builder.setTicker(getString(R.string.app_name));
@@ -606,7 +606,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setContentIntent(pendingIntent);
         builder.setWhen(when);
         builder.setContentIntent(pendingIntent);
-        asw_notification_new = builder.getNotification();
+        asw_notification_new = builder.build();
         asw_notification.notify(id, asw_notification_new);
     }
 
