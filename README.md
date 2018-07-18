@@ -23,6 +23,7 @@ You can remove any of the following requests if you do not need them or you can 
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.CAMERA"/>
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.VIBRATE" />
@@ -38,6 +39,7 @@ Once your project is ready here are some static variables you can change as per 
 static boolean ASWP_JSCRIPT     = true;     //enable JavaScript for webview
 static boolean ASWP_FUPLOAD     = true;     //upload file from webview
 static boolean ASWP_CAMUPLOAD   = true;     //enable upload from camera for photos
+static boolean ASWP_MULFILE     = false;    //upload multiple files in webview
 static boolean ASWP_LOCATION    = true;     //track GPS locations
 static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
 static boolean ASWP_PBAR        = true;     //show progress bar in app
@@ -50,7 +52,7 @@ static boolean ASWP_EXTURL      = true;     //open external url with default bro
 #### Configuration variables
 Complete URL of your website, landing page or local file as (file:///android_res/dir/file.html)
 ```java
-ASWV_URL      = "http://mgks.infeeds.com/";	//domain, or directory or locating to any root file
+ASWV_URL      = "https://github.com/mgks";	//domain, or directory or locating to any root file
 ```
 
 If file upload enabled, you can define its extention type, default is "\*/\*" for all file types;
@@ -71,7 +73,7 @@ COOKIE "long" for longitude
 This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
 
 
-## Buy Android Smart WebView Pro
+## Get Android Smart WebView Pro
 ```
 ADDITIONAL FEATURES:
 - Firebase Push Notifications
