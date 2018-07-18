@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     if (null == asw_file_path) {
                         return;
                     }
-                    if (intent == null) {
+                    if (intent == null || intent.getData() == null) {
                         if (asw_cam_message != null) {
                             results = new Uri[]{Uri.parse(asw_cam_message)};
                         }
@@ -125,9 +125,7 @@ public class MainActivity extends AppCompatActivity {
 			    			if(ASWP_MULFILE) {
                                 if (intent.getClipData() != null) {
                                     final int numSelectedFiles = intent.getClipData().getItemCount();
-
                                     results = new Uri[numSelectedFiles];
-
                                     for (int i = 0; i < numSelectedFiles; i++) {
                                         results[i] = intent.getClipData().getItemAt(i).getUri();
                                     }
@@ -252,22 +250,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             //Handling input[type="file"] requests for android API 21+
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,WebChromeClient.FileChooserParams fileChooserParams){
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams){
 				get_file();
                 if(ASWP_FUPLOAD) {
                     if (asw_file_path != null) {
                         asw_file_path.onReceiveValue(null);
                     }
                     asw_file_path = filePathCallback;
-                    Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    contentSelectionIntent.setType(ASWV_F_TYPE);
-		    		if(ASWP_MULFILE) {
-                        contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                    }
-                    Intent[] intentArray;
+					Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (ASWP_CAMUPLOAD) {
-                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
                             File photoFile = null;
                             try {
@@ -283,14 +274,20 @@ public class MainActivity extends AppCompatActivity {
                                 takePictureIntent = null;
                             }
                         }
-                        if (takePictureIntent != null) {
-                            intentArray = new Intent[]{takePictureIntent};
-                        } else {
-                            intentArray = new Intent[0];
-                        }
-                    } else {
-                        intentArray = new Intent[0];
                     }
+					Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+					contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+					contentSelectionIntent.setType(ASWV_F_TYPE);
+					if(ASWP_MULFILE) {
+						contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+					}
+					Intent[] intentArray;
+					if (takePictureIntent != null) {
+						intentArray = new Intent[]{takePictureIntent};
+					} else {
+						intentArray = new Intent[0];
+					}
+
                     Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
                     chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
                     chooserIntent.putExtra(Intent.EXTRA_TITLE, "File Chooser");
