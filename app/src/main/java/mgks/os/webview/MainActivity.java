@@ -488,7 +488,7 @@ public class MainActivity extends AppCompatActivity {
     //Using cookies to update user locations
     public void get_location(){
 		//Checking for location permissions
-		if (ASWP_LOCATION && (Build.VERSION.SDK_INT >= 23 && check_permission(1)) || Build.VERSION.SDK_INT < 23) {
+		if (ASWP_LOCATION && ((Build.VERSION.SDK_INT >= 23 && check_permission(1)) || Build.VERSION.SDK_INT < 23)) {
 			CookieManager cookieManager = CookieManager.getInstance();
 			cookieManager.setAcceptCookie(true);
 			GPSTrack gps;
