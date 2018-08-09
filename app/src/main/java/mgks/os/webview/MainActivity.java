@@ -43,6 +43,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
+import android.webkit.GeolocationPermissions;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -307,6 +308,17 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+		
+	    // overload the geoLocations permissions prompt to always allow instantly as app permission was granted previously
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+		if(Build.VERSION.SDK_INT < 23 || (Build.VERSION.SDK_INT >= 23 && check_permission(1))){
+			// location permissions were granted previously so auto-approve
+			callback.invoke(origin, true, false);
+		} else {
+			// location permissions not granted so request them
+			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, loc_perm);
+		}
+	}
         });
         if (getIntent().getData() != null) {
             String path     = getIntent().getDataString();
@@ -387,7 +399,13 @@ public class MainActivity extends AppCompatActivity {
             intent.setData(Uri.parse(url));
             startActivity(intent);
         } else {
-            asw_view.loadUrl(url+"?rid="+random_id());
+	   if(url.contains("?")){ // check to see whether the url already has query parameters and handle appropriately.
+		url += "&";
+	   } else {
+      		url += "?";
+	   }
+	   url += "rid="+random_id();
+	   asw_view.loadUrl(url);
         }
     }
 
