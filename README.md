@@ -39,6 +39,7 @@ Once your project is ready here are some static variables you can change as per 
 static boolean ASWP_JSCRIPT     = true;     //enable JavaScript for webview
 static boolean ASWP_FUPLOAD     = true;     //upload file from webview
 static boolean ASWP_CAMUPLOAD   = true;     //enable upload from camera for photos
+static boolean ASWP_ONLYCAM		= false;	//incase you want only camera files to upload
 static boolean ASWP_MULFILE     = false;    //upload multiple files in webview
 static boolean ASWP_LOCATION    = true;     //track GPS locations
 static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
