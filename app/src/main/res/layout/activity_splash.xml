@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary" >
 
-    <ImageView
+	<ImageView
         android:id="@+id/msw_loading_logo"
         android:src="@raw/front_splash"
         android:contentDescription=""
