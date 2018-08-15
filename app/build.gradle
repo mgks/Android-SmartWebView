@@ -10,6 +10,7 @@ android {
 		versionCode 2
 		versionName '2.0'
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		multiDexEnabled true
 	}
 	buildTypes {
 		release {
