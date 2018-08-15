@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 	static boolean ASWP_JSCRIPT     = SmartWebView.ASWP_JSCRIPT;
 	static boolean ASWP_FUPLOAD     = SmartWebView.ASWP_FUPLOAD;
 	static boolean ASWP_CAMUPLOAD   = SmartWebView.ASWP_CAMUPLOAD;
+	static boolean ASWP_ONLYCAM		= SmartWebView.ASWP_ONLYCAM;
 	static boolean ASWP_MULFILE     = SmartWebView.ASWP_MULFILE;
 	static boolean ASWP_LOCATION    = SmartWebView.ASWP_LOCATION;
 	static boolean ASWP_RATINGS     = SmartWebView.ASWP_RATINGS;
@@ -277,10 +278,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 					Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-					contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-					contentSelectionIntent.setType(ASWV_F_TYPE);
-					if(ASWP_MULFILE) {
-						contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    if(!ASWP_ONLYCAM) {
+						contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+						contentSelectionIntent.setType(ASWV_F_TYPE);
+						if (ASWP_MULFILE) {
+							contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+						}
 					}
 					Intent[] intentArray;
 					if (takePictureIntent != null) {
@@ -308,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-		
+
 	    // overload the geoLocations permissions prompt to always allow instantly as app permission was granted previously
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
 		if(Build.VERSION.SDK_INT < 23 || (Build.VERSION.SDK_INT >= 23 && check_permission(1))){
