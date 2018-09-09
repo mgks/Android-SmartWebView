@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
                     chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-                    chooserIntent.putExtra(Intent.EXTRA_TITLE, "File Chooser");
+                    chooserIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.fl_chooser));
                     chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
                     startActivityForResult(chooserIntent, asw_file_req);
                 }
@@ -605,7 +605,7 @@ public class MainActivity extends AppCompatActivity {
 
             case 2:
                 builder.setTicker(getString(R.string.app_name));
-                builder.setContentTitle(getString(R.string.app_name));
+                builder.setContentTitle(getString(R.string.loc_perm));
                 builder.setContentText(getString(R.string.loc_perm_text));
                 builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.loc_perm_more)));
                 builder.setVibrate(new long[]{350, 700, 350, 700, 350});
