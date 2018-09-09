@@ -259,8 +259,9 @@ public class MainActivity extends AppCompatActivity {
                         asw_file_path.onReceiveValue(null);
                     }
                     asw_file_path = filePathCallback;
-					Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					Intent takePictureIntent = null;
                     if (ASWP_CAMUPLOAD) {
+						takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
                             File photoFile = null;
                             try {
