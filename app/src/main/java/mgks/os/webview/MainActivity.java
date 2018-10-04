@@ -205,21 +205,26 @@ public class MainActivity extends AppCompatActivity {
 		asw_view.setDownloadListener(new DownloadListener() {
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
-				DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
-				request.setMimeType(mimeType);
-				String cookies = CookieManager.getInstance().getCookie(url);
-				request.addRequestHeader("cookie", cookies);
-				request.addRequestHeader("User-Agent", userAgent);
-				request.setDescription(getString(R.string.dl_downloading));
-				request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
-				request.allowScanningByMediaScanner();
-				request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType));
-				DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-				assert dm != null;
-				dm.enqueue(request);
-				Toast.makeText(getApplicationContext(), getString(R.string.dl_downloading2), Toast.LENGTH_LONG).show();
+				if(!check_permission(2)){
+					ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, file_perm);
+				}else {
+					DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+					request.setMimeType(mimeType);
+					String cookies = CookieManager.getInstance().getCookie(url);
+					request.addRequestHeader("cookie", cookies);
+					request.addRequestHeader("User-Agent", userAgent);
+					request.setDescription(getString(R.string.dl_downloading));
+					request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
+					request.allowScanningByMediaScanner();
+					request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+					request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType));
+					DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+					assert dm != null;
+					dm.enqueue(request);
+					Toast.makeText(getApplicationContext(), getString(R.string.dl_downloading2), Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 
