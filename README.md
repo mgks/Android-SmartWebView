@@ -2,7 +2,7 @@
 
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-# Android Smart WebView
+# Android Smart WebView 
 This project is developed to help you create Hybrid Android applications with just webview. Hybrid app comes in between webview and native forms, with this project you can embed any existing webpage or setup an Offline HTML/CSS/Javascript based project.
 
 Android Smart WebView gathers all necessary information needed to make any simple app as powerful as a native Android app. This project takes only required data from device to obtain information, including, GPS Location, File Manager, Camera for Processing Images, Custom Dialogues, Notifications and more with clean minimal design.
@@ -39,7 +39,7 @@ Once your project is ready here are some static variables you can change as per 
 static boolean ASWP_JSCRIPT     = true;     //enable JavaScript for webview
 static boolean ASWP_FUPLOAD     = true;     //upload file from webview
 static boolean ASWP_CAMUPLOAD   = true;     //enable upload from camera for photos
-static boolean ASWP_ONLYCAM	    = false;	//incase you want only camera files to upload
+static boolean ASWP_ONLYCAM     = false;	//incase you want only camera files to upload
 static boolean ASWP_MULFILE     = true;     //upload multiple files in webview
 static boolean ASWP_LOCATION    = true;     //track GPS locations
 static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
@@ -51,14 +51,14 @@ static boolean ASWP_EXTURL      = true;     //open external url with default bro
 ```
 
 #### Configuration variables
-Complete URL of your website, landing page or local file as (file:///android_res/dir/file.html)
+Complete URL of your website, landing page or local file as `file:///android_res/dir/file.html`
 ```java
 ASWV_URL      = "https://github.com/mgks";	//domain, or directory or locating to any root file
 ```
 
-If file upload enabled, you can define its extention type, default is "\*/\*" for all file types;
+If file upload enabled, you can define its extention type, default is `*/*` for all file types;
 
-Use "image/*" for image types; check file type references on web for custom file type
+Use `image/*` for image types; check file type references on web for custom file type
 ```java
 ASWV_F_TYPE   = "*/*";
 ```
@@ -78,7 +78,7 @@ This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) fi
 
 <a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
-## Get Smart WebView Pro
+## [Get Smart WebView Pro](https://github.com/mgks/SmartWebView-Pro)
 Smart WebView Pro is a commercial app built for small and medium level businesses, easy to implement with any existing environment.
 ```
 PRO FEATURES:
@@ -107,3 +107,4 @@ Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
 This project is initially developed by **[Ghazi Khan](https://mgks.infeeds.com)**.
 
 [![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
+![ga tracker](https://www.google-analytics.com/collect?v=1&a=257770996&t=pageview&dl=https%3A%2F%2Fgithub.com%2Fmgks%2FAndroid-SmartWebView&ul=en-us&de=UTF-8&cid=978224512.1377738459&tid=UA-129370045-1&z=887657232 "ga tracker")
