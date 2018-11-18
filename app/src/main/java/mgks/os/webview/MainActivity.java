@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 		get_info();
 
 		//Getting GPS location of device if given permission
-		if(!check_permission(1)){
+		if(ASWP_LOCATION && !check_permission(1)){
 			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, loc_perm);
 		}
 		get_location();
