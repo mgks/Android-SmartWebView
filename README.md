@@ -1,9 +1,6 @@
-[![Java](https://forthebadge.com/images/badges/made-with-java.svg)](https://github.com/mgks/Android-SmartWebView)
-
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php) <img src="https://img.shields.io/badge/version-3.0-blue.svg" />
-
-
 # Android Smart WebView 
+<img src="https://img.shields.io/badge/language-java-orange.svg" /> <img src="https://img.shields.io/badge/version-3.0-yellow.svg" /> [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+
 This project is developed to help you create Hybrid Android applications with just webview. Hybrid app comes in between webview and native forms, with this project you can embed any existing webpage or setup an Offline HTML/CSS/Javascript based project.
 
 Android Smart WebView gathers all necessary information needed to make any simple app as powerful as a native Android app. This project takes only required data from device to obtain information, including, GPS Location, File Manager, Camera for Processing Images, Custom Dialogues, Notifications and more with clean minimal design.
