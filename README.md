@@ -40,7 +40,7 @@ static boolean ASWP_JSCRIPT     = true;     //enable JavaScript for webview
 static boolean ASWP_FUPLOAD     = true;     //upload file from webview
 static boolean ASWP_CAMUPLOAD   = true;     //enable upload from camera for photos
 static boolean ASWP_ONLYCAM		= false;	//incase you want only camera files to upload
-static boolean ASWP_MULFILE     = false;    //upload multiple files in webview
+static boolean ASWP_MULFILE     = true;     //upload multiple files in webview
 static boolean ASWP_LOCATION    = true;     //track GPS locations
 static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
 static boolean ASWP_PBAR        = true;     //show progress bar in app
@@ -78,19 +78,21 @@ This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) fi
 
 <a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
-## Get Android Smart WebView Pro
+## Get Smart WebView Pro
+Smart WebView Pro is a commercial app built for small and medium level businesses, easy to implement with any existing environment.
 ```
-ADDITIONAL FEATURES:
+PRO FEATURES:
 - Firebase Push Notifications
-- AdMob
+- Google AdMob
 - Navigation Drawer
 - Search Bar
 - Action Menu
 - Chrome Tab for External URLs
 - And more
 ```
-**Or need a Custom and Smarter WebView for your Business? Contact me at - getmgks@gmail.com**
+**To Get Your Smart WebView Pro's copy, drop an email to [getmgks@gmail.com]**
 
+**For SWV Pro Updates, Demo and Documentation, follow [SmartWebView-Pro](https://github.com/mgks/SmartWebView-Pro) repo.**
 
 ## Acknowledgment
 Rating method (Android-Rate) used in this app is developed by [hotchemi](https://github.com/hotchemi) and thanks to other programmers who contributed to this project.
