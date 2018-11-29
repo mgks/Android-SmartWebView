@@ -1,7 +1,7 @@
 [![alt text](https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-hdpi/ic_launcher.png "Android Smart WebView")](https://github.com/mgks/Android-SmartWebView/)
 
 # Android Smart WebView 
-[![alt text](https://img.shields.io/badge/language-java-orange.svg "Build with Java")](https://github.com/mgks/Android-SmartWebView/) [![alt text](https://img.shields.io/badge/version-3.0-yellow.svg "Smart WebView Current Version")](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php) [![alt text](https://img.shields.io/badge/get-SWV%20Pro-green.svg "Get Smart WebView Pro")](https://voinsource.github.io/SmartWebView-Pro/)
+[![alt text](https://img.shields.io/badge/language-java-orange.svg "Build with Java")](https://github.com/mgks/Android-SmartWebView/) [![alt text](https://img.shields.io/badge/version-3.0-yellow.svg "Smart WebView Current Version")](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php) [![alt text](https://img.shields.io/badge/get-SWV%20Pro-green.svg "Get Smart WebView Pro")](https://voinsource.github.io/SmartWebView-Pro/)
 
 This project is developed to help you create Hybrid Android applications with just webview. Hybrid app comes in between webview and native forms, with this project you can embed any existing webpage or setup an Offline HTML/CSS/Javascript based project.
 
