@@ -311,7 +311,7 @@ a:focus {
 .btn-default:focus {
     border: 1px solid {{ site.color.links-dark }};
     outline: 0;
-	color: {{ site.color.primary-light }};
+    color: {{ site.color.primary-light }};
     background-color: {{ site.color.links-dark }};
 }
 
