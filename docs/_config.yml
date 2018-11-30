@@ -7,9 +7,9 @@ description: "SWV is used to develop advanced hybrid android applications just w
 # Color settings (hex-codes without the leading hash-tag)
 color:
   primary-dark: '#000000'
-	primary-light: '#ffffff'
+  primary-light: '#ffffff'
   links: '#569e28'
-	links-dark: '#488422'
+  links-dark: '#488422'
 
 # Footer settings
 footer: voinsource
