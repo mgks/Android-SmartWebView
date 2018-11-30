@@ -300,6 +300,13 @@ a:focus {
     background-color: {{ site.color.links }};
 }
 
+.btn-gold {
+    border: 1px solid {{ site.color.gold }};
+    outline: 0;
+    color: {{ site.color.primary-light }};
+    background-color: {{ site.color.gold }};
+}
+
 .btn-default:hover,
 .btn-default:focus {
     border: 1px solid {{ site.color.links-dark }};
