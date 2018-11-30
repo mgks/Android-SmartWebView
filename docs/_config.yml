@@ -1,8 +1,8 @@
 # Site settings
-title: Grayscale
-email: your-email@domain.com
-url: https://example.github.io
-description: "Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description."
+title: Android Smart WebView
+email: getmgks@gmail.com
+url: https://mgks.github.io/Android-SmartWebView/
+description: "This project is developed to help you create Hybrid Android applications with just webview. Hybrid app comes in between webview and native forms, with this project you can embed any existing webpage or setup an Offline HTML/CSS/Javascript based project."
 
 # Color settings (hex-codes without the leading hash-tag)
 color:
@@ -10,20 +10,18 @@ color:
   links: '#219ab3'
 
 # Footer settings
-footer: Your Website
+footer: voinsource
 
 # Social networks usernames (many more available: google-plus, flickr, dribbble, pinterest, instagram, tumblr, linkedin, etc.)
 social:
   - title: twitter
-    url: https://twitter.com/SBootstrap
+    url: https://twitter.com/infeeds
   - title: facebook
-    url:
+    url: https://www.facebook.com/infeeds
   - title: stack-overflow
-    url: http://stackoverflow.com/questions/tagged/jekyll
-  - title: bitbucket
-    url: http://bitbucket.org/jekyll
+    url: https://stackoverflow.com/questions/tagged/swv
   - title: github
-    url: https://github.com/IronSummitMedia/startbootstrap
+    url: https://github.com/mgks
 
 # Build settings
 markdown: kramdown
