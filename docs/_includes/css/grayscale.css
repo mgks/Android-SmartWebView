@@ -54,7 +54,7 @@ a {
 a:hover,
 a:focus {
     text-decoration: none;
-    color: #11505d;
+    color: {{ site.color.links-dark }};
 }
 
 .light {
@@ -288,7 +288,7 @@ a:focus {
 .btn {
     text-transform: uppercase;
     font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-weight: 400;
+    font-weight: 100;
     -webkit-transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out;
@@ -296,16 +296,15 @@ a:focus {
 
 .btn-default {
     border: 1px solid {{ site.color.links }};
-    color: {{ site.color.links }};
-    background-color: transparent;
+    color: {{ site.color.primary-light }};
+    background-color: {{ site.color.links }};
 }
 
 .btn-default:hover,
 .btn-default:focus {
-    border: 1px solid {{ site.color.links }};
+    border: 1px solid {{ site.color.links-dark }};
     outline: 0;
-    color: {{ site.color.primary-dark }};
-    background-color: {{ site.color.links }};
+    background-color: {{ site.color.links-dark }};
 }
 
 ul.banner-social-buttons {
