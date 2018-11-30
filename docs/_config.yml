@@ -10,6 +10,7 @@ color:
   primary-light: '#ffffff'
   links: '#569e28'
   links-dark: '#488422'
+  links-gold: '#d98900'
 
 # Footer settings
 footer: voinsource
