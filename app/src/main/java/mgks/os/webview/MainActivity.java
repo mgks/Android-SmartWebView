@@ -47,7 +47,6 @@ import android.webkit.GeolocationPermissions;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -452,7 +451,13 @@ public class MainActivity extends AppCompatActivity {
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
 
-			//Opening external URLs in android default web browser
+			//Getting location for offline files
+		} else if (url.startsWith("offloc:")) {
+			String offloc = ASWV_URL+"?loc="+get_location();
+			aswm_view(offloc,false);
+			Log.d("OFFLINE LOC REQ",offloc);
+
+		 	//Opening external URLs in android default web browser
 		} else if (ASWP_EXTURL && !aswm_host(url).equals(ASWV_HOST)) {
 			aswm_view(url,true);
 		} else {
@@ -507,7 +512,8 @@ public class MainActivity extends AppCompatActivity {
 	}
 
     //Using cookies to update user locations
-    public void get_location(){
+	public String get_location(){
+		String newloc = "0,0";
 		//Checking for location permissions
 		if (ASWP_LOCATION && ((Build.VERSION.SDK_INT >= 23 && check_permission(1)) || Build.VERSION.SDK_INT < 23)) {
 			CookieManager cookieManager = CookieManager.getInstance();
@@ -518,9 +524,12 @@ public class MainActivity extends AppCompatActivity {
 			double longitude = gps.getLongitude();
 			if (gps.canGetLocation()) {
 				if (latitude != 0 || longitude != 0) {
-					cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
-					cookieManager.setCookie(ASWV_URL, "long=" + longitude);
+					if(!ASWP_OFFLINE) {
+						cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
+						cookieManager.setCookie(ASWV_URL, "long=" + longitude);
+					}
 					//Log.w("New Updated Location:", latitude + "," + longitude);  //enable to test dummy latitude and longitude
+					newloc = latitude+","+longitude;
 				} else {
 					Log.w("New Updated Location:", "NULL");
 				}
@@ -529,7 +538,8 @@ public class MainActivity extends AppCompatActivity {
 				Log.w("New Updated Location:", "FAIL");
 			}
 		}
-    }
+		return newloc;
+	}
 
 	//Checking if particular permission is given or not
 	public boolean check_permission(int permission){
