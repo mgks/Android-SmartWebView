@@ -73,10 +73,12 @@ COOKIE "long" for longitude
 ## License
 This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
 
-## Donate
+## Support me
 #### I'd appreciate even your tiniest contribution to my work, it keeps me motivated to keep this Open Source updated. If this project helped you or your business in any way and you feel like donating some change, you can Paypal me from the button below.
 
 <a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
+
+#### Or buy a copy or Smart WebView Pro version from below, it will be really appreciated. Thank You!
 
 ## [Get Smart WebView Pro](https://voinsource.github.io/SmartWebView-Pro/)
 Smart WebView Pro is a commercial app built for small and medium level businesses, easy to implement with any existing environment.
