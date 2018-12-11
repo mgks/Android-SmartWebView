@@ -91,19 +91,18 @@ PRO FEATURES:
 - And more
 ```
 
-**To Get Smart WebView Pro's Updates, Demo and Documentation, follow [SmartWebView-Pro](https://github.com/voinsource/SmartWebView-Pro) repo, or just drop an email to [getmgks@gmail.com] for any more query.**
+**To Get Smart WebView Pro's Updates, Demo and Documentation, follow [SmartWebView-Pro](https://github.com/voinsource/SmartWebView-Pro) repo.<br>If you have any queries regarding SWV Pro, you can raise an issue [here](https://github.com/voinsource/SmartWebView-Pro/issues).**
 
 ## Acknowledgment
 Rating method (Android-Rate) used in this app is developed by [hotchemi](https://github.com/hotchemi) and thanks to other programmers who contributed to this project.
 
 Post in Github Repo issues section if you got any problem handling the project and if you want to contribute, you're most welcome to help me make a smarter project than what it is.
-Just drop me a mail at: [getmgks@gmail.com](mailto:getmgks@gmail.com)
 
 **This project on Infeeds - [Android Smart WebView open source to upload files, get GPS locations and more advanced features](https://infeeds.com/d/CODEmgks/25019/android-smart-webview-open-source-upload)**
 
 **A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
 
-This project is initially developed by **[Ghazi Khan](https://mgks.infeeds.com)**.
+This project is initially developed by **[Ghazi Khan](https://github.com/mgks)**.
 
 [![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
 ![ga tracker](https://www.google-analytics.com/collect?v=1&a=257770996&t=pageview&dl=https%3A%2F%2Fgithub.com%2Fmgks%2FAndroid-SmartWebView&ul=en-us&de=UTF-8&cid=978224512.1377738459&tid=UA-129370045-1&z=887657232 "ga tracker")
