@@ -257,53 +257,57 @@ public class MainActivity extends AppCompatActivity {
             }
             //Handling input[type="file"] requests for android API 21+
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams){
-				get_file();
-                if(ASWP_FUPLOAD) {
-                    if (asw_file_path != null) {
-                        asw_file_path.onReceiveValue(null);
-                    }
-                    asw_file_path = filePathCallback;
-					Intent takePictureIntent = null;
-                    if (ASWP_CAMUPLOAD) {
-						takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
-                            File photoFile = null;
-                            try {
-                                photoFile = create_image();
-                                takePictureIntent.putExtra("PhotoPath", asw_cam_message);
-                            } catch (IOException ex) {
-                                Log.e(TAG, "Image file creation failed", ex);
-                            }
-                            if (photoFile != null) {
-                                asw_cam_message = "file:" + photoFile.getAbsolutePath();
-                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                            } else {
-                                takePictureIntent = null;
-                            }
-                        }
-                    }
-					Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    if(!ASWP_ONLYCAM) {
-						contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-						contentSelectionIntent.setType(ASWV_F_TYPE);
-						if (ASWP_MULFILE) {
-							contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            	if(check_permission(2) && check_permission(3)) {
+					if (ASWP_FUPLOAD) {
+						if (asw_file_path != null) {
+							asw_file_path.onReceiveValue(null);
 						}
-					}
-					Intent[] intentArray;
-					if (takePictureIntent != null) {
-						intentArray = new Intent[]{takePictureIntent};
-					} else {
-						intentArray = new Intent[0];
-					}
+						asw_file_path = filePathCallback;
+						Intent takePictureIntent = null;
+						if (ASWP_CAMUPLOAD) {
+							takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+							if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
+								File photoFile = null;
+								try {
+									photoFile = create_image();
+									takePictureIntent.putExtra("PhotoPath", asw_cam_message);
+								} catch (IOException ex) {
+									Log.e(TAG, "Image file creation failed", ex);
+								}
+								if (photoFile != null) {
+									asw_cam_message = "file:" + photoFile.getAbsolutePath();
+									takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+								} else {
+									takePictureIntent = null;
+								}
+							}
+						}
+						Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+						if (!ASWP_ONLYCAM) {
+							contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+							contentSelectionIntent.setType(ASWV_F_TYPE);
+							if (ASWP_MULFILE) {
+								contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+							}
+						}
+						Intent[] intentArray;
+						if (takePictureIntent != null) {
+							intentArray = new Intent[]{takePictureIntent};
+						} else {
+							intentArray = new Intent[0];
+						}
 
-                    Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-                    chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-                    chooserIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.fl_chooser));
-                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-                    startActivityForResult(chooserIntent, asw_file_req);
-                }
-                return true;
+						Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+						chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+						chooserIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.fl_chooser));
+						chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+						startActivityForResult(chooserIntent, asw_file_req);
+					}
+					return true;
+				}else{
+            		get_file();
+            		return false;
+				}
             }
 
             //Getting webview rendering progress
