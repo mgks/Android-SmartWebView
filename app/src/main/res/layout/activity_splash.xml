@@ -6,8 +6,7 @@
     android:background="@color/colorPrimary" >
 
 	<ImageView
-        android:id="@+id/msw_loading_logo"
-        android:src="@raw/front_splash"
+		android:src="@raw/front_splash"
         android:contentDescription=""
         tools:ignore="ContentDescription"
         android:layout_height="120sp"

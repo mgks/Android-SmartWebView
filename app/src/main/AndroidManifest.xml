@@ -43,7 +43,7 @@
 		android:hardwareAccelerated="true"
         tools:ignore="AllowBackup">
         <activity
-            android:name="mgks.os.webview.SplashScreen"
+            android:name=".SplashScreen"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="mgks.os.webview.MainActivity"
+            android:name=".MainActivity"
             android:screenOrientation="portrait" > <!-- remove or alter as your apps requirement -->
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.VIEW" />
@@ -60,7 +60,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https"
                     android:host="github.com"
-                    android:pathPrefix="/mgks" /> <!-- if you want only a specific directory from your website to be opened in the app through external links -->
+                    android:pathPrefix="/voinsource" /> <!-- if you want only a specific directory from your website to be opened in the app through external links -->
             </intent-filter>
         </activity>
         <meta-data
