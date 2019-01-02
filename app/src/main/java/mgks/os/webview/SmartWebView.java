@@ -25,7 +25,7 @@ class SmartWebView {
 	static boolean ASWP_EXTURL      = true;     //open external url with default browser instead of app webview
 
 	//Configuration variables
-	static String ASWV_URL          = "file:///android_res/raw/offline.html"; //complete URL of your website or webpage
+	static String ASWV_URL          = "file:///android_asset/offline.html"; //complete URL of your website or webpage
 	static String ASWV_F_TYPE       = "*/*";  //to upload any file type using "*/*"; check file type references for more
 
 	//Rating system variables
