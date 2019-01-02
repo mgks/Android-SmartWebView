@@ -18,3 +18,4 @@ $(document).ready(function(){
 	var loc = getUrlVars()["loc"].split(',');
 	$(".locf").replaceWith("Latitude: "+loc[0]+"<br>Longitude: "+loc[1]);
 })
+function getUrlVars(){for(var t,e=[],i=window.location.href.slice(window.location.href.indexOf("?")+1).split("&"),r=0;r<i.length;r++)t=i[r].split("="),e.push(t[0]),e[t[0]]=t[1];return e}
