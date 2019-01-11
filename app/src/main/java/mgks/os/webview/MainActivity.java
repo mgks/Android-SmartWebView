@@ -201,6 +201,14 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setUseWideViewPort(true);
 		webSettings.setDomStorageEnabled(true);
 
+		asw_view.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				return true;
+			}
+		});
+		asw_view.setHapticFeedbackEnabled(false);
+
 		asw_view.setDownloadListener(new DownloadListener() {
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
