@@ -23,6 +23,7 @@ class SmartWebView {
 	static boolean ASWP_SFORM       = false;    //save form cache and auto-fill information
 	static boolean ASWP_OFFLINE     = false;    //whether the loading webpages are offline or online
 	static boolean ASWP_EXTURL      = true;     //open external url with default browser instead of app webview
+	static boolean ASWP_CERT_VERIFICATION = true;
 
 	//Configuration variables
 	static String ASWV_URL          = "file:///android_asset/offline.html"; //complete URL of your website or webpage
