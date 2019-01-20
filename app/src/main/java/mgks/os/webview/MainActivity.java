@@ -26,6 +26,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -51,6 +52,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.SslErrorHandler;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 	static boolean ASWP_SFORM       = SmartWebView.ASWP_SFORM;
 	static boolean ASWP_OFFLINE		= SmartWebView.ASWP_OFFLINE;
 	static boolean ASWP_EXTURL		= SmartWebView.ASWP_EXTURL;
+	static boolean ASWP_CERT_VERIFICATION = SmartWebView.ASWP_CERT_VERIFICATION;
 
 	//Configuration variables
 	private static String ASWV_URL      = SmartWebView.ASWV_URL;
@@ -399,7 +402,16 @@ public class MainActivity extends AppCompatActivity {
 		public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
 			return url_actions(view, request.getUrl().toString());
 		}
-    }
+
+		@Override
+		public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+        	if(ASWP_CERT_VERIFICATION) {
+				super.onReceivedSslError(view, handler, error);
+			} else {
+        		handler.proceed(); // Ignore SSL certificate errors
+			}
+		}
+	}
 
     //Random ID creation function to help get fresh cache every-time webview reloaded
     public String random_id() {

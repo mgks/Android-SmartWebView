@@ -14,7 +14,7 @@ class SmartWebView {
 	static boolean ASWP_JSCRIPT     = true;     //enable JavaScript for webview
 	static boolean ASWP_FUPLOAD     = true;     //upload file from webview
 	static boolean ASWP_CAMUPLOAD   = true;     //enable upload from camera for photos
-	static boolean ASWP_ONLYCAM		 = false;    //incase you want only camera files to upload
+	static boolean ASWP_ONLYCAM	= false;    //incase you want only camera files to upload
  	static boolean ASWP_MULFILE     = false;    //upload multiple files in webview
 	static boolean ASWP_LOCATION    = true;     //track GPS locations
 	static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
@@ -23,6 +23,9 @@ class SmartWebView {
 	static boolean ASWP_SFORM       = false;    //save form cache and auto-fill information
 	static boolean ASWP_OFFLINE     = false;    //whether the loading webpages are offline or online
 	static boolean ASWP_EXTURL      = true;     //open external url with default browser instead of app webview
+	
+	//Security variables
+	static boolean ASWP_CERT_VERIFICATION = true;	//verify whether HTTPS port needs certificate verification
 
 	//Configuration variables
 	static String ASWV_URL          = "file:///android_asset/offline.html"; //complete URL of your website or webpage
