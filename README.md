@@ -1,11 +1,15 @@
 <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="65"></a>
 
 # Android Smart WebView 
-[![alt text](https://img.shields.io/badge/language-java-red.svg "Build with Java")](https://github.com/mgks/Android-SmartWebView/) [![alt text](https://img.shields.io/badge/version-3.0-green.svg "Smart WebView Current Version")](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php) [![alt text](https://img.shields.io/badge/visit-ASWV%20Page-black.svg "ASWV GitHub Page")](https://mgks.github.io/Android-SmartWebView/)<br>[![alt text](https://img.shields.io/badge/explore-Smart%20WebView%20Pro-yellow.svg "Get Smart WebView Pro")](https://github.com/voinsource/SmartWebView-Pro)
+[![alt text](https://img.shields.io/badge/language-java-red.svg "Build with Java")](https://github.com/mgks/Android-SmartWebView/) [![alt text](https://img.shields.io/badge/version-3.0-green.svg "Smart WebView Current Version")](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php) [![alt text](https://img.shields.io/badge/visit-ASWV%20Page-black.svg "ASWV GitHub Page")](https://mgks.github.io/Android-SmartWebView/)<br>[![alt text](https://img.shields.io/badge/see%20also-Smart%20WebView%20Pro-yellow.svg "Get Smart WebView Pro")](https://github.com/voinsource/SmartWebView-Pro)
 
 This project is developed to help you create Hybrid Android applications with just webview. Hybrid app comes in between webview and native forms, with this project you can embed any existing webpage or setup an Offline HTML/CSS/Javascript based project.
 
 Android Smart WebView gathers all necessary information needed to make any simple app as powerful as a native Android app. This project takes only required data from device to obtain information, including, GPS Location, File Manager, Camera for Processing Images, Custom Dialogues, Notifications and more with clean minimal design.
+
+```
+A REQUEST: PLEASE DON'T FORGET TO SHARE YOUR FEEDBACK :)
+```
 
 ## Getting Started
 These instructions will help you get your Smart WebView copy up and running on your local machine for development and testing purposes.
@@ -39,7 +43,7 @@ Once your project is ready here are some static variables you can change as per 
 static boolean ASWP_JSCRIPT     = true;     //enable JavaScript for webview
 static boolean ASWP_FUPLOAD     = true;     //upload file from webview
 static boolean ASWP_CAMUPLOAD   = true;     //enable upload from camera for photos
-static boolean ASWP_ONLYCAM     = false;	//incase you want only camera files to upload
+static boolean ASWP_ONLYCAM     = false;    //incase you want only camera files to upload
 static boolean ASWP_MULFILE     = true;     //upload multiple files in webview
 static boolean ASWP_LOCATION    = true;     //track GPS locations
 static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
@@ -49,11 +53,14 @@ static boolean ASWP_SFORM       = false;    //save form cache and auto-fill info
 static boolean ASWP_OFFLINE     = false;    //whether the loading webpages are offline or online
 static boolean ASWP_EXTURL      = true;     //open external url with default browser instead of app webview
 ```
-
+#### Security variables
+```java
+static boolean ASWP_CERT_VERIFICATION   = true;    //verify whether HTTPS port needs certificate verification
+```
 #### Configuration variables
 Complete URL of your website, landing page or local file as `file:///android_res/dir/file.html`
 ```java
-ASWV_URL      = "https://github.com/mgks";	//domain, or directory or locating to any root file
+ASWV_URL      = "https://github.com/mgks";    //domain, or directory or locating to any root file
 ```
 
 If file upload enabled, you can define its extention type, default is `*/*` for all file types;
@@ -82,6 +89,7 @@ This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) fi
 
 ## [Get Smart WebView Pro](https://voinsource.github.io/SmartWebView-Pro/)
 Smart WebView Pro is a commercial app built for small and medium level businesses, easy to implement with any existing environment.
+
 ```
 PRO FEATURES:
 - Firebase Push Notifications
@@ -94,6 +102,11 @@ PRO FEATURES:
 ```
 
 **To Get Smart WebView Pro's Updates, Demo and Documentation, follow [SmartWebView-Pro](https://github.com/voinsource/SmartWebView-Pro) repo.<br>If you have any queries regarding SWV Pro, you can raise an issue [here](https://github.com/voinsource/SmartWebView-Pro/issues).**
+
+```
+NOTE: All public contributions will always be a part of this open source here.
+SWV Pro just contains some additional features that have been implemented only by me to make the app more commercial oriented which helps me keep this repo updated.
+```
 
 ## Acknowledgment
 Rating method (Android-Rate) used in this app is developed by [hotchemi](https://github.com/hotchemi) and thanks to other programmers who contributed to this project.
