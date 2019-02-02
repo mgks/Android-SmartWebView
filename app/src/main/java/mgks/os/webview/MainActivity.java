@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
 	static boolean ASWP_SFORM       = SmartWebView.ASWP_SFORM;
 	static boolean ASWP_OFFLINE		= SmartWebView.ASWP_OFFLINE;
 	static boolean ASWP_EXTURL		= SmartWebView.ASWP_EXTURL;
+
+	//Security variables
 	static boolean ASWP_CERT_VERIFICATION = SmartWebView.ASWP_CERT_VERIFICATION;
 
 	//Configuration variables
@@ -358,9 +360,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		asw_view.onPause();
+	}
+
     @Override
     public void onResume() {
         super.onResume();
+        asw_view.onResume();
         //Coloring the "recent apps" tab header; doing it onResume, as an insurance
         if (Build.VERSION.SDK_INT >= 23) {
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
