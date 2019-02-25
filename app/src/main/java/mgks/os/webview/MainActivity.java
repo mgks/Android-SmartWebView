@@ -1,11 +1,11 @@
 package mgks.os.webview;
 
 /*
-* Android Smart WebView is an Open Source Project available on GitHub.
-* Developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
-* This program is free to use for private and commercial purposes.
-* Please mention project source or developer credits in your Application's License(s) Wiki.
-* Giving right credit to developers encourages them to create better projects, just want you to know that :)
+ * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
+ * Developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
+ * This program is free to use for private and commercial purposes.
+ * Please mention project source or developer credit in your Application's License(s) Wiki.
+ * Giving right credit to developers encourages them to create better projects :)
 */
 
 import android.Manifest;
@@ -35,6 +35,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -66,16 +67,18 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-	static boolean ASWP_JSCRIPT     = SmartWebView.ASWP_JSCRIPT;
-	static boolean ASWP_FUPLOAD     = SmartWebView.ASWP_FUPLOAD;
-	static boolean ASWP_CAMUPLOAD   = SmartWebView.ASWP_CAMUPLOAD;
+	//Permission variables
+	static boolean ASWP_JSCRIPT    = SmartWebView.ASWP_JSCRIPT;
+	static boolean ASWP_FUPLOAD    = SmartWebView.ASWP_FUPLOAD;
+	static boolean ASWP_CAMUPLOAD  = SmartWebView.ASWP_CAMUPLOAD;
 	static boolean ASWP_ONLYCAM		= SmartWebView.ASWP_ONLYCAM;
-	static boolean ASWP_MULFILE     = SmartWebView.ASWP_MULFILE;
-	static boolean ASWP_LOCATION    = SmartWebView.ASWP_LOCATION;
-	static boolean ASWP_RATINGS     = SmartWebView.ASWP_RATINGS;
-	static boolean ASWP_PBAR        = SmartWebView.ASWP_PBAR;
-	static boolean ASWP_ZOOM        = SmartWebView.ASWP_ZOOM;
-	static boolean ASWP_SFORM       = SmartWebView.ASWP_SFORM;
+	static boolean ASWP_MULFILE    = SmartWebView.ASWP_MULFILE;
+	static boolean ASWP_LOCATION   = SmartWebView.ASWP_LOCATION;
+	static boolean ASWP_RATINGS    = SmartWebView.ASWP_RATINGS;
+	static boolean ASWP_PULLFRESH	= SmartWebView.ASWP_PULLFRESH;
+	static boolean ASWP_PBAR       = SmartWebView.ASWP_PBAR;
+	static boolean ASWP_ZOOM       = SmartWebView.ASWP_ZOOM;
+	static boolean ASWP_SFORM      = SmartWebView.ASWP_SFORM;
 	static boolean ASWP_OFFLINE		= SmartWebView.ASWP_OFFLINE;
 	static boolean ASWP_EXTURL		= SmartWebView.ASWP_EXTURL;
 
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
 	//Configuration variables
 	private static String ASWV_URL      = SmartWebView.ASWV_URL;
+	private String CURR_URL				 = ASWV_URL;
 	private static String ASWV_F_TYPE   = SmartWebView.ASWV_F_TYPE;
 
     public static String ASWV_HOST		= aswm_host(ASWV_URL);
@@ -167,7 +171,21 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        if (ASWP_PBAR) {
+		final SwipeRefreshLayout pullfresh = findViewById(R.id.pullfresh);
+		if (ASWP_PULLFRESH) {
+			pullfresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+				@Override
+				public void onRefresh() {
+					pull_fresh();
+					pullfresh.setRefreshing(false);
+				}
+			});
+		}else{
+			pullfresh.setRefreshing(false);
+			pullfresh.setEnabled(false);
+		}
+
+		if (ASWP_PBAR) {
             asw_progress = findViewById(R.id.msw_progress);
         } else {
             findViewById(R.id.msw_progress).setVisibility(View.GONE);
@@ -334,16 +352,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-	    // overload the geoLocations permissions prompt to always allow instantly as app permission was granted previously
-            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-		if(Build.VERSION.SDK_INT < 23 || (Build.VERSION.SDK_INT >= 23 && check_permission(1))){
-			// location permissions were granted previously so auto-approve
-			callback.invoke(origin, true, false);
-		} else {
-			// location permissions not granted so request them
-			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, loc_perm);
-		}
-	}
+	    	// overload the geoLocations permissions prompt to always allow instantly as app permission was granted previously
+			public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+				if(Build.VERSION.SDK_INT < 23 || check_permission(1)){
+					// location permissions were granted previously so auto-approve
+					callback.invoke(origin, true, false);
+				} else {
+					// location permissions not granted so request them
+					ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, loc_perm);
+				}
+			}
         });
         if (getIntent().getData() != null) {
             String path     = getIntent().getDataString();
@@ -402,6 +420,7 @@ public class MainActivity extends AppCompatActivity {
 		@SuppressWarnings("deprecation")
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        	CURR_URL = url;
 			return url_actions(view, url);
         }
 
@@ -409,6 +428,7 @@ public class MainActivity extends AppCompatActivity {
 		@TargetApi(Build.VERSION_CODES.N)
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        	CURR_URL = request.getUrl().toString();
 			return url_actions(view, request.getUrl().toString());
 		}
 
@@ -453,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
 
 			//Use this in a hyperlink to redirect back to default URL :: href="refresh:android"
 		} else if (url.startsWith("refresh:")) {
-			aswm_view(ASWV_URL, false);
+			pull_fresh();
 
 			//Use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
 		} else if (url.startsWith("tel:")) {
@@ -516,6 +536,11 @@ public class MainActivity extends AppCompatActivity {
 		end = (port > 0 && port < end) ? port : end;
 		Log.w("URL Host: ",url.substring(dslash, end));
 		return url.substring(dslash, end);
+	}
+
+	//Reloading current page
+	public void pull_fresh(){
+    	aswm_view(CURR_URL,false);
 	}
 
 	//Getting device basic information
