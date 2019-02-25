@@ -47,6 +47,7 @@ static boolean ASWP_ONLYCAM     = false;    //incase you want only camera files 
 static boolean ASWP_MULFILE     = true;     //upload multiple files in webview
 static boolean ASWP_LOCATION    = true;     //track GPS locations
 static boolean ASWP_RATINGS     = true;     //show ratings dialog; auto configured, edit method get_rating() for customizations
+static boolean ASWP_PULLFRESH	= true;     //pull refresh current url
 static boolean ASWP_PBAR        = true;     //show progress bar in app
 static boolean ASWP_ZOOM        = false;    //zoom control for webpages view
 static boolean ASWP_SFORM       = false;    //save form cache and auto-fill information
@@ -94,11 +95,11 @@ Smart WebView Pro is a commercial app built for small and medium level businesse
 PRO FEATURES:
 - Firebase Push Notifications
 - Google AdMob
+- Chromium Tab for External URLs
 - Navigation Drawer
 - Search Bar
 - Action Menu
-- Chrome Tab for External URLs
-- And more
+- And other customizations
 ```
 
 **To Get Smart WebView Pro's Updates, Demo and Documentation, follow [SmartWebView-Pro](https://github.com/voinsource/SmartWebView-Pro) repo.<br>If you have any queries regarding SWV Pro, you can raise an issue [here](https://github.com/voinsource/SmartWebView-Pro/issues).**
