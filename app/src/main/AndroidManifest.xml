@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
-* Android Smart WebView is an Open Source Project available on GitHub.
-* Developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
-* This program is free to use for private and commercial purposes.
-* Please mention project source or developer credits in your Application's License(s) Wiki.
-* Giving right credit to developers encourages them to create better projects, just want you to know that :)
+ * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
+ * Developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
+ * This program is free to use for private and commercial purposes.
+ * Please mention project source or developer credit in your Application's License(s) Wiki.
+ * Giving right credit to developers encourages them to create better projects :)
 -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="mgks.os.webview"
