@@ -413,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
 		@Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             Toast.makeText(getApplicationContext(), getString(R.string.went_wrong), Toast.LENGTH_SHORT).show();
-            aswm_view("file:///android_res/raw/error.html", false);
+            aswm_view("file:///android_asset/error.html", false);
         }
 
         //Overriding webview URLs
