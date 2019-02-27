@@ -1,7 +1,9 @@
 <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="65"></a>
 
-# Android Smart WebView 
-[![alt text](https://img.shields.io/badge/language-java-red.svg "Build with Java")](https://github.com/mgks/Android-SmartWebView/) [![alt text](https://img.shields.io/badge/version-3.0-green.svg "Smart WebView Current Version")](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php) [![alt text](https://img.shields.io/badge/visit-ASWV%20Page-black.svg "ASWV GitHub Page")](https://mgks.github.io/Android-SmartWebView/)<br>[![alt text](https://img.shields.io/badge/see%20also-Smart%20WebView%20Pro-yellow.svg "Get Smart WebView Pro")](https://github.com/voinsource/SmartWebView-Pro)
+# Android Smart WebView
+[![alt text](https://img.shields.io/badge/language-java-red.svg "Build with Java")](https://github.com/mgks/Android-SmartWebView/) [![alt text](https://img.shields.io/badge/version-3.0-green.svg "Smart WebView Current Version")](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php) [![alt text](https://img.shields.io/badge/see%20also-Smart%20WebView%20Pro-yellow.svg "Get Smart WebView Pro")](https://github.com/voinsource/SmartWebView-Pro)
+
+**Note: Active version of this project has been moved from Java to Kotlin now, checkout [Android-SWV](https://github.com/mgks/Android-SWV)**
 
 This project is developed to help you create Hybrid Android applications with just webview. Hybrid app comes in between webview and native forms, with this project you can embed any existing webpage or setup an Offline HTML/CSS/Javascript based project.
 
