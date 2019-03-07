@@ -42,6 +42,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
@@ -178,6 +179,16 @@ public class MainActivity extends AppCompatActivity {
 				public void onRefresh() {
 					pull_fresh();
 					pullfresh.setRefreshing(false);
+				}
+			});
+			asw_view.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+				@Override
+				public void onScrollChanged() {
+					if (asw_view.getScrollY() == 0) {
+						pullfresh.setEnabled(true);
+					} else {
+						pullfresh.setEnabled(false);
+					}
 				}
 			});
 		}else{
