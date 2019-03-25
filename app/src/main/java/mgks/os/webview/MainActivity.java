@@ -172,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+		asw_view = findViewById(R.id.msw_view);
+
 		final SwipeRefreshLayout pullfresh = findViewById(R.id.pullfresh);
 		if (ASWP_PULLFRESH) {
 			pullfresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -217,8 +219,6 @@ public class MainActivity extends AppCompatActivity {
 			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, loc_perm);
 		}
 		get_location();
-
-        asw_view = findViewById(R.id.msw_view);
 
         //Webview settings; defaults are customized for best performance
         WebSettings webSettings = asw_view.getSettings();
