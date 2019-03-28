@@ -584,9 +584,7 @@ public class MainActivity extends AppCompatActivity {
 	public String get_location(){
 		String newloc = "0,0";
 		//Checking for location permissions
-		if (ASWP_LOCATION && ((Build.VERSION.SDK_INT >= 23 && check_permission(1)) || Build.VERSION.SDK_INT < 23)) {
-			CookieManager cookieManager = CookieManager.getInstance();
-			cookieManager.setAcceptCookie(true);
+		if (ASWP_LOCATION && (Build.VERSION.SDK_INT < 23 || check_permission(1))) {
 			GPSTrack gps;
 			gps = new GPSTrack(MainActivity.this);
 			double latitude = gps.getLatitude();
@@ -594,6 +592,8 @@ public class MainActivity extends AppCompatActivity {
 			if (gps.canGetLocation()) {
 				if (latitude != 0 || longitude != 0) {
 					if(!ASWP_OFFLINE) {
+						CookieManager cookieManager = CookieManager.getInstance();
+						cookieManager.setAcceptCookie(true);
 						cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
 						cookieManager.setCookie(ASWV_URL, "long=" + longitude);
 					}
