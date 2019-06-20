@@ -32,13 +32,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -58,6 +52,13 @@ import android.webkit.SslErrorHandler;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import java.io.File;
 import java.io.IOException;
@@ -269,14 +270,10 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-            asw_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        } else if (Build.VERSION.SDK_INT >= 19) {
-            asw_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+		getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+		webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+		asw_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         asw_view.setVerticalScrollBarEnabled(false);
         asw_view.setWebViewClient(new Callback());
 
@@ -284,20 +281,7 @@ public class MainActivity extends AppCompatActivity {
         aswm_view(ASWV_URL, false);
 
         asw_view.setWebChromeClient(new WebChromeClient() {
-            //Handling input[type="file"] requests for android API 16+
-            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture){
-                if(ASWP_FUPLOAD) {
-                    asw_file_message = uploadMsg;
-                    Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                    i.addCategory(Intent.CATEGORY_OPENABLE);
-                    i.setType(ASWV_F_TYPE);
-		    		if(ASWP_MULFILE) {
-                        i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                    }
-                    startActivityForResult(Intent.createChooser(i, getString(R.string.fl_chooser)), asw_file_req);
-                }
-            }
-            //Handling input[type="file"] requests for android API 21+
+            //Handling input[type="file"]
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams){
             	if(check_permission(2) && check_permission(3)) {
 					if (ASWP_FUPLOAD) {
@@ -420,7 +404,6 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.msw_view).setVisibility(View.VISIBLE);
         }
         //For android below API 23
-		@SuppressWarnings("deprecation")
 		@Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             Toast.makeText(getApplicationContext(), getString(R.string.went_wrong), Toast.LENGTH_SHORT).show();
@@ -428,8 +411,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Overriding webview URLs
-		@SuppressWarnings("deprecation")
-        @Override
+		@Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
         	CURR_URL = url;
 			return url_actions(view, url);
@@ -484,6 +466,10 @@ public class MainActivity extends AppCompatActivity {
 
 			//Use this in a hyperlink to redirect back to default URL :: href="refresh:android"
 		} else if (url.startsWith("refresh:")) {
+			String ref_sch = (Uri.parse(url).toString()).replace("refresh:","");
+			if(ref_sch.matches("URL")){
+				CURR_URL = ASWV_URL;
+			}
 			pull_fresh();
 
 			//Use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
@@ -551,7 +537,7 @@ public class MainActivity extends AppCompatActivity {
 
 	//Reloading current page
 	public void pull_fresh(){
-    	aswm_view(CURR_URL,false);
+    	aswm_view((!CURR_URL.equals("")?CURR_URL:ASWV_URL),false);
 	}
 
 	//Getting device basic information
@@ -709,12 +695,10 @@ public class MainActivity extends AppCompatActivity {
 
 	//Checking if users allowed the requested permissions or not
 	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults){
-		switch (requestCode){
-			case 1: {
-				if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-					get_location();
-				}
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+		if (requestCode == 1) {
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				get_location();
 			}
 		}
 	}
@@ -723,14 +707,13 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
-			switch (keyCode) {
-				case KeyEvent.KEYCODE_BACK:
-					if (asw_view.canGoBack()) {
-						asw_view.goBack();
-					} else {
-						finish();
-					}
-					return true;
+			if (keyCode == KeyEvent.KEYCODE_BACK) {
+				if (asw_view.canGoBack()) {
+					asw_view.goBack();
+				} else {
+					finish();
+				}
+				return true;
 			}
 		}
 		return super.onKeyDown(keyCode, event);
