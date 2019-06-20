@@ -1,7 +1,7 @@
 <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="65"></a>
 
 # Android Smart WebView
-[![alt text](https://img.shields.io/badge/project%20variant-java-red.svg)](#) [![alt text](https://img.shields.io/badge/version-3.5-green.svg)](https://github.com/mgks/Kotlin-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php) [![alt text](https://img.shields.io/badge/learn%20about-SWV%20Pro-yellow.svg "Get Smart WebView Pro")](https://github.com/voinsource/SmartWebView-Pro)
+[![alt text](https://img.shields.io/badge/project%20variant-java-red.svg)](#) [![alt text](https://img.shields.io/badge/version-4-green.svg)](https://github.com/mgks/Kotlin-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php) [![alt text](https://img.shields.io/badge/learn%20about-SWV%20Pro-yellow.svg "Get Smart WebView Pro")](https://github.com/voinsource/SmartWebView-Pro)
 
 **For kotlin variant, see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
 
@@ -13,7 +13,7 @@ Android Smart WebView gathers only required information from user's device based
 These instructions will help you get your Smart WebView copy up and running on your local machine for development and testing purposes.
 
 ### Requirement
-The project requires minimum Android API 19+ (4.4 KitKat) SDK to test. I use Android Studio (latest release by time last update) for this.
+The project requires minimum Android API 21+ (5.0 Lollipop) SDK to test. I use Android Studio (latest release by time last update) for this.
 
 ### Test Run
 Try cleaning and rebuilding the project in your programming environment, once you are done fixing any error (incase of one), you'll be ready to look into the project.
