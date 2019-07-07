@@ -120,6 +120,14 @@ public class MainActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
             Uri[] results = null;
+            if (resultCode == Activity.RESULT_CANCELED) {
+                if (requestCode == asw_file_req) {
+                    // If the file request was cancelled (i.e. user exited camera),
+                    // we must still send a null value in order to ensure that future attempts
+                    // to pick files will still work.
+                    asw_file_path.onReceiveValue(null);
+                }
+            }
             if (resultCode == Activity.RESULT_OK) {
                 if (requestCode == asw_file_req) {
                     if (null == asw_file_path) {
@@ -285,9 +293,6 @@ public class MainActivity extends AppCompatActivity {
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams){
             	if(check_permission(2) && check_permission(3)) {
 					if (ASWP_FUPLOAD) {
-						if (asw_file_path != null) {
-							asw_file_path.onReceiveValue(null);
-						}
 						asw_file_path = filePathCallback;
 						Intent takePictureIntent = null;
 						if (ASWP_CAMUPLOAD) {
