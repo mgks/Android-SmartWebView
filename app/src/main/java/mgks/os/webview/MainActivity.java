@@ -296,24 +296,77 @@ public class MainActivity extends AppCompatActivity {
 					if (ASWP_FUPLOAD) {
 						asw_file_path = filePathCallback;
 						Intent takePictureIntent = null;
+						Intent takeVideoIntent = null;
 						if (ASWP_CAMUPLOAD) {
-							takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-							if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
-								File photoFile = null;
-								try {
-									photoFile = create_image();
-									takePictureIntent.putExtra("PhotoPath", asw_cam_message);
-								} catch (IOException ex) {
-									Log.e(TAG, "Image file creation failed", ex);
+							boolean includeVideo = false;
+							boolean includePhoto = false;
+
+							// Check the accept parameter to determine which intent(s) to include.
+							paramCheck:
+							for (String acceptTypes : fileChooserParams.getAcceptTypes()) {
+								// Although it's an array, it still seems to be the whole value.
+								// Split it out into chunks so that we can detect multiple values.
+								String[] splitTypes = acceptTypes.split(", ?+");
+								for (String acceptType : splitTypes) {
+									switch (acceptType) {
+										case "*/*":
+											includePhoto = true;
+											includeVideo = true;
+											break paramCheck;
+										case "image/*":
+											includePhoto = true;
+											break;
+										case "video/*":
+											includeVideo = true;
+											break;
+									}
 								}
-								if (photoFile != null) {
-									asw_cam_message = "file:" + photoFile.getAbsolutePath();
-									takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-								} else {
-									takePictureIntent = null;
+							}
+
+							// If no `accept` parameter was specified, allow both photo and video.
+							if (fileChooserParams.getAcceptTypes().length == 0) {
+								includePhoto = true;
+								includeVideo = true;
+							}
+
+							if (includePhoto) {
+								takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+								if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
+									File photoFile = null;
+									try {
+										photoFile = create_image();
+										takePictureIntent.putExtra("PhotoPath", asw_cam_message);
+									} catch (IOException ex) {
+										Log.e(TAG, "Image file creation failed", ex);
+									}
+									if (photoFile != null) {
+										asw_cam_message = "file:" + photoFile.getAbsolutePath();
+										takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+									} else {
+										takePictureIntent = null;
+									}
+								}
+							}
+
+							if (includeVideo) {
+								takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+								if (takeVideoIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
+									File videoFile = null;
+									try {
+										videoFile = create_video();
+									} catch (IOException ex) {
+										Log.e(TAG, "Video file creation failed", ex);
+									}
+									if (videoFile != null) {
+										asw_cam_message = "file:" + videoFile.getAbsolutePath();
+										takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(videoFile));
+									} else {
+										takeVideoIntent = null;
+									}
 								}
 							}
 						}
+
 						Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
 						if (!ASWP_ONLYCAM) {
 							contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -323,8 +376,12 @@ public class MainActivity extends AppCompatActivity {
 							}
 						}
 						Intent[] intentArray;
-						if (takePictureIntent != null) {
+						if (takePictureIntent != null && takeVideoIntent != null) {
+							intentArray = new Intent[]{takePictureIntent, takeVideoIntent};
+						} else if (takePictureIntent != null) {
 							intentArray = new Intent[]{takePictureIntent};
+						} else if (takeVideoIntent != null) {
+							intentArray = new Intent[]{takeVideoIntent};
 						} else {
 							intentArray = new Intent[0];
 						}
@@ -625,6 +682,15 @@ public class MainActivity extends AppCompatActivity {
         String new_name     = "file_"+file_name+"_";
         File sd_directory   = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(new_name, ".jpg", sd_directory);
+    }
+
+	//Creating video file for upload
+    private File create_video() throws IOException {
+        @SuppressLint("SimpleDateFormat")
+        String file_name    = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
+        String new_name     = "file_"+file_name+"_";
+        File sd_directory   = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        return File.createTempFile(new_name, ".3gp", sd_directory);
     }
 
     //Launching app rating dialoge [developed by github.com/hotchemi]
