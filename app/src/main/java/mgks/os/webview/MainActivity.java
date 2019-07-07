@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     // we must still send a null value in order to ensure that future attempts
                     // to pick files will still work.
                     asw_file_path.onReceiveValue(null);
+                    return;
                 }
             }
             if (resultCode == Activity.RESULT_OK) {
