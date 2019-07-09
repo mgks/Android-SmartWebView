@@ -12,6 +12,8 @@ Android Smart WebView gathers only required information from user's device based
 ## Getting Started
 These instructions will help you get your Smart WebView copy up and running on your local machine for development and testing purposes.
 
+**[Watch Explainer Video for Getting Started](https://www.youtube.com/watch?v=BM_5j-KAgoQ)** created by [Nate Harris](https://www.youtube.com/channel/UCuav96GscozuOSAx18r8b4g).
+
 ### Requirement
 The project requires minimum Android API 21+ (5.0 Lollipop) SDK to test. I use Android Studio (latest release by time last update) for this.
 
