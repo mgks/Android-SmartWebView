@@ -2,11 +2,11 @@ package mgks.os.webview;
 
 /*
  * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
- * Developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
+ * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
- * Please mention project source or developer credit in your Application's License(s) Wiki.
+ * Please mention project source or credit developers in your Application's License(s) Wiki.
  * Giving right credit to developers encourages them to create better projects :)
-*/
+ */
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -134,30 +134,26 @@ public class MainActivity extends AppCompatActivity {
                     if (null == asw_file_path) {
                         return;
                     }
-                    if (intent == null || intent.getData() == null) {
-                        if (asw_cam_message != null) {
-                            results = new Uri[]{Uri.parse(asw_cam_message)};
-                        }
-                    } else {
-                        String dataString = intent.getDataString();
-                        if (dataString != null) {
-                            results = new Uri[]{ Uri.parse(dataString) };
-                        } else {
-			    			if(ASWP_MULFILE) {
-                                if (intent.getClipData() != null) {
-                                    final int numSelectedFiles = intent.getClipData().getItemCount();
-                                    results = new Uri[numSelectedFiles];
-                                    for (int i = 0; i < numSelectedFiles; i++) {
-                                        results[i] = intent.getClipData().getItemAt(i).getUri();
-                                    }
-                                }
-                            }
+					if (intent == null || intent.getData() == null) {
+						if (asw_cam_message != null) {
+							results = new Uri[]{Uri.parse(asw_cam_message)};
 						}
-                    }
+					} else {
+						if (null != intent.getClipData()) { // checking if multiple files selected or not
+							final int numSelectedFiles = intent.getClipData().getItemCount();
+							results = new Uri[numSelectedFiles];
+							for (int i = 0; i < intent.getClipData().getItemCount(); i++) {
+								results[i] = intent.getClipData().getItemAt(i).getUri();
+							}
+						} else {
+							results = new Uri[]{Uri.parse(intent.getDataString())};
+						}
+					}
                 }
             }
             asw_file_path.onReceiveValue(results);
             asw_file_path = null;
+
         } else {
             if (requestCode == asw_file_req) {
                 if (null == asw_file_message) return;
