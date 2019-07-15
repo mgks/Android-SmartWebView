@@ -81,7 +81,7 @@ COOKIE "long" for longitude
 ## Want to support this project?
 **UPDATE: I've decided to merge Smart WebView Pro with original open source after 15 copies sold of Pro.**
 
-`Currently sold: 5 (10 to go) *I'll keep this space updated`
+`Currently sold: 6 (9 to go) *I'll keep this space updated`
 <hr>
 
 #### There are few ways you can support this project -
