@@ -2,7 +2,7 @@ package mgks.os.webview;
 
 /*
  * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
- * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
+ * Initially developed by Ghazi Khan (https://github.com/mgks), under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
  * Please mention project source or credit developers in your Application's License(s) Wiki.
  * Giving right credit to developers encourages them to create better projects :)
@@ -28,6 +28,8 @@ class SmartWebView {
 	static boolean ASWP_OFFLINE     = false;			// whether the loading webpages are offline or online
 	static boolean ASWP_EXTURL      = true;			// open external url with default browser instead of app webview
 
+	static boolean ASWP_TAB			 = true;
+	static boolean ASWP_ADMOB		 = false;
 
 	/* -- SECURITY VARIABLES -- */
 
@@ -36,14 +38,22 @@ class SmartWebView {
 
 	/* -- CONFIG VARIABLES -- */
 
-	// complete URL of your website or offline webpage
-	static String ASWV_URL          = "file:///android_asset/offline.html";
+	// layout selection
+	static int ASWV_LAYOUT			 = 0;				// default=0; for clear fullscreen layout and 1 to add drawer and navigation bar
+
+	// URL configs; search URL can be left empty if default layout is 0
+	static String ASWV_URL          = "file:///android_asset/offline.html";	// complete URL of your website or offline webpage
+	static String ASWV_SEARCH		 = "https://www.google.com/search?q=";		// search query will start by the end of the present string
+	static String ASWV_SHARE_URL	 = ASWV_URL+"?share=";
 
 	// domains allowed to be opened inside webview
-	static String ASWV_EXCEP_LIST	 = "";		//separate domains with a comma (,)
+	static String ASWV_EXC_LIST		 = "";		//separate domains with a comma (,)
 
 	// to upload any file type using "*/*"; check file type references for more
-	static String ASWV_F_TYPE       = "*/*";
+	static String ASWV_F_TYPE       = "image/*";
+
+	// admob config
+	static String ASWV_ADMOB		 = "ca-app-pub-9276682923792397~7957851075";	// your unique publishers ID; this one is temporary
 
 
 	/* -- RATING SYSTEM VARIABLES -- */
