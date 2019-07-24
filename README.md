@@ -1,7 +1,7 @@
 <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="65"></a>
 
 # Android Smart WebView
-[![alt text](https://img.shields.io/badge/project%20variant-java-red.svg)](#) [![alt text](https://img.shields.io/badge/version-4-green.svg)](https://github.com/mgks/Kotlin-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php) [![alt text](https://img.shields.io/badge/learn%20about-SWV%20Pro-yellow.svg "Get Smart WebView Pro")](https://github.com/voinsource/SmartWebView-Pro)
+[![alt text](https://img.shields.io/badge/project%20variant-java-red.svg)](#) [![alt text](https://img.shields.io/badge/version-0.1-green.svg)](https://github.com/mgks/Kotlin-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
 
 **For kotlin variant, see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
 
@@ -78,44 +78,17 @@ COOKIE "lat" for latitude
 COOKIE "long" for longitude
 ```
 
-## Want to support this project?
-**UPDATE: I've decided to merge Smart WebView Pro with original open source after 15 copies sold of Pro.**
+## Support the Project
 
-`Currently sold: 6 (9 to go) *I'll keep this space updated`
-<hr>
+#### There are few ways to support this project -
 
-#### There are few ways you can support this project -
-
-**- Donating:** Even your tiniest contribution will be appreciate. If this project helped you or your business in any way and you feel like donating some change, you can always buy me a coffee :)
+**- Donating:** If this project helped you or your business in any way and you feel like donating some change, you can always buy me a cup of coffee :)
 
 <a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;display:block;margin:0 auto" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
-**- Buying SWV Pro:** Dozens of amazing additional features including firebase notifications, admob, chromium tabs for external links and mutiple layouts.
+Even your tiniest contribution will be appreciated. 
 
-**[Get Smart WebView Pro](https://voinsource.github.io/SmartWebView-Pro/)**
-
-**- Feeback:** Donations are definitely not everything. Without an honest feedback no good project is possible. Your valuable feedbacks are always welcome, just drop an [email](mailto:getmgks@gmail.com).<br />Report your [issues](https://github.com/mgks/Kotlin-SmartWebView/issues) here.
-
-#### More about Smart WebView Pro
-**[SWV Pro](https://voinsource.github.io/SmartWebView-Pro/) is a commercial app built for small and medium level businesses, easy to implement with any existing environment.**
-
-```
-PRO FEATURES:
-- Firebase Push Notifications
-- Google AdMob
-- Chromium Tab for External URLs
-- Navigation Drawer
-- Search Bar
-- Action Menu
-- And other customizations
-```
-
-*To Get Smart WebView Pro's Updates, Demo and Documentation, follow [SmartWebView-Pro](https://github.com/voinsource/SmartWebView-Pro) repo.*
-
-```
-NOTE: All public contributions will always be a part of this open source here.
-SWV Pro just contains some additional features that have been implemented only by me to make the app more commercial oriented which helps me keep this repo updated.
-```
+**- Providing Your Valuable Feeback:** Donations help us run things but feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).<br />Report your [issues](https://github.com/mgks/Kotlin-SmartWebView/issues) here.
 
 ## License
 This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
@@ -127,6 +100,6 @@ Post in Github Repo issues section if you got any problem handling the project a
 
 **A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
 
-This project is initially developed by **[Ghazi Khan](https://github.com/mgks)**.
+SWV is initially developed by **[Ghazi Khan (me)](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
 
 [![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
