@@ -1,3 +1,11 @@
+<!--
+ * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
+ * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
+ * This program is free to use for private and commercial purposes.
+ * Please mention project source or developer credit in your Application's License(s) Wiki.
+ * Giving right credit to developers encourages them to create better projects :)
+-->
+
 <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="65"></a>
 
 # Android Smart WebView
@@ -82,13 +90,13 @@ COOKIE "long" for longitude
 
 #### There are few ways to support this project -
 
-**- Donating:** If this project helped you or your business in any way and you feel like donating some change, you can always buy me a cup of coffee :)
+**DONATE:** If this project helped you or your business in any way and you feel like donating some change, you can always buy me a cup of coffee :)
 
 <a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;display:block;margin:0 auto" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
 Even your tiniest contribution will be appreciated. 
 
-**- Providing Your Valuable Feeback:** Donations help us run things but feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).<br />Report your [issues](https://github.com/mgks/Kotlin-SmartWebView/issues) here.
+**PROVIDE FEEDBACK:** Donations help us run things but feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).<br />Report your [issues](https://github.com/mgks/Kotlin-SmartWebView/issues) here.
 
 ## License
 This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
@@ -100,6 +108,6 @@ Post in Github Repo issues section if you got any problem handling the project a
 
 **A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
 
-SWV is initially developed by **[Ghazi Khan (me)](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
+This project was initially developed by **[Ghazi Khan](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
 
 [![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
