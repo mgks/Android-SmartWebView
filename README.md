@@ -6,29 +6,61 @@
  * Giving right credit to developers encourages them to create better projects :)
 -->
 
-<a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="65"></a>
+<span align="center" style="text-align:center">
 
-# Android Smart WebView
-[![alt text](https://img.shields.io/badge/project%20variant-java-red.svg)](#) [![alt text](https://img.shields.io/badge/version-0.1-green.svg)](https://github.com/mgks/Kotlin-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
+<a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="100"></a>
 
-**For kotlin variant, see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
+[![alt text](https://img.shields.io/badge/variant-java-red.svg)](#) [![alt text](https://img.shields.io/badge/version-0.1-green.svg)](https://github.com/mgks/Kotlin-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
+
+<h1>Android Smart WebView</h1>
+
+</span>
 
 This project is developed to help anyone create hybrid android applications with just webview. This app gives web based applications power to use native android features without hassle, whether online or offline w/ just HTML+JavaScript.
 
 Android Smart WebView gathers only required information from user's device based on request, that includes Live GPS location, File upload, Camera image processing, Rating system and more, with clean minimal interface.
+
+**For kotlin variant, see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
+
+## Table of Contents
+
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Environment Setup](#environment-setup)
+* [Configurations](#configurations)
+  * [Device Permissions](#device-permissions)
+  * [Config Variables](#config-variables)
+  * [Permission Variables](#permission-variables)
+  * [Security Variables](#security-variables)
+  * [Other Variables](#other-variables)
+* [Features](#features)
+  * [GPS Location](#gps-location)
+  * [Camera Input](#camera-input)
+  * [Firebase Messaging](#firebase-messaging)
+  * [Google AdMob](#google-admob)
+  * [Chrome Tab](#chrome-tab)
+  * [Content Sharing](#content-sharing)
+  * [User Interfaces](#user-interfaces)
+  * [Rating System](#rating-system)
+* [Contributing](#contributing)
+* [License](#license)
+* [Acknowledgements](#acknowledgements)
+* [Contact](#contact)
 
 ## Getting Started
 These instructions will help you get your Smart WebView copy up and running on your local machine for development and testing purposes.
 
 **[Watch Explainer Video for Getting Started w/ SWV](https://www.youtube.com/watch?v=BM_5j-KAgoQ)** created by [Nate Harris](https://www.youtube.com/channel/UCuav96GscozuOSAx18r8b4g).
 
-### Requirement
+### Prerequisites
 The project requires minimum Android API 21+ (5.0 Lollipop) SDK to test. I use Android Studio (latest release by time last update) for this.
 
-### Test Run
+### Environment Setup
 Try cleaning and rebuilding the project in your programming environment, once you are done fixing any error (incase of one), you'll be ready to look into the project.
 
-### Permissions
+## Configurations
+
+### Device Permissions
 You can remove any of the following requests if you do not need them or you can disable any feature using easy setup variables. Currently, these permissions are must for default variables to work properly.
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
@@ -43,11 +75,14 @@ You can remove any of the following requests if you do not need them or you can 
 `INTERNET` permission is required if you are requesting a weburl or webpage.
 `WRITE_EXTERNAL_STORAGE` is required for camera photo creation, if you have enabled `ASWP_FUPLOAD` and `ASWP_CAMUPLOAD` to upload image files.
 
-### Easy Setup
-Once your project is ready, here are some important config variables that you can adjust as per your app requirements.
+### Config Variables
+Complete URL of your website, landing page or local file as `file:///android_res/dir/file.html`
+```java
+ASWV_URL      = "https://github.com/mgks"    //domain, or directory or locating to any root file
+```
 
-#### Permission variables
-```kotlin
+### Permission Variables
+```java
 static boolean ASWP_JSCRIPT     = true     //enable JavaScript for webview
 static boolean ASWP_FUPLOAD     = true     //upload file from webview
 static boolean ASWP_CAMUPLOAD   = true     //enable upload from camera for photos
@@ -62,29 +97,49 @@ static boolean ASWP_SFORM       = false    //save form cache and auto-fill infor
 static boolean ASWP_OFFLINE     = false    //whether the loading webpages are offline or online
 static boolean ASWP_EXTURL      = true     //open external url with default browser instead of app webview
 ```
-#### Security variables
-```kotlin
+
+### Security Variables
+```java
 static boolean ASWP_CERT_VERIFICATION   = true    //verify whether HTTPS port needs certificate verification
 ```
-#### Configuration variables
-Complete URL of your website, landing page or local file as `file:///android_res/dir/file.html`
-```kotlin
-ASWV_URL      = "https://github.com/mgks"    //domain, or directory or locating to any root file
-```
 
+### Other Variables
 If file upload enabled, you can define its extention type, default is `*/*` for all file types;
 
 Use `image/*` for image types; check file type references on web for custom file type
-```kotlin
+```java
 ASWV_F_TYPE   = "*/*"
 ```
 
-## Getting GPS Location
+## Features
+### GPS Location
 If `ASWP_LOCATION = true` then the app will start requesting GPS locations of the device on regular basis and all of the recorded data will be sent to the webpage in form of cookies, with updated live GPS locations.
-```kotlin
+```java
 COOKIE "lat" for latitude
 COOKIE "long" for longitude
 ```
+
+### Camera Input
+
+### Firebase Messaging
+
+### Google AdMob
+
+### Chrome Tab
+
+### Content Sharing
+
+### User Interfaces
+
+### Rating System
+
+## Contributing
+If you want to contribute to the project, you're most welcome to do so. Just:
+- Fork it
+- Create your feature branch (git checkout -b my-new-feature)
+- Commit your changes (git commit -am 'Added some feature')
+- Push to the branch (git push origin my-new-feature)
+- Create new Pull Request
 
 ## Support the Project
 
@@ -96,18 +151,21 @@ COOKIE "long" for longitude
 
 Even your tiniest contribution will be appreciated. 
 
-**PROVIDE FEEDBACK:** Donations help us run things but feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).<br />Report your [issues](https://github.com/mgks/Kotlin-SmartWebView/issues) here.
+**PROVIDE FEEDBACK:** Donations help us run things but feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).
+
+Report your [issues](https://github.com/mgks/Kotlin-SmartWebView/issues) here.
 
 ## License
 This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
 
-## Acknowledgment
-Rating method (Android-Rate) used in this app is developed by [hotchemi](https://github.com/hotchemi) and thanks to other programmers who contributed to this project.
+## Acknowledgements
+- Rating method [Android-Rate](https://github.com/hotchemi/Android-Rate) is developed by [hotchemi](https://github.com/hotchemi)
 
-Post in Github Repo issues section if you got any problem handling the project and if you want to contribute, you're most welcome to help me make a smarter project than what it is.
+Thanks to other [contributers](https://github.com/mgks/Android-SmartWebView/graphs/contributors) who helped make this project amazing.
+
+## Contact
+This project was initially developed by **[Ghazi Khan](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
 
 **A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
-
-This project was initially developed by **[Ghazi Khan](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
 
 [![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
