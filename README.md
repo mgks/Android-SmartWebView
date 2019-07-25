@@ -30,7 +30,7 @@ A small build with features working out of the box: Live GPS Location, Notificat
 
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
-  * [Environment Setup](#environment-setup)
+  * [Setup](#setup)
 * [Configurations](#configurations)
   * [Device Permissions](#device-permissions)
   * [Config Variables](#config-variables)
@@ -52,78 +52,128 @@ A small build with features working out of the box: Live GPS Location, Notificat
 * [Contact](#contact)
 
 ## Getting Started
+
 These instructions will help you get your Smart WebView copy up and running on your local machine for development and testing purposes.
 
 **[Watch Explainer Video for Getting Started w/ SWV](https://www.youtube.com/watch?v=BM_5j-KAgoQ)** created by [Nate Harris](https://www.youtube.com/channel/UCuav96GscozuOSAx18r8b4g).
 
 ### Prerequisites
-The project requires minimum Android API 21+ (5.0 Lollipop) SDK to test. I use Android Studio (latest release by time last update) for this.
 
-### Environment Setup
-Try cleaning and rebuilding the project in your programming environment, once you are done fixing any error (incase of one), you'll be ready to look into the project.
+Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lollipop) SDK to test run.
+
+### Setup
+
+1. Download repo or just clone it
+
+   `git clone https://github.com/mgks/Android-SmartWebView`
+
+2. Load project in Android Studio
+
+   `File > Open > Browse to Project and Select`
+
+3. Let Android Studio process the project and download support libraries and dependencies
+
+4. Just to make sure, try cleaning and rebuilding project before run
+
+   `Build > Clean Project` then `Build > Rebuild Project`
+
+5. Got any error? You better fasten you seatbelt. It's gonna be a bumpy night.
 
 ## Configurations
 
+Following is the overview of how things work here, just important details; for a detailed walkthrough, look into [Wiki](https://github.com/mgks/Android-SmartWebView/wiki).
+
 ### Device Permissions
-You can remove any of the following requests if you do not need them or you can disable any feature using easy setup variables. Currently, these permissions are must for default variables to work properly.
+
+You can remove any of the following requests if you do not need them, you can also disable features with permission variables. For default setup, there permissions are required.
+
 ```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.CAMERA"/>
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<uses-permission android:name="android.permission.VIBRATE" />
+INTERNET
+ACCESS_NETWORK_STATE
+ACCESS_WIFI_STATE
+WRITE_EXTERNAL_STORAGE
+READ_EXTERNAL_STORAGE
+CAMERA
+ACCESS_FINE_LOCATION
+VIBRATE
 ```
-`INTERNET` permission is required if you are requesting a weburl or webpage.
-`WRITE_EXTERNAL_STORAGE` is required for camera photo creation, if you have enabled `ASWP_FUPLOAD` and `ASWP_CAMUPLOAD` to upload image files.
+```xml
+c2dm.permission.RECEIVE
+```
+```xml
+hardware.location.gps
+hardware.touchscreen
+```
+
+`INTERNET` permission is required for any webview to work.
+
+`WRITE_EXTERNAL_STORAGE` is required for camera file processing: if you have `ASWP_FUPLOAD` and `ASWP_CAMUPLOAD` enabled to upload image/video files.
 
 ### Config Variables
-Complete URL of your website, landing page or local file as `file:///android_res/dir/file.html`
-```java
-ASWV_URL      = "https://github.com/mgks"    //domain, or directory or locating to any root file
+
+Complete webpage URL or load local file as `file:///android_res/dir/file.html`
+
+```kotlin
+ASWV_URL   = "https://github.com/mgks"   // domain or directory or address to any root file
 ```
 
 ### Permission Variables
-```java
-ASWP_JSCRIPT     = true     //enable JavaScript for webview
-ASWP_FUPLOAD     = true     //upload file from webview
-ASWP_CAMUPLOAD   = true     //enable upload from camera for photos
-ASWP_ONLYCAM     = false    //incase you want only camera files to upload
-ASWP_MULFILE     = true     //upload multiple files in webview
-ASWP_LOCATION    = true     //track GPS locations
-ASWP_RATINGS     = true     //show ratings dialog; auto configured, edit method get_rating() for customizations
-ASWP_PULLFRESH   = true     //pull refresh current url
-ASWP_PBAR        = true     //show progress bar in app
-ASWP_ZOOM        = false    //zoom control for webpages view
-ASWP_SFORM       = false    //save form cache and auto-fill information
-ASWP_OFFLINE     = false    //whether the loading webpages are offline or online
-ASWP_EXTURL      = true     //open external url with default browser instead of app webview
+
+```kotlin
+ASWP_JSCRIPT     = true     // enable JavaScript for webview
+ASWP_FUPLOAD     = true     // upload files from local device 
+ASWP_MULFILE     = true     // upload multiple files
+ASWP_CAMUPLOAD   = true     // enable camera file upload
+ASWP_ONLYCAM     = false    // incase you want only camera for input files
+
+ASWP_LOCATION    = true     // track GPS locations
+
+ASWP_RATINGS     = true     // show ratings dialog; auto configured, edit method get_rating() for customizations
+ASWP_PULLFRESH   = true     // pull to refresh feature
+ASWP_PBAR        = true     // show progress bar
+ASWP_ZOOM        = false    // zoom control for webpages
+ASWP_SFORM       = false    // save form data and auto-fill information
+ASWP_OFFLINE     = false    // whether the loading webpages are offline or online
+ASWP_EXTURL      = true     // open external url with default browser instead of app webview
+
+ASWP_TAB         = true;    // instead of default browser, open external URLs in chrome tab
+ASWP_ADMOB       = false;   // enabled Google AdMob
 ```
 
 ### Security Variables
-```java
-ASWP_CERT_VERIFICATION   = true    //verify whether HTTPS port needs certificate verification
+
+```kotlin
+ASWP_CERT_VERIFICATION   = true   // verify whether HTTPS port needs certificate verification
 ```
 
 ### Other Variables
-If file upload enabled, you can define its extention type, default is `*/*` for all file types;
 
-Use `image/*` for image types; check file type references on web for custom file type
-```java
-ASWV_F_TYPE   = "*/*"
+```kotlin
+ASWV_LAYOUT      = 0;   // default=0; for clear fullscreen layout and 1 to add drawer and navigation bar
+
+// custom settings if layout `1` with search bar is set.
+ASWV_SEARCH      = "https://www.google.com/search?q=";   // search query will start by the end of the present string
+
+ASWV_SHARE_URL   = ASWV_URL+"?share=";   // URL where you process external content shared with the app
+ASWV_EXC_LIST    = "";                   // domains allowed to be opened inside webview, separate domains with a comma (,)
+
+ASWV_ADMOB       = "ca-app-pub-9276682923792397~7957851075";   // your unique publishers ID; this one is temporary
+
+ASWV_F_TYPE      = "*/*"   // use `image/*` for image files only; check file type references for custom file type
 ```
 
 ## Features
+
 ### GPS Location
+
 If `ASWP_LOCATION = true` then the app will start requesting GPS locations of the device on regular basis and all of the recorded data will be sent to the webpage in form of cookies, with updated live GPS locations.
-```java
+```kotlin
 COOKIE "lat" for latitude
 COOKIE "long" for longitude
 ```
 
 ### Camera Input
+
 
 ### Firebase Messaging
 
@@ -138,7 +188,9 @@ COOKIE "long" for longitude
 ### Rating System
 
 ## Contributing
+
 If you want to contribute to the project, you're most welcome to do so. Just:
+
 - Fork it
 - Create your feature branch `git checkout -b my-new-feature`
 - Commit your changes `git commit -am 'Added some feature'`
@@ -161,15 +213,18 @@ Report your [issues](https://github.com/mgks/Kotlin-SmartWebView/issues) here.
 
 
 ## License
+
 This project is published under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
 
 
 ## Acknowledgements
+
 - Rating method [Android-Rate](https://github.com/hotchemi/Android-Rate) is developed by [hotchemi](https://github.com/hotchemi)
 
 Thanks to other [contributers](https://github.com/mgks/Android-SmartWebView/graphs/contributors) who helped make this project amazing.
 
 ## Contact
+
 This project was initially developed by **[Ghazi Khan](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
 
 **A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
