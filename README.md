@@ -10,15 +10,19 @@
 
 <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="100"></a>
 
-[![alt text](https://img.shields.io/badge/variant-java-red.svg)](#) [![alt text](https://img.shields.io/badge/version-0.1-green.svg)](https://github.com/mgks/Kotlin-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
+[![alt text](https://img.shields.io/badge/variant-java-red.svg)](#environment-setup) [![alt text](https://img.shields.io/badge/version-p_%5F0.1-green.svg)](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
 
 <h1>Android Smart WebView</h1>
 
+</span><span align="center" style="text-align:center">
+
+**[GETTING STARTED](#getting-started) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+
 </span>
 
-This project is developed to help anyone create hybrid android applications with just webview. This app gives web based applications power to use native android features without hassle, whether online or offline w/ just HTML+JavaScript.
+SWV is a framework built on Java to develop advanced hybrid webview applications with ease.
 
-Android Smart WebView gathers only required information from user's device based on request, that includes Live GPS location, File upload, Camera image processing, Rating system and more, with clean minimal interface.
+A small build with features working out of the box: Live GPS Location, Notifications with FCM, AdMob, Chrome Tabs, Process Camera Input, Upload/Download Files, Custom Rating System, Multiple User Interfaces and more.
 
 **For kotlin variant, see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
 
@@ -83,24 +87,24 @@ ASWV_URL      = "https://github.com/mgks"    //domain, or directory or locating 
 
 ### Permission Variables
 ```java
-static boolean ASWP_JSCRIPT     = true     //enable JavaScript for webview
-static boolean ASWP_FUPLOAD     = true     //upload file from webview
-static boolean ASWP_CAMUPLOAD   = true     //enable upload from camera for photos
-static boolean ASWP_ONLYCAM     = false    //incase you want only camera files to upload
-static boolean ASWP_MULFILE     = true     //upload multiple files in webview
-static boolean ASWP_LOCATION    = true     //track GPS locations
-static boolean ASWP_RATINGS     = true     //show ratings dialog; auto configured, edit method get_rating() for customizations
-static boolean ASWP_PULLFRESH   = true     //pull refresh current url
-static boolean ASWP_PBAR        = true     //show progress bar in app
-static boolean ASWP_ZOOM        = false    //zoom control for webpages view
-static boolean ASWP_SFORM       = false    //save form cache and auto-fill information
-static boolean ASWP_OFFLINE     = false    //whether the loading webpages are offline or online
-static boolean ASWP_EXTURL      = true     //open external url with default browser instead of app webview
+ASWP_JSCRIPT     = true     //enable JavaScript for webview
+ASWP_FUPLOAD     = true     //upload file from webview
+ASWP_CAMUPLOAD   = true     //enable upload from camera for photos
+ASWP_ONLYCAM     = false    //incase you want only camera files to upload
+ASWP_MULFILE     = true     //upload multiple files in webview
+ASWP_LOCATION    = true     //track GPS locations
+ASWP_RATINGS     = true     //show ratings dialog; auto configured, edit method get_rating() for customizations
+ASWP_PULLFRESH   = true     //pull refresh current url
+ASWP_PBAR        = true     //show progress bar in app
+ASWP_ZOOM        = false    //zoom control for webpages view
+ASWP_SFORM       = false    //save form cache and auto-fill information
+ASWP_OFFLINE     = false    //whether the loading webpages are offline or online
+ASWP_EXTURL      = true     //open external url with default browser instead of app webview
 ```
 
 ### Security Variables
 ```java
-static boolean ASWP_CERT_VERIFICATION   = true    //verify whether HTTPS port needs certificate verification
+ASWP_CERT_VERIFICATION   = true    //verify whether HTTPS port needs certificate verification
 ```
 
 ### Other Variables
@@ -136,9 +140,9 @@ COOKIE "long" for longitude
 ## Contributing
 If you want to contribute to the project, you're most welcome to do so. Just:
 - Fork it
-- Create your feature branch (git checkout -b my-new-feature)
-- Commit your changes (git commit -am 'Added some feature')
-- Push to the branch (git push origin my-new-feature)
+- Create your feature branch `git checkout -b my-new-feature`
+- Commit your changes `git commit -am 'Added some feature'`
+- Push to the branch `git push origin my-new-feature`
 - Create new Pull Request
 
 ## Support the Project
@@ -155,8 +159,10 @@ Even your tiniest contribution will be appreciated.
 
 Report your [issues](https://github.com/mgks/Kotlin-SmartWebView/issues) here.
 
+
 ## License
-This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
+This project is published under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
+
 
 ## Acknowledgements
 - Rating method [Android-Rate](https://github.com/hotchemi/Android-Rate) is developed by [hotchemi](https://github.com/hotchemi)
