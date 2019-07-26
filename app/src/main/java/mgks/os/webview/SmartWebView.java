@@ -58,7 +58,7 @@ class SmartWebView {
 
 	/* -- RATING SYSTEM VARIABLES -- */
 
-	static int ASWR_DAYS            = 3;			// after how many days of usage would you like to show the dialoge
-	static int ASWR_TIMES           = 10;  		// overall request launch times being ignored
-	static int ASWR_INTERVAL        = 2;   		// reminding users to rate after days interval
+	static int ASWR_DAYS            = 3;			// after how many days of usage would you like to show the dialog
+	static int ASWR_TIMES           = 10;			// overall request launch times being ignored
+	static int ASWR_INTERVAL        = 2;			// reminding users to rate after days interval
 }
