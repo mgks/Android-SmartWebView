@@ -16,7 +16,7 @@
 
 </span><span align="center" style="text-align:center">
 
-**[GETTING STARTED](#getting-started) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[GETTING STARTED](#getting-started) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://github.com/mgks/Android-SmartWebView/documentation) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 </span>
 
@@ -81,7 +81,7 @@ Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lo
 
 ## Configurations
 
-For more detailed config, check project [Wiki](https://github.com/mgks/Android-SmartWebView/wiki).
+For more detailed config, check project [Documentation](https://github.com/mgks/Android-SmartWebView/documentation).
 
 ### Device Permissions
 
@@ -180,13 +180,15 @@ You can either select to get input from both file manager and camera or can just
 
 You need a firebase account to get started then download `google-services.json` and put it in the app level directory. Then you can create a POST request as below.
 
-To URL: `https://fcm.googleapis.com/fcm/send`
-Header:
+**To URL:** `https://fcm.googleapis.com/fcm/send`
+
+**Header:**
 ```
 content-type:application/json
 authorization:key=____server_key_here___ (Firebase > Settings > Cloud Messaging)
 ```
-Data:
+
+**Data:**
 ```
 { "notification": {
     "title": "___title_string___",
