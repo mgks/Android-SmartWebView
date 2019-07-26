@@ -854,21 +854,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		if (id == R.id.nav_home) {
 			aswm_view("file:///android_asset/offline.html",false,asw_error_counter);
 		} else if (id == R.id.nav_doc) {
-			aswm_view("https://github.com/voinsource/SmartWebView-Pro",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/documentation",false,asw_error_counter);
 		} else if (id == R.id.nav_fcm) {
-			aswm_view("https://github.com/voinsource/SmartWebView-Pro/blob/master/Android/fcm.md",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/fcm.md",false,asw_error_counter);
 		} else if (id == R.id.nav_admob) {
-			aswm_view("https://github.com/voinsource/SmartWebView-Pro/blob/master/Android/admob.md",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/admob.md",false,asw_error_counter);
 		} else if (id == R.id.nav_gps) {
-			aswm_view("https://github.com/voinsource/SmartWebView-Pro/blob/master/Android/gps.md",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/gps.md",false,asw_error_counter);
 		} else if (id == R.id.nav_share) {
-			aswm_view("https://github.com/voinsource/SmartWebView-Pro/blob/master/Android/share.md",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/share.md",false,asw_error_counter);
 		} else if (id == R.id.nav_lay) {
-			aswm_view("https://github.com/voinsource/SmartWebView-Pro/blob/master/Android/layout.md",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/layout.md",false,asw_error_counter);
 		} else if (id == R.id.nav_support) {
 			Intent intent = new Intent(Intent.ACTION_SENDTO);
 			intent.setData(Uri.parse("mailto:getmgks@gmail.com"));
-			intent.putExtra(Intent.EXTRA_SUBJECT, "SWV-Pro Help");
+			intent.putExtra(Intent.EXTRA_SUBJECT, "SWV Help");
 			startActivity(Intent.createChooser(intent, "Send Email"));
 		}
 

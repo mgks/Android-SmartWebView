@@ -28,7 +28,7 @@ class SmartWebView {
 	static boolean ASWP_OFFLINE     = false;			// whether the loading webpages are offline or online
 	static boolean ASWP_EXTURL      = true;			// open external url with default browser instead of app webview
 
-	static boolean ASWP_TAB			 = true;
+	static boolean ASWP_TAB			 = true;			// instead of default browser, open external URLs in chrome tab
 	static boolean ASWP_ADMOB		 = false;
 
 	/* -- SECURITY VARIABLES -- */
@@ -44,13 +44,13 @@ class SmartWebView {
 	// URL configs; search URL can be left empty if default layout is 0
 	static String ASWV_URL          = "file:///android_asset/offline.html";	// complete URL of your website or offline webpage
 	static String ASWV_SEARCH		 = "https://www.google.com/search?q=";		// search query will start by the end of the present string
-	static String ASWV_SHARE_URL	 = ASWV_URL+"?share=";
+	static String ASWV_SHARE_URL	 = ASWV_URL+"?share=";						// URL where you process external content shared with the app
 
 	// domains allowed to be opened inside webview
 	static String ASWV_EXC_LIST		 = "";		//separate domains with a comma (,)
 
 	// to upload any file type using "*/*"; check file type references for more
-	static String ASWV_F_TYPE       = "image/*";
+	static String ASWV_F_TYPE       = "*/*";
 
 	// admob config
 	static String ASWV_ADMOB		 = "ca-app-pub-9276682923792397~7957851075";	// your unique publishers ID; this one is temporary
