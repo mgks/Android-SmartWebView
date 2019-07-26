@@ -81,7 +81,7 @@ Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lo
 
 ## Configurations
 
-Following is the overview of how things work here, just important details; for a detailed walkthrough, look into [Wiki](https://github.com/mgks/Android-SmartWebView/wiki).
+For more detailed config, check project [Wiki](https://github.com/mgks/Android-SmartWebView/wiki).
 
 ### Device Permissions
 
@@ -174,18 +174,61 @@ COOKIE "long" for longitude
 
 ### Camera Input
 
+You can either select to get input from both file manager and camera or can just choose camera to get image/video input. To get video input, add file type condition in your html input `video/*` and `image/*` for camera photos. By default `ASWV_F_TYPE` is set to `*/*` and suggested not to change instead file type should be provided on web pages end.
 
 ### Firebase Messaging
 
+You need a firebase account to get started then download `google-services.json` and put it in the app level directory. Then you can create a POST request as below.
+
+To URL: `https://fcm.googleapis.com/fcm/send`
+Header:
+```
+content-type:application/json
+authorization:key=____server_key_here___ (Firebase > Settings > Cloud Messaging)
+```
+Data:
+```
+{ "notification": {
+    "title": "___title_string___",
+    "text": "___text_string___",
+     "click_action": "Open_URI"
+  },
+    "data": {
+    "uri": "___the_URL_where_you_want_users_to_send__"
+    },
+  "to" : "___user_token___"
+}
+```
+
+You can get `___user_token___` from COOKIE `fcm_token`.
+
 ### Google AdMob
+
+Enable `ASWP_ADMOB` to show ads, and get your App ID from AdMob to replace `ASWV_ADMOB`.
 
 ### Chrome Tab
 
+With `ASWP_TAB` you handle external links to be opened in the chrome tab or external browser. More chrome tab customizations are available inside `MainActivity`.
+
 ### Content Sharing
+
+User can share external content with your app like text, link or image. You can received data on your end by proving `ASWV_SHARE_URL`, an endpoint that can handle such requests. You can disable it by removing `.ShareActivity` from `Manifest`.
 
 ### User Interfaces
 
+You can switch between clean and native interface with `ASWV_LAYOUT` where `0` represents full screen interface and `1` as a complete drawer layout with search option and navigation bar.
+
+To customize drawer bar, you can look into `onNavigationItemSelected()` method in `MainActivity` and `activity_main_drawer.xml` for menu items.
+
 ### Rating System
+
+Rating dialogue is enabled by default.
+
+```
+ASWR_DAYS            = 3;			// after how many days of usage would you like to show the dialoge
+ASWR_TIMES           = 10;  		// overall request launch times being ignored
+ASWR_INTERVAL        = 2;   		// reminding users to rate after days interval
+```
 
 ## Contributing
 
