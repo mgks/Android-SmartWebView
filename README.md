@@ -227,9 +227,9 @@ To customize drawer bar, you can look into `onNavigationItemSelected()` method i
 Rating dialogue is enabled by default.
 
 ```
-ASWR_DAYS            = 3;			// after how many days of usage would you like to show the dialoge
-ASWR_TIMES           = 10;  		// overall request launch times being ignored
-ASWR_INTERVAL        = 2;   		// reminding users to rate after days interval
+ASWR_DAYS            = 3;           // after how many days of usage would you like to show the dialog
+ASWR_TIMES           = 10;          // overall request launch times being ignored
+ASWR_INTERVAL        = 2;           // reminding users to rate after days interval
 ```
 
 ## Contributing
@@ -254,7 +254,7 @@ Even your tiniest contribution will be appreciated.
 
 **PROVIDE FEEDBACK:** Donations help us run things but feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).
 
-Report your [issues](https://github.com/mgks/Kotlin-SmartWebView/issues) here.
+Report your [issues](https://github.com/mgks/Android-SmartWebView/issues) here.
 
 
 ## License
