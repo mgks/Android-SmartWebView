@@ -16,7 +16,7 @@
 
 </span><span align="center" style="text-align:center">
 
-**[GETTING STARTED](#getting-started) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[GETTING STARTED](#getting-started) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://github.com/mgks/Android-SmartWebView/documentation) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 </span>
 
@@ -81,7 +81,7 @@ Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lo
 
 ## Configurations
 
-For more detailed config, check project [Wiki](https://github.com/mgks/Android-SmartWebView/wiki).
+For more detailed config, check project [Documentation](https://github.com/mgks/Android-SmartWebView/documentation).
 
 ### Device Permissions
 
@@ -180,13 +180,15 @@ You can either select to get input from both file manager and camera or can just
 
 You need a firebase account to get started then download `google-services.json` and put it in the app level directory. Then you can create a POST request as below.
 
-To URL: `https://fcm.googleapis.com/fcm/send`
-Header:
+**To URL:** `https://fcm.googleapis.com/fcm/send`
+
+**Header:**
 ```
 content-type:application/json
 authorization:key=____server_key_here___ (Firebase > Settings > Cloud Messaging)
 ```
-Data:
+
+**Data:**
 ```
 { "notification": {
     "title": "___title_string___",
@@ -225,9 +227,9 @@ To customize drawer bar, you can look into `onNavigationItemSelected()` method i
 Rating dialogue is enabled by default.
 
 ```
-ASWR_DAYS            = 3;			// after how many days of usage would you like to show the dialoge
-ASWR_TIMES           = 10;  		// overall request launch times being ignored
-ASWR_INTERVAL        = 2;   		// reminding users to rate after days interval
+ASWR_DAYS            = 3;           // after how many days of usage would you like to show the dialog
+ASWR_TIMES           = 10;          // overall request launch times being ignored
+ASWR_INTERVAL        = 2;           // reminding users to rate after days interval
 ```
 
 ## Contributing
@@ -252,7 +254,7 @@ Even your tiniest contribution will be appreciated.
 
 **PROVIDE FEEDBACK:** Donations help us run things but feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).
 
-Report your [issues](https://github.com/mgks/Kotlin-SmartWebView/issues) here.
+Report your [issues](https://github.com/mgks/Android-SmartWebView/issues) here.
 
 
 ## License
