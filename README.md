@@ -224,7 +224,7 @@ To customize drawer bar, you can look into `onNavigationItemSelected()` method i
 
 ### Rating System
 
-Rating dialogue is enabled by default.
+Rating dialogue is enabled by default and can be handled by `ASWP_RATINGS`.
 
 ```
 ASWR_DAYS            = 3;           // after how many days of usage would you like to show the dialog
