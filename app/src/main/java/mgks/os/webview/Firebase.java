@@ -7,24 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.util.Log;
-import java.util.Objects;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.messaging.FirebaseMessagingService;
-//import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class Firebase extends FirebaseMessagingService {
-	public void onTokenRefresh() {
-		//For registration of token
-		String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-		//To displaying token on logcat
-		Log.d("TOKEN REFRESHED: ", refreshedToken);
+	public void onNewToken(String s) {
+		Log.d("TOKEN_REFRESHED ", s);		// printing new tokens in logcat
 	}
 
 	public void onMessageReceived(RemoteMessage message) {

@@ -74,8 +74,10 @@ import androidx.core.app.NotificationCompat;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,7 +86,6 @@ import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import java.util.Date;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	private final static int file_perm = 2;
 
 	public static String asw_fcm_channel = "1";
+	final String[] fcm_token = new String[1];
 
     private SecureRandom random = new SecureRandom();
 
@@ -206,11 +208,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
 		Log.w("READ_PERM = ",Manifest.permission.READ_EXTERNAL_STORAGE);
 		Log.w("WRITE_PERM = ",Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        //Prevent the app from being started again when it is still alive in the background
+
+        // prevent app from being started again when it is still alive in the background
         if (!isTaskRoot()) {
         	finish();
         	return;
         }
+
+        // requesting new FCM token, to store in the final variable
+        fcm_token[0] = fcm_token();
 
 		if(ASWV_LAYOUT==1){
 			setContentView(R.layout.drawer_main);
@@ -649,14 +655,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-	//Actions based on shouldOverrideUrlLoading
+	/*--- actions based on URL structure ---*/
+
 	public boolean url_actions(WebView view, String url){
 		boolean a = true;
-		//Show toast error if not connected to the network
+		// show toast error if not connected to the network
 		if (!ASWP_OFFLINE && !DetectConnection.isInternetAvailable(MainActivity.this)) {
 			Toast.makeText(getApplicationContext(), getString(R.string.check_connection), Toast.LENGTH_SHORT).show();
 
-			//Use this in a hyperlink to redirect back to default URL :: href="refresh:android"
+		// use this in a hyperlink to redirect back to default URL :: href="refresh:android"
 		} else if (url.startsWith("refresh:")) {
 			String ref_sch = (Uri.parse(url).toString()).replace("refresh:","");
 			if(ref_sch.matches("URL")){
@@ -664,12 +671,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			}
 			pull_fresh();
 
-			//Use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
+		// use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
 		} else if (url.startsWith("tel:")) {
 			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 			startActivity(intent);
 
-			//Use this to open your apps page on google play store app :: href="rate:android"
+		// use this to open your apps page on google play store app :: href="rate:android"
 		} else if (url.startsWith("rate:")) {
 			final String app_package = getPackageName(); //requesting app package name from Context or Activity object
 			try {
@@ -678,7 +685,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
 			}
 
-			//Sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
+		// sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
 		} else if (url.startsWith("share:")) {
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
@@ -686,20 +693,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle()+"\nVisit: "+(Uri.parse(url).toString()).replace("share:",""));
 			startActivity(Intent.createChooser(intent, getString(R.string.share_w_friends)));
 
-			//Use this in a hyperlink to exit your app :: href="exit:android"
+		// use this in a hyperlink to exit your app :: href="exit:android"
 		} else if (url.startsWith("exit:")) {
 			aswm_exit();
 
-			//Getting location for offline files
+		// getting location for offline files
 		} else if (url.startsWith("offloc:")) {
 			String offloc = ASWV_URL+"?loc="+get_location();
 			aswm_view(offloc,false, asw_error_counter);
 			Log.d("OFFLINE LOC REQ",offloc);
 
-		 	//Opening external URLs in android default web browser
+		// creating firebase notification for offline files
+		} else if (url.startsWith("fcm:")) {
+			String fcm = ASWV_URL+"?fcm="+fcm_token();
+			aswm_view(fcm,false, asw_error_counter);
+			Log.d("OFFLINE_FCM_TOKEN",fcm);
+
+		// opening external URLs in android default web browser
 		} else if (ASWP_EXTURL && !aswm_host(url).equals(ASWV_HOST)) {
 			aswm_view(url,true, asw_error_counter);
 
+		// else return false for no special action
 		} else {
 			a = false;
 		}
@@ -737,7 +751,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			cookieManager.setAcceptCookie(true);
 			cookieManager.setCookie(ASWV_URL, "DEVICE=android");
 			cookieManager.setCookie(ASWV_URL, "DEV_API=" + Build.VERSION.SDK_INT);
-			cookieManager.setCookie(ASWV_URL, "FCM_TOKEN=" + FirebaseInstanceId.getInstance().getToken());
+			cookieManager.setCookie(ASWV_URL, "FCM_TOKEN=" + fcm_token());
 			Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
 		}
 	}
@@ -881,6 +895,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		//Date now = new Date();
 		//Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
 		return 1;
+	}
+
+	public String fcm_token(){
+		FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this,  new OnSuccessListener<InstanceIdResult>() {
+			@Override
+			public void onSuccess(InstanceIdResult instanceIdResult) {
+				fcm_token[0] = instanceIdResult.getToken();
+				Log.d("REQ_FCM_TOKEN", fcm_token[0]);
+			}
+		});
+		return fcm_token[0];
 	}
 
 	//Checking if particular permission is given or not

@@ -29,7 +29,7 @@ class SmartWebView {
 	static boolean ASWP_EXTURL      = true;			// open external url with default browser instead of app webview
 
 	static boolean ASWP_TAB			 = true;			// instead of default browser, open external URLs in chrome tab
-	static boolean ASWP_ADMOB		 = false;
+	static boolean ASWP_ADMOB		 = true;
 
 	/* -- SECURITY VARIABLES -- */
 
