@@ -749,11 +749,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	//Getting device basic information
 	public void get_info(){
 		if(true_online) {
+			fcm_token();
 			CookieManager cookieManager = CookieManager.getInstance();
 			cookieManager.setAcceptCookie(true);
 			cookieManager.setCookie(ASWV_URL, "DEVICE=android");
 			cookieManager.setCookie(ASWV_URL, "DEV_API=" + Build.VERSION.SDK_INT);
-			fcm_token();
 			Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
 		}
 	}
@@ -906,7 +906,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					CookieManager cookieManager = CookieManager.getInstance();
 					cookieManager.setAcceptCookie(true);
 					cookieManager.setCookie(ASWV_URL, "FCM_TOKEN="+fcm_token);
-					Log.d("FCM_COOKED","YES");
+					Log.d("FCM_BAKED","YES");
+					//Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
 				}
 			Log.d("REQ_FCM_TOKEN", fcm_token);
 		}).addOnFailureListener(e -> Log.d("REQ_FCM_TOKEN", "FAILED"));
