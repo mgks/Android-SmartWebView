@@ -74,6 +74,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -93,31 +94,31 @@ import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 	// permission variables
-	static boolean ASWP_JSCRIPT    = SmartWebView.ASWP_JSCRIPT;
-	static boolean ASWP_FUPLOAD    = SmartWebView.ASWP_FUPLOAD;
-	static boolean ASWP_CAMUPLOAD  = SmartWebView.ASWP_CAMUPLOAD;
+	static boolean ASWP_JSCRIPT		= SmartWebView.ASWP_JSCRIPT;
+	static boolean ASWP_FUPLOAD		= SmartWebView.ASWP_FUPLOAD;
+	static boolean ASWP_CAMUPLOAD	= SmartWebView.ASWP_CAMUPLOAD;
 	static boolean ASWP_ONLYCAM		= SmartWebView.ASWP_ONLYCAM;
-	static boolean ASWP_MULFILE    = SmartWebView.ASWP_MULFILE;
-	static boolean ASWP_LOCATION   = SmartWebView.ASWP_LOCATION;
-	static boolean ASWP_RATINGS    = SmartWebView.ASWP_RATINGS;
+	static boolean ASWP_MULFILE		= SmartWebView.ASWP_MULFILE;
+	static boolean ASWP_LOCATION	= SmartWebView.ASWP_LOCATION;
+	static boolean ASWP_RATINGS		= SmartWebView.ASWP_RATINGS;
 	static boolean ASWP_PULLFRESH	= SmartWebView.ASWP_PULLFRESH;
-	static boolean ASWP_PBAR       = SmartWebView.ASWP_PBAR;
-	static boolean ASWP_ZOOM       = SmartWebView.ASWP_ZOOM;
-	static boolean ASWP_SFORM      = SmartWebView.ASWP_SFORM;
+	static boolean ASWP_PBAR		= SmartWebView.ASWP_PBAR;
+	static boolean ASWP_ZOOM        = SmartWebView.ASWP_ZOOM;
+	static boolean ASWP_SFORM       = SmartWebView.ASWP_SFORM;
 	static boolean ASWP_OFFLINE		= SmartWebView.ASWP_OFFLINE;
 	static boolean ASWP_EXTURL		= SmartWebView.ASWP_EXTURL;
 	static boolean ASWP_ADMOB		= SmartWebView.ASWP_ADMOB;
 	static boolean ASWP_TAB			= SmartWebView.ASWP_TAB;
 
 	// security variables
-	static boolean ASWP_CERT_VERIFICATION = SmartWebView.ASWP_CERT_VERIFICATION;
+	static boolean ASWP_CERT_VERIFICATION 	= SmartWebView.ASWP_CERT_VERIFICATION;
 
 	//Configuration variables
-	private static String ASWV_URL     	= SmartWebView.ASWV_URL;
+	private static String ASWV_URL     		= SmartWebView.ASWV_URL;
 	private String CURR_URL					= ASWV_URL;
 	private static String ASWV_SEARCH		= SmartWebView.ASWV_SEARCH;
 	private static String ASWV_SHARE_URL	= SmartWebView.ASWV_SHARE_URL;
-	private static String ASWV_EXC_LIST	= SmartWebView.ASWV_EXC_LIST;
+	private static String ASWV_EXC_LIST		= SmartWebView.ASWV_EXC_LIST;
 
 	private static String ASWV_F_TYPE   	= SmartWebView.ASWV_F_TYPE;
 
@@ -125,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static String ASWV_HOST			= aswm_host(ASWV_URL);
 
-	public static int ASWV_FCM_ID		= aswm_fcm_id();
-	public static int ASWV_LAYOUT		= SmartWebView.ASWV_LAYOUT;
+	public static int ASWV_FCM_ID			= aswm_fcm_id();
+	public static int ASWV_LAYOUT			= SmartWebView.ASWV_LAYOUT;
 
     //Careful with these variable names if altering
     WebView asw_view;
@@ -135,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NotificationManager asw_notification;
     Notification asw_notification_new;
 	int asw_error_counter = 0;
+
+	Boolean true_online = !ASWP_OFFLINE && !ASWV_URL.startsWith("file:///");
 
     private String asw_cam_message;
     private ValueCallback<Uri> asw_file_message;
@@ -145,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	private final static int file_perm = 2;
 
 	public static String asw_fcm_channel = "1";
-	final String[] fcm_token = new String[1];
+	public String fcm_token;
 
     private SecureRandom random = new SecureRandom();
 
@@ -214,9 +217,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         	return;
         }
 
-        // requesting new FCM token, to store in the final variable
-        fcm_token[0] = fcm_token();
-
 		if(ASWV_LAYOUT==1){
 			setContentView(R.layout.drawer_main);
 			findViewById(R.id.app_bar).setVisibility(View.VISIBLE);
@@ -237,6 +237,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		}
 
 		asw_view = findViewById(R.id.msw_view);
+
+		// requesting new FCM token; updating final cookie variable
+		fcm_token();
 
 		// notification manager
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -745,12 +748,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 	//Getting device basic information
 	public void get_info(){
-		if(!ASWP_OFFLINE && !ASWV_URL.startsWith("file:///")) {
+		if(true_online) {
 			CookieManager cookieManager = CookieManager.getInstance();
 			cookieManager.setAcceptCookie(true);
 			cookieManager.setCookie(ASWV_URL, "DEVICE=android");
 			cookieManager.setCookie(ASWV_URL, "DEV_API=" + Build.VERSION.SDK_INT);
-			cookieManager.setCookie(ASWV_URL, "FCM_TOKEN=" + fcm_token());
+			fcm_token();
 			Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
 		}
 	}
@@ -784,7 +787,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			double longitude = gps.getLongitude();
 			if (gps.canGetLocation()) {
 				if (latitude != 0 || longitude != 0) {
-					if(!ASWP_OFFLINE) {
+					if(true_online) {
 						CookieManager cookieManager = CookieManager.getInstance();
 						cookieManager.setAcceptCookie(true);
 						cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
@@ -897,14 +900,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	}
 
 	public String fcm_token(){
-		FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this,  new OnSuccessListener<InstanceIdResult>() {
-			@Override
-			public void onSuccess(InstanceIdResult instanceIdResult) {
-				fcm_token[0] = instanceIdResult.getToken();
-				Log.d("REQ_FCM_TOKEN", fcm_token[0]);
-			}
-		});
-		return fcm_token[0];
+		FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this, instanceIdResult -> {
+			fcm_token = instanceIdResult.getToken();
+				if(true_online) {
+					CookieManager cookieManager = CookieManager.getInstance();
+					cookieManager.setAcceptCookie(true);
+					cookieManager.setCookie(ASWV_URL, "FCM_TOKEN="+fcm_token);
+					Log.d("FCM_COOKED","YES");
+				}
+			Log.d("REQ_FCM_TOKEN", fcm_token);
+		}).addOnFailureListener(e -> Log.d("REQ_FCM_TOKEN", "FAILED"));
+		return fcm_token;
 	}
 
 	//Checking if particular permission is given or not
