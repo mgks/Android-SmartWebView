@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	static boolean ASWP_TAB			= SmartWebView.ASWP_TAB;
 
 	// security variables
-	static boolean ASWP_CERT_VERIFICATION 	= SmartWebView.ASWP_CERT_VERIFICATION;
+	static boolean ASWP_CERT_VERIFICATION 	= SmartWebView.ASWP_CERT_VERI;
 
 	//Configuration variables
 	private static String ASWV_URL     		= SmartWebView.ASWV_URL;
