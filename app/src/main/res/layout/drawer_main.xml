@@ -1,0 +1,88 @@
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+	android:id="@+id/pullfresh"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.drawerlayout.widget.DrawerLayout
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/drawer_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true"
+	tools:openDrawer="start"
+	tools:context="MainActivity">
+
+	<include
+		layout="@layout/drawer_main_bar"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
+
+	<RelativeLayout
+		android:id="@+id/msw_welcome"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentStart="true"
+		android:layout_alignParentTop="true"
+		android:background="@color/colorPrimary"
+		android:gravity="center_vertical|center_horizontal|center"
+		android:visibility="visible"
+		tools:ignore="RtlHardcoded">
+
+		<ImageView
+			android:id="@+id/msw_logo"
+			android:layout_width="275dip"
+			android:layout_height="100dip"
+			android:layout_centerHorizontal="true"
+			android:layout_centerVertical="true"
+			android:layout_gravity="top"
+			android:contentDescription="@string/image_view"
+			android:gravity="center_vertical|center_horizontal|center"
+			android:src="@raw/front_splash" />
+
+		<TextView
+			android:id="@+id/msw_loading_text"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true"
+			android:layout_below="@+id/msw_logo"
+			android:layout_marginTop="26dp"
+			android:gravity="center_vertical|center_horizontal|center"
+			android:text="@string/connecting"
+			android:textColor="?android:attr/textColorTertiary"
+			android:textSize="18sp"
+			android:textStyle="normal|bold"
+			tools:ignore="NotSibling" />
+
+		<TextView
+			android:id="@+id/mgks_web"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true"
+			android:layout_below="@+id/msw_loading_text"
+			android:layout_marginTop="110dp"
+			android:gravity="center_vertical|center_horizontal|center"
+			android:text="@string/loading2"
+			android:textColor="?android:attr/textColorTertiary"
+			android:textSize="18sp"
+			android:textStyle="normal|bold"
+			android:visibility="gone"
+			tools:ignore="NotSibling" />
+	</RelativeLayout>
+
+	<com.google.android.material.navigation.NavigationView
+		android:id="@+id/nav_view"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:layout_gravity="start"
+		android:fitsSystemWindows="true"
+		app:headerLayout="@layout/drawer_main_header"
+		app:menu="@menu/activity_main_drawer"
+		android:background="@color/white"
+		app:itemTextColor="@color/black"
+		app:itemIconTint="@color/black" />
+</androidx.drawerlayout.widget.DrawerLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

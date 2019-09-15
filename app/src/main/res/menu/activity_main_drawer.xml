@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_doc"
+            android:icon="@drawable/ic_doc"
+            android:title="Documentation" />
+		<item
+			android:id="@+id/nav_fcm"
+			android:title="FCM" />
+		<item
+			android:id="@+id/nav_admob"
+			android:title="AdMob" />
+		<item
+			android:id="@+id/nav_gps"
+			android:title="GPS" />
+		<item
+			android:id="@+id/nav_share"
+			android:title="Sharing" />
+		<item
+			android:id="@+id/nav_lay"
+			android:title="Layouts" />
+		<item
+			android:id="@+id/nav_support"
+			android:icon="@drawable/ic_help"
+			android:title="Support/Help" />
+	</group>
+</menu>

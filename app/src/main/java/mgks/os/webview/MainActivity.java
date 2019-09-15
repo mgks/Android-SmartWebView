@@ -2,11 +2,11 @@ package mgks.os.webview;
 
 /*
  * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
- * Developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
+ * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
- * Please mention project source or developer credit in your Application's License(s) Wiki.
+ * Please mention project source or credit developers in your Application's License(s) Wiki.
  * Giving right credit to developers encourages them to create better projects :)
-*/
+ */
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -15,8 +15,10 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.DownloadManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -35,6 +38,8 @@ import android.provider.Settings;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
@@ -54,11 +59,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,32 +87,47 @@ import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-	//Permission variables
-	static boolean ASWP_JSCRIPT    = SmartWebView.ASWP_JSCRIPT;
-	static boolean ASWP_FUPLOAD    = SmartWebView.ASWP_FUPLOAD;
-	static boolean ASWP_CAMUPLOAD  = SmartWebView.ASWP_CAMUPLOAD;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+	// permission variables
+	static boolean ASWP_JSCRIPT		= SmartWebView.ASWP_JSCRIPT;
+	static boolean ASWP_FUPLOAD		= SmartWebView.ASWP_FUPLOAD;
+	static boolean ASWP_CAMUPLOAD	= SmartWebView.ASWP_CAMUPLOAD;
 	static boolean ASWP_ONLYCAM		= SmartWebView.ASWP_ONLYCAM;
-	static boolean ASWP_MULFILE    = SmartWebView.ASWP_MULFILE;
-	static boolean ASWP_LOCATION   = SmartWebView.ASWP_LOCATION;
-	static boolean ASWP_RATINGS    = SmartWebView.ASWP_RATINGS;
+	static boolean ASWP_MULFILE		= SmartWebView.ASWP_MULFILE;
+	static boolean ASWP_LOCATION	= SmartWebView.ASWP_LOCATION;
+	static boolean ASWP_RATINGS		= SmartWebView.ASWP_RATINGS;
 	static boolean ASWP_PULLFRESH	= SmartWebView.ASWP_PULLFRESH;
-	static boolean ASWP_PBAR       = SmartWebView.ASWP_PBAR;
-	static boolean ASWP_ZOOM       = SmartWebView.ASWP_ZOOM;
-	static boolean ASWP_SFORM      = SmartWebView.ASWP_SFORM;
+	static boolean ASWP_PBAR		= SmartWebView.ASWP_PBAR;
+	static boolean ASWP_ZOOM        = SmartWebView.ASWP_ZOOM;
+	static boolean ASWP_SFORM       = SmartWebView.ASWP_SFORM;
 	static boolean ASWP_OFFLINE		= SmartWebView.ASWP_OFFLINE;
 	static boolean ASWP_EXTURL		= SmartWebView.ASWP_EXTURL;
+	static boolean ASWP_ADMOB		= SmartWebView.ASWP_ADMOB;
+	static boolean ASWP_TAB			= SmartWebView.ASWP_TAB;
 
-	//Security variables
-	static boolean ASWP_CERT_VERIFICATION = SmartWebView.ASWP_CERT_VERIFICATION;
+	// security variables
+	static boolean ASWP_CERT_VERIFICATION 	= SmartWebView.ASWP_CERT_VERI;
 
 	//Configuration variables
-	private static String ASWV_URL      = SmartWebView.ASWV_URL;
-	private String CURR_URL				 = ASWV_URL;
-	private static String ASWV_F_TYPE   = SmartWebView.ASWV_F_TYPE;
+	private static String ASWV_URL     		= SmartWebView.ASWV_URL;
+	private String CURR_URL					= ASWV_URL;
+	private static String ASWV_SEARCH		= SmartWebView.ASWV_SEARCH;
+	private static String ASWV_SHARE_URL	= SmartWebView.ASWV_SHARE_URL;
+	private static String ASWV_EXC_LIST		= SmartWebView.ASWV_EXC_LIST;
 
-    public static String ASWV_HOST		= aswm_host(ASWV_URL);
+	private static String ASWV_F_TYPE   	= SmartWebView.ASWV_F_TYPE;
+
+	private static String ASWV_ADMOB		= SmartWebView.ASWV_ADMOB;
+
+    public static String ASWV_HOST			= aswm_host(ASWV_URL);
+
+	public static int ASWV_FCM_ID			= aswm_fcm_id();
+	public static int ASWV_LAYOUT			= SmartWebView.ASWV_LAYOUT;
 
     //Careful with these variable names if altering
     WebView asw_view;
@@ -100,6 +135,9 @@ public class MainActivity extends AppCompatActivity {
     TextView asw_loading_text;
     NotificationManager asw_notification;
     Notification asw_notification_new;
+	int asw_error_counter = 0;
+
+	Boolean true_online = !ASWP_OFFLINE && !ASWV_URL.startsWith("file:///");
 
     private String asw_cam_message;
     private ValueCallback<Uri> asw_file_message;
@@ -108,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
 
 	private final static int loc_perm = 1;
 	private final static int file_perm = 2;
+
+	public static String asw_fcm_channel = "1";
+	public String fcm_token;
 
     private SecureRandom random = new SecureRandom();
 
@@ -134,30 +175,25 @@ public class MainActivity extends AppCompatActivity {
                     if (null == asw_file_path) {
                         return;
                     }
-                    if (intent == null || intent.getData() == null) {
-                        if (asw_cam_message != null) {
-                            results = new Uri[]{Uri.parse(asw_cam_message)};
-                        }
-                    } else {
-                        String dataString = intent.getDataString();
-                        if (dataString != null) {
-                            results = new Uri[]{ Uri.parse(dataString) };
-                        } else {
-			    			if(ASWP_MULFILE) {
-                                if (intent.getClipData() != null) {
-                                    final int numSelectedFiles = intent.getClipData().getItemCount();
-                                    results = new Uri[numSelectedFiles];
-                                    for (int i = 0; i < numSelectedFiles; i++) {
-                                        results[i] = intent.getClipData().getItemAt(i).getUri();
-                                    }
-                                }
-                            }
+					if (null == intent.getClipData() && null == intent.getDataString() && null != asw_cam_message) {
+						results = new Uri[]{Uri.parse(asw_cam_message)};
+
+					} else {
+						if (null != intent.getClipData()) { // checking if multiple files selected or not
+							final int numSelectedFiles = intent.getClipData().getItemCount();
+							results = new Uri[numSelectedFiles];
+							for (int i = 0; i < intent.getClipData().getItemCount(); i++) {
+								results[i] = intent.getClipData().getItemAt(i).getUri();
+							}
+						} else {
+							results = new Uri[]{Uri.parse(intent.getDataString())};
 						}
-                    }
+					}
                 }
             }
             asw_file_path.onReceiveValue(results);
             asw_file_path = null;
+
         } else {
             if (requestCode == asw_file_req) {
                 if (null == asw_file_message) return;
@@ -174,16 +210,52 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 		Log.w("READ_PERM = ",Manifest.permission.READ_EXTERNAL_STORAGE);
 		Log.w("WRITE_PERM = ",Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        //Prevent the app from being started again when it is still alive in the background
+
+        // prevent app from being started again when it is still alive in the background
         if (!isTaskRoot()) {
         	finish();
         	return;
         }
 
-        setContentView(R.layout.activity_main);
+		if(ASWV_LAYOUT==1){
+			setContentView(R.layout.drawer_main);
+			findViewById(R.id.app_bar).setVisibility(View.VISIBLE);
+
+			Toolbar toolbar = findViewById(R.id.toolbar);
+			setSupportActionBar(toolbar);
+			Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+
+			DrawerLayout drawer = findViewById(R.id.drawer_layout);
+			ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(MainActivity.this, drawer, toolbar, R.string.open, R.string.close);
+			drawer.addDrawerListener(toggle);
+			toggle.syncState();
+
+			NavigationView navigationView = findViewById(R.id.nav_view);
+			navigationView.setNavigationItemSelectedListener(MainActivity.this);
+		}else{
+			setContentView(R.layout.activity_main);
+		}
 
 		asw_view = findViewById(R.id.msw_view);
 
+		// requesting new FCM token; updating final cookie variable
+		fcm_token();
+
+		// notification manager
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+		if(Build.VERSION.SDK_INT >= 26) {
+			NotificationChannel notificationChannel = new NotificationChannel(asw_fcm_channel,String.valueOf(R.string.notification_channel_name),NotificationManager.IMPORTANCE_HIGH);
+			notificationChannel.setDescription(String.valueOf(R.string.notification_channel_desc));
+			notificationChannel.setLightColor(Color.RED);
+			notificationChannel.enableVibration(true);
+			notificationChannel.setShowBadge(true);
+			assert notificationManager != null;
+			notificationManager.createNotificationChannel(notificationChannel);
+			notificationManager.createNotificationChannel(notificationChannel);
+		}
+
+		// swipe refresh
 		final SwipeRefreshLayout pullfresh = findViewById(R.id.pullfresh);
 		if (ASWP_PULLFRESH) {
 			pullfresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -253,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
 		});
 		asw_view.setHapticFeedbackEnabled(false);
 
+		// download listener
 		asw_view.setDownloadListener(new DownloadListener() {
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
@@ -286,11 +359,54 @@ public class MainActivity extends AppCompatActivity {
         asw_view.setVerticalScrollBarEnabled(false);
         asw_view.setWebViewClient(new Callback());
 
-        //Rendering the default URL
-        aswm_view(ASWV_URL, false);
+		//Reading incoming intents
+		Intent read_int = getIntent();
+		Log.d("INTENT", read_int.toUri(0));
+		String uri = read_int.getStringExtra("uri");
+		String share = read_int.getStringExtra("s_uri");
+		String share_img = read_int.getStringExtra("s_img");
+
+		if(share != null) {
+			//Processing shared content
+			Log.d("SHARE INTENT",share);
+			Matcher matcher = urlPattern.matcher(share);
+			String urlStr = "";
+			if(matcher.find()){
+				urlStr = matcher.group();
+				if(urlStr.startsWith("(") && urlStr.endsWith(")")) {
+					urlStr = urlStr.substring(1, urlStr.length() - 1);
+				}
+			}
+			String red_url = ASWV_SHARE_URL+"?text="+share+"&link="+urlStr+"&image_url=";
+			//Toast.makeText(MainActivity.this, "SHARE: "+red_url+"\nLINK: "+urlStr, Toast.LENGTH_LONG).show();
+			aswm_view(red_url, false, asw_error_counter);
+
+		}else if(share_img != null) {
+			//Processing shared content
+			Log.d("SHARE INTENT",share_img);
+			Toast.makeText(MainActivity.this, share_img, Toast.LENGTH_LONG).show();
+			aswm_view(ASWV_URL, false, asw_error_counter);
+
+		}else if(uri != null) {
+			//Opening notification
+			Log.d("NOTIFICATION INTENT",uri);
+			aswm_view(uri, false, asw_error_counter);
+
+		}else{
+			//Rendering the default URL
+			Log.d("MAIN INTENT",ASWV_URL);
+			aswm_view(ASWV_URL, false, asw_error_counter);
+		}
+
+		if(ASWP_ADMOB) {
+			MobileAds.initialize(this, ASWV_ADMOB);
+			AdView asw_ad_view = findViewById(R.id.msw_ad_view);
+			AdRequest adRequest = new AdRequest.Builder().build();
+			asw_ad_view.loadAd(adRequest);
+		}
 
         asw_view.setWebChromeClient(new WebChromeClient() {
-            //Handling input[type="file"]
+            // handling input[type="file"]
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams){
             	if(check_permission(2) && check_permission(3)) {
 					if (ASWP_FUPLOAD) {
@@ -432,7 +548,7 @@ public class MainActivity extends AppCompatActivity {
             List<String> pr = data.getPathSegments();
             String param1   = pr.get(0);
             */
-            aswm_view(path, false);
+            aswm_view(path, false, asw_error_counter);
         }
     }
 
@@ -470,7 +586,7 @@ public class MainActivity extends AppCompatActivity {
 		@Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             Toast.makeText(getApplicationContext(), getString(R.string.went_wrong), Toast.LENGTH_SHORT).show();
-            aswm_view("file:///android_asset/error.html", false);
+            aswm_view("file:///android_asset/error.html", false, asw_error_counter);
         }
 
         //Overriding webview URLs
@@ -504,30 +620,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Opening URLs inside webview with request
-    void aswm_view(String url, Boolean tab) {
-        if (tab) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        } else {
-	   if(url.contains("?")){ // check to see whether the url already has query parameters and handle appropriately.
-		url += "&";
-	   } else {
-      		url += "?";
-	   }
-	   url += "rid="+random_id();
-	   asw_view.loadUrl(url);
+    void aswm_view(String url, Boolean tab, int error_counter) {
+		if(error_counter > 2){
+			asw_error_counter = 0;
+			aswm_exit();
+		}else {
+			if(tab){
+				if(ASWP_TAB) {
+					CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+					intentBuilder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+					intentBuilder.setSecondaryToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+					intentBuilder.setStartAnimations(this, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+					intentBuilder.setExitAnimations(this, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+					CustomTabsIntent customTabsIntent = intentBuilder.build();
+					try {
+						customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
+					} catch (ActivityNotFoundException e) {
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						intent.setData(Uri.parse(url));
+						startActivity(intent);
+					}
+				}else{
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setData(Uri.parse(url));
+					startActivity(intent);
+				}
+			} else {
+				if (url.contains("?")) { // check to see whether the url already has query parameters and handle appropriately.
+					url += "&";
+				} else {
+					url += "?";
+				}
+				url += "rid=" + random_id();
+				asw_view.loadUrl(url);
+			}
         }
     }
 
-	//Actions based on shouldOverrideUrlLoading
+	/*--- actions based on URL structure ---*/
+
 	public boolean url_actions(WebView view, String url){
 		boolean a = true;
-		//Show toast error if not connected to the network
+		// show toast error if not connected to the network
 		if (!ASWP_OFFLINE && !DetectConnection.isInternetAvailable(MainActivity.this)) {
 			Toast.makeText(getApplicationContext(), getString(R.string.check_connection), Toast.LENGTH_SHORT).show();
 
-			//Use this in a hyperlink to redirect back to default URL :: href="refresh:android"
+		// use this in a hyperlink to redirect back to default URL :: href="refresh:android"
 		} else if (url.startsWith("refresh:")) {
 			String ref_sch = (Uri.parse(url).toString()).replace("refresh:","");
 			if(ref_sch.matches("URL")){
@@ -535,12 +673,12 @@ public class MainActivity extends AppCompatActivity {
 			}
 			pull_fresh();
 
-			//Use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
+		// use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
 		} else if (url.startsWith("tel:")) {
 			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 			startActivity(intent);
 
-			//Use this to open your apps page on google play store app :: href="rate:android"
+		// use this to open your apps page on google play store app :: href="rate:android"
 		} else if (url.startsWith("rate:")) {
 			final String app_package = getPackageName(); //requesting app package name from Context or Activity object
 			try {
@@ -549,7 +687,7 @@ public class MainActivity extends AppCompatActivity {
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
 			}
 
-			//Sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
+		// sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
 		} else if (url.startsWith("share:")) {
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
@@ -557,22 +695,27 @@ public class MainActivity extends AppCompatActivity {
 			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle()+"\nVisit: "+(Uri.parse(url).toString()).replace("share:",""));
 			startActivity(Intent.createChooser(intent, getString(R.string.share_w_friends)));
 
-			//Use this in a hyperlink to exit your app :: href="exit:android"
+		// use this in a hyperlink to exit your app :: href="exit:android"
 		} else if (url.startsWith("exit:")) {
-			Intent intent = new Intent(Intent.ACTION_MAIN);
-			intent.addCategory(Intent.CATEGORY_HOME);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(intent);
+			aswm_exit();
 
-			//Getting location for offline files
+		// getting location for offline files
 		} else if (url.startsWith("offloc:")) {
 			String offloc = ASWV_URL+"?loc="+get_location();
-			aswm_view(offloc,false);
+			aswm_view(offloc,false, asw_error_counter);
 			Log.d("OFFLINE LOC REQ",offloc);
 
-		 	//Opening external URLs in android default web browser
+		// creating firebase notification for offline files
+		} else if (url.startsWith("fcm:")) {
+			String fcm = ASWV_URL+"?fcm="+fcm_token();
+			aswm_view(fcm,false, asw_error_counter);
+			Log.d("OFFLINE_FCM_TOKEN",fcm);
+
+		// opening external URLs in android default web browser
 		} else if (ASWP_EXTURL && !aswm_host(url).equals(ASWV_HOST)) {
-			aswm_view(url,true);
+			aswm_view(url,true, asw_error_counter);
+
+		// else return false for no special action
 		} else {
 			a = false;
 		}
@@ -600,15 +743,19 @@ public class MainActivity extends AppCompatActivity {
 
 	//Reloading current page
 	public void pull_fresh(){
-    	aswm_view((!CURR_URL.equals("")?CURR_URL:ASWV_URL),false);
+    	aswm_view((!CURR_URL.equals("")?CURR_URL:ASWV_URL),false, asw_error_counter);
 	}
 
 	//Getting device basic information
 	public void get_info(){
-		CookieManager cookieManager = CookieManager.getInstance();
-		cookieManager.setAcceptCookie(true);
-		cookieManager.setCookie(ASWV_URL, "DEVICE=android");
-		cookieManager.setCookie(ASWV_URL, "DEV_API=" + Build.VERSION.SDK_INT);
+		if(true_online) {
+			fcm_token();
+			CookieManager cookieManager = CookieManager.getInstance();
+			cookieManager.setAcceptCookie(true);
+			cookieManager.setCookie(ASWV_URL, "DEVICE=android");
+			cookieManager.setCookie(ASWV_URL, "DEV_API=" + Build.VERSION.SDK_INT);
+			Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
+		}
 	}
 
 	//Checking permission for storage and camera for writing and uploading images
@@ -640,7 +787,7 @@ public class MainActivity extends AppCompatActivity {
 			double longitude = gps.getLongitude();
 			if (gps.canGetLocation()) {
 				if (latitude != 0 || longitude != 0) {
-					if(!ASWP_OFFLINE) {
+					if(true_online) {
 						CookieManager cookieManager = CookieManager.getInstance();
 						cookieManager.setAcceptCookie(true);
 						cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
@@ -657,6 +804,114 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 		return newloc;
+	}
+
+	// get cookie value
+	public String get_cookies(String cookie){
+		String value = "";
+		CookieManager cookieManager = CookieManager.getInstance();
+		String cookies = cookieManager.getCookie(ASWV_URL);
+		String[] temp=cookies.split(";");
+		for (String ar1 : temp ){
+			if(ar1.contains(cookie)){
+				String[] temp1=ar1.split("=");
+				value = temp1[1];
+				break;
+			}
+		}
+		return value;
+	}
+
+	private static final Pattern urlPattern = Pattern.compile(
+			"(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"+"(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"+"[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
+	@SuppressLint("ResourceAsColor")
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		final SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		searchView.setQueryHint(getString(R.string.search_hint));
+		searchView.setIconified(true);
+		searchView.setIconifiedByDefault(true);
+		searchView.clearFocus();
+
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				searchView.clearFocus();
+				aswm_view(ASWV_SEARCH+query,false,asw_error_counter);
+				searchView.setQuery(query,false);
+				return false;
+			}
+			@Override
+			public boolean onQueryTextChange(String query) {
+				return false;
+			}
+		});
+		//searchView.setQuery(asw_view.getUrl(),false);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.action_exit) {
+			aswm_exit();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	public boolean onNavigationItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.nav_home) {
+			aswm_view("file:///android_asset/offline.html",false,asw_error_counter);
+		} else if (id == R.id.nav_doc) {
+			aswm_view("https://github.com/mgks/Android-SmartWebView/documentation",false,asw_error_counter);
+		} else if (id == R.id.nav_fcm) {
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/fcm.md",false,asw_error_counter);
+		} else if (id == R.id.nav_admob) {
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/admob.md",false,asw_error_counter);
+		} else if (id == R.id.nav_gps) {
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/gps.md",false,asw_error_counter);
+		} else if (id == R.id.nav_share) {
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/share.md",false,asw_error_counter);
+		} else if (id == R.id.nav_lay) {
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/layout.md",false,asw_error_counter);
+		} else if (id == R.id.nav_support) {
+			Intent intent = new Intent(Intent.ACTION_SENDTO);
+			intent.setData(Uri.parse("mailto:getmgks@gmail.com"));
+			intent.putExtra(Intent.EXTRA_SUBJECT, "SWV Help");
+			startActivity(Intent.createChooser(intent, "Send Email"));
+		}
+
+		DrawerLayout drawer = findViewById(R.id.drawer_layout);
+		drawer.closeDrawer(GravityCompat.START);
+		return true;
+	}
+
+	public static int aswm_fcm_id(){
+		//Date now = new Date();
+		//Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
+		return 1;
+	}
+
+	public String fcm_token(){
+		FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this, instanceIdResult -> {
+			fcm_token = instanceIdResult.getToken();
+				if(true_online) {
+					CookieManager cookieManager = CookieManager.getInstance();
+					cookieManager.setAcceptCookie(true);
+					cookieManager.setCookie(ASWV_URL, "FCM_TOKEN="+fcm_token);
+					Log.d("FCM_BAKED","YES");
+					//Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
+				}
+			Log.d("REQ_FCM_TOKEN", fcm_token);
+		}).addOnFailureListener(e -> Log.d("REQ_FCM_TOKEN", "FAILED"));
+		return fcm_token;
 	}
 
 	//Checking if particular permission is given or not
@@ -789,6 +1044,13 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	public void aswm_exit(){
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 	}
 
     @Override

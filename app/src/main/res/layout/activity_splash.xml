@@ -6,12 +6,11 @@
     android:background="@color/colorPrimary" >
 
 	<ImageView
+		android:layout_width="325sp"
+		android:layout_height="120sp"
+		android:layout_centerInParent="true"
+		android:contentDescription=""
 		android:src="@raw/front_splash"
-        android:contentDescription=""
-        tools:ignore="ContentDescription"
-        android:layout_height="120sp"
-        android:layout_width="250sp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+		tools:ignore="ContentDescription" />
 
 </RelativeLayout>

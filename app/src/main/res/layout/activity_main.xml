@@ -1,10 +1,9 @@
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/pullfresh"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 <RelativeLayout
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
     android:layout_height="match_parent"
 	android:paddingLeft="0dip"
@@ -68,6 +67,16 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="gone" />
+	<com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/msw_ad_view"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|center"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		ads:adSize="BANNER"
+		ads:adUnitId="ca-app-pub-3940256099942544/6300978111"> <!-- this is just a test ad unit ID, replace it with your real ID right before publishing or your account can be suspended -->
+	</com.google.android.gms.ads.AdView>
     <ProgressBar
         android:id="@+id/msw_progress"
         style="@android:style/Widget.ProgressBar.Horizontal"
