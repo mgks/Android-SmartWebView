@@ -7,6 +7,7 @@
 -->
 
 <span align="center" style="text-align:center">
+
 <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="100"></a>
 
 [![alt text](https://img.shields.io/badge/variant-java-red.svg)](#environment-setup) [![alt text](https://img.shields.io/badge/version-p_%5F0.1-green.svg)](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
