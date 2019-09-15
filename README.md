@@ -7,6 +7,8 @@
 -->
 
 <span align="center" style="text-align:center">
+# Android Smart WebView
+[![alt text](https://img.shields.io/badge/project%20variant-java-red.svg)](#) [![alt text](https://img.shields.io/badge/version-4-green.svg)](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php) [![alt text](https://img.shields.io/badge/learn%20about-SWV%20Pro-yellow.svg "Get Smart WebView Pro")](https://github.com/voinsource/SmartWebView-Pro)
 
 <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="100"></a>
 
