@@ -242,6 +242,13 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 - Push to the branch `git push origin my-new-feature`
 - Create new Pull Request
 
+### Know bugs log
+```
+22/09/19 - App crashing below API 24 in some devices
+22/09/19 - Camcorder not working in API 25, 26
+22/09/19 - Camera not working in API 29
+```
+
 ## Support the Project
 
 #### There are few ways to support this project -
