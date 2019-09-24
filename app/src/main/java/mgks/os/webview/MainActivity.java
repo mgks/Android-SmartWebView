@@ -20,6 +20,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -175,7 +176,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (null == asw_file_path) {
                         return;
                     }
-					if (null == intent.getClipData() && null == intent.getDataString() && null != asw_cam_message) {
+					ClipData clipData;
+                    String stringData;
+					try {
+						clipData = intent.getClipData();
+						stringData = intent.getDataString();
+					}catch (Exception e){
+						clipData = null;
+						stringData = null;
+					}
+
+					if (clipData == null && stringData == null && asw_cam_message != null) {
 						results = new Uri[]{Uri.parse(asw_cam_message)};
 
 					} else {
@@ -870,7 +881,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		if (id == R.id.nav_home) {
 			aswm_view("file:///android_asset/offline.html",false,asw_error_counter);
 		} else if (id == R.id.nav_doc) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/documentation",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/tree/master/documentation",false,asw_error_counter);
 		} else if (id == R.id.nav_fcm) {
 			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/fcm.md",false,asw_error_counter);
 		} else if (id == R.id.nav_admob) {
