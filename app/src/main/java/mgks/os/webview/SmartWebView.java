@@ -37,7 +37,7 @@ class SmartWebView {
 
 	/* -- CONFIG VARIABLES -- */
 	// layout selection
-	static int ASWV_LAYOUT            = 0;            // default=0; for clear fullscreen layout, no other layout is added to the OpenSource
+	static int ASWV_LAYOUT            = 0;            // default=0; for clear fullscreen layout, and =1 for drawer layout
 
 	// URL configs
 	static String ASWV_URL            = "file:///android_asset/offline.html";     // complete URL of your website or offline webpage
