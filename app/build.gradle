@@ -1,14 +1,22 @@
 apply plugin: 'com.android.application'
 
 android {
+	signingConfigs {
+		debug {
+			storeFile file('D:\\Downloads\\voinsource.jks')
+			storePassword 'voinsource360'
+			keyAlias = 'voinsource_key'
+			keyPassword 'voinsource360'
+		}
+	}
 	compileSdkVersion 29
 	buildToolsVersion '29.0.2'
 	defaultConfig {
 		applicationId 'mgks.os.webview'
 		minSdkVersion 21
 		targetSdkVersion 29
-		versionCode 5
-		versionName '5.0'
+		versionCode 1
+		versionName 'p_0.1'
 		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 		multiDexEnabled true
 	}
@@ -28,19 +36,19 @@ android {
 
 dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	implementation 'com.google.firebase:firebase-core:17.1.0'
-	implementation 'com.google.firebase:firebase-config:19.0.0'
+	implementation 'com.google.firebase:firebase-core:17.2.0'
+	implementation 'com.google.firebase:firebase-config:19.0.1'
 	implementation 'com.google.firebase:firebase-appindexing:19.0.0'
 	implementation 'com.google.firebase:firebase-messaging:20.0.0'
-	implementation 'com.google.firebase:firebase-ads:18.1.1'
-	implementation 'com.google.firebase:firebase-analytics:17.1.0'
+	implementation 'com.google.firebase:firebase-ads:18.2.0'
+	implementation 'com.google.firebase:firebase-analytics:17.2.0'
 
 	testImplementation 'junit:junit:4.13-beta-3'
 	androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-	implementation 'com.google.android.material:material:1.1.0-alpha09'
+	implementation 'com.google.android.material:material:1.1.0-alpha10'
 	implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-	implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+	implementation 'androidx.appcompat:appcompat:1.0.0'
 	implementation 'androidx.browser:browser:1.0.0'
 
 	implementation 'com.google.android.gms:play-services-auth:17.0.0'
