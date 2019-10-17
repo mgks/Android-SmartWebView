@@ -190,14 +190,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 						results = new Uri[]{Uri.parse(asw_cam_message)};
 
 					} else {
-						if (null != intent.getClipData()) { // checking if multiple files selected or not
-							final int numSelectedFiles = intent.getClipData().getItemCount();
+						if (null != clipData) { // checking if multiple files selected or not
+							final int numSelectedFiles = clipData.getItemCount();
 							results = new Uri[numSelectedFiles];
-							for (int i = 0; i < intent.getClipData().getItemCount(); i++) {
-								results[i] = intent.getClipData().getItemAt(i).getUri();
+							for (int i = 0; i < clipData.getItemCount(); i++) {
+								results[i] = clipData.getItemAt(i).getUri();
 							}
 						} else {
-							results = new Uri[]{Uri.parse(intent.getDataString())};
+							results = new Uri[]{Uri.parse(stringData)};
 						}
 					}
                 }
