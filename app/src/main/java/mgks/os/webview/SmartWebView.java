@@ -30,6 +30,7 @@ class SmartWebView {
 	static boolean ASWP_TAB           = true;         // instead of default browser, open external URLs in chrome tab
 	static boolean ASWP_ADMOB         = true;         // to load admob or not
 
+	static boolean ASWP_EXITDIAL	  = true;		  // confirm to exit app on back press
 
 	/* -- SECURITY VARIABLES -- */
 	static boolean ASWP_CERT_VERI     = true;         // verify whether HTTPS port needs certificate verification

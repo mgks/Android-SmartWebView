@@ -67,6 +67,11 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="gone" />
+	<WebView
+		android:id="@+id/print_view"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:visibility="gone" />
 	<com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
 		android:id="@+id/msw_ad_view"
 		android:layout_width="wrap_content"

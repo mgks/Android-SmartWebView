@@ -13,6 +13,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -22,6 +23,7 @@ import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -32,11 +34,15 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintJob;
+import android.print.PrintManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -47,6 +53,8 @@ import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
+import android.webkit.SslErrorHandler;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -54,32 +62,28 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.webkit.SslErrorHandler;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,7 +91,6 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	static boolean ASWP_EXTURL		= SmartWebView.ASWP_EXTURL;
 	static boolean ASWP_ADMOB		= SmartWebView.ASWP_ADMOB;
 	static boolean ASWP_TAB			= SmartWebView.ASWP_TAB;
+	static boolean ASWP_EXITDIAL	= SmartWebView.ASWP_EXITDIAL;
 
 	// security variables
 	static boolean ASWP_CERT_VERIFICATION 	= SmartWebView.ASWP_CERT_VERI;
@@ -132,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Careful with these variable names if altering
     WebView asw_view;
+    WebView print_view;
     ProgressBar asw_progress;
     TextView asw_loading_text;
     NotificationManager asw_notification;
@@ -215,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
+    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -248,6 +253,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		}
 
 		asw_view = findViewById(R.id.msw_view);
+		print_view = (WebView) findViewById(R.id.print_view); //view on which you want to take a printout
+		asw_view.addJavascriptInterface(new MainActivity.WebViewJavaScriptInterface(this), "androidapp"); //
+		// "androidapp is used to call methods exposed from javascript interface, in this example case print
+		// method can be called by androidapp.print(String)"
+		// load your data from the URL in web view
 
 		// requesting new FCM token; updating final cookie variable
 		fcm_token();
@@ -563,6 +573,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+	public class WebViewJavaScriptInterface {
+		WebViewJavaScriptInterface(Context context) {
+			/*public void print(final String data){
+				runOnUiThread(() -> doWebViewPrint(data));
+			}*/
+		}
+	}
+
+	private void doWebViewPrint(String ss) {
+		print_view.setWebViewClient(new WebViewClient() {
+
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				return false;
+			}
+
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				print_page(view,view.getTitle(),false);
+				super.onPageFinished(view, url);
+			}
+		});
+		// Generate an HTML document on the fly:
+		print_view.loadDataWithBaseURL(null, ss, "text/html", "UTF-8", null);
+	}
+
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -688,6 +723,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		} else if (url.startsWith("tel:")) {
 			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 			startActivity(intent);
+
+		} else if(url.startsWith("print:")) {
+			print_page(view,view.getTitle(),true);
 
 		// use this to open your apps page on google play store app :: href="rate:android"
 		} else if (url.startsWith("rate:")) {
@@ -1031,6 +1069,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         asw_notification.notify(id, asw_notification_new);
     }
 
+    //Printing pages
+	private void print_page(WebView view, String print_name, boolean manual) {
+		PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+		PrintDocumentAdapter printAdapter = view.createPrintDocumentAdapter(print_name);
+		PrintAttributes.Builder builder = new PrintAttributes.Builder();
+		builder.setMediaSize(PrintAttributes.MediaSize.ISO_A5);
+		PrintJob printJob = printManager.print(print_name, printAdapter, builder.build());
+
+		if(printJob.isCompleted()){
+			Toast.makeText(getApplicationContext(), R.string.print_complete, Toast.LENGTH_LONG).show();
+		}
+		else if(printJob.isFailed()){
+			Toast.makeText(getApplicationContext(), R.string.print_failed, Toast.LENGTH_LONG).show();
+		}
+	}
+
 	//Checking if users allowed the requested permissions or not
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
@@ -1049,7 +1103,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				if (asw_view.canGoBack()) {
 					asw_view.goBack();
 				} else {
-					finish();
+					if(ASWP_EXITDIAL) {
+						ask_exit();
+					}else{
+						finish();
+					}
 				}
 				return true;
 			}
@@ -1062,6 +1120,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		intent.addCategory(Intent.CATEGORY_HOME);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
+	}
+
+	// Creating exit dialogue
+	public void ask_exit(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+		builder.setTitle(getString(R.string.exit_title));
+		builder.setMessage(getString(R.string.exit_subtitle));
+		builder.setCancelable(true);
+
+		// Action if user selects 'yes'
+		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				finish();
+			}
+		});
+
+		// Actions if user selects 'no'
+		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+			}
+		});
+
+		// Create the alert dialog using alert dialog builder
+		AlertDialog dialog = builder.create();
+
+		// Finally, display the dialog when user press back button
+		dialog.show();
 	}
 
     @Override
