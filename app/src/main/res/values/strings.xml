@@ -31,4 +31,6 @@
 	<string name="connecting">Connecting…</string>
 	<string name="exit_title">Exit confirmation</string>
 	<string name="exit_subtitle">You sure you want to exit SWV?</string>
+	<string name="print_complete">Printing complete</string>
+	<string name="print_failed">Printing failed</string>
 </resources>

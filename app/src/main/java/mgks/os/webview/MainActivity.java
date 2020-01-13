@@ -37,6 +37,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintJob;
+import android.print.PrintManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
@@ -49,6 +53,7 @@ import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
@@ -131,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Careful with these variable names if altering
     WebView asw_view;
+    WebView print_view;
     ProgressBar asw_progress;
     TextView asw_loading_text;
     NotificationManager asw_notification;
@@ -214,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
+    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -247,6 +253,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		}
 
 		asw_view = findViewById(R.id.msw_view);
+		print_view = (WebView) findViewById(R.id.print_view); //view on which you want to take a printout
+		asw_view.addJavascriptInterface(new MainActivity.WebViewJavaScriptInterface(this), "androidapp"); //
+		// "androidapp is used to call methods exposed from javascript interface, in this example case print
+		// method can be called by androidapp.print(String)"
+		// load your data from the URL in web view
 
 		// requesting new FCM token; updating final cookie variable
 		fcm_token();
@@ -562,6 +573,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+	public class WebViewJavaScriptInterface {
+		WebViewJavaScriptInterface(Context context) {
+			/*public void print(final String data){
+				runOnUiThread(() -> doWebViewPrint(data));
+			}*/
+		}
+	}
+
+	private void doWebViewPrint(String ss) {
+		print_view.setWebViewClient(new WebViewClient() {
+
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				return false;
+			}
+
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				print_page(view,view.getTitle(),false);
+				super.onPageFinished(view, url);
+			}
+		});
+		// Generate an HTML document on the fly:
+		print_view.loadDataWithBaseURL(null, ss, "text/html", "UTF-8", null);
+	}
+
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -687,6 +723,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		} else if (url.startsWith("tel:")) {
 			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 			startActivity(intent);
+
+		} else if(url.startsWith("print:")) {
+			print_page(view,view.getTitle(),true);
 
 		// use this to open your apps page on google play store app :: href="rate:android"
 		} else if (url.startsWith("rate:")) {
@@ -1029,6 +1068,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         asw_notification_new = builder.build();
         asw_notification.notify(id, asw_notification_new);
     }
+
+    //Printing pages
+	private void print_page(WebView view, String print_name, boolean manual) {
+		PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+		PrintDocumentAdapter printAdapter = view.createPrintDocumentAdapter(print_name);
+		PrintAttributes.Builder builder = new PrintAttributes.Builder();
+		builder.setMediaSize(PrintAttributes.MediaSize.ISO_A5);
+		PrintJob printJob = printManager.print(print_name, printAdapter, builder.build());
+
+		if(printJob.isCompleted()){
+			Toast.makeText(getApplicationContext(), R.string.print_complete, Toast.LENGTH_LONG).show();
+		}
+		else if(printJob.isFailed()){
+			Toast.makeText(getApplicationContext(), R.string.print_failed, Toast.LENGTH_LONG).show();
+		}
+	}
 
 	//Checking if users allowed the requested permissions or not
 	@Override
