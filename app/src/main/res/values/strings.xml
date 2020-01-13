@@ -29,4 +29,6 @@
 	<string name="close">Close</string>
 	<string name="search_hint">Enter your query here</string>
 	<string name="connecting">Connecting…</string>
+	<string name="exit_title">Exit confirmation</string>
+	<string name="exit_subtitle">You sure you want to exit SWV?</string>
 </resources>

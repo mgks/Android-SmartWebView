@@ -13,6 +13,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -22,6 +23,7 @@ import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	static boolean ASWP_EXTURL		= SmartWebView.ASWP_EXTURL;
 	static boolean ASWP_ADMOB		= SmartWebView.ASWP_ADMOB;
 	static boolean ASWP_TAB			= SmartWebView.ASWP_TAB;
+	static boolean ASWP_EXITDIAL	= SmartWebView.ASWP_EXITDIAL;
 
 	// security variables
 	static boolean ASWP_CERT_VERIFICATION 	= SmartWebView.ASWP_CERT_VERI;
@@ -1045,7 +1048,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				if (asw_view.canGoBack()) {
 					asw_view.goBack();
 				} else {
-					finish();
+					if(ASWP_EXITDIAL) {
+						ask_exit();
+					}else{
+						finish();
+					}
 				}
 				return true;
 			}
@@ -1058,6 +1065,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		intent.addCategory(Intent.CATEGORY_HOME);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
+	}
+
+	// Creating exit dialogue
+	public void ask_exit(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+		builder.setTitle(getString(R.string.exit_title));
+		builder.setMessage(getString(R.string.exit_subtitle));
+		builder.setCancelable(true);
+
+		// Action if user selects 'yes'
+		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				finish();
+			}
+		});
+
+		// Actions if user selects 'no'
+		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+			}
+		});
+
+		// Create the alert dialog using alert dialog builder
+		AlertDialog dialog = builder.create();
+
+		// Finally, display the dialog when user press back button
+		dialog.show();
 	}
 
     @Override
