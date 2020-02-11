@@ -17,6 +17,7 @@ class SmartWebView {
 	static boolean ASWP_ONLYCAM       = false;        // incase you want only camera files to upload
 	static boolean ASWP_MULFILE       = true;         // upload multiple files in webview
 	static boolean ASWP_LOCATION      = true;         // track GPS locations
+	static boolean ASWP_CP			  = true;		  // enable copy/paste within webview
 
 	static boolean ASWP_RATINGS       = true;         // show ratings dialog; auto configured ; edit method get_rating() for customizations
 
