@@ -21,11 +21,7 @@ public class Firebase extends FirebaseMessagingService {
 
 	public void onMessageReceived(RemoteMessage message) {
 		if (message.getNotification() != null) {
-			sendMyNotification(message.getNotification().getTitle(),
-				message.getNotification().getBody(),
-				message.getNotification().getClickAction(),
-				message.getData().get("uri")
-			);
+			sendMyNotification(message.getNotification().getTitle(), message.getNotification().getBody(), message.getNotification().getClickAction(), message.getData().get("uri"));
 		}
 	}
 
