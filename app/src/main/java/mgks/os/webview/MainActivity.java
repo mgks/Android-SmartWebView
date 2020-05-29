@@ -987,7 +987,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @SuppressLint("SimpleDateFormat")
         String file_name    = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
         String new_name     = "file_"+file_name+"_";
-        File sd_directory   = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File sd_directory   = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(new_name, ".jpg", sd_directory);
     }
 
@@ -996,7 +996,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @SuppressLint("SimpleDateFormat")
         String file_name    = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
         String new_name     = "file_"+file_name+"_";
-        File sd_directory   = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File sd_directory   = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(new_name, ".3gp", sd_directory);
     }
 
