@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "1004337301382",
+    "firebase_url": "https://smart-wv.firebaseio.com",
+    "project_id": "smart-wv",
+    "storage_bucket": "smart-wv.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004337301382:android:619ce09a414ebc69",
+        "android_client_info": {
+          "package_name": "mgks.os.webview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004337301382-6rlvhd438h4qao2oav5bc8csdodq3odd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE5XQ5iqAAoMGhvGDY5-BcIoloi14jjuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004337301382-6rlvhd438h4qao2oav5bc8csdodq3odd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004337301382:android:d16545f8291cfb273d8e07",
+        "android_client_info": {
+          "package_name": "mgks.os.webview.drawer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004337301382-6rlvhd438h4qao2oav5bc8csdodq3odd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE5XQ5iqAAoMGhvGDY5-BcIoloi14jjuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004337301382-6rlvhd438h4qao2oav5bc8csdodq3odd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004337301382:android:ee6e8017b38da1c83d8e07",
+        "android_client_info": {
+          "package_name": "mgks.os.webview.fullscreen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004337301382-6rlvhd438h4qao2oav5bc8csdodq3odd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE5XQ5iqAAoMGhvGDY5-BcIoloi14jjuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004337301382-6rlvhd438h4qao2oav5bc8csdodq3odd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
