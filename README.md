@@ -121,7 +121,7 @@ ASWV_URL   = "https://github.com/mgks"   // domain or directory or address to an
 
 ```kotlin
 ASWP_JSCRIPT     = true     // enable JavaScript for webview
-ASWP_FUPLOAD     = true     // upload files from local device 
+ASWP_FUPLOAD     = true     // upload files from local device
 ASWP_MULFILE     = true     // upload multiple files
 ASWP_CAMUPLOAD   = true     // enable camera file upload
 ASWP_ONLYCAM     = false    // incase you want only camera for input files
@@ -179,6 +179,7 @@ You can either select to get input from both file manager and camera or can just
 ### Firebase Messaging
 
 You need a firebase account to get started then download `google-services.json` and put it in the app level directory. Then you can create a POST request as below.
+[See detailed steps](https://support.google.com/firebase/answer/7015592?hl=en) to download firebase config file.
 
 **To URL:** `https://fcm.googleapis.com/fcm/send`
 
@@ -256,7 +257,7 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 <a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;display:block;margin:0 auto" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
-Even your tiniest contribution will be appreciated. 
+Even your tiniest contribution will be appreciated.
 
 **PROVIDE FEEDBACK:** Donations help us run things but feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).
 
