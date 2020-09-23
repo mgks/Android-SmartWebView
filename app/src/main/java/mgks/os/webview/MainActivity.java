@@ -764,7 +764,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			Log.d("OFFLINE_FCM_TOKEN",fcm);
 
 		// opening external URLs in android default web browser
-		} else if (ASWP_EXTURL && !aswm_host(url).equals(ASWV_HOST)) {
+		} else if (ASWP_EXTURL && !aswm_host(url).equals(ASWV_HOST) && !ASWV_EXC_LIST.contains(aswm_host(url))) {
 			aswm_view(url,true, asw_error_counter);
 
 		// else return false for no special action
