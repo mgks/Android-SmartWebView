@@ -47,7 +47,7 @@ class SmartWebView {
 	static String ASWV_SHARE_URL      = ASWV_URL + "?share=";                     // URL where you process external content shared with the app
 
 	// domains allowed to be opened inside webview
-	static String ASWV_EXC_LIST       = "github.com,www.google.com";              //separate domains with a comma (,)
+	static String ASWV_EXC_LIST       = "github.com";				//separate domains with a comma (,)
 
 	// to upload any file type using "*/*"; check file type references for more
 	static String ASWV_F_TYPE         = "*/*";
