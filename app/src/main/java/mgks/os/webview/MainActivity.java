@@ -2,8 +2,9 @@ package mgks.os.webview;
 
 /*
  * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
- * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
+ * Initially developed by Ghazi Khan (https://github.com/mgks), under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
+ * Enhance Smart WebView with plugins - https://voinsource.github.io/#plugins (Google Login, Background Services, Vision API, Advance Notifications, PQL etc).
  * Please mention project source or credit developers in your Application's License(s) Wiki.
  * Giving right credit to developers encourages them to create better projects :)
  */
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 	Boolean true_online = !ASWP_OFFLINE && !ASWV_URL.startsWith("file:///");
 
-    private String asw_cam_message;
+    private String asw_pcam_message,asw_vcam_message;
     private ValueCallback<Uri> asw_file_message;
     private ValueCallback<Uri[]> asw_file_path;
     private final static int asw_file_req = 1;
@@ -192,8 +193,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 						stringData = null;
 					}
 
-					if (clipData == null && stringData == null && asw_cam_message != null) {
-						results = new Uri[]{Uri.parse(asw_cam_message)};
+					if (clipData == null && stringData == null && (asw_pcam_message != null || asw_vcam_message != null)) {
+						results = new Uri[]{Uri.parse(asw_pcam_message != null ? asw_pcam_message:asw_vcam_message)};
 
 					} else {
 						if (null != clipData) { // checking if multiple files selected or not
@@ -225,8 +226,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		Log.w("READ_PERM = ",Manifest.permission.READ_EXTERNAL_STORAGE);
+
+		// PLAY AREA START :: for debug purposes only
+
+		/*S2S s2s = new S2S();
+		try {
+			s2s.post("http://demo1423088.mockable.io/new","hello23");
+			Log.w("S2S_ALERT","HERE1");
+		} catch (IOException e) {
+			e.printStackTrace();
+			Log.w("S2S_ALERT","FAIL");
+		}*/
+
+		/*Log.w("READ_PERM = ",Manifest.permission.READ_EXTERNAL_STORAGE);
 		Log.w("WRITE_PERM = ",Manifest.permission.WRITE_EXTERNAL_STORAGE);
+		PQL pql = new PQL();
+		pql.write("user_id", "9032", MainActivity.this);
+		String pql_p = pql.read("user_id",MainActivity.this);
+		Log.w("PQL: ",pql_p);
+		//Toast.makeText(MainActivity.this,pql.pull(MainActivity.this),Toast.LENGTH_LONG).show();
+		//pql.flush_all(MainActivity.this);
+		Toast.makeText(MainActivity.this,pql.list(MainActivity.this),Toast.LENGTH_LONG).show();*/
+
+		// PLAY AREA END
 
         // prevent app from being started again when it is still alive in the background
         if (!isTaskRoot()) {
@@ -255,7 +277,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 		asw_view = findViewById(R.id.msw_view);
 		print_view = (WebView) findViewById(R.id.print_view); //view on which you want to take a printout
-		asw_view.addJavascriptInterface(new MainActivity.WebViewJavaScriptInterface(this), "androidapp"); //
+		//asw_view.addJavascriptInterface(new JSInterface(), "JSOUT");
+		//asw_view.addJavascriptInterface(new MainActivity.WebViewJavaScriptInterface(this), "androidapp"); //
 		// "androidapp is used to call methods exposed from javascript interface, in this example case print
 		// method can be called by androidapp.print(String)"
 		// load your data from the URL in web view
@@ -475,12 +498,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 									File photoFile = null;
 									try {
 										photoFile = create_image();
-										takePictureIntent.putExtra("PhotoPath", asw_cam_message);
+										takePictureIntent.putExtra("PhotoPath", asw_pcam_message);
 									} catch (IOException ex) {
 										Log.e(TAG, "Image file creation failed", ex);
 									}
 									if (photoFile != null) {
-										asw_cam_message = "file:" + photoFile.getAbsolutePath();
+										asw_pcam_message = "file:" + photoFile.getAbsolutePath();
 										takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
 									} else {
 										takePictureIntent = null;
@@ -498,7 +521,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 										Log.e(TAG, "Video file creation failed", ex);
 									}
 									if (videoFile != null) {
-										asw_cam_message = "file:" + videoFile.getAbsolutePath();
+										asw_vcam_message = "file:" + videoFile.getAbsolutePath();
 										takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(videoFile));
 									} else {
 										takeVideoIntent = null;
