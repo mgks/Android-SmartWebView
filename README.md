@@ -255,7 +255,7 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 **DONATE:** If this project helped you or your business in any way and you feel like donating some change, you can always buy me a cup of coffee :)
 
-<a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;display:block;margin:0 auto" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
+<a href="https://ko-fi.com/getmgks" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;display:block;margin:0 auto" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
 Even your tiniest contribution will be appreciated.
 
@@ -275,10 +275,12 @@ This project is published under the MIT License - see [LICENSE.md](LICENSE.md) f
 
 Thanks to other [contributers](https://github.com/mgks/Android-SmartWebView/graphs/contributors) who helped make this project amazing.
 
-## Contact
+## Closing Note
 
 This project was initially developed by **[Ghazi Khan](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
 
-**A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
+You can hire me to develop your custom project or even for dev consulting. [Contact me!](mailto:getmgks@gmail.com)
+
+**A personal suggestion:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
 
 [![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
