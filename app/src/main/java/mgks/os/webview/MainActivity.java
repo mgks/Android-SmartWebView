@@ -83,6 +83,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -91,7 +94,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -139,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Careful with these variable names if altering
     WebView asw_view;
     WebView print_view;
+    AdView asw_ad_view;
     ProgressBar asw_progress;
     TextView asw_loading_text;
     NotificationManager asw_notification;
@@ -227,9 +233,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-		// PLAY AREA START :: for debug purposes only
+		// ------ PLAY AREA :: for debug purposes only ------ //
 
-		/*S2S s2s = new S2S();
+		/*
+
+		S2S s2s = new S2S();
 		try {
 			s2s.post("http://demo1423088.mockable.io/new","hello23");
 			Log.w("S2S_ALERT","HERE1");
@@ -246,9 +254,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		Log.w("PQL: ",pql_p);
 		//Toast.makeText(MainActivity.this,pql.pull(MainActivity.this),Toast.LENGTH_LONG).show();
 		//pql.flush_all(MainActivity.this);
-		Toast.makeText(MainActivity.this,pql.list(MainActivity.this),Toast.LENGTH_LONG).show();*/
+		Toast.makeText(MainActivity.this,pql.list(MainActivity.this),Toast.LENGTH_LONG).show();
 
-		// PLAY AREA END
+		*/
+
+		// ------- PLAY AREA END ------ //
 
         // prevent app from being started again when it is still alive in the background
         if (!isTaskRoot()) {
@@ -446,8 +456,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		}
 
 		if(ASWP_ADMOB) {
-			MobileAds.initialize(this, ASWV_ADMOB);
-			AdView asw_ad_view = findViewById(R.id.msw_ad_view);
+			MobileAds.initialize(this, new OnInitializationCompleteListener() {
+				@Override
+				public void onInitializationComplete(InitializationStatus initializationStatus){}
+			});
+			List<String> testDeviceIds = Arrays.asList("4C304B10577C757E3A3C3B667FF84F8C");
+			RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+			MobileAds.setRequestConfiguration(configuration);
+			//MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("4C304B10577C757E3A3C3B667FF84F8C")).build());
+			asw_ad_view = findViewById(R.id.msw_ad_view);
 			AdRequest adRequest = new AdRequest.Builder().build();
 			asw_ad_view.loadAd(adRequest);
 		}
@@ -828,7 +845,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			CookieManager cookieManager = CookieManager.getInstance();
 			cookieManager.setAcceptCookie(true);
 			cookieManager.setCookie(ASWV_URL, "DEVICE=android");
+			DeviceDetails dv = new DeviceDetails();
+			cookieManager.setCookie(ASWV_URL, "DEVICE_INFO=" + dv.pull());
 			cookieManager.setCookie(ASWV_URL, "DEV_API=" + Build.VERSION.SDK_INT);
+			cookieManager.setCookie(ASWV_URL, "APP_ID=" + BuildConfig.APPLICATION_ID);
+			cookieManager.setCookie(ASWV_URL, "APP_VER=" + BuildConfig.VERSION_CODE + "/" + BuildConfig.VERSION_NAME);
 			Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
 		}
 	}
@@ -867,6 +888,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 						cookieManager.setAcceptCookie(true);
 						cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
 						cookieManager.setCookie(ASWV_URL, "long=" + longitude);
+						cookieManager.setCookie(ASWV_URL, "LATLANG=" + latitude + "x" + longitude);
 					}
 					//Log.w("New Updated Location:", latitude + "," + longitude);  //enable to test dummy latitude and longitude
 					newloc = latitude+","+longitude;
