@@ -72,15 +72,16 @@
 		android:layout_width="0dp"
 		android:layout_height="0dp"
 		android:visibility="gone" />
-	<com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+
+	<com.google.android.gms.ads.AdView
+		xmlns:ads="http://schemas.android.com/apk/res-auto"
 		android:id="@+id/msw_ad_view"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_gravity="bottom|center"
-		android:layout_alignParentBottom="true"
 		android:layout_centerHorizontal="true"
+		android:layout_alignParentBottom="true"
 		ads:adSize="BANNER"
-		ads:adUnitId="ca-app-pub-3940256099942544/6300978111"> <!-- this is just a test ad unit ID, replace it with your real ID right before publishing or your account can be suspended -->
+		ads:adUnitId="@string/test_ad_banner">
 	</com.google.android.gms.ads.AdView>
     <ProgressBar
         android:id="@+id/msw_progress"
