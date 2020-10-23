@@ -4,6 +4,7 @@ package mgks.os.webview;
  * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks), under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
+ * Enhance Smart WebView with plugins - https://voinsource.github.io/#plugins (Google Login, Background Services, Vision API, Advance Notifications, PQL etc).
  * Please mention project source or credit developers in your Application's License(s) Wiki.
  * Giving right credit to developers encourages them to create better projects :)
  */
@@ -42,7 +43,7 @@ class SmartWebView {
 	static int ASWV_LAYOUT            = 0;            // default=0; for clear fullscreen layout, and =1 for drawer layout
 
 	// URL configs
-	static String ASWV_URL            = "file:///android_asset/offline.html";     // complete URL of your website or offline webpage
+	static String ASWV_URL            = "https://apps.mgks.dev/swv/?android=true"; //"file:///android_asset/offline.html";     // complete URL of your website or offline webpage
 	static String ASWV_SEARCH         = "https://www.google.com/search?q=";       // search query will start by the end of the present string
 	static String ASWV_SHARE_URL      = ASWV_URL + "?share=";                     // URL where you process external content shared with the app
 
@@ -53,7 +54,7 @@ class SmartWebView {
 	static String ASWV_F_TYPE         = "*/*";
 
 	// admob config
-	static String ASWV_ADMOB          = "ca-app-pub-9276682923792397~7957851075"; // your unique publishers ID; this one is temporary
+	static String ASWV_ADMOB          = "pub-1566476371455791";		// your unique publishers ID
 
 
 	/* -- RATING SYSTEM VARIABLES -- */
