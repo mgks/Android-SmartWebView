@@ -2,9 +2,10 @@
 
 <!--
  * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
- * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
+ * Initially developed by Ghazi Khan (https://github.com/mgks), under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
- * Please mention project source or developer credit in your Application's License(s) Wiki.
+ * Enhance Smart WebView with plugins - https://voinsource.github.io/#plugins (Google Login, Background Services, Vision API, Advance Notifications, PQL etc).
+ * Please mention project source or credit developers in your Application's License(s) Wiki.
  * Giving right credit to developers encourages them to create better projects :)
 -->
 
@@ -64,8 +65,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https"
-                    android:host="github.com"
-                    android:pathPrefix="/mgks" />
+                    android:host="apps.mgks.dev"
+                    android:pathPrefix="/swv" />
 					<!-- if you want only a specific directory from your website to be opened in the app through external links -->
 			</intent-filter>
 			<intent-filter android:label="OpenURI">
@@ -81,6 +82,7 @@
 				<!-- <data android:mimeType="image/*" /> -->
 			</intent-filter>
 		</activity>
+		<!--<receiver android:name=".NotificationPausePlay" />-->
 		<service android:name=".Firebase">
 			<intent-filter>
 				<action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -88,8 +90,8 @@
 			</intent-filter>
 		</service>
 		<meta-data
-			android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-			android:value="true"/>
+			android:name="com.google.android.gms.ads.APPLICATION_ID"
+			android:value="@string/app_id"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
