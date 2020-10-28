@@ -16,7 +16,7 @@
 
 </span><span align="center" style="text-align:center">
 
-**[GETTING STARTED](#getting-started) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://github.com/mgks/Android-SmartWebView/tree/master/documentation) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[GETTING STARTED](#getting-started) &middot; [GET SWV PRO](https://voinsource.github.io/SmartWebView-Pro/) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://github.com/mgks/Android-SmartWebView/tree/master/documentation) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 </span>
 
@@ -24,6 +24,7 @@ SWV is a framework built on Java to develop advanced hybrid webview applications
 
 A small build with features working out of the box: Live GPS Location, Notifications with FCM, AdMob, Chrome Tabs, Process Camera Input, Upload/Download Files, Custom Rating System, Multiple User Interfaces and more.
 
+**Explore also: [Smart WebView Pro](https://voinsource.github.io/SmartWebView-Pro/)**<br>
 **For kotlin variant, see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
 
 ## Table of Contents
@@ -253,13 +254,9 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 #### There are few ways to support this project -
 
-**DONATE:** If this project helped you or your business in any way and you feel like donating some change, you can always buy me a cup of coffee :)
+**[Get Smart WebView Pro](https://voinsource.github.io/SmartWebView-Pro/):** There is a Pro variant of SWV also with many advanced features and bundle of plugins to help you build the best of webview app. Smartest and easiest solution to your instat Android app building problems.<br>Some of the additional features include Google Login, Vision API, QR/Barcode Reader, Background Services, Advanced Notifications, Multiple Layout designs, PQL and more.
 
-<a href="https://ko-fi.com/getmgks" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;display:block;margin:0 auto" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
-
-Even your tiniest contribution will be appreciated.
-
-**PROVIDE FEEDBACK:** Donations help us run things but feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).
+**PROVIDE FEEDBACK:** Feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).
 
 Report your [issues](https://github.com/mgks/Android-SmartWebView/issues) here.
 
@@ -279,7 +276,7 @@ Thanks to other [contributers](https://github.com/mgks/Android-SmartWebView/grap
 
 This project was initially developed by **[Ghazi Khan](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
 
-You can hire me to develop your custom project or even for dev consulting. [Contact me!](mailto:getmgks@gmail.com)
+For development consulting or other support. [Contact me!](mailto:getmgks@gmail.com)
 
 **A personal suggestion:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
 
