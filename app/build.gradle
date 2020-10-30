@@ -4,7 +4,7 @@ android {
 	compileSdkVersion 30
 	buildToolsVersion '29.0.2'
 	defaultConfig {
-		applicationId 'mgks.os.webview'
+		applicationId 'mgks.os.swv'
 		minSdkVersion 21
 		targetSdkVersion 30
 		versionCode 2
@@ -32,12 +32,11 @@ dependencies {
 
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-	implementation platform('com.google.firebase:firebase-bom:25.12.0')
+	implementation platform('com.google.firebase:firebase-bom:26.0.0')
 	implementation 'com.google.firebase:firebase-core'
 	implementation 'com.google.firebase:firebase-config'
 	implementation 'com.google.firebase:firebase-appindexing'
 	implementation 'com.google.firebase:firebase-messaging'
-	implementation 'com.google.firebase:firebase-ads'
 	implementation 'com.google.firebase:firebase-analytics'
 
 	implementation 'com.google.android.material:material:1.3.0-alpha03'
@@ -47,7 +46,9 @@ dependencies {
 	implementation 'androidx.browser:browser:1.2.0'
 
 	implementation 'com.google.android.gms:play-services-auth:18.1.0'
+	implementation 'com.google.android.gms:play-services-ads:19.5.0'
 	implementation 'com.google.android.gms:play-services-location:17.1.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
