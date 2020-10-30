@@ -81,7 +81,7 @@
 		android:layout_centerHorizontal="true"
 		android:layout_alignParentBottom="true"
 		ads:adSize="BANNER"
-		ads:adUnitId="@string/test_ad_banner">
+		ads:adUnitId="@string/ad_banner">
 	</com.google.android.gms.ads.AdView>
     <ProgressBar
         android:id="@+id/msw_progress"
