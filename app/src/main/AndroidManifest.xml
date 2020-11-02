@@ -38,7 +38,7 @@
 	<uses-feature android:name="android.hardware.location.gps" />
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
-	<uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+	<!--<uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />-->
 
 	<application
 		android:allowBackup="true"
