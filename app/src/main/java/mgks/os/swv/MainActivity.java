@@ -102,59 +102,65 @@ import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 	// permission variables
-	static boolean ASWP_JSCRIPT		= SmartWebView.ASWP_JSCRIPT;
-	static boolean ASWP_FUPLOAD		= SmartWebView.ASWP_FUPLOAD;
-	static boolean ASWP_CAMUPLOAD	= SmartWebView.ASWP_CAMUPLOAD;
-	static boolean ASWP_ONLYCAM		= SmartWebView.ASWP_ONLYCAM;
-	static boolean ASWP_MULFILE		= SmartWebView.ASWP_MULFILE;
-	static boolean ASWP_LOCATION	= SmartWebView.ASWP_LOCATION;
-	static boolean ASWP_RATINGS		= SmartWebView.ASWP_RATINGS;
-	static boolean ASWP_PULLFRESH	= SmartWebView.ASWP_PULLFRESH;
-	static boolean ASWP_PBAR		= SmartWebView.ASWP_PBAR;
-	static boolean ASWP_ZOOM        = SmartWebView.ASWP_ZOOM;
-	static boolean ASWP_SFORM       = SmartWebView.ASWP_SFORM;
-	static boolean ASWP_OFFLINE		= SmartWebView.ASWP_OFFLINE;
-	static boolean ASWP_EXTURL		= SmartWebView.ASWP_EXTURL;
-	static boolean ASWP_ADMOB		= SmartWebView.ASWP_ADMOB;
-	static boolean ASWP_TAB			= SmartWebView.ASWP_TAB;
-	static boolean ASWP_EXITDIAL	= SmartWebView.ASWP_EXITDIAL;
-	static boolean ASWP_CP			= SmartWebView.ASWP_CP;
+	static boolean ASWP_JSCRIPT             = SmartWebView.ASWP_JSCRIPT;
+	static boolean ASWP_FUPLOAD             = SmartWebView.ASWP_FUPLOAD;
+	static boolean ASWP_CAMUPLOAD           = SmartWebView.ASWP_CAMUPLOAD;
+	static boolean ASWP_ONLYCAM             = SmartWebView.ASWP_ONLYCAM;
+	static boolean ASWP_MULFILE             = SmartWebView.ASWP_MULFILE;
+	static boolean ASWP_LOCATION            = SmartWebView.ASWP_LOCATION;
+	static boolean ASWP_RATINGS             = SmartWebView.ASWP_RATINGS;
+	static boolean ASWP_PULLFRESH           = SmartWebView.ASWP_PULLFRESH;
+	static boolean ASWP_PBAR                = SmartWebView.ASWP_PBAR;
+	static boolean ASWP_ZOOM                = SmartWebView.ASWP_ZOOM;
+	static boolean ASWP_SFORM               = SmartWebView.ASWP_SFORM;
+	static boolean ASWP_OFFLINE             = SmartWebView.ASWP_OFFLINE;
+	static boolean ASWP_EXTURL              = SmartWebView.ASWP_EXTURL;
+	static boolean ASWP_ADMOB               = SmartWebView.ASWP_ADMOB;
+	static boolean ASWP_TAB                 = SmartWebView.ASWP_TAB;
+	static boolean ASWP_EXITDIAL            = SmartWebView.ASWP_EXITDIAL;
+	static boolean ASWP_CP                  = SmartWebView.ASWP_CP;
 
 	// security variables
-	static boolean ASWP_CERT_VERIFICATION 	= SmartWebView.ASWP_CERT_VERI;
+	static boolean ASWP_CERT_VERIFICATION   = SmartWebView.ASWP_CERT_VERI;
 
-	//Configuration variables
-	private static String ASWV_URL     		= SmartWebView.ASWV_URL;
-	private String CURR_URL					= ASWV_URL;
-	private static String ASWV_SEARCH		= SmartWebView.ASWV_SEARCH;
-	private static String ASWV_SHARE_URL	= SmartWebView.ASWV_SHARE_URL;
-	private static String ASWV_EXC_LIST		= SmartWebView.ASWV_EXC_LIST;
+	// configuration variables
+	private static String ASWV_URL          = SmartWebView.ASWV_URL;
+	private String CURR_URL                 = ASWV_URL;
+	private static String ASWV_SEARCH       = SmartWebView.ASWV_SEARCH;
+	private static String ASWV_SHARE_URL    = SmartWebView.ASWV_SHARE_URL;
+	private static String ASWV_EXC_LIST     = SmartWebView.ASWV_EXC_LIST;
 
-	private static String ASWV_F_TYPE   	= SmartWebView.ASWV_F_TYPE;
+	private static String ASWV_F_TYPE       = SmartWebView.ASWV_F_TYPE;
 
-	private static String ASWV_ADMOB		= SmartWebView.ASWV_ADMOB;
+	private static String ASWV_ADMOB        = SmartWebView.ASWV_ADMOB;
 
-    public static String ASWV_HOST			= aswm_host(ASWV_URL);
+	public static String ASWV_HOST          = aswm_host(ASWV_URL);
 
-	public static int ASWV_FCM_ID			= aswm_fcm_id();
-	public static int ASWV_LAYOUT			= SmartWebView.ASWV_LAYOUT;
+	public static int ASWV_FCM_ID           = aswm_fcm_id();
+	public static int ASWV_LAYOUT           = SmartWebView.ASWV_LAYOUT;
+	
+	// user agent variables
+	static boolean POSTFIX_USER_AGENT         = SmartWebView.POSTFIX_USER_AGENT;
+	static boolean OVERRIDE_USER_AGENT        = SmartWebView.OVERRIDE_USER_AGENT;
+	private static String USER_AGENT_POSTFIX  = SmartWebView.USER_AGENT_POSTFIX;
+	private static String CUSTOM_USER_AGENT   = SmartWebView.CUSTOM_USER_AGENT;
 
-    //Careful with these variable names if altering
-    WebView asw_view;
-    WebView print_view;
-    AdView asw_ad_view;
-    ProgressBar asw_progress;
-    TextView asw_loading_text;
-    NotificationManager asw_notification;
-    Notification asw_notification_new;
+	// careful with these variable names if altering
+	WebView asw_view;
+	WebView print_view;
+	AdView asw_ad_view;
+	ProgressBar asw_progress;
+	TextView asw_loading_text;
+	NotificationManager asw_notification;
+	Notification asw_notification_new;
 	int asw_error_counter = 0;
 
 	Boolean true_online = !ASWP_OFFLINE && !ASWV_URL.startsWith("file:///");
 
-    private String asw_pcam_message,asw_vcam_message;
-    private ValueCallback<Uri> asw_file_message;
-    private ValueCallback<Uri[]> asw_file_path;
-    private final static int asw_file_req = 1;
+	private String asw_pcam_message,asw_vcam_message;
+	private ValueCallback<Uri> asw_file_message;
+	private ValueCallback<Uri[]> asw_file_path;
+	private final static int asw_file_req = 1;
 
 	private final static int loc_perm = 1;
 	private final static int file_perm = 2;
@@ -162,9 +168,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	public static String asw_fcm_channel = "1";
 	public String fcm_token;
 
-    private SecureRandom random = new SecureRandom();
+	private SecureRandom random = new SecureRandom();
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+	private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -233,29 +239,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
 
 		// ------ PLAY AREA :: for debug purposes only ------ //
-
-		/*
-
-		S2S s2s = new S2S();
-		try {
-			s2s.post("http://demo1423088.mockable.io/new","hello23");
-			Log.w("S2S_ALERT","HERE1");
-		} catch (IOException e) {
-			e.printStackTrace();
-			Log.w("S2S_ALERT","FAIL");
-		}*/
-
-		/*Log.w("READ_PERM = ",Manifest.permission.READ_EXTERNAL_STORAGE);
-		Log.w("WRITE_PERM = ",Manifest.permission.WRITE_EXTERNAL_STORAGE);
-		PQL pql = new PQL();
-		pql.write("user_id", "9032", MainActivity.this);
-		String pql_p = pql.read("user_id",MainActivity.this);
-		Log.w("PQL: ",pql_p);
-		//Toast.makeText(MainActivity.this,pql.pull(MainActivity.this),Toast.LENGTH_LONG).show();
-		//pql.flush_all(MainActivity.this);
-		Toast.makeText(MainActivity.this,pql.list(MainActivity.this),Toast.LENGTH_LONG).show();
-
-		*/
 
 		// ------- PLAY AREA END ------ //
 
@@ -358,6 +341,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Webview settings; defaults are customized for best performance
         WebSettings webSettings = asw_view.getSettings();
+
+		// setting custom user agent
+		if (OVERRIDE_USER_AGENT || POSTFIX_USER_AGENT) {
+			String userAgent = webSettings.getUserAgentString();
+			if (OVERRIDE_USER_AGENT) {
+				userAgent = CUSTOM_USER_AGENT;
+			}
+			if (POSTFIX_USER_AGENT) {
+				userAgent = userAgent + " " + USER_AGENT_POSTFIX;
+			}
+			webSettings.setUserAgentString(userAgent);
+		}
 
 		if(!ASWP_OFFLINE){
 			webSettings.setJavaScriptEnabled(ASWP_JSCRIPT);
