@@ -61,4 +61,11 @@ class SmartWebView {
 	static int ASWR_DAYS      = 3;            // after how many days of usage would you like to show the dialog
 	static int ASWR_TIMES     = 10;           // overall request launch times being ignored
 	static int ASWR_INTERVAL  = 2;            // reminding users to rate after days interval
+	
+	// User Agent tweaks
+	static boolean POSTFIX_USER_AGENT = true; // set to true to append USER_AGENT_POSTFIX to user agent
+	static boolean OVERRIDE_USER_AGENT = true; // set to true to use USER_AGENT instead of default one
+	static String USER_AGENT_POSTFIX = "AndroidApp"; // useful for identifying traffic, e.g. in Google Analytics
+	static String USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Mobile Safari/537.36";
+
 }
