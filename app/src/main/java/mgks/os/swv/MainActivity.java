@@ -359,6 +359,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Webview settings; defaults are customized for best performance
         WebSettings webSettings = asw_view.getSettings();
 
+		//set user agent
+		if (SmartWebView.OVERRIDE_USER_AGENT || SmartWebView.POSTFIX_USER_AGENT) {
+			String userAgent = webSettings.getUserAgentString();
+			if (SmartWebView.OVERRIDE_USER_AGENT) {
+				userAgent = SmartWebView.USER_AGENT;
+			}
+			if (SmartWebView.POSTFIX_USER_AGENT) {
+				userAgent = userAgent + " " + SmartWebView.USER_AGENT_POSTFIX;
+			}
+			webSettings.setUserAgentString(userAgent);
+		}
+
 		if(!ASWP_OFFLINE){
 			webSettings.setJavaScriptEnabled(ASWP_JSCRIPT);
 		}
