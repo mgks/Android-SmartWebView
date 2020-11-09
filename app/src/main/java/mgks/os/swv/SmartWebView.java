@@ -52,7 +52,7 @@ class SmartWebView {
 
 	// custom user agent defaults
 	static boolean POSTFIX_USER_AGENT       = true;         // set to true to append USER_AGENT_POSTFIX to user agent
-	static boolean OVERRIDE_USER_AGENT      = true;         // set to true to use USER_AGENT instead of default one
+	static boolean OVERRIDE_USER_AGENT      = false;        // set to true to use USER_AGENT instead of default one
 	static String USER_AGENT_POSTFIX        = "SWVAndroid"; // useful for identifying traffic, e.g. in Google Analytics
 	static String CUSTOM_USER_AGENT         = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Mobile Safari/537.36";    // custom user-agent
 
