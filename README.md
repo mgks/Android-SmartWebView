@@ -24,6 +24,8 @@ SWV is a framework built on Java to develop advanced hybrid webview applications
 
 A small build with features working out of the box: Live GPS Location, Notifications with FCM, AdMob, Chrome Tabs, Process Camera Input, Upload/Download Files, Custom Rating System, Multiple User Interfaces and more.
 
+**[Download Donate version from Google Play Store](https://play.google.com/store/apps/details?id=mgks.os.swv)**
+
 **Explore also: [Smart WebView Pro](https://voinsource.github.io/SmartWebView-Pro/)**<br>
 **For kotlin variant, see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
 
@@ -66,17 +68,17 @@ Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lo
 
 1. Download repo or just clone it
 
-   `git clone https://github.com/mgks/Android-SmartWebView`
+    `git clone https://github.com/mgks/Android-SmartWebView`
 
 2. Load project in Android Studio
 
-   `File > Open > Browse to Project and Select`
+    `File > Open > Browse to Project and Select`
 
 3. Let Android Studio process the project and download support libraries and dependencies
 
 4. Just to make sure, try cleaning and rebuilding project before run
 
-   `Build > Clean Project` then `Build > Rebuild Project`
+    `Build > Clean Project` then `Build > Rebuild Project`
 
 5. Got any error? You better fasten you seatbelt. It's gonna be a bumpy night.
 
@@ -161,6 +163,11 @@ ASWV_EXC_LIST    = "";                   // domains allowed to be opened inside 
 ASWV_ADMOB       = "ca-app-pub-9276682923792397~7957851075";   // your unique publishers ID; this one is temporary
 
 ASWV_F_TYPE      = "*/*"   // use `image/*` for image files only; check file type references for custom file type
+
+POSTFIX_USER_AGENT      = true;     // set to true to append USER_AGENT_POSTFIX to user agent
+OVERRIDE_USER_AGENT     = false;    // set to true to use USER_AGENT instead of default one
+USER_AGENT_POSTFIX      = "SWVAndroid";    // useful for identifying traffic, e.g. in Google Analytics
+CUSTOM_USER_AGENT       = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Mobile Safari/537.36";    // custom user-agent
 ```
 
 ## Features
