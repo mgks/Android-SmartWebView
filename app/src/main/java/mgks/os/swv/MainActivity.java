@@ -54,6 +54,8 @@ import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
+import android.webkit.ServiceWorkerClient;
+import android.webkit.ServiceWorkerController;
 import android.webkit.SslErrorHandler;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
@@ -241,7 +243,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		// ------ PLAY AREA :: for debug purposes only ------ //
 
 		// ------- PLAY AREA END ------ //
-
+		if (Build.VERSION.SDK_INT >= 24) {
+			ServiceWorkerController swController = ServiceWorkerController.getInstance();
+			swController.setServiceWorkerClient(new ServiceWorkerClient() {
+				@Override
+				public WebResourceResponse shouldInterceptRequest(WebResourceRequest request) {
+				return null;
+				}
+			}
+		}
+		
         // prevent app from being started again when it is still alive in the background
         if (!isTaskRoot()) {
         	finish();
@@ -623,6 +634,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				return false;
+			}
+
+			@Nullable
+			@Override
+			if (Build.VERSION.SDK_INT >= 24) {
+				public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+					return super.shouldInterceptRequest(view, request);
+				}
 			}
 
 			@Override
