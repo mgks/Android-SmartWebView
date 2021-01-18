@@ -61,6 +61,7 @@ import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -69,6 +70,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 	public static int ASWV_FCM_ID           = aswm_fcm_id();
 	public static int ASWV_LAYOUT           = SmartWebView.ASWV_LAYOUT;
-	
+
 	// user agent variables
 	static boolean POSTFIX_USER_AGENT         = SmartWebView.POSTFIX_USER_AGENT;
 	static boolean OVERRIDE_USER_AGENT        = SmartWebView.OVERRIDE_USER_AGENT;
@@ -243,6 +245,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		// ------ PLAY AREA :: for debug purposes only ------ //
 
 		// ------- PLAY AREA END ------ //
+
+		// use Service Worker
 		if (Build.VERSION.SDK_INT >= 24) {
 			ServiceWorkerController swController = ServiceWorkerController.getInstance();
 			swController.setServiceWorkerClient(new ServiceWorkerClient() {
@@ -250,9 +254,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				public WebResourceResponse shouldInterceptRequest(WebResourceRequest request) {
 				return null;
 				}
-			}
+			});
 		}
-		
+
         // prevent app from being started again when it is still alive in the background
         if (!isTaskRoot()) {
         	finish();
@@ -636,12 +640,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				return false;
 			}
 
+			//use Service Worker
 			@Nullable
 			@Override
-			if (Build.VERSION.SDK_INT >= 24) {
-				public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-					return super.shouldInterceptRequest(view, request);
-				}
+			public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+				return super.shouldInterceptRequest(view, request);
 			}
 
 			@Override
