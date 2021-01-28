@@ -60,7 +60,7 @@ class SmartWebView {
 	static String ASWV_F_TYPE         = "*/*";
 
 	// admob config
-	static String ASWV_ADMOB          = "pub-1566476371455791";		// your unique publishers ID
+	static String ASWV_ADMOB          = "";		// your unique publishers ID
 
 
 	/* -- RATING SYSTEM VARIABLES -- */
