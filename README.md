@@ -66,21 +66,23 @@ Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lo
 
 ### Setup
 
-1. Download repo or just clone it
+1. Download repo or clone the project
 
     `git clone https://github.com/mgks/Android-SmartWebView`
 
-2. Load project in Android Studio
+2. Download `google-services.json` file from Firebase ([setup](https://github.com/mgks/Android-SmartWebView#firebase-messaging))
+
+3. Load project in Android Studio
 
     `File > Open > Browse to Project and Select`
 
-3. Let Android Studio process the project and download support libraries and dependencies
+4. Let Android Studio process the project and download support libraries and dependencies
 
-4. Just to make sure, try cleaning and rebuilding project before run
+5. Just to make sure, try cleaning and rebuilding project before run
 
     `Build > Clean Project` then `Build > Rebuild Project`
 
-5. Got any error? You better fasten you seatbelt. It's gonna be a bumpy night.
+6. Got any error? You better fasten you seatbelt. It's going be a bumpy night.
 
 ## Configurations
 
