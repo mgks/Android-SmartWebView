@@ -93,6 +93,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.zxing.integration.android.IntentIntegrator;
 //import com.google.zxing.integration.android.IntentResult;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-			super.onActivityResult(requestCode, resultCode, intent);
+    	super.onActivityResult(requestCode, resultCode, intent);
 
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -219,6 +220,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 								results[i] = clipData.getItemAt(i).getUri();
 							}
 						} else {
+							try {
+								Bitmap cam_photo = (Bitmap) intent.getExtras().get("data");
+								ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+								cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+								stringData = MediaStore.Images.Media.insertImage(this.getContentResolver(), cam_photo, null, null);
+							}catch (Exception ignored){}
 							results = new Uri[]{Uri.parse(stringData)};
 						}
 					}
