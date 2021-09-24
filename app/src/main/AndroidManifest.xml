@@ -27,10 +27,13 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:remove="android:maxSdkVersion" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+		android:maxSdkVersion="29"
+		tools:ignore="ScopedStorage" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
@@ -53,7 +56,8 @@
 		<activity
 			android:name="mgks.os.swv.SplashScreen"
 			android:label="@string/app_name"
-			android:screenOrientation="portrait" >
+			android:screenOrientation="fullSensor"
+			android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -61,7 +65,8 @@
 		</activity>
 		<activity
 			android:name="mgks.os.swv.MainActivity"
-			android:screenOrientation="portrait" >		<!-- remove or alter as your apps requirement -->
+			android:screenOrientation="fullSensor"
+			android:exported="true">		<!-- remove or alter as your apps requirement -->
 			<intent-filter android:label="@string/app_name">
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -76,7 +81,8 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
-		<activity android:name="mgks.os.swv.ShareActivity">
+		<activity android:name="mgks.os.swv.ShareActivity"
+			android:exported="true">
 			<intent-filter android:label="Share">
 				<action android:name="android.intent.action.SEND" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -85,7 +91,8 @@
 			</intent-filter>
 		</activity>
 		<!--<receiver android:name=".NotificationPausePlay" />-->
-		<service android:name="mgks.os.swv.Firebase">
+		<service android:name="mgks.os.swv.Firebase"
+			android:exported="false">
 			<intent-filter>
 				<action android:name="com.google.firebase.MESSAGING_EVENT" />
 				<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

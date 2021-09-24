@@ -2,14 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
 	compileSdkVersion 31
-	buildToolsVersion '30.0.2'
+	buildToolsVersion '31.0.0'
 	defaultConfig {
 		applicationId 'mgks.os.swv'
 		minSdkVersion 21
 		targetSdkVersion 31
 		versionCode 2
 		versionName 'p_0.2'
-		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 		multiDexEnabled true
 	}
 	buildTypes {
@@ -21,8 +20,8 @@ android {
 	productFlavors {
 	}
 	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_1_8
-		targetCompatibility JavaVersion.VERSION_1_8
+		sourceCompatibility 1.8
+		targetCompatibility 1.8
 	}
 }
 
@@ -32,6 +31,8 @@ dependencies {
 
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+	implementation 'androidx.multidex:multidex:2.0.1'
+
 	implementation platform('com.google.firebase:firebase-bom:26.0.0')
 	implementation 'com.google.firebase:firebase-core'
 	implementation 'com.google.firebase:firebase-config'
@@ -39,16 +40,15 @@ dependencies {
 	implementation 'com.google.firebase:firebase-messaging'
 	implementation 'com.google.firebase:firebase-analytics'
 
-	implementation 'com.google.android.material:material:1.5.0-alpha01'
-	implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+	implementation 'com.google.android.material:material:1.5.0-alpha03'
+	implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
 	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 	implementation 'androidx.appcompat:appcompat:1.3.1'
 	implementation 'androidx.browser:browser:1.3.0'
 
 	implementation 'com.google.android.gms:play-services-auth:19.2.0'
-	implementation 'com.google.android.gms:play-services-ads:20.2.0'
+	implementation 'com.google.android.gms:play-services-ads:20.4.0'
 	implementation 'com.google.android.gms:play-services-location:18.0.0'
-
 }
 
 apply plugin: 'com.google.gms.google-services'

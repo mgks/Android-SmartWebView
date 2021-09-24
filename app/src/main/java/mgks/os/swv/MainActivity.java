@@ -89,6 +89,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.BuildConfig;
 import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.zxing.integration.android.IntentIntegrator;
 //import com.google.zxing.integration.android.IntentResult;
@@ -871,7 +872,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			cookieManager.setCookie(ASWV_URL, "DEVICE=android");
 			DeviceDetails dv = new DeviceDetails();
 			cookieManager.setCookie(ASWV_URL, "DEVICE_INFO=" + dv.pull());
+
 			cookieManager.setCookie(ASWV_URL, "DEV_API=" + Build.VERSION.SDK_INT);
+
 			cookieManager.setCookie(ASWV_URL, "APP_ID=" + BuildConfig.APPLICATION_ID);
 			cookieManager.setCookie(ASWV_URL, "APP_VER=" + BuildConfig.VERSION_CODE + "/" + BuildConfig.VERSION_NAME);
 			Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
@@ -1158,6 +1161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	}
 
 	//Checking if users allowed the requested permissions or not
+	@SuppressLint("MissingSuperCall")
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
 		if (requestCode == 1) {
