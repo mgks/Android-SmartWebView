@@ -16,7 +16,7 @@
 
 </span><span align="center" style="text-align:center">
 
-**[GETTING STARTED](#getting-started) &middot; [GET SWV PRO](https://voinsource.github.io/SmartWebView-Pro/) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://github.com/mgks/Android-SmartWebView/tree/master/documentation) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[GETTING STARTED](#getting-started) &middot; [GET SWV PRO (DONATE)](https://voinsource.github.io/SmartWebView-Pro/) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://github.com/mgks/Android-SmartWebView/tree/master/documentation) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 </span>
 
@@ -24,10 +24,9 @@ SWV is a framework built on Java to develop advanced hybrid webview applications
 
 A small build with features working out of the box: Live GPS Location, Notifications with FCM, AdMob, Chrome Tabs, Process Camera Input, Upload/Download Files, Custom Rating System, Multiple User Interfaces and more.
 
-**[Download Donate version from Google Play Store](https://play.google.com/store/apps/details?id=mgks.os.swv)**
+**[Get Pro (Donate) version](https://voinsource.github.io/SmartWebView-Pro/)**
 
-**Explore also: [Smart WebView Pro](https://voinsource.github.io/SmartWebView-Pro/)**<br>
-**For kotlin variant, see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
+**For kotlin variant (few commits behind), see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
 
 ## Table of Contents
 
@@ -263,7 +262,7 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 #### There are few ways to support this project -
 
-**[Get Smart WebView Pro](https://voinsource.github.io/SmartWebView-Pro/):** There is a Pro variant of SWV also with many advanced features and bundle of plugins to help you build the best of webview app. Smartest and easiest solution to your instat Android app building problems.<br>Some of the additional features include Google Login, Vision API, QR/Barcode Reader, Background Services, Advanced Notifications, Multiple Layout designs, PQL and more.
+**[Donate for Smart WebView Pro](https://voinsource.github.io/SmartWebView-Pro/):** There is a Pro variant of SWV also with many advanced features and bundle of plugins to help you build the best of webview app. Smartest and easiest solution to your instat Android app building problems.<br>Some of the additional features include Google Login, Vision API, QR/Barcode Reader, Background Services, Advanced Notifications, Multiple Layout designs, PQL and more.
 
 **PROVIDE FEEDBACK:** Feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).
 
