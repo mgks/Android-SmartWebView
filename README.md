@@ -266,7 +266,7 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 **PROVIDE FEEDBACK:** Feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).
 
-**[Follow Me](https://github.com/mgks)** | **Add Project to Watchlist** | **Star the Project**
+**[Follow Me](https://github.com/mgks) on GitHub** | **Add Project to Watchlist** | **Star the Project**
 
 Report your [issues](https://github.com/mgks/Android-SmartWebView/issues) here.
 
