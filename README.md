@@ -16,7 +16,7 @@
 
 </span><span align="center" style="text-align:center">
 
-**[GETTING STARTED](#getting-started) &middot; [GET SWV PRO (DONATE)](https://mgks.dev/projects/smart-webview#pro) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://github.com/mgks/Android-SmartWebView/tree/master/documentation) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[GETTING STARTED](#getting-started) &middot; [GET SWV PRO (DONATE)](https://mgks.dev/projects/smart-webview#pro) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://mgks.dev/docs/smart-webview-documentation#index) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 </span>
 
