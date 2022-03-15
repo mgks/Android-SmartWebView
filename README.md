@@ -16,7 +16,7 @@
 
 </span><span align="center" style="text-align:center">
 
-**[GETTING STARTED](#getting-started) &middot; [GET SWV PRO (DONATE)](https://mgks.dev/projects/smart-webview#pro) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://mgks.dev/docs/smart-webview-documentation#index) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[GETTING STARTED](#getting-started) &middot; [DONATE (GET SWV PRO)](https://mgks.dev/projects/smart-webview#pro) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://mgks.dev/docs/smart-webview-documentation#index) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 </span>
 
@@ -24,9 +24,6 @@ SWV is a framework built on Java to develop advanced hybrid webview applications
 
 A small build with features working out of the box: Live GPS Location, Notifications with FCM, AdMob, Chrome Tabs, Process Camera Input, Upload/Download Files, Custom Rating System, Multiple User Interfaces and more.
 
-**[Support the Project and Get SWV Pro](https://mgks.dev/projects/smart-webview#pro)**
-
-**For kotlin variant (few commits behind), see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
 
 ## Table of Contents
 
@@ -51,7 +48,7 @@ A small build with features working out of the box: Live GPS Location, Notificat
 * [Contributing](#contributing)
 * [License](#license)
 * [Acknowledgements](#acknowledgements)
-* [Contact](#contact)
+* [Contact](#closing-note)
 
 ## Getting Started
 
