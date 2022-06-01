@@ -79,6 +79,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -539,7 +540,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 									}
 									if (photoFile != null) {
 										asw_pcam_message = "file:" + photoFile.getAbsolutePath();
-										takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+										takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".provider", photoFile));
 									} else {
 										takePictureIntent = null;
 									}
@@ -557,7 +558,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 									}
 									if (videoFile != null) {
 										asw_vcam_message = "file:" + videoFile.getAbsolutePath();
-										takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(videoFile));
+										takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".provider", videoFile));
 									} else {
 										takeVideoIntent = null;
 									}
@@ -1046,7 +1047,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
 			case 2:
-				return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+				return Build.VERSION.SDK_INT >= 30 || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
 			case 3:
 				return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
@@ -1111,9 +1112,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent;
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+			pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+		} else {
+			pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+		}
 
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "");
         switch(type){
@@ -1138,7 +1144,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         builder.setOngoing(false);
         builder.setAutoCancel(true);
-        builder.setContentIntent(pendingIntent);
         builder.setWhen(when);
         builder.setContentIntent(pendingIntent);
         asw_notification_new = builder.build();
