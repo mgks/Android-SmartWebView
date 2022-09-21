@@ -16,7 +16,7 @@
 
 </span><span align="center" style="text-align:center">
 
-**[GETTING STARTED](#getting-started) &middot; [GET SWV PRO (DONATE)](https://voinsource.github.io/SmartWebView-Pro/) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://github.com/mgks/Android-SmartWebView/tree/master/documentation) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[GETTING STARTED](#getting-started) &middot; [DONATE (GET SWV PRO)](https://mgks.dev/projects/smart-webview#pro) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://mgks.dev/docs/smart-webview-documentation#index) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 </span>
 
@@ -24,9 +24,6 @@ SWV is a framework built on Java to develop advanced hybrid webview applications
 
 A small build with features working out of the box: Live GPS Location, Notifications with FCM, AdMob, Chrome Tabs, Process Camera Input, Upload/Download Files, Custom Rating System, Multiple User Interfaces and more.
 
-**[Get Pro (Donate) version](https://voinsource.github.io/SmartWebView-Pro/)**
-
-**For kotlin variant (few commits behind), see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
 
 ## Table of Contents
 
@@ -51,7 +48,7 @@ A small build with features working out of the box: Live GPS Location, Notificat
 * [Contributing](#contributing)
 * [License](#license)
 * [Acknowledgements](#acknowledgements)
-* [Contact](#contact)
+* [Contact](#closing-note)
 
 ## Getting Started
 
@@ -85,7 +82,7 @@ Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lo
 
 ## Configurations
 
-For more detailed config, check project [Documentation](https://github.com/mgks/Android-SmartWebView/tree/master/documentation).
+For more detailed config, check project [Documentation](https://mgks.dev/docs/smart-webview-documentation#config).
 
 ### Device Permissions
 
@@ -262,9 +259,9 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 #### There are few ways to support this project -
 
-**[Donate for Smart WebView Pro](https://voinsource.github.io/SmartWebView-Pro/):** There is a Pro variant of SWV also with many advanced features and bundle of plugins to help you build the best of webview app. Smartest and easiest solution to your instat Android app building problems.<br>Some of the additional features include Google Login, Vision API, QR/Barcode Reader, Background Services, Advanced Notifications, Multiple Layout designs, PQL and more.
+**[Donate and Get Smart WebView Pro](https://mgks.dev/projects/smart-webview#pro):** There is a Pro variant of SWV also with many advanced features and bundle of plugins to help you build the best of webview app. Smartest and easiest solution to your instat Android app building problems.<br>Some of the additional features include Google Login, Vision API, QR/Barcode Reader, Background Services, Advanced Notifications, Multiple Layout designs, PQL and more.
 
-**PROVIDE FEEDBACK:** Feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).
+**PROVIDE FEEDBACK:** Feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:hello@mgks.dev).
 
 **[Follow Me](https://github.com/mgks) on GitHub** | **Add Project to Watchlist** | **Star the Project**
 
@@ -286,8 +283,8 @@ Thanks to other [contributers](https://github.com/mgks/Android-SmartWebView/grap
 
 This project was initially developed by **[Ghazi Khan](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
 
-For development consulting or other support. [Contact me!](mailto:getmgks@gmail.com)
+For development consulting or other support. [Contact me!](mailto:hello@mgks.dev)
 
 **A personal suggestion:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
 
-[![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
+[![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://mgks.dev)

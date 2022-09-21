@@ -30,7 +30,12 @@ public class Firebase extends FirebaseMessagingService {
 		Intent intent = new Intent(click_action);
 		intent.putExtra("uri", uri);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+		PendingIntent pendingIntent;
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+			pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+		} else {
+			pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+		}
 
 		int notification_id = nid!=null ? Integer.parseInt(nid) : MainActivity.ASWV_FCM_ID;
 
