@@ -26,7 +26,7 @@ class SmartWebView {
 	static boolean ASWP_PBAR          = true;         // show progress bar in app
 	static boolean ASWP_ZOOM          = false;        // zoom control for webpages view
 	static boolean ASWP_SFORM         = false;        // save form cache and auto-fill information
-	static boolean ASWP_OFFLINE       = false;        // whether the loading webpages are offline or online
+	static boolean ASWP_OFFLINE       = true;        // whether the loading webpages are offline or online
 	static boolean ASWP_EXTURL        = true;         // open external url with default browser instead of app webview
 
 	static boolean ASWP_TAB           = true;         // instead of default browser, open external URLs in chrome tab
@@ -39,11 +39,16 @@ class SmartWebView {
 
 
 	/* -- CONFIG VARIABLES -- */
+	// orientation setting
+	static int ASWV_ORIENTATION	  	  = 0;		      // change device orientation to portrait (1)(default) or landscape (2) or unspecified (0)
+
 	// layout selection
 	static int ASWV_LAYOUT            = 0;            // default=0; for clear fullscreen layout, and =1 for drawer layout
 
 	// URL configs
-	static String ASWV_URL            = "file:///android_asset/offline.html";//"https://apps.mgks.dev/swv/?android=true";  		// complete URL of your website or offline webpage "file:///android_asset/offline.html";
+	static String ASWV_URL_ONLINE	  = "https://apps.mgks.dev/swv/?android=true";	// if online URL is not provided, offline URL will be loaded by default
+	static String ASWV_URL_OFFLINE	  = "file:///android_asset/offline.html";	// if ASWP_OFFLINE is set false or ASWV_URL_ONLINE is empty
+	static String ASWV_URL            = (ASWV_URL_ONLINE == null || ASWV_URL_ONLINE.length() == 0) || ASWP_OFFLINE ? ASWV_URL_OFFLINE : ASWV_URL_ONLINE;	// complete URL of your website or offline webpage "file:///android_asset/offline.html";
 	static String ASWV_SEARCH         = "https://www.google.com/search?q=";         // search query will start by the end of the present string
 	static String ASWV_SHARE_URL      = ASWV_URL + "?share=";                       // URL where you process external content shared with the app
 
