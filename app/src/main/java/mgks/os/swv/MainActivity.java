@@ -26,6 +26,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -145,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	public static String ASWV_HOST          = aswm_host(ASWV_URL);
 
 	public static int ASWV_FCM_ID           = aswm_fcm_id();
+	public static int ASWV_ORIENTATION		= SmartWebView.ASWV_ORIENTATION;
 	public static int ASWV_LAYOUT           = SmartWebView.ASWV_LAYOUT;
 
 	// user agent variables
@@ -157,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	WebView asw_view;
 	WebView print_view;
 	AdView asw_ad_view;
+	CookieManager cookieManager;
 	ProgressBar asw_progress;
 	TextView asw_loading_text;
 	NotificationManager asw_notification;
@@ -184,68 +187,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
     	super.onActivityResult(requestCode, resultCode, intent);
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-            Uri[] results = null;
-            if (resultCode == Activity.RESULT_CANCELED) {
-                if (requestCode == asw_file_req) {
-                    // If the file request was cancelled (i.e. user exited camera),
-                    // we must still send a null value in order to ensure that future attempts
-                    // to pick files will still work.
-                    asw_file_path.onReceiveValue(null);
-                    return;
-                }
-            }
-            if (resultCode == Activity.RESULT_OK) {
-                if (requestCode == asw_file_req) {
-                    if (null == asw_file_path) {
-                        return;
-                    }
-					ClipData clipData;
-                    String stringData;
-					try {
-						clipData = intent.getClipData();
-						stringData = intent.getDataString();
-					}catch (Exception e){
-						clipData = null;
-						stringData = null;
-					}
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+		getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+		Uri[] results = null;
+		if (resultCode == Activity.RESULT_CANCELED) {
+			if (requestCode == asw_file_req) {
+				// If the file request was cancelled (i.e. user exited camera),
+				// we must still send a null value in order to ensure that future attempts
+				// to pick files will still work.
+				asw_file_path.onReceiveValue(null);
+				return;
+			}
+		}
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == asw_file_req) {
+				if (null == asw_file_path) {
+					return;
+				}
+				ClipData clipData;
+				String stringData;
+				try {
+					clipData = intent.getClipData();
+					stringData = intent.getDataString();
+				}catch (Exception e){
+					clipData = null;
+					stringData = null;
+				}
 
-					if (clipData == null && stringData == null && (asw_pcam_message != null || asw_vcam_message != null)) {
-						results = new Uri[]{Uri.parse(asw_pcam_message != null ? asw_pcam_message:asw_vcam_message)};
+				if (clipData == null && stringData == null && (asw_pcam_message != null || asw_vcam_message != null)) {
+					results = new Uri[]{Uri.parse(asw_pcam_message != null ? asw_pcam_message:asw_vcam_message)};
 
-					} else {
-						if (null != clipData) { // checking if multiple files selected or not
-							final int numSelectedFiles = clipData.getItemCount();
-							results = new Uri[numSelectedFiles];
-							for (int i = 0; i < clipData.getItemCount(); i++) {
-								results[i] = clipData.getItemAt(i).getUri();
-							}
-						} else {
-							try {
-								Bitmap cam_photo = (Bitmap) intent.getExtras().get("data");
-								ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-								cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-								stringData = MediaStore.Images.Media.insertImage(this.getContentResolver(), cam_photo, null, null);
-							}catch (Exception ignored){}
-							results = new Uri[]{Uri.parse(stringData)};
+				} else {
+					if (null != clipData) { // checking if multiple files selected or not
+						final int numSelectedFiles = clipData.getItemCount();
+						results = new Uri[numSelectedFiles];
+						for (int i = 0; i < clipData.getItemCount(); i++) {
+							results[i] = clipData.getItemAt(i).getUri();
 						}
+					} else {
+						try {
+							Bitmap cam_photo = (Bitmap) intent.getExtras().get("data");
+							ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+							cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+							stringData = MediaStore.Images.Media.insertImage(this.getContentResolver(), cam_photo, null, null);
+						}catch (Exception ignored){}
+						results = new Uri[]{Uri.parse(stringData)};
 					}
-                }
-            }
-            asw_file_path.onReceiveValue(results);
-            asw_file_path = null;
-
-        } else {
-            if (requestCode == asw_file_req) {
-                if (null == asw_file_message) return;
-                Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-                asw_file_message.onReceiveValue(result);
-                asw_file_message = null;
-            }
-        }
-    }
+				}
+			}
+		}
+		asw_file_path.onReceiveValue(results);
+		asw_file_path = null;
+	}
 
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
@@ -255,6 +248,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		// ------ PLAY AREA :: for debug purposes only ------ //
 
 		// ------- PLAY AREA END ------ //
+
+		// cookie manager initialisation
+		cookieManager = CookieManager.getInstance();
+		cookieManager.setAcceptCookie(true);
+
+		// setting port view
+		String cookie_orientation = !ASWP_OFFLINE ? get_cookies("ORIENT"):"";
+		set_orientation((!Objects.equals(cookie_orientation, "") ? Integer.parseInt(cookie_orientation) :ASWV_ORIENTATION), false);
 
 		// use Service Worker
 		if (Build.VERSION.SDK_INT >= 24) {
@@ -832,7 +833,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 		// opening external URLs in android default web browser
 		} else if (ASWP_EXTURL && !aswm_host(url).equals(ASWV_HOST) && !ASWV_EXC_LIST.contains(aswm_host(url))) {
-			aswm_view(url,true, asw_error_counter);
+			aswm_view(url, true, asw_error_counter);
+
+		// set the device orientation on request
+		} else if (url.startsWith("orient:")){
+			set_orientation(5,true);
 
 		// else return false for no special action
 		} else {
@@ -865,25 +870,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     	aswm_view((!CURR_URL.equals("")?CURR_URL:ASWV_URL),false, asw_error_counter);
 	}
 
+	// changing port view
+	@SuppressLint("SourceLockedOrientationActivity")
+	public void set_orientation(int orientation, boolean cookie){ // setting the view port var
+		if(orientation == 1){
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		}else if(orientation == 2){
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		}else if(orientation == 5){ //experimental switch
+			ASWV_ORIENTATION = (ASWV_ORIENTATION==1 ? 2:1);
+		}else{
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+		}
+		if(cookie){
+			set_cookie("ORIENT="+orientation);
+		}
+	}
+
+	// setting cookies
+	public void set_cookie(String data){
+		boolean log = true;
+		cookieManager.setCookie(ASWV_URL, data);
+		Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
+	}
+
 	//Getting device basic information
 	public void get_info(){
 		if(true_online) {
 			fcm_token();
-			CookieManager cookieManager = CookieManager.getInstance();
-			cookieManager.setAcceptCookie(true);
-			cookieManager.setCookie(ASWV_URL, "DEVICE=android");
+			set_cookie("DEVICE=android");
 			DeviceDetails dv = new DeviceDetails();
-			cookieManager.setCookie(ASWV_URL, "DEVICE_INFO=" + dv.pull());
-
-			cookieManager.setCookie(ASWV_URL, "DEV_API=" + Build.VERSION.SDK_INT);
-
-			cookieManager.setCookie(ASWV_URL, "APP_ID=" + BuildConfig.APPLICATION_ID);
-			cookieManager.setCookie(ASWV_URL, "APP_VER=" + BuildConfig.VERSION_CODE + "/" + BuildConfig.VERSION_NAME);
-			Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
+			set_cookie("DEVICE_INFO=" + dv.pull());
+			set_cookie("DEV_API=" + Build.VERSION.SDK_INT);
+			set_cookie("APP_ID=" + BuildConfig.APPLICATION_ID);
+			set_cookie("APP_VER=" + BuildConfig.VERSION_CODE + "/" + BuildConfig.VERSION_NAME);
 		}
 	}
 
-	//Checking permission for storage and camera for writing and uploading images
+	// checking permission for storage and camera for writing and uploading images
 	public void get_file(){
 		String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
@@ -901,7 +925,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		}
 	}
 
-    //Using cookies to update user locations
+    // using cookies to update user locations
 	public String get_location(){
 		String newloc = "0,0";
 		//Checking for location permissions
@@ -913,11 +937,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			if (gps.canGetLocation()) {
 				if (latitude != 0 || longitude != 0) {
 					if(true_online) {
-						CookieManager cookieManager = CookieManager.getInstance();
-						cookieManager.setAcceptCookie(true);
-						cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
-						cookieManager.setCookie(ASWV_URL, "long=" + longitude);
-						cookieManager.setCookie(ASWV_URL, "LATLANG=" + latitude + "x" + longitude);
+						set_cookie("lat=" + latitude);
+						set_cookie("long=" + longitude);
+						set_cookie("LATLANG=" + latitude + "x" + longitude);
 					}
 					//Log.w("New Updated Location:", latitude + "," + longitude);  //enable to test dummy latitude and longitude
 					newloc = latitude+","+longitude;
@@ -1029,9 +1051,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this, instanceIdResult -> {
 			fcm_token = instanceIdResult.getToken();
 				if(true_online) {
-					CookieManager cookieManager = CookieManager.getInstance();
-					cookieManager.setAcceptCookie(true);
-					cookieManager.setCookie(ASWV_URL, "FCM_TOKEN="+fcm_token);
+					set_cookie("FCM_TOKEN="+fcm_token);
 					Log.d("FCM_BAKED","YES");
 					//Log.d("COOKIES: ", cookieManager.getCookie(ASWV_URL));
 				}
