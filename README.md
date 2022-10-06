@@ -150,6 +150,8 @@ ASWP_CERT_VERIFICATION   = true   // verify whether HTTPS port needs certificate
 ### Other Variables
 
 ```kotlin
+ASWV_ORIENTATION = 0;   // change device orientation to portrait (1)(default) or landscape (2) or unspecified (0)
+
 ASWV_LAYOUT      = 0;   // default=0; for clear fullscreen layout and 1 to add drawer and navigation bar
 
 // custom settings if layout `1` with search bar is set.
@@ -259,11 +261,13 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 #### There are few ways to support this project -
 
-**[Donate and Get Smart WebView Pro](https://mgks.dev/projects/smart-webview#pro):** There is a Pro variant of SWV also with many advanced features and bundle of plugins to help you build the best of webview app. Smartest and easiest solution to your instat Android app building problems.<br>Some of the additional features include Google Login, Vision API, QR/Barcode Reader, Background Services, Advanced Notifications, Multiple Layout designs, PQL and more.
+**1 - [Become GitHub Sponsor](https://github.com/sponsors/mgks)**
 
-**PROVIDE FEEDBACK:** Feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:hello@mgks.dev).
+**2 - [Get Smart WebView Pro](https://mgks.dev/projects/smart-webview#pro):** There is a Pro variant of SWV also with many advanced features and bundle of plugins to help you build the best of webview app. Smartest and easiest solution to your instat Android app building problems.<br>Some of the additional features include Google Login, Vision API, QR/Barcode Reader, Background Services, Advanced Notifications, Multiple Layout designs, PQL and more.
 
-**[Follow Me](https://github.com/mgks) on GitHub** | **Add Project to Watchlist** | **Star the Project**
+**3 - Provide Feedback:** Feedbacks help us become better over time. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:hello@mgks.dev).
+
+**4 - [Follow Me](https://github.com/mgks) on GitHub** | **Add Project to Watchlist** | **Star the Project**
 
 Report your [issues](https://github.com/mgks/Android-SmartWebView/issues) here.
 
