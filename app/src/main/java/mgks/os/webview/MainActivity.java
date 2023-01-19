@@ -4,6 +4,10 @@ package mgks.os.webview;
  * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
+=======
+ * Enhance Smart WebView with plugins - https://mgks.dev/blog/smart-webview-plugins (Google Login, Background Services, Vision API, Advance Notifications, PQL etc).
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
  * Please mention project source or credit developers in your Application's License(s) Wiki.
  * Giving right credit to developers encourages them to create better projects :)
  */
@@ -23,7 +27,6 @@ import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -48,10 +51,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
-import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
@@ -66,6 +67,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -82,22 +87,34 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
+=======
+import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.BuildConfig;
+import com.google.firebase.messaging.FirebaseMessaging;
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 	// permission variables
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
 	static boolean ASWP_JSCRIPT		= SmartWebView.ASWP_JSCRIPT;
 	static boolean ASWP_FUPLOAD		= SmartWebView.ASWP_FUPLOAD;
 	static boolean ASWP_CAMUPLOAD	= SmartWebView.ASWP_CAMUPLOAD;
@@ -150,6 +167,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ValueCallback<Uri> asw_file_message;
     private ValueCallback<Uri[]> asw_file_path;
     private final static int asw_file_req = 1;
+=======
+	static boolean ASWP_JSCRIPT = SmartWebView.ASWP_JSCRIPT;
+	static boolean ASWP_FUPLOAD = SmartWebView.ASWP_FUPLOAD;
+	static boolean ASWP_CAMUPLOAD = SmartWebView.ASWP_CAMUPLOAD;
+	static boolean ASWP_ONLYCAM = SmartWebView.ASWP_ONLYCAM;
+	static boolean ASWP_MULFILE = SmartWebView.ASWP_MULFILE;
+	static boolean ASWP_LOCATION = SmartWebView.ASWP_LOCATION;
+	static boolean ASWP_RATINGS = SmartWebView.ASWP_RATINGS;
+	static boolean ASWP_PULLFRESH = SmartWebView.ASWP_PULLFRESH;
+	static boolean ASWP_PBAR = SmartWebView.ASWP_PBAR;
+	static boolean ASWP_ZOOM = SmartWebView.ASWP_ZOOM;
+	static boolean ASWP_SFORM = SmartWebView.ASWP_SFORM;
+	static boolean ASWP_OFFLINE = SmartWebView.ASWP_OFFLINE;
+	static boolean ASWP_EXTURL = SmartWebView.ASWP_EXTURL;
+	static boolean ASWP_ADMOB = SmartWebView.ASWP_ADMOB;
+	static boolean ASWP_TAB = SmartWebView.ASWP_TAB;
+	static boolean ASWP_EXITDIAL = SmartWebView.ASWP_EXITDIAL;
+	static boolean ASWP_CP = SmartWebView.ASWP_CP;
+
+	// security variables
+	static boolean ASWP_CERT_VERIFICATION = SmartWebView.ASWP_CERT_VERI;
+
+	// configuration variables
+	private static final String ASWV_URL = SmartWebView.ASWV_URL;
+	private String CURR_URL = ASWV_URL;
+	private static final String ASWV_SEARCH = SmartWebView.ASWV_SEARCH;
+	private static final String ASWV_SHARE_URL = SmartWebView.ASWV_SHARE_URL;
+	private static final String ASWV_EXC_LIST = SmartWebView.ASWV_EXC_LIST;
+
+	private static final String ASWV_F_TYPE = SmartWebView.ASWV_F_TYPE;
+
+	private static final String ASWV_ADMOB = SmartWebView.ASWV_ADMOB;
+
+	public static String ASWV_HOST = aswm_host(ASWV_URL);
+
+	public static int ASWV_FCM_ID = aswm_fcm_id();
+	public static int ASWV_ORIENTATION = SmartWebView.ASWV_ORIENTATION;
+	public static int ASWV_LAYOUT = SmartWebView.ASWV_LAYOUT;
+
+	// user agent variables
+	static boolean POSTFIX_USER_AGENT = SmartWebView.POSTFIX_USER_AGENT;
+	static boolean OVERRIDE_USER_AGENT = SmartWebView.OVERRIDE_USER_AGENT;
+	private static final String USER_AGENT_POSTFIX = SmartWebView.USER_AGENT_POSTFIX;
+	private static final String CUSTOM_USER_AGENT = SmartWebView.CUSTOM_USER_AGENT;
+
+	// careful with these variable names if altering
+	WebView asw_view;
+	WebView print_view;
+	AdView asw_ad_view;
+	CookieManager cookieManager;
+	ProgressBar asw_progress;
+	TextView asw_loading_text;
+	NotificationManager asw_notification;
+	Notification asw_notification_new;
+
+	ActivityResultLauncher<Intent> activityResultLauncher;
+	int asw_error_counter = 0;
+	Boolean true_online = !ASWP_OFFLINE;
+	private String asw_pcam_message, asw_vcam_message;
+	private ValueCallback<Uri> asw_file_message;
+	private ValueCallback<Uri[]> asw_file_path;
+	private final static int asw_file_req = 1;
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 
 	private final static int loc_perm = 1;
 	private final static int file_perm = 2;
@@ -157,10 +237,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	public static String asw_fcm_channel = "1";
 	public String fcm_token;
 
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
     private SecureRandom random = new SecureRandom();
+=======
+	private final SecureRandom random = new SecureRandom();
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -194,8 +279,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 					if (clipData == null && stringData == null && asw_cam_message != null) {
 						results = new Uri[]{Uri.parse(asw_cam_message)};
+=======
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+
+		//Log.d("SLOG_TRUE_ONLINE", String.valueOf(true_online));
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+		getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+		Uri[] results = null;
+		if (resultCode == Activity.RESULT_CANCELED) {
+			if (requestCode == asw_file_req) {
+				// If the file request was cancelled (i.e. user exited camera),
+				// we must still send a null value in order to ensure that future attempts
+				// to pick files will still work.
+				asw_file_path.onReceiveValue(null);
+				return;
+			}
+		}
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == asw_file_req) {
+				if (null == asw_file_path) {
+					return;
+				}
+				ClipData clipData;
+				String stringData;
+				try {
+					clipData = intent.getClipData();
+					stringData = intent.getDataString();
+				} catch (Exception e) {
+					clipData = null;
+					stringData = null;
+				}
+
+				if (clipData == null && stringData == null && (asw_pcam_message != null || asw_vcam_message != null)) {
+					results = new Uri[]{Uri.parse(asw_pcam_message != null ? asw_pcam_message : asw_vcam_message)};
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 
 					} else {
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
 						if (null != clipData) { // checking if multiple files selected or not
 							final int numSelectedFiles = clipData.getItemCount();
 							results = new Uri[numSelectedFiles];
@@ -205,6 +328,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 						} else {
 							results = new Uri[]{Uri.parse(stringData)};
 						}
+=======
+						try {
+							Bitmap cam_photo = (Bitmap) intent.getExtras().get("data");
+							ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+							cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+							stringData = MediaStore.Images.Media.insertImage(this.getContentResolver(), cam_photo, null, null);
+						} catch (Exception ignored) {
+						}
+						results = new Uri[]{Uri.parse(stringData)};
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 					}
                 }
             }
@@ -221,20 +354,105 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		Log.w("READ_PERM = ",Manifest.permission.READ_EXTERNAL_STORAGE);
 		Log.w("WRITE_PERM = ",Manifest.permission.WRITE_EXTERNAL_STORAGE);
+=======
+	@SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        // prevent app from being started again when it is still alive in the background
-        if (!isTaskRoot()) {
-        	finish();
-        	return;
-        }
+		// ------ PLAY AREA :: for debug purposes only ------ //
 
-		if(ASWV_LAYOUT==1){
+		// ------- PLAY AREA END ------ //
+
+		// cookie manager initialisation
+		cookieManager = CookieManager.getInstance();
+		cookieManager.setAcceptCookie(true);
+
+		activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+			//Log.d("SLOG_TRUE_ONLINE", String.valueOf(true_online));
+
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+			getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+			Uri[] results = null;
+			if (result.getResultCode() == Activity.RESULT_CANCELED) {
+				// If the file request was cancelled (i.e. user exited camera),
+				// we must still send a null value in order to ensure that future attempts
+				// to pick files will still work.
+				asw_file_path.onReceiveValue(null);
+				return;
+
+			}else if (result.getResultCode() == Activity.RESULT_OK) {
+				if (null == asw_file_path) {
+					return;
+				}
+				ClipData clipData;
+				String stringData;
+				try {
+					assert result.getData() != null;
+					clipData = result.getData().getClipData();
+					stringData = result.getData().getDataString();
+				} catch (Exception e) {
+					clipData = null;
+					stringData = null;
+				}
+
+				if (clipData == null && stringData == null && (asw_pcam_message != null || asw_vcam_message != null)) {
+					results = new Uri[]{Uri.parse(asw_pcam_message != null ? asw_pcam_message : asw_vcam_message)};
+
+				} else {
+					if (null != clipData) { // checking if multiple files selected or not
+						final int numSelectedFiles = clipData.getItemCount();
+						results = new Uri[numSelectedFiles];
+						for (int i = 0; i < clipData.getItemCount(); i++) {
+							results[i] = clipData.getItemAt(i).getUri();
+						}
+					} else {
+						try {
+							assert result.getData() != null;
+							Bitmap cam_photo = (Bitmap) result.getData().getExtras().get("data");
+							ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+							cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+							stringData = MediaStore.Images.Media.insertImage(getContentResolver(), cam_photo, null, null);
+						} catch (Exception ignored) {
+						}
+						results = new Uri[]{Uri.parse(stringData)};
+					}
+				}
+			}
+			asw_file_path.onReceiveValue(results);
+			asw_file_path = null;
+		});
+
+		// setting port view
+		String cookie_orientation = !ASWP_OFFLINE ? get_cookies("ORIENT") : "";
+		set_orientation((!Objects.equals(cookie_orientation, "") ? Integer.parseInt(cookie_orientation) : ASWV_ORIENTATION), false);
+
+		// use Service Worker
+		if (Build.VERSION.SDK_INT >= 24) {
+			ServiceWorkerController swController = ServiceWorkerController.getInstance();
+			swController.setServiceWorkerClient(new ServiceWorkerClient() {
+				@Override
+				public WebResourceResponse shouldInterceptRequest(WebResourceRequest request) {
+					return null;
+				}
+			});
+		}
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
+
+		// prevent app from being started again when it is still alive in the background
+		if (!isTaskRoot()) {
+			finish();
+			return;
+		}
+
+		if (ASWV_LAYOUT == 1) {
 			setContentView(R.layout.drawer_main);
 			findViewById(R.id.app_bar).setVisibility(View.VISIBLE);
 
@@ -249,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 			NavigationView navigationView = findViewById(R.id.nav_view);
 			navigationView.setNavigationItemSelectedListener(MainActivity.this);
-		}else{
+		} else {
 			setContentView(R.layout.activity_main);
 		}
 
@@ -266,8 +484,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		// notification manager
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-		if(Build.VERSION.SDK_INT >= 26) {
-			NotificationChannel notificationChannel = new NotificationChannel(asw_fcm_channel,String.valueOf(R.string.notification_channel_name),NotificationManager.IMPORTANCE_HIGH);
+		if (Build.VERSION.SDK_INT >= 26) {
+			NotificationChannel notificationChannel = new NotificationChannel(asw_fcm_channel, String.valueOf(R.string.notification_channel_name), NotificationManager.IMPORTANCE_HIGH);
 			notificationChannel.setDescription(String.valueOf(R.string.notification_channel_desc));
 			notificationChannel.setLightColor(Color.RED);
 			notificationChannel.enableVibration(true);
@@ -280,54 +498,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		// swipe refresh
 		final SwipeRefreshLayout pullfresh = findViewById(R.id.pullfresh);
 		if (ASWP_PULLFRESH) {
-			pullfresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-				@Override
-				public void onRefresh() {
-					pull_fresh();
-					pullfresh.setRefreshing(false);
-				}
+			pullfresh.setOnRefreshListener(() -> {
+				pull_fresh();
+				pullfresh.setRefreshing(false);
 			});
-			asw_view.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-				@Override
-				public void onScrollChanged() {
-					if (asw_view.getScrollY() == 0) {
-						pullfresh.setEnabled(true);
-					} else {
-						pullfresh.setEnabled(false);
-					}
-				}
-			});
-		}else{
+			asw_view.getViewTreeObserver().addOnScrollChangedListener(() -> pullfresh.setEnabled(asw_view.getScrollY() == 0));
+		} else {
 			pullfresh.setRefreshing(false);
 			pullfresh.setEnabled(false);
 		}
 
 		if (ASWP_PBAR) {
-            asw_progress = findViewById(R.id.msw_progress);
-        } else {
-            findViewById(R.id.msw_progress).setVisibility(View.GONE);
-        }
-        asw_loading_text = findViewById(R.id.msw_loading_text);
-        Handler handler = new Handler();
+			asw_progress = findViewById(R.id.msw_progress);
+		} else {
+			findViewById(R.id.msw_progress).setVisibility(View.GONE);
+		}
+		asw_loading_text = findViewById(R.id.msw_loading_text);
+		Handler handler = new Handler();
 
-        //Launching app rating request
-        if (ASWP_RATINGS) {
-            handler.postDelayed(new Runnable() { public void run() { get_rating(); }}, 1000 * 60); //running request after few moments
-        }
+		//Launching app rating request
+		if (ASWP_RATINGS) {
+			handler.postDelayed(this::get_rating, 1000 * 60); //running request after few moments
+		}
 
-        //Getting basic device information
+		//Getting basic device information
 		get_info();
 
 		//Getting GPS location of device if given permission
-		if(ASWP_LOCATION && !check_permission(1)){
+		if (ASWP_LOCATION && !check_permission(1)) {
 			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, loc_perm);
 		}
 		get_location();
 
-        //Webview settings; defaults are customized for best performance
-        WebSettings webSettings = asw_view.getSettings();
+		//Webview settings; defaults are customized for best performance
+		WebSettings webSettings = asw_view.getSettings();
 
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
 		if(!ASWP_OFFLINE){
+=======
+		// setting custom user agent
+		if (OVERRIDE_USER_AGENT || POSTFIX_USER_AGENT) {
+			String userAgent = webSettings.getUserAgentString();
+			if (OVERRIDE_USER_AGENT) {
+				userAgent = CUSTOM_USER_AGENT;
+			}
+			if (POSTFIX_USER_AGENT) {
+				userAgent = userAgent + " " + USER_AGENT_POSTFIX;
+			}
+			webSettings.setUserAgentString(userAgent);
+		}
+
+		if (!ASWP_OFFLINE) {
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 			webSettings.setJavaScriptEnabled(ASWP_JSCRIPT);
 		}
 		webSettings.setSaveFormData(ASWP_SFORM);
@@ -339,40 +561,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		webSettings.setUseWideViewPort(true);
 		webSettings.setDomStorageEnabled(true);
 
-		if(!ASWP_CP) {
-			asw_view.setOnLongClickListener(new View.OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					return true;
-				}
-			});
+		if (!ASWP_CP) {
+			asw_view.setOnLongClickListener(v -> true);
 		}
 		asw_view.setHapticFeedbackEnabled(false);
 
 		// download listener
-		asw_view.setDownloadListener(new DownloadListener() {
-			@Override
-			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
+		asw_view.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {
 
-				if(!check_permission(2)){
-					ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, file_perm);
-				}else {
-					DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+			if (!check_permission(2)) {
+				ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, file_perm);
+			} else {
+				DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
-					request.setMimeType(mimeType);
-					String cookies = CookieManager.getInstance().getCookie(url);
-					request.addRequestHeader("cookie", cookies);
-					request.addRequestHeader("User-Agent", userAgent);
-					request.setDescription(getString(R.string.dl_downloading));
-					request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
-					request.allowScanningByMediaScanner();
-					request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-					request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType));
-					DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-					assert dm != null;
-					dm.enqueue(request);
-					Toast.makeText(getApplicationContext(), getString(R.string.dl_downloading2), Toast.LENGTH_LONG).show();
-				}
+				request.setMimeType(mimeType);
+				String cookies = CookieManager.getInstance().getCookie(url);
+				request.addRequestHeader("cookie", cookies);
+				request.addRequestHeader("User-Agent", userAgent);
+				request.setDescription(getString(R.string.dl_downloading));
+				request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
+				request.allowScanningByMediaScanner();
+				request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType));
+				DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+				assert dm != null;
+				dm.enqueue(request);
+				Toast.makeText(getApplicationContext(), getString(R.string.dl_downloading2), Toast.LENGTH_LONG).show();
 			}
 		});
 
@@ -380,59 +594,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
 		webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 		asw_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        asw_view.setVerticalScrollBarEnabled(false);
-        asw_view.setWebViewClient(new Callback());
+		asw_view.setVerticalScrollBarEnabled(false);
+		asw_view.setWebViewClient(new Callback());
 
 		//Reading incoming intents
 		Intent read_int = getIntent();
-		Log.d("INTENT", read_int.toUri(0));
+		Log.d("SLOG_INTENT", read_int.toUri(0));
 		String uri = read_int.getStringExtra("uri");
 		String share = read_int.getStringExtra("s_uri");
 		String share_img = read_int.getStringExtra("s_img");
 
-		if(share != null) {
+		if (share != null) {
 			//Processing shared content
-			Log.d("SHARE INTENT",share);
+			Log.d("SLOG_SHARE_INTENT", share);
 			Matcher matcher = urlPattern.matcher(share);
 			String urlStr = "";
-			if(matcher.find()){
+			if (matcher.find()) {
 				urlStr = matcher.group();
-				if(urlStr.startsWith("(") && urlStr.endsWith(")")) {
+				if (urlStr.startsWith("(") && urlStr.endsWith(")")) {
 					urlStr = urlStr.substring(1, urlStr.length() - 1);
 				}
 			}
-			String red_url = ASWV_SHARE_URL+"?text="+share+"&link="+urlStr+"&image_url=";
+			String red_url = ASWV_SHARE_URL + "?text=" + share + "&link=" + urlStr + "&image_url=";
 			//Toast.makeText(MainActivity.this, "SHARE: "+red_url+"\nLINK: "+urlStr, Toast.LENGTH_LONG).show();
 			aswm_view(red_url, false, asw_error_counter);
 
-		}else if(share_img != null) {
+		} else if (share_img != null) {
 			//Processing shared content
-			Log.d("SHARE INTENT",share_img);
+			Log.d("SLOG_SHARE_INTENT", share_img);
 			Toast.makeText(MainActivity.this, share_img, Toast.LENGTH_LONG).show();
 			aswm_view(ASWV_URL, false, asw_error_counter);
 
-		}else if(uri != null) {
+		} else if (uri != null) {
 			//Opening notification
-			Log.d("NOTIFICATION INTENT",uri);
+			Log.d("SLOG_NOTIFI_INTENT", uri);
 			aswm_view(uri, false, asw_error_counter);
 
-		}else{
+		} else {
 			//Rendering the default URL
-			Log.d("MAIN INTENT",ASWV_URL);
+			Log.d("SLOG_MAIN_INTENT", ASWV_URL);
 			aswm_view(ASWV_URL, false, asw_error_counter);
 		}
 
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
 		if(ASWP_ADMOB) {
 			MobileAds.initialize(this, ASWV_ADMOB);
 			AdView asw_ad_view = findViewById(R.id.msw_ad_view);
+=======
+		if (ASWP_ADMOB) {
+			MobileAds.initialize(this, initializationStatus -> {
+			});
+			//List<String> testDeviceIds = List.of("4C304B10577C757E3A3C3B667FF84F8C");
+			//RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+			//MobileAds.setRequestConfiguration(configuration);
+			//MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(List.of("4C304B10577C757E3A3C3B667FF84F8C")).build());
+			asw_ad_view = findViewById(R.id.msw_ad_view);
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 			AdRequest adRequest = new AdRequest.Builder().build();
 			asw_ad_view.loadAd(adRequest);
 		}
 
-        asw_view.setWebChromeClient(new WebChromeClient() {
-            // handling input[type="file"]
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams){
-            	if(check_permission(2) && check_permission(3)) {
+		asw_view.setWebChromeClient(new WebChromeClient() {
+			// handling input[type="file"]
+			public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+				if (check_permission(2) && check_permission(3)) {
 					if (ASWP_FUPLOAD) {
 						asw_file_path = filePathCallback;
 						Intent takePictureIntent = null;
@@ -477,7 +702,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 										photoFile = create_image();
 										takePictureIntent.putExtra("PhotoPath", asw_cam_message);
 									} catch (IOException ex) {
-										Log.e(TAG, "Image file creation failed", ex);
+										Log.e("SLOG_ERROR", "Image file creation failed", ex);
 									}
 									if (photoFile != null) {
 										asw_cam_message = "file:" + photoFile.getAbsolutePath();
@@ -495,7 +720,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 									try {
 										videoFile = create_video();
 									} catch (IOException ex) {
-										Log.e(TAG, "Video file creation failed", ex);
+										Log.e("SLOG_ERROR", "Video file creation failed", ex);
 									}
 									if (videoFile != null) {
 										asw_cam_message = "file:" + videoFile.getAbsolutePath();
@@ -530,29 +755,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 						chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
 						chooserIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.fl_chooser));
 						chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-						startActivityForResult(chooserIntent, asw_file_req);
+						//startActivityForResult(chooserIntent, asw_file_req);
+						activityResultLauncher.launch(chooserIntent);
 					}
 					return true;
-				}else{
-            		get_file();
-            		return false;
+				} else {
+					get_file();
+					return false;
 				}
-            }
+			}
 
-            //Getting webview rendering progress
-            @Override
-            public void onProgressChanged(WebView view, int p) {
-                if (ASWP_PBAR) {
-                    asw_progress.setProgress(p);
-                    if (p == 100) {
-                        asw_progress.setProgress(0);
-                    }
-                }
-            }
+			//Getting webview rendering progress
+			@Override
+			public void onProgressChanged(WebView view, int p) {
+				if (ASWP_PBAR) {
+					asw_progress.setProgress(p);
+					if (p == 100) {
+						asw_progress.setProgress(0);
+					}
+				}
+			}
 
-	    	// overload the geoLocations permissions prompt to always allow instantly as app permission was granted previously
+			// overload the geoLocations permissions prompt to always allow instantly as app permission was granted previously
 			public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-				if(Build.VERSION.SDK_INT < 23 || check_permission(1)){
+				if (Build.VERSION.SDK_INT < 23 || check_permission(1)) {
 					// location permissions were granted previously so auto-approve
 					callback.invoke(origin, true, false);
 				} else {
@@ -560,9 +786,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, loc_perm);
 				}
 			}
-        });
-        if (getIntent().getData() != null) {
-            String path     = getIntent().getDataString();
+		});
+		if (getIntent().getData() != null) {
+			String path = getIntent().getDataString();
             /*
             If you want to check or use specific directories or schemes or hosts
 
@@ -572,11 +798,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             List<String> pr = data.getPathSegments();
             String param1   = pr.get(0);
             */
-            aswm_view(path, false, asw_error_counter);
-        }
-    }
+			aswm_view(path, false, asw_error_counter);
+		}
+	}
 
-	public class WebViewJavaScriptInterface {
+	public static class WebViewJavaScriptInterface {
 		WebViewJavaScriptInterface(Context context) {
 			/*public void print(final String data){
 				runOnUiThread(() -> doWebViewPrint(data));
@@ -593,7 +819,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
-				print_page(view,view.getTitle(),false);
+				print_page(view, view.getTitle(), false);
 				super.onPageFinished(view, url);
 			}
 		});
@@ -607,78 +833,79 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		asw_view.onPause();
 	}
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        asw_view.onResume();
-        //Coloring the "recent apps" tab header; doing it onResume, as an insurance
-        if (Build.VERSION.SDK_INT >= 23) {
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-            ActivityManager.TaskDescription taskDesc;
-            taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, getColor(R.color.colorPrimary));
-            MainActivity.this.setTaskDescription(taskDesc);
-        }
-        get_location();
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		asw_view.onResume();
+		//Coloring the "recent apps" tab header; doing it onResume, as an insurance
+		if (Build.VERSION.SDK_INT >= 23) {
+			Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+			ActivityManager.TaskDescription taskDesc;
+			taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, getColor(R.color.colorPrimary));
+			MainActivity.this.setTaskDescription(taskDesc);
+		}
+		get_location();
+	}
 
-    //Setting activity layout visibility
+	//Setting activity layout visibility
 	private class Callback extends WebViewClient {
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            get_location();
-        }
+		public void onPageStarted(WebView view, String url, Bitmap favicon) {
+			get_location();
+		}
 
-        public void onPageFinished(WebView view, String url) {
-            findViewById(R.id.msw_welcome).setVisibility(View.GONE);
-            findViewById(R.id.msw_view).setVisibility(View.VISIBLE);
-        }
-        //For android below API 23
-		@Override
-        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            Toast.makeText(getApplicationContext(), getString(R.string.went_wrong), Toast.LENGTH_SHORT).show();
-            aswm_view("file:///android_asset/error.html", false, asw_error_counter);
-        }
+		public void onPageFinished(WebView view, String url) {
+			findViewById(R.id.msw_welcome).setVisibility(View.GONE);
+			findViewById(R.id.msw_view).setVisibility(View.VISIBLE);
+		}
 
-        //Overriding webview URLs
+		//For android below API 23
 		@Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        	CURR_URL = url;
+		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+			Toast.makeText(getApplicationContext(), getString(R.string.went_wrong), Toast.LENGTH_SHORT).show();
+			aswm_view("file:///android_asset/error.html", false, asw_error_counter);
+		}
+
+		//Overriding webview URLs
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			CURR_URL = url;
 			return url_actions(view, url);
-        }
+		}
 
 		//Overriding webview URLs for API 23+ [suggested by github.com/JakePou]
 		@TargetApi(Build.VERSION_CODES.N)
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-        	CURR_URL = request.getUrl().toString();
+			CURR_URL = request.getUrl().toString();
 			return url_actions(view, request.getUrl().toString());
 		}
 
+		@SuppressLint("WebViewClientOnReceivedSslError")
 		@Override
 		public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-        	if(ASWP_CERT_VERIFICATION) {
+			if (ASWP_CERT_VERIFICATION) {
 				super.onReceivedSslError(view, handler, error);
 			} else {
-        		handler.proceed(); // Ignore SSL certificate errors
+				// to ignore SSL certificate errors; can cause security issues
+				handler.proceed();
 			}
 		}
 	}
 
-    //Random ID creation function to help get fresh cache every-time webview reloaded
-    public String random_id() {
-        return new BigInteger(130, random).toString(32);
-    }
+	//Random ID creation function to help get fresh cache every-time webview reloaded
+	public String random_id() {
+		return new BigInteger(130, random).toString(32);
+	}
 
-    //Opening URLs inside webview with request
-    void aswm_view(String url, Boolean tab, int error_counter) {
-		if(error_counter > 2){
+	//Opening URLs inside webview with request
+	void aswm_view(String url, Boolean tab, int error_counter) {
+		if (error_counter > 2) {
 			asw_error_counter = 0;
 			aswm_exit();
-		}else {
-			if(tab){
-				if(ASWP_TAB) {
+		} else {
+			if (tab) {
+				if (ASWP_TAB) {
 					CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
-					intentBuilder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-					intentBuilder.setSecondaryToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
 					intentBuilder.setStartAnimations(this, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 					intentBuilder.setExitAnimations(this, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 					CustomTabsIntent customTabsIntent = intentBuilder.build();
@@ -689,7 +916,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 						intent.setData(Uri.parse(url));
 						startActivity(intent);
 					}
-				}else{
+				} else {
 					Intent intent = new Intent(Intent.ACTION_VIEW);
 					intent.setData(Uri.parse(url));
 					startActivity(intent);
@@ -703,34 +930,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				url += "rid=" + random_id();
 				asw_view.loadUrl(url);
 			}
-        }
-    }
+		}
+	}
 
 	/*--- actions based on URL structure ---*/
 
-	public boolean url_actions(WebView view, String url){
+	public boolean url_actions(WebView view, String url) {
 		boolean a = true;
 		// show toast error if not connected to the network
 		if (!ASWP_OFFLINE && !DetectConnection.isInternetAvailable(MainActivity.this)) {
 			Toast.makeText(getApplicationContext(), getString(R.string.check_connection), Toast.LENGTH_SHORT).show();
 
-		// use this in a hyperlink to redirect back to default URL :: href="refresh:android"
+			// use this in a hyperlink to redirect back to default URL :: href="refresh:android"
 		} else if (url.startsWith("refresh:")) {
-			String ref_sch = (Uri.parse(url).toString()).replace("refresh:","");
-			if(ref_sch.matches("URL")){
+			String ref_sch = (Uri.parse(url).toString()).replace("refresh:", "");
+			if (ref_sch.matches("URL")) {
 				CURR_URL = ASWV_URL;
 			}
 			pull_fresh();
 
-		// use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
+			// use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
 		} else if (url.startsWith("tel:")) {
 			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 			startActivity(intent);
 
-		} else if(url.startsWith("print:")) {
-			print_page(view,view.getTitle(),true);
+		} else if (url.startsWith("print:")) {
+			print_page(view, view.getTitle(), true);
 
-		// use this to open your apps page on google play store app :: href="rate:android"
+			// use this to open your apps page on google play store app :: href="rate:android"
 		} else if (url.startsWith("rate:")) {
 			final String app_package = getPackageName(); //requesting app package name from Context or Activity object
 			try {
@@ -739,26 +966,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
 			}
 
-		// sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
+			// sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
 		} else if (url.startsWith("share:")) {
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
 			intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
-			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle()+"\nVisit: "+(Uri.parse(url).toString()).replace("share:",""));
+			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle() + "\nVisit: " + (Uri.parse(url).toString()).replace("share:", ""));
 			startActivity(Intent.createChooser(intent, getString(R.string.share_w_friends)));
 
-		// use this in a hyperlink to exit your app :: href="exit:android"
+			// use this in a hyperlink to exit your app :: href="exit:android"
 		} else if (url.startsWith("exit:")) {
 			aswm_exit();
 
-		// getting location for offline files
+			// getting location for offline files
 		} else if (url.startsWith("offloc:")) {
-			String offloc = ASWV_URL+"?loc="+get_location();
-			aswm_view(offloc,false, asw_error_counter);
-			Log.d("OFFLINE LOC REQ",offloc);
+			String offloc = ASWV_URL + "?loc=" + get_location();
+			aswm_view(offloc, false, asw_error_counter);
+			Log.d("SLOG_OFFLINE_LOC_REQ", offloc);
 
-		// creating firebase notification for offline files
+			// creating firebase notification for offline files
 		} else if (url.startsWith("fcm:")) {
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
 			String fcm = ASWV_URL+"?fcm="+fcm_token();
 			aswm_view(fcm,false, asw_error_counter);
 			Log.d("OFFLINE_FCM_TOKEN",fcm);
@@ -766,8 +994,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		// opening external URLs in android default web browser
 		} else if (ASWP_EXTURL && !aswm_host(url).equals(ASWV_HOST)) {
 			aswm_view(url,true, asw_error_counter);
+=======
+			String fcm = ASWV_URL + "?fcm=" + fcm_token();
+			aswm_view(fcm, false, asw_error_counter);
+			Log.d("SLOG_OFFLINE_FCM_TOKEN", fcm);
 
-		// else return false for no special action
+
+			// opening external URLs in android default web browser
+		} else if (ASWP_EXTURL && !aswm_host(url).equals(ASWV_HOST) && !ASWV_EXC_LIST.contains(aswm_host(url))) {
+			aswm_view(url, true, asw_error_counter);
+
+			// set the device orientation on request
+		} else if (url.startsWith("orient:")) {
+			set_orientation(5, true);
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
+
+			// else return false for no special action
 		} else {
 			a = false;
 		}
@@ -775,7 +1017,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	}
 
 	//Getting host name
-	public static String aswm_host(String url){
+	public static String aswm_host(String url) {
 		if (url == null || url.length() == 0) {
 			return "";
 		}
@@ -789,19 +1031,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		end = end >= 0 ? end : url.length();
 		int port = url.indexOf(':', dslash);
 		end = (port > 0 && port < end) ? port : end;
-		Log.w("URL Host: ",url.substring(dslash, end));
+		Log.i("SLOG_URL_HOST", url.substring(dslash, end));
 		return url.substring(dslash, end);
 	}
 
 	//Reloading current page
-	public void pull_fresh(){
-    	aswm_view((!CURR_URL.equals("")?CURR_URL:ASWV_URL),false, asw_error_counter);
+	public void pull_fresh() {
+		aswm_view((!CURR_URL.equals("") ? CURR_URL : ASWV_URL), false, asw_error_counter);
 	}
 
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
+=======
+	// changing port view
+	@SuppressLint("SourceLockedOrientationActivity")
+	public void set_orientation(int orientation, boolean cookie) { // setting the view port var
+		if (orientation == 1) {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		} else if (orientation == 2) {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		} else if (orientation == 5) { //experimental switch
+			ASWV_ORIENTATION = (ASWV_ORIENTATION == 1 ? 2 : 1);
+		} else {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+		}
+		if (cookie) {
+			set_cookie("ORIENT=" + orientation);
+		}
+	}
+
+	// setting cookies
+	public void set_cookie(String data) {
+		//boolean log = true;
+		cookieManager.setCookie(ASWV_URL, data);
+		Log.d("SLOG_COOKIES", cookieManager.getCookie(ASWV_URL));
+	}
+
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 	//Getting device basic information
-	public void get_info(){
-		if(true_online) {
+	public void get_info() {
+		if (!ASWP_OFFLINE) {
 			fcm_token();
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
 			CookieManager cookieManager = CookieManager.getInstance();
 			cookieManager.setAcceptCookie(true);
 			cookieManager.setCookie(ASWV_URL, "DEVICE=android");
@@ -812,24 +1082,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 	//Checking permission for storage and camera for writing and uploading images
 	public void get_file(){
+=======
+			set_cookie("DEVICE=android");
+			DeviceDetails dv = new DeviceDetails();
+			set_cookie("DEVICE_INFO=" + dv.pull());
+			set_cookie("DEV_API=" + Build.VERSION.SDK_INT);
+			set_cookie("APP_ID=" + BuildConfig.LIBRARY_PACKAGE_NAME);
+			set_cookie("APP_VER=" + BuildConfig.BUILD_TYPE + "/" + BuildConfig.VERSION_NAME);
+		}
+	}
+
+	// checking permission for storage and camera for writing and uploading images
+	public void get_file() {
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 		String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
 		//Checking for storage permission to write images for upload
 		if (ASWP_FUPLOAD && ASWP_CAMUPLOAD && !check_permission(2) && !check_permission(3)) {
 			ActivityCompat.requestPermissions(MainActivity.this, perms, file_perm);
 
-		//Checking for WRITE_EXTERNAL_STORAGE permission
+			//Checking for WRITE_EXTERNAL_STORAGE permission
 		} else if (ASWP_FUPLOAD && !check_permission(2)) {
 			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, file_perm);
 
-		//Checking for CAMERA permissions
+			//Checking for CAMERA permissions
 		} else if (ASWP_CAMUPLOAD && !check_permission(3)) {
 			ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, file_perm);
 		}
 	}
 
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
     //Using cookies to update user locations
 	public String get_location(){
+=======
+	// using cookies to update user locations
+	public String get_location() {
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 		String newloc = "0,0";
 		//Checking for location permissions
 		if (ASWP_LOCATION && (Build.VERSION.SDK_INT < 23 || check_permission(1))) {
@@ -839,43 +1127,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			double longitude = gps.getLongitude();
 			if (gps.canGetLocation()) {
 				if (latitude != 0 || longitude != 0) {
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
 					if(true_online) {
 						CookieManager cookieManager = CookieManager.getInstance();
 						cookieManager.setAcceptCookie(true);
 						cookieManager.setCookie(ASWV_URL, "lat=" + latitude);
 						cookieManager.setCookie(ASWV_URL, "long=" + longitude);
+=======
+					if (!ASWP_OFFLINE) {
+						set_cookie("lat=" + latitude);
+						set_cookie("long=" + longitude);
+						set_cookie("LATLANG=" + latitude + "x" + longitude);
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 					}
-					//Log.w("New Updated Location:", latitude + "," + longitude);  //enable to test dummy latitude and longitude
-					newloc = latitude+","+longitude;
+					//Log.d("SLOG_NEW_LOCATION", latitude + "," + longitude);  //enable to test dummy latitude and longitude
+					newloc = latitude + "," + longitude;
 				} else {
-					Log.w("New Updated Location:", "NULL");
+					Log.d("SLOG_UPDATED_LOCATION", "NULL");
 				}
 			} else {
 				show_notification(1, 1);
-				Log.w("New Updated Location:", "FAIL");
+				Log.d("SLOG_UPDATED_LOCATION", "FAIL");
 			}
 		}
 		return newloc;
 	}
 
 	// get cookie value
-	public String get_cookies(String cookie){
+	public String get_cookies(String cookie) {
 		String value = "";
 		CookieManager cookieManager = CookieManager.getInstance();
 		String cookies = cookieManager.getCookie(ASWV_URL);
-		String[] temp=cookies.split(";");
-		for (String ar1 : temp ){
-			if(ar1.contains(cookie)){
-				String[] temp1=ar1.split("=");
-				value = temp1[1];
-				break;
+		if(!cookies.isEmpty()) {
+			String[] temp = cookies.split(";");
+			for (String ar1 : temp) {
+				if (ar1.contains(cookie)) {
+					String[] temp1 = ar1.split("=");
+					value = temp1[1];
+					break;
+				}
 			}
 		}
 		return value;
 	}
 
 	private static final Pattern urlPattern = Pattern.compile(
-			"(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"+"(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"+"[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+			"(?:^|\\W)((ht|f)tp(s?)://|www\\.)" + "(([\\w\\-]+\\.)+([\\w\\-.~]+/?)*" + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 
 	@SuppressLint("ResourceAsColor")
 	@Override
@@ -894,10 +1191,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			@Override
 			public boolean onQueryTextSubmit(String query) {
 				searchView.clearFocus();
-				aswm_view(ASWV_SEARCH+query,false,asw_error_counter);
-				searchView.setQuery(query,false);
+				aswm_view(ASWV_SEARCH + query, false, asw_error_counter);
+				searchView.setQuery(query, false);
 				return false;
 			}
+
 			@Override
 			public boolean onQueryTextChange(String query) {
 				return false;
@@ -920,19 +1218,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	public boolean onNavigationItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == R.id.nav_home) {
-			aswm_view("file:///android_asset/offline.html",false,asw_error_counter);
+			aswm_view("file:///android_asset/offline.html", false, asw_error_counter);
 		} else if (id == R.id.nav_doc) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/tree/master/documentation",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/tree/master/documentation", false, asw_error_counter);
 		} else if (id == R.id.nav_fcm) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/fcm.md",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/fcm.md", false, asw_error_counter);
 		} else if (id == R.id.nav_admob) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/admob.md",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/admob.md", false, asw_error_counter);
 		} else if (id == R.id.nav_gps) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/gps.md",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/gps.md", false, asw_error_counter);
 		} else if (id == R.id.nav_share) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/share.md",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/share.md", false, asw_error_counter);
 		} else if (id == R.id.nav_lay) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/layout.md",false,asw_error_counter);
+			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/layout.md", false, asw_error_counter);
 		} else if (id == R.id.nav_support) {
 			Intent intent = new Intent(Intent.ACTION_SENDTO);
 			intent.setData(Uri.parse("mailto:getmgks@gmail.com"));
@@ -945,12 +1243,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		return true;
 	}
 
-	public static int aswm_fcm_id(){
+	public static int aswm_fcm_id() {
 		//Date now = new Date();
 		//Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
 		return 1;
 	}
 
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
 	public String fcm_token(){
 		FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this, instanceIdResult -> {
 			fcm_token = instanceIdResult.getToken();
@@ -963,12 +1262,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				}
 			Log.d("REQ_FCM_TOKEN", fcm_token);
 		}).addOnFailureListener(e -> Log.d("REQ_FCM_TOKEN", "FAILED"));
+=======
+	public String fcm_token() {
+		FirebaseMessaging.getInstance().getToken().addOnSuccessListener(instanceIdResult -> {
+			fcm_token = FirebaseMessaging.getInstance().getToken().getResult();
+			if (!ASWP_OFFLINE) {
+				set_cookie("FCM_TOKEN=" + fcm_token);
+				Log.d("SLOG_FCM_BAKED", "YES");
+				//Log.d("SLOG_COOKIES", cookieManager.getCookie(ASWV_URL));
+			}
+			Log.d("SLOG_REQ_FCM_TOKEN", fcm_token);
+		}).addOnFailureListener(e -> Log.d("SLOG_REQ_FCM_TOKEN", "FAILED"));
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 		return fcm_token;
 	}
 
 	//Checking if particular permission is given or not
-	public boolean check_permission(int permission){
-		switch(permission){
+	public boolean check_permission(int permission) {
+		switch (permission) {
 			case 1:
 				return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
@@ -983,6 +1294,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	}
 
 	//Creating image file for upload
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
     private File create_image() throws IOException {
         @SuppressLint("SimpleDateFormat")
         String file_name    = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
@@ -1039,9 +1351,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+=======
+	private File create_image() throws IOException {
+		@SuppressLint("SimpleDateFormat")
+		String file_name = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
+		String new_name = "file_" + file_name + "_";
+		File sd_directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+		return File.createTempFile(new_name, ".jpg", sd_directory);
+	}
+
+	//Creating video file for upload
+	private File create_video() throws IOException {
+		@SuppressLint("SimpleDateFormat")
+		String file_name = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
+		String new_name = "file_" + file_name + "_";
+		File sd_directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+		return File.createTempFile(new_name, ".3gp", sd_directory);
+	}
+
+	//Launching app rating dialog [developed by github.com/hotchemi]
+	public void get_rating() {
+		if (DetectConnection.isInternetAvailable(MainActivity.this)) {
+			AppRate.with(this)
+					.setStoreType(StoreType.GOOGLEPLAY)     //default is Google Play, other option is Amazon App Store
+					.setInstallDays(SmartWebView.ASWR_DAYS)
+					.setLaunchTimes(SmartWebView.ASWR_TIMES)
+					.setRemindInterval(SmartWebView.ASWR_INTERVAL)
+					.setTitle(R.string.rate_dialog_title)
+					.setMessage(R.string.rate_dialog_message)
+					.setTextLater(R.string.rate_dialog_cancel)
+					.setTextNever(R.string.rate_dialog_no)
+					.setTextRateNow(R.string.rate_dialog_ok)
+					.monitor();
+			AppRate.showRateDialogIfMeetsConditions(this);
+		}
+		//for more customizations, look for AppRate and DialogManager
+	}
+
+	//Creating custom notifications with IDs
+	public void show_notification(int type, int id) {
+		long when = System.currentTimeMillis();
+		asw_notification = (NotificationManager) MainActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+		Intent i = new Intent();
+		if (type == 1) {
+			i.setClass(MainActivity.this, MainActivity.class);
+		} else if (type == 2) {
+			i.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		} else {
+			i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+			i.addCategory(Intent.CATEGORY_DEFAULT);
+			i.setData(Uri.parse("package:" + MainActivity.this.getPackageName()));
+			i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+			i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+		}
+		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+		PendingIntent pendingIntent;
+		final int flag =  Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
+		pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, i, flag);
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/MainActivity.java
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "");
         switch(type){
             case 1:
@@ -1073,6 +1446,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //Printing pages
+=======
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "");
+		switch (type) {
+			case 1:
+				builder.setTicker(getString(R.string.app_name));
+				builder.setContentTitle(getString(R.string.loc_fail));
+				builder.setContentText(getString(R.string.loc_fail_text));
+				builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.loc_fail_more)));
+				builder.setVibrate(new long[]{350, 350, 350, 350, 350});
+				builder.setSmallIcon(R.mipmap.ic_launcher);
+				break;
+
+			case 2:
+				builder.setTicker(getString(R.string.app_name));
+				builder.setContentTitle(getString(R.string.loc_perm));
+				builder.setContentText(getString(R.string.loc_perm_text));
+				builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.loc_perm_more)));
+				builder.setVibrate(new long[]{350, 700, 350, 700, 350});
+				builder.setSound(alarmSound);
+				builder.setSmallIcon(R.mipmap.ic_launcher);
+				break;
+		}
+		builder.setOngoing(false);
+		builder.setAutoCancel(true);
+		builder.setWhen(when);
+		builder.setContentIntent(pendingIntent);
+		asw_notification_new = builder.build();
+		asw_notification.notify(id, asw_notification_new);
+	}
+
+	//Printing pages
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/MainActivity.java
 	private void print_page(WebView view, String print_name, boolean manual) {
 		PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
 		PrintDocumentAdapter printAdapter = view.createPrintDocumentAdapter(print_name);
@@ -1080,17 +1485,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		builder.setMediaSize(PrintAttributes.MediaSize.ISO_A5);
 		PrintJob printJob = printManager.print(print_name, printAdapter, builder.build());
 
-		if(printJob.isCompleted()){
+		if (printJob.isCompleted()) {
 			Toast.makeText(getApplicationContext(), R.string.print_complete, Toast.LENGTH_LONG).show();
-		}
-		else if(printJob.isFailed()){
+		} else if (printJob.isFailed()) {
 			Toast.makeText(getApplicationContext(), R.string.print_failed, Toast.LENGTH_LONG).show();
 		}
 	}
 
 	//Checking if users allowed the requested permissions or not
 	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		if (requestCode == 1) {
 			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				get_location();
@@ -1106,9 +1510,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				if (asw_view.canGoBack()) {
 					asw_view.goBack();
 				} else {
-					if(ASWP_EXITDIAL) {
+					if (ASWP_EXITDIAL) {
 						ask_exit();
-					}else{
+					} else {
 						finish();
 					}
 				}
@@ -1118,7 +1522,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		return super.onKeyDown(keyCode, event);
 	}
 
-	public void aswm_exit(){
+	public void aswm_exit() {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.addCategory(Intent.CATEGORY_HOME);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1126,7 +1530,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	}
 
 	// Creating exit dialogue
-	public void ask_exit(){
+	public void ask_exit() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
 		builder.setTitle(getString(R.string.exit_title));
@@ -1134,18 +1538,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		builder.setCancelable(true);
 
 		// Action if user selects 'yes'
-		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-				finish();
-			}
-		});
+		builder.setPositiveButton("Yes", (dialogInterface, i) -> finish());
 
 		// Actions if user selects 'no'
-		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-			}
+		builder.setNegativeButton("No", (dialogInterface, i) -> {
 		});
 
 		// Create the alert dialog using alert dialog builder
@@ -1155,30 +1551,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		dialog.show();
 	}
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
+	@Override
+	protected void onStart() {
+		super.onStart();
+	}
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
+	@Override
+	public void onConfigurationChanged(@NonNull Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState ){
-        super.onSaveInstanceState(outState);
-        asw_view.saveState(outState);
-    }
+	@Override
+	protected void onSaveInstanceState(@NonNull Bundle outState) {
+		super.onSaveInstanceState(outState);
+		asw_view.saveState(outState);
+	}
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState){
-        super.onRestoreInstanceState(savedInstanceState);
-        asw_view.restoreState(savedInstanceState);
-    }
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		asw_view.restoreState(savedInstanceState);
+	}
 }
