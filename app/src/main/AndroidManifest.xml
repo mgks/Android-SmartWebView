@@ -4,7 +4,12 @@
  * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
+<<<<<<< Updated upstream
  * Please mention project source or developer credit in your Application's License(s) Wiki.
+=======
+ * Enhance Smart WebView with plugins - https://mgks.dev/blog/smart-webview-plugins (Google Login, Background Services, Vision API, Advance Notifications, PQL etc).
+ * Please mention project source or credit developers in your Application's License(s) Wiki.
+>>>>>>> Stashed changes
  * Giving right credit to developers encourages them to create better projects :)
 -->
 
@@ -21,12 +26,26 @@
         android:normalScreens="true"
         android:xlargeScreens="true" />
 
+<<<<<<< Updated upstream
     <!-- remove permissions that your app doesn't require;
     asking for authority over unwanted information can cause damage to your reputation among your users -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:remove="android:maxSdkVersion" />
+=======
+	<!-- remove permissions that your app doesn't require;
+	asking for authority over unwanted information can cause damage to your reputation among your users -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+		android:maxSdkVersion="29"
+		tools:ignore="ScopedStorage" />
+	<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+		android:maxSdkVersion="30"
+		tools:ignore="QueryAllPackagesPermission" />
+>>>>>>> Stashed changes
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -45,6 +64,7 @@
         android:theme="@style/SplashTheme"
 		android:hardwareAccelerated="true"
 		android:usesCleartextTraffic="true"
+<<<<<<< Updated upstream
         tools:ignore="AllowBackup,UnusedAttribute">
         <activity
             android:name=".SplashScreen"
@@ -66,6 +86,31 @@
                     android:host="github.com"
                     android:pathPrefix="/mgks" />
 					<!-- if you want only a specific directory from your website to be opened in the app through external links -->
+=======
+		android:requestLegacyExternalStorage="true"
+		tools:ignore="AllowBackup,UnusedAttribute">
+		<activity
+			android:name="mgks.os.swv.SplashScreen"
+			android:screenOrientation="fullSensor"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name="mgks.os.swv.MainActivity"
+			android:screenOrientation="fullSensor"
+			android:exported="true">		<!-- remove or alter as your apps requirement -->
+			<intent-filter android:label="@string/app_name">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="https"
+					android:host="apps.mgks.dev"
+					android:pathPrefix="/swv" />
+				<!-- if you want only a specific directory from your website to be opened in the app through external links -->
+>>>>>>> Stashed changes
 			</intent-filter>
 			<intent-filter android:label="OpenURI">
 				<action android:name="Open_URI" />
