@@ -19,7 +19,7 @@ import static mgks.os.webview.PreferenceHelper.setInstallDate;
 public final class AppRate {
 
     @SuppressLint("StaticFieldLeak")
-	private static AppRate singleton;
+	private static volatile AppRate singleton;
 
     private final Context context;
 
@@ -56,7 +56,7 @@ public final class AppRate {
 	}
 
     private static boolean isOverDate(long targetDate, int threshold) {
-        return new Date().getTime() - targetDate >= threshold * 24 * 60 * 60 * 1000;
+        return new Date().getTime() - targetDate >= (long) threshold * 24 * 60 * 60 * 1000;
     }
 
     AppRate setLaunchTimes(int launchTimes) {

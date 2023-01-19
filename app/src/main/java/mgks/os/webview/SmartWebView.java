@@ -4,6 +4,10 @@ package mgks.os.webview;
  * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks), under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/SmartWebView.java
+=======
+ * Enhance Smart WebView with plugins - https://mgks.dev/blog/smart-webview-plugins (Google Login, Background Services, Vision API, Advance Notifications, PQL etc).
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/SmartWebView.java
  * Please mention project source or credit developers in your Application's License(s) Wiki.
  * Giving right credit to developers encourages them to create better projects :)
  */

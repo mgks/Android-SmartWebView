@@ -53,7 +53,7 @@ public class ShareActivity extends AppCompatActivity {
 			startActivity(i);
 			finish();
 		} else {
-			Toast.makeText(this, "Error occured, URI is invalid", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Error occurred, URI is invalid", Toast.LENGTH_LONG).show();
 		}
 	}
 

@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
-
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
@@ -16,21 +16,35 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 
 public class Firebase extends FirebaseMessagingService {
 	public void onNewToken(String s) {
-		Log.d("TOKEN_REFRESHED ", s);		// printing new tokens in logcat
+		super.onNewToken(s);
+		if (!s.isEmpty()) {
+			Log.d("TOKEN_REFRESHED ", s);        // printing new tokens in logcat
+		}
 	}
-
 	public void onMessageReceived(RemoteMessage message) {
 		if (message.getNotification() != null) {
 			sendMyNotification(message.getNotification().getTitle(), message.getNotification().getBody(), message.getNotification().getClickAction(), message.getData().get("uri"));
 		}
 	}
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/Firebase.java
 
 	private void sendMyNotification(String title, String message, String click_action, String uri) {
+=======
+	private void sendMyNotification(String title, String message, String click_action, String uri, String tag, String nid) {
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/Firebase.java
 		//On click of notification it redirect to this Activity
 		Intent intent = new Intent(click_action);
 		intent.putExtra("uri", uri);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+<<<<<<< Updated upstream:app/src/main/java/mgks/os/webview/Firebase.java
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+=======
+		PendingIntent pendingIntent;
+		final int flag =  Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_ONE_SHOT;
+		pendingIntent = PendingIntent.getActivity(this, 0, intent, flag);
+
+		int notification_id = nid!=null ? Integer.parseInt(nid) : MainActivity.ASWV_FCM_ID;
+>>>>>>> Stashed changes:app/src/main/java/mgks/os/swv/Firebase.java
 
 		Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, MainActivity.asw_fcm_channel)
