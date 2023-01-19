@@ -193,8 +193,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 
-		//Log.d("SLOG_TRUE_ONLINE", String.valueOf(true_online));
-
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 		getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 		Uri[] results = null;
@@ -254,16 +252,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		Log.w("READ_PERM = ",Manifest.permission.READ_EXTERNAL_STORAGE);
-		Log.w("WRITE_PERM = ",Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
 		// ------ PLAY AREA :: for debug purposes only ------ //
 
 		// ------- PLAY AREA END ------ //
-
-		// cookie manager initialisation
-		cookieManager = CookieManager.getInstance();
-		cookieManager.setAcceptCookie(true);
 
 		activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 			//Log.d("SLOG_TRUE_ONLINE", String.valueOf(true_online));
@@ -461,8 +453,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
 				request.setMimeType(mimeType);
-				String cookies = CookieManager.getInstance().getCookie(url);
-				request.addRequestHeader("cookie", cookies);
+				request.addRequestHeader("cookie", get_cookies(""));
 				request.addRequestHeader("User-Agent", userAgent);
 				request.setDescription(getString(R.string.dl_downloading));
 				request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
@@ -933,20 +924,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	// setting cookies
 	public void set_cookie(String data) {
 		//boolean log = true;
-		cookieManager.setCookie(ASWV_URL, data);
-		Log.d("SLOG_COOKIES", cookieManager.getCookie(ASWV_URL));
+		if(true_online) {
+			// cookie manager initialisation
+			cookieManager = CookieManager.getInstance();
+			cookieManager.setAcceptCookie(true);
+			cookieManager.setCookie(ASWV_URL, data);
+			Log.d("SLOG_COOKIES", cookieManager.getCookie(ASWV_URL));
+		}
 	}
 
 	//Getting device basic information
 	public void get_info() {
-		if (!ASWP_OFFLINE) {
 			set_cookie("DEVICE=android");
 			DeviceDetails dv = new DeviceDetails();
 			set_cookie("DEVICE_INFO=" + dv.pull());
 			set_cookie("DEV_API=" + Build.VERSION.SDK_INT);
 			set_cookie("APP_ID=" + BuildConfig.LIBRARY_PACKAGE_NAME);
 			set_cookie("APP_VER=" + BuildConfig.BUILD_TYPE + "/" + BuildConfig.VERSION_NAME);
-		}
 	}
 
 	// checking permission for storage and camera for writing and uploading images
@@ -998,17 +992,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	// get cookie value
 	public String get_cookies(String cookie) {
 		String value = "";
-		CookieManager cookieManager = CookieManager.getInstance();
-		String cookies = cookieManager.getCookie(ASWV_URL);
-		if(!cookies.isEmpty()) {
-			String[] temp = cookies.split(";");
-			for (String ar1 : temp) {
-				if (ar1.contains(cookie)) {
-					String[] temp1 = ar1.split("=");
-					value = temp1[1];
-					break;
+		if(true_online) {
+			cookieManager = CookieManager.getInstance();
+			String cookies = cookieManager.getCookie(ASWV_URL);
+			if (!cookies.isEmpty()) {
+				String[] temp = cookies.split(";");
+				for (String ar1 : temp) {
+					if (ar1.contains(cookie)) {
+						String[] temp1 = ar1.split("=");
+						value = temp1[1];
+						break;
+					}
 				}
+			}else{
+				Log.d("SLOG_COOKIES", cookies);
+				value = cookies;
 			}
+		}else{
+			Log.w("SLOG_NETWORK","DEVICE NOT ONLINE");
 		}
 		return value;
 	}

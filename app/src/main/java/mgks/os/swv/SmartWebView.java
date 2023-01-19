@@ -26,7 +26,7 @@ class SmartWebView {
 	static boolean ASWP_PBAR          = true;         // show progress bar in app
 	static boolean ASWP_ZOOM          = false;        // zoom control for webpages view
 	static boolean ASWP_SFORM         = false;        // save form cache and auto-fill information
-	static boolean ASWP_OFFLINE       = true;        // whether the loading webpages are offline or online
+	static boolean ASWP_OFFLINE       = false;        // whether the loading webpages are offline or online
 	static boolean ASWP_EXTURL        = true;         // open external url with default browser instead of app webview
 
 	static boolean ASWP_TAB           = true;         // instead of default browser, open external URLs in chrome tab
