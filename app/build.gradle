@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 32
-	buildToolsVersion '32.0.0'
+	compileSdkVersion 33
+	buildToolsVersion '33.0.1'
 	defaultConfig {
 		applicationId 'mgks.os.swv'
 		minSdkVersion 21
-		targetSdkVersion 32
+		targetSdkVersion 33
 		versionCode 2
 		versionName 'p_0.2'
 		multiDexEnabled true
@@ -28,7 +28,7 @@ android {
 
 dependencies {
 	testImplementation 'junit:junit:4.13.2'
-	androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+	androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -36,23 +36,23 @@ dependencies {
 
 	//implementation platform('com.google.firebase:firebase-bom:26.0.0')
 	implementation 'com.google.firebase:firebase-core:21.1.1'
-	implementation 'com.google.firebase:firebase-auth:21.0.8'
-	implementation 'com.google.firebase:firebase-config:21.1.2'
+	implementation 'com.google.firebase:firebase-auth:21.1.0'
+	implementation 'com.google.firebase:firebase-config:21.2.0'
 	implementation 'com.google.firebase:firebase-appindexing:20.0.0'
-	implementation 'com.google.firebase:firebase-messaging:23.0.8'
+	implementation 'com.google.firebase:firebase-messaging:23.1.1'
 	implementation 'com.google.firebase:firebase-iid:21.1.0'
-	implementation 'com.google.firebase:firebase-analytics:21.1.1'
+	implementation 'com.google.firebase:firebase-analytics:21.2.0'
 
-	implementation 'com.google.android.material:material:1.8.0-alpha01'
+	implementation 'com.google.android.material:material:1.8.0-rc01'
 	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-	implementation 'androidx.appcompat:appcompat:1.5.1'
+	implementation 'androidx.appcompat:appcompat:1.6.0'
 	implementation 'androidx.browser:browser:1.4.0'
 	implementation 'androidx.work:work-runtime:2.7.1'
 
-    implementation 'com.google.android.gms:play-services-auth:20.3.0'
-	implementation 'com.google.android.gms:play-services-ads:21.2.0'
-	implementation 'com.google.android.gms:play-services-location:20.0.0'
+    implementation 'com.google.android.gms:play-services-auth:20.4.0'
+	implementation 'com.google.android.gms:play-services-ads:21.4.0'
+	implementation 'com.google.android.gms:play-services-location:21.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
