@@ -7,8 +7,8 @@ android {
 		applicationId 'mgks.os.swv'
 		minSdkVersion 21
 		targetSdkVersion 33
-		versionCode 2
-		versionName 'p_0.2'
+		versionCode 3
+		versionName 'p_0.3'
 		multiDexEnabled true
 	}
 	buildTypes {
