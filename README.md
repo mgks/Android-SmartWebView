@@ -16,7 +16,7 @@
 
 </span><span align="center" style="text-align:center">
 
-**[GETTING STARTED](#getting-started) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://github.com/mgks/Android-SmartWebView/tree/master/documentation) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[GETTING STARTED](#getting-started) &middot; [DONATE (GET SWV PRO)](https://mgks.dev/projects/smart-webview#pro) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://mgks.dev/docs/smart-webview-documentation#index) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 </span>
 
@@ -24,7 +24,6 @@ SWV is a framework built on Java to develop advanced hybrid webview applications
 
 A small build with features working out of the box: Live GPS Location, Notifications with FCM, AdMob, Chrome Tabs, Process Camera Input, Upload/Download Files, Custom Rating System, Multiple User Interfaces and more.
 
-**For kotlin variant, see: [Kotlin Smart WebView](https://github.com/mgks/Kotlin-SmartWebView)**
 
 ## Table of Contents
 
@@ -49,7 +48,7 @@ A small build with features working out of the box: Live GPS Location, Notificat
 * [Contributing](#contributing)
 * [License](#license)
 * [Acknowledgements](#acknowledgements)
-* [Contact](#contact)
+* [Contact](#closing-note)
 
 ## Getting Started
 
@@ -63,25 +62,27 @@ Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lo
 
 ### Setup
 
-1. Download repo or just clone it
+1. Download repo or clone the project
 
-   `git clone https://github.com/mgks/Android-SmartWebView`
+    `git clone https://github.com/mgks/Android-SmartWebView`
 
-2. Load project in Android Studio
+2. Download `google-services.json` file from Firebase ([setup](https://github.com/mgks/Android-SmartWebView#firebase-messaging))
 
-   `File > Open > Browse to Project and Select`
+3. Load project in Android Studio
 
-3. Let Android Studio process the project and download support libraries and dependencies
+    `File > Open > Browse to Project and Select`
 
-4. Just to make sure, try cleaning and rebuilding project before run
+4. Let Android Studio process the project and download support libraries and dependencies
 
-   `Build > Clean Project` then `Build > Rebuild Project`
+5. Just to make sure, try cleaning and rebuilding project before run
 
-5. Got any error? You better fasten you seatbelt. It's gonna be a bumpy night.
+    `Build > Clean Project` then `Build > Rebuild Project`
+
+6. Got any error? You better fasten you seatbelt. It's going be a bumpy night.
 
 ## Configurations
 
-For more detailed config, check project [Documentation](https://github.com/mgks/Android-SmartWebView/tree/master/documentation).
+For more detailed config, check project [Documentation](https://mgks.dev/docs/smart-webview-documentation#config).
 
 ### Device Permissions
 
@@ -121,7 +122,7 @@ ASWV_URL   = "https://github.com/mgks"   // domain or directory or address to an
 
 ```kotlin
 ASWP_JSCRIPT     = true     // enable JavaScript for webview
-ASWP_FUPLOAD     = true     // upload files from local device 
+ASWP_FUPLOAD     = true     // upload files from local device
 ASWP_MULFILE     = true     // upload multiple files
 ASWP_CAMUPLOAD   = true     // enable camera file upload
 ASWP_ONLYCAM     = false    // incase you want only camera for input files
@@ -149,6 +150,8 @@ ASWP_CERT_VERIFICATION   = true   // verify whether HTTPS port needs certificate
 ### Other Variables
 
 ```kotlin
+ASWV_ORIENTATION = 0;   // change device orientation to portrait (1)(default) or landscape (2) or unspecified (0)
+
 ASWV_LAYOUT      = 0;   // default=0; for clear fullscreen layout and 1 to add drawer and navigation bar
 
 // custom settings if layout `1` with search bar is set.
@@ -160,6 +163,11 @@ ASWV_EXC_LIST    = "";                   // domains allowed to be opened inside 
 ASWV_ADMOB       = "ca-app-pub-9276682923792397~7957851075";   // your unique publishers ID; this one is temporary
 
 ASWV_F_TYPE      = "*/*"   // use `image/*` for image files only; check file type references for custom file type
+
+POSTFIX_USER_AGENT      = true;     // set to true to append USER_AGENT_POSTFIX to user agent
+OVERRIDE_USER_AGENT     = false;    // set to true to use USER_AGENT instead of default one
+USER_AGENT_POSTFIX      = "SWVAndroid";    // useful for identifying traffic, e.g. in Google Analytics
+CUSTOM_USER_AGENT       = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Mobile Safari/537.36";    // custom user-agent
 ```
 
 ## Features
@@ -179,6 +187,7 @@ You can either select to get input from both file manager and camera or can just
 ### Firebase Messaging
 
 You need a firebase account to get started then download `google-services.json` and put it in the app level directory. Then you can create a POST request as below.
+[See detailed steps](https://support.google.com/firebase/answer/7015592?hl=en) to download firebase config file.
 
 **To URL:** `https://fcm.googleapis.com/fcm/send`
 
@@ -252,13 +261,13 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 #### There are few ways to support this project -
 
-**DONATE:** If this project helped you or your business in any way and you feel like donating some change, you can always buy me a cup of coffee :)
+**1 - [Become GitHub Sponsor](https://github.com/sponsors/mgks)**
 
-<a href="https://ko-fi.com/Z8Z4BPQ6" target="_blank" title="Buy me a Coffee"><img width="150" style="border:0px;width:150px;display:block;margin:0 auto" src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
+**2 - [Get Smart WebView Pro](https://mgks.dev/projects/smart-webview#pro):** There is a Pro variant of SWV also with many advanced features and bundle of plugins to help you build the best of webview app. Smartest and easiest solution to your instat Android app building problems.<br>Some of the additional features include Google Login, Vision API, QR/Barcode Reader, Background Services, Advanced Notifications, Multiple Layout designs, PQL and more.
 
-Even your tiniest contribution will be appreciated. 
+**3 - Provide Feedback:** Feedbacks help us become better over time. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:hello@mgks.dev).
 
-**PROVIDE FEEDBACK:** Donations help us run things but feedback helps us learn new things and understand you better. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:getmgks@gmail.com).
+**4 - [Follow Me](https://github.com/mgks) on GitHub** | **Add Project to Watchlist** | **Star the Project**
 
 Report your [issues](https://github.com/mgks/Android-SmartWebView/issues) here.
 
@@ -274,10 +283,12 @@ This project is published under the MIT License - see [LICENSE.md](LICENSE.md) f
 
 Thanks to other [contributers](https://github.com/mgks/Android-SmartWebView/graphs/contributors) who helped make this project amazing.
 
-## Contact
+## Closing Note
 
 This project was initially developed by **[Ghazi Khan](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
 
-**A personal note:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
+For development consulting or other support. [Contact me!](mailto:hello@mgks.dev)
 
-[![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/mgks)
+**A personal suggestion:** `You all must keep up with programming. It's sometimes difficult and sometimes easy but fun afterall, you can create your own world with programming and that's the beauty of it. So, all the best for your next creation.`
+
+[![Profile](https://forthebadge.com/images/badges/built-with-love.svg)](https://mgks.dev)
