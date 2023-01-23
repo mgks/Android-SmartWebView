@@ -995,7 +995,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		if(true_online) {
 			cookieManager = CookieManager.getInstance();
 			String cookies = cookieManager.getCookie(ASWV_URL);
-			if (!cookies.isEmpty()) {
+			if (cookies !=null && !cookies.isEmpty()) {
 				String[] temp = cookies.split(";");
 				for (String ar1 : temp) {
 					if (ar1.contains(cookie)) {
@@ -1005,8 +1005,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					}
 				}
 			}else{
-				Log.d("SLOG_COOKIES", cookies);
-				value = cookies;
+				Log.d("SLOG_COOKIES", "Cookies either NULL or Empty");
+				value = "";
 			}
 		}else{
 			Log.w("SLOG_NETWORK","DEVICE NOT ONLINE");
