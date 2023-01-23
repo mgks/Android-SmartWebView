@@ -35,7 +35,7 @@ class SmartWebView {
 	static boolean ASWP_EXITDIAL	  = true;         // confirm to exit app on back press
 
 	/* -- SECURITY VARIABLES -- */
-	static boolean ASWP_CERT_VERI     = true;         // verify whether HTTPS port needs certificate verification
+	static boolean ASWP_CERT_VERI     = false;         // verify whether HTTPS port needs certificate verification
 
 
 	/* -- CONFIG VARIABLES -- */
