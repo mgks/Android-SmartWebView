@@ -54,8 +54,6 @@ A small build with features working out of the box: Live GPS Location, Notificat
 
 These instructions will help you get your Smart WebView copy up and running on your local machine for development and testing purposes.
 
-**[Watch Explainer Video for Getting Started w/ SWV](https://www.youtube.com/watch?v=BM_5j-KAgoQ)** created by [Nate Harris](https://www.youtube.com/channel/UCuav96GscozuOSAx18r8b4g).
-
 ### Prerequisites
 
 Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lollipop) SDK to test run.
