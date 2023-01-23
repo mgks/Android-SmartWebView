@@ -64,7 +64,7 @@ Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lo
 
     `git clone https://github.com/mgks/Android-SmartWebView`
 
-2. Download `google-services.json` file from Firebase ([setup](https://github.com/mgks/Android-SmartWebView#firebase-messaging))
+2. Download `google-services.json` file from Firebase ([instructions](https://github.com/mgks/Android-SmartWebView#firebase-messaging))
 
 3. Load project in Android Studio
 
@@ -84,7 +84,7 @@ For detailed configuration, check project [Documentation](https://mgks.dev/blog/
 
 ### Device Permissions
 
-You can remove any of the following requests if you do not need them, you can also disable features with permission variables. For default setup, these permissions are required.
+You can remove any of the following requests if you do not need them, you can also disable features with permission variables. For default setup, following permissions are required.
 
 ```xml
 INTERNET
@@ -269,7 +269,7 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 ## License
 
-This project is published under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
+This project is published under the MIT License - see [LICENSE](LICENSE) file for details or read [MIT license](https://opensource.org/licenses/MIT).
 
 
 ## Acknowledgements
