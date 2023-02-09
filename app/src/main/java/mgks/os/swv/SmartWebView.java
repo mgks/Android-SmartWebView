@@ -19,9 +19,7 @@ class SmartWebView {
 	static boolean ASWP_MULFILE       = true;         // upload multiple files in webview
 	static boolean ASWP_LOCATION      = true;         // track GPS locations
 	static boolean ASWP_CP            = false;        // enable copy/paste within webview
-
 	static boolean ASWP_RATINGS       = true;         // show ratings dialog; auto configured ; edit method get_rating() for customizations
-
 	static boolean ASWP_PULLFRESH     = true;         // pull refresh current url
 	static boolean ASWP_PBAR          = true;         // show progress bar in app
 	static boolean ASWP_ZOOM          = false;        // zoom control for webpages view
