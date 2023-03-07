@@ -42,6 +42,6 @@ authorization: `key=____your_server_key_here___` (Firebase > Settings > Cloud Me
 ```
 
 ## How to acquire fresh User Token
-SWV creates a cookie `FCM_TOKEN` with latest token eveytime app opened that can be saved to your server.
+SWV creates a cookie `FCM_TOKEN` with latest token everytime app opened that can be saved to your server.
 
 Token is also saved as Log.d `FCM_TOKEN` for testing.

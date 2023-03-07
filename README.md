@@ -10,13 +10,13 @@
 
 <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="100"></a>
 
-[![alt text](https://img.shields.io/badge/variant-java-red.svg)](#config-variables) [![alt text](https://img.shields.io/badge/version-p_%5F0.1-green.svg)](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE)
+[![alt text](https://img.shields.io/badge/variant-java-red.svg)](#config-variables) [![alt text](https://img.shields.io/badge/version-0.2-green.svg)](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE)
 
 <h1>Android Smart WebView</h1>
 
 </span><span align="center" style="text-align:center">
 
-**[GETTING STARTED](#getting-started) &middot; [DONATE (GET SWV PRO)](https://mgks.dev/projects/smart-webview#pro) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://mgks.dev/docs/smart-webview-documentation#index) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[GETTING STARTED](#getting-started) &middot; [SUPPORT (SWV PRO)](https://mgks.dev/blog/smart-webview-pro) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://mgks.dev/blog/smart-webview-documentation#index) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 </span>
 
@@ -64,7 +64,7 @@ Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lo
 
     `git clone https://github.com/mgks/Android-SmartWebView`
 
-2. Download `google-services.json` file from Firebase ([setup](https://github.com/mgks/Android-SmartWebView#firebase-messaging))
+2. Download `google-services.json` file from Firebase ([instructions](https://github.com/mgks/Android-SmartWebView#firebase-messaging))
 
 3. Load project in Android Studio
 
@@ -80,11 +80,11 @@ Project was built on Android Studio and requires minimum Android API 21+ (5.0 Lo
 
 ## Configurations
 
-For more detailed config, check project [Documentation](https://mgks.dev/docs/smart-webview-documentation#config).
+For detailed configuration, check project [Documentation](https://mgks.dev/blog/smart-webview-documentation#config).
 
 ### Device Permissions
 
-You can remove any of the following requests if you do not need them, you can also disable features with permission variables. For default setup, there permissions are required.
+You can remove any of the following requests if you do not need them, you can also disable features with permission variables. For default setup, following permissions are required.
 
 ```xml
 INTERNET
@@ -249,30 +249,27 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 - Push to the branch `git push origin my-new-feature`
 - Create new Pull Request
 
-### Know Bugs
+### Known Bugs
 ```
-22/09/19 - Camcorder not working in API 25, 26
-22/09/19 - Camera not working in API 29
+
 ```
 
 ## Support the Project
 
 #### There are few ways to support this project -
 
-**1 - [Become GitHub Sponsor](https://github.com/sponsors/mgks)**
+**[GitHub Sponsors](https://github.com/sponsors/mgks):** Support this project and my other works by becoming a GitHub sponsor. Means a lot :)
 
-**2 - [Get Smart WebView Pro](https://mgks.dev/projects/smart-webview#pro):** There is a Pro variant of SWV also with many advanced features and bundle of plugins to help you build the best of webview app. Smartest and easiest solution to your instat Android app building problems.<br>Some of the additional features include Google Login, Vision API, QR/Barcode Reader, Background Services, Advanced Notifications, Multiple Layout designs, PQL and more.
+**[Get Smart WebView Pro](https://mgks.dev/blog/smart-webview-pro):** You can support this project by getting a Pro variant of SWV also with additional features and plugins, some of the features/plugins include - PQL, Google Login, Vision API, and QR/Barcode Reader.
 
-**3 - Provide Feedback:** Feedbacks help us become better over time. Without an honest feedback no good project is possible and your valuable feedbacks are always welcome: just drop an [email](mailto:hello@mgks.dev).
+**[Join Discussions](https://github.com/mgks/Android-SmartWebView/discussions):** Feedbacks have helped this project become what it is today, share your honest feedback via [Discussion Board](https://github.com/mgks/Android-SmartWebView/discussions), [Email](mailto:hello@mgks.dev) or report your project [Issues](https://github.com/mgks/Android-SmartWebView/issues) here.
 
-**4 - [Follow Me](https://github.com/mgks) on GitHub** | **Add Project to Watchlist** | **Star the Project**
-
-Report your [issues](https://github.com/mgks/Android-SmartWebView/issues) here.
+**[Follow Me](https://github.com/mgks) on GitHub** | **Add Project to Watchlist** | **Star the Project**
 
 
 ## License
 
-This project is published under the MIT License - see [LICENSE.md](LICENSE.md) file for details or read [MIT license](https://opensource.org/licenses/MIT).
+This project is published under the MIT License - see [LICENSE](LICENSE) file for details or read [MIT license](https://opensource.org/licenses/MIT).
 
 
 ## Acknowledgements
@@ -283,7 +280,7 @@ Thanks to other [contributers](https://github.com/mgks/Android-SmartWebView/grap
 
 ## Closing Note
 
-This project was initially developed by **[Ghazi Khan](https://github.com/mgks)**, but coming this far wouldn't be possible without the people who contributed to this project.
+This project was initially developed by **[Ghazi Khan](https://mgks.dev)**, but coming this far wouldn't be possible without the people who contributed to this project.
 
 For development consulting or other support. [Contact me!](mailto:hello@mgks.dev)
 

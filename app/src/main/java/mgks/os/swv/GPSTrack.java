@@ -164,7 +164,7 @@ public class GPSTrack extends Service implements LocationListener {
 
     /**
      * Function to show settings alert dialog
-     * On pressing Settings button will lauch Settings Options
+     * On pressing Settings button will launch Settings Options
      * */
     public void showSettingsAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
@@ -176,19 +176,13 @@ public class GPSTrack extends Service implements LocationListener {
         alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
 
         // On pressing Settings button
-        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                mContext.startActivity(intent);
-            }
-        });
+        alertDialog.setPositiveButton("Settings", (dialog, which) -> {
+			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+			mContext.startActivity(intent);
+		});
 
         // on pressing cancel button
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
         // Showing Alert Message
         alertDialog.show();
@@ -196,8 +190,8 @@ public class GPSTrack extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location loc){
-//        MainActivity mn = new MainActivity();
-//        mn.updateL(false);
+		//MainActivity mn = new MainActivity();
+		//mn.updateL(false);
     }
 
     @Override

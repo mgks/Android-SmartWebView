@@ -4,7 +4,7 @@ package mgks.os.swv;
  * Android Smart WebView is an Open Source Project available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks), under MIT Open Source License.
  * This program is free to use for private and commercial purposes.
- * Enhance Smart WebView with plugins - https://voinsource.github.io/#plugins (Google Login, Background Services, Vision API, Advance Notifications, PQL etc).
+ * Enhance Smart WebView with plugins - https://mgks.dev/blog/smart-webview-plugins (Google Login, Background Services, Vision API, Advance Notifications, PQL etc).
  * Please mention project source or credit developers in your Application's License(s) Wiki.
  * Giving right credit to developers encourages them to create better projects :)
  */
@@ -19,14 +19,12 @@ class SmartWebView {
 	static boolean ASWP_MULFILE       = true;         // upload multiple files in webview
 	static boolean ASWP_LOCATION      = true;         // track GPS locations
 	static boolean ASWP_CP            = false;        // enable copy/paste within webview
-
 	static boolean ASWP_RATINGS       = true;         // show ratings dialog; auto configured ; edit method get_rating() for customizations
-
 	static boolean ASWP_PULLFRESH     = true;         // pull refresh current url
 	static boolean ASWP_PBAR          = true;         // show progress bar in app
 	static boolean ASWP_ZOOM          = false;        // zoom control for webpages view
 	static boolean ASWP_SFORM         = false;        // save form cache and auto-fill information
-	static boolean ASWP_OFFLINE       = true;        // whether the loading webpages are offline or online
+	static boolean ASWP_OFFLINE       = false;        // whether the loading webpages are offline or online
 	static boolean ASWP_EXTURL        = true;         // open external url with default browser instead of app webview
 
 	static boolean ASWP_TAB           = true;         // instead of default browser, open external URLs in chrome tab
@@ -35,7 +33,7 @@ class SmartWebView {
 	static boolean ASWP_EXITDIAL	  = true;         // confirm to exit app on back press
 
 	/* -- SECURITY VARIABLES -- */
-	static boolean ASWP_CERT_VERI     = true;         // verify whether HTTPS port needs certificate verification
+	static boolean ASWP_CERT_VERI     = false;         // verify whether HTTPS port needs certificate verification
 
 
 	/* -- CONFIG VARIABLES -- */
