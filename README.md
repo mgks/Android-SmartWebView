@@ -10,15 +10,16 @@
 
 <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="100"></a>
 
-[![alt text](https://img.shields.io/badge/variant-java-red.svg)](#config-variables) [![alt text](https://img.shields.io/badge/version-0.2-green.svg)](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE)
-
 <h1>Android Smart WebView</h1>
+
+[![alt text](https://img.shields.io/badge/variant-java-red.svg)](#config-variables) [![alt text](https://img.shields.io/badge/version-0.2-green.svg)](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE)
 
 </span><span align="center" style="text-align:center">
 
 **[GETTING STARTED](#getting-started) &middot; [SUPPORT (SWV PRO)](https://mgks.dev/blog/smart-webview-pro) &middot; [WIKI](https://github.com/mgks/Android-SmartWebView/wiki) &middot; [DOCUMENTATION](https://mgks.dev/blog/smart-webview-documentation#index) &middot; [ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 </span>
+
 
 SWV is a framework built on Java to develop advanced hybrid webview applications with ease.
 
@@ -249,12 +250,9 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 - Push to the branch `git push origin my-new-feature`
 - Create new Pull Request
 
-### Known Bugs
-```
-
-```
-
 ## Support the Project
+
+<!-- <img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/beta/res/swv_banner.jpg">-->
 
 #### There are few ways to support this project -
 
@@ -266,6 +264,10 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 **[Follow Me](https://github.com/mgks) on GitHub** | **Add Project to Watchlist** | **Star the Project**
 
+### Known Bugs
+```
+
+```
 
 ## License
 
