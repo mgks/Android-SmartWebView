@@ -244,7 +244,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				}
 			}
 		}
-		asw_file_path.onReceiveValue(results);
+		if(results!=null) {
+			asw_file_path.onReceiveValue(results);
+		}
 		asw_file_path = null;
 	}
 
