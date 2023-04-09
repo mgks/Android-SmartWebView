@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 
+		/*
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 		getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 		Uri[] results = null;
@@ -248,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			asw_file_path.onReceiveValue(results);
 		}
 		asw_file_path = null;
+		*/
 	}
 
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
