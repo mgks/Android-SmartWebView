@@ -7,8 +7,8 @@ android {
 		applicationId 'mgks.os.swv'
 		minSdkVersion 21
 		targetSdkVersion 33
-		versionCode 2
-		versionName 'p_0.2'
+		versionCode 3
+		versionName 'p_0.3'
 		multiDexEnabled true
 	}
 	buildTypes {
@@ -36,12 +36,12 @@ dependencies {
 
 	//implementation platform('com.google.firebase:firebase-bom:26.0.0')
 	implementation 'com.google.firebase:firebase-core:21.1.1'
-	implementation 'com.google.firebase:firebase-auth:21.2.0'
+	implementation 'com.google.firebase:firebase-auth:21.3.0'
 	implementation 'com.google.firebase:firebase-config:21.3.0'
 	implementation 'com.google.firebase:firebase-appindexing:20.0.0'
 	implementation 'com.google.firebase:firebase-messaging:23.1.2'
 	implementation 'com.google.firebase:firebase-iid:21.1.0'
-	implementation 'com.google.firebase:firebase-analytics:21.2.1'
+	implementation 'com.google.firebase:firebase-analytics:21.2.2'
 
 	implementation 'com.google.android.material:material:1.8.0'
 	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
