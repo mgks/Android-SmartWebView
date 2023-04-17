@@ -1,12 +1,10 @@
 package mgks.os.swv;
 
-// following source code is taken from - @hotchemi (https://github.com/hotchemi/Android-Rate)
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -18,78 +16,101 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import static mgks.os.swv.IntentHelper.createIntentForAmazonAppstore;
+import static mgks.os.swv.IntentHelper.createIntentForGooglePlay;
+import static mgks.os.swv.PreferenceHelper.setAgreeShowDialog;
+import static mgks.os.swv.PreferenceHelper.setRemindInterval;
+import static mgks.os.swv.UriHelper.getAmazonAppstore;
+import static mgks.os.swv.UriHelper.getGooglePlay;
+import static mgks.os.swv.UriHelper.isPackageExists;
+import static mgks.os.swv.Utils.getDialogBuilder;
+
 final class DialogManager {
 
-	private static boolean showNeutralButton = true;
-	private static boolean showNegativeButton = true;
-	private static boolean showTitle = true;
-	private static boolean cancelable = false;
+    private DialogManager() {
+    }
 
-	private static StoreType storeType = StoreType.GOOGLEPLAY;
-
-	private static int titleResId = R.string.rate_dialog_title;
-	private static int messageResId = R.string.rate_dialog_message;
-	private static int textPositiveResId = R.string.rate_dialog_ok;
-	private static int textNeutralResId = R.string.rate_dialog_cancel;
-	private static int textNegativeResId = R.string.rate_dialog_no;
-
-	private static String titleText = null;
-	private static String messageText = null;
-	private static String positiveText = null;
-	private static String neutralText = null;
-	private static String negativeText = null;
-
-	private static final String GOOGLE_PLAY_PACKAGE_NAME = "com.android.vending";
-	private static final String GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=";
-	private static final String AMAZON_APPSTORE = "amzn://apps/android?p=";
-
-	private View view;
-
-	private static Reference<OnClickButtonListener> listener;
-
-    Dialog create(final Context context, DialogManager options) {
+    static Dialog create(final Context context, final DialogOptions options) {
         AlertDialog.Builder builder = getDialogBuilder(context);
-        builder.setMessage(getMessageText(context));
+        builder.setMessage(options.getMessageText(context));
 
-        if (shouldShowTitle()) builder.setTitle(getTitleText(context));
+        if (options.shouldShowTitle()) builder.setTitle(options.getTitleText(context));
 
-        builder.setCancelable(getCancelable());
+        builder.setCancelable(options.getCancelable());
 
-        View view = getView();
+        View view = options.getView();
         if (view != null) builder.setView(view);
 
-        final OnClickButtonListener listener = getListener();
+        final OnClickButtonListener listener = options.getListener();
 
-        builder.setPositiveButton(getPositiveText(context), (dialog, which) -> {
-			final Intent intentToAppstore = getStoreType() == StoreType.GOOGLEPLAY ?
+        builder.setPositiveButton(options.getPositiveText(context), (dialog, which) -> {
+			final Intent intentToAppstore = options.getStoreType() == StoreType.GOOGLEPLAY ?
 			createIntentForGooglePlay(context) : createIntentForAmazonAppstore(context);
 			context.startActivity(intentToAppstore);
-			AppRate.setAgreeShowDialog(context, false);
+			setAgreeShowDialog(context, false);
 			if (listener != null) listener.onClickButton(which);
 		});
 
-        if (shouldShowNeutralButton()) {
-            builder.setNeutralButton(getNeutralText(context), (dialog, which) -> {
-				AppRate.setRemindInterval(context);
+        if (options.shouldShowNeutralButton()) {
+            builder.setNeutralButton(options.getNeutralText(context), (dialog, which) -> {
+				setRemindInterval(context);
 				if (listener != null) listener.onClickButton(which);
 			});
         }
 
-        if (shouldShowNegativeButton()) {
-            builder.setNegativeButton(getNegativeText(context), (dialog, which) -> {
-				AppRate.setAgreeShowDialog(context, false);
+        if (options.shouldShowNegativeButton()) {
+            builder.setNegativeButton(options.getNegativeText(context), (dialog, which) -> {
+				setAgreeShowDialog(context, false);
 				if (listener != null) listener.onClickButton(which);
 			});
         }
+
         return builder.create();
     }
+
+}
+final class DialogOptions {
+
+	private boolean showNeutralButton = true;
+
+	private boolean showNegativeButton = true;
+
+	private boolean showTitle = true;
+
+	private boolean cancelable = false;
+
+	private StoreType storeType = StoreType.GOOGLEPLAY;
+
+	private int titleResId = R.string.rate_dialog_title;
+
+	private int messageResId = R.string.rate_dialog_message;
+
+	private int textPositiveResId = R.string.rate_dialog_ok;
+
+	private int textNeutralResId = R.string.rate_dialog_cancel;
+
+	private int textNegativeResId = R.string.rate_dialog_no;
+
+	private String titleText = null;
+
+	private String messageText = null;
+
+	private String positiveText = null;
+
+	private String neutralText = null;
+
+	private String negativeText = null;
+
+	private View view;
+
+	private Reference<OnClickButtonListener> listener;
 
 	boolean shouldShowNeutralButton() {
 		return showNeutralButton;
 	}
 
 	void setShowNeutralButton(boolean showNeutralButton) {
-		DialogManager.showNeutralButton = showNeutralButton;
+		this.showNeutralButton = showNeutralButton;
 	}
 
 	boolean shouldShowNegativeButton() {
@@ -97,7 +118,7 @@ final class DialogManager {
 	}
 
 	void setShowNegativeButton(boolean showNegativeButton) {
-		DialogManager.showNegativeButton = showNegativeButton;
+		this.showNegativeButton = showNegativeButton;
 	}
 
 	boolean shouldShowTitle() {
@@ -105,7 +126,7 @@ final class DialogManager {
 	}
 
 	void setShowTitle(boolean showTitle) {
-		DialogManager.showTitle = showTitle;
+		this.showTitle = showTitle;
 	}
 
 	boolean getCancelable() {
@@ -113,10 +134,10 @@ final class DialogManager {
 	}
 
 	void setCancelable(boolean cancelable) {
-		DialogManager.cancelable = cancelable;
+		this.cancelable = cancelable;
 	}
 
-	static StoreType getStoreType() {
+	StoreType getStoreType() {
 		return storeType;
 	}
 
@@ -125,23 +146,23 @@ final class DialogManager {
 	}
 
 	void setTitleResId(int titleResId) {
-		DialogManager.titleResId = titleResId;
+		this.titleResId = titleResId;
 	}
 
 	void setMessageResId(int messageResId) {
-		DialogManager.messageResId = messageResId;
+		this.messageResId = messageResId;
 	}
 
 	void setTextPositiveResId(int textPositiveResId) {
-		DialogManager.textPositiveResId = textPositiveResId;
+		this.textPositiveResId = textPositiveResId;
 	}
 
 	void setTextNeutralResId(int textNeutralResId) {
-		DialogManager.textNeutralResId = textNeutralResId;
+		this.textNeutralResId = textNeutralResId;
 	}
 
 	void setTextNegativeResId(int textNegativeResId) {
-		DialogManager.textNegativeResId = textNegativeResId;
+		this.textNegativeResId = textNegativeResId;
 	}
 
 	public View getView() {
@@ -149,17 +170,18 @@ final class DialogManager {
 	}
 
 	public void setView(View view) {
+		this.view = view;
 	}
 
-	static OnClickButtonListener getListener() {
+	OnClickButtonListener getListener() {
 		return listener != null ? listener.get() : null;
 	}
 
 	void setListener(OnClickButtonListener listener) {
-		DialogManager.listener = new WeakReference<>(listener);
+		this.listener = new WeakReference<>(listener);
 	}
 
-	static String getTitleText(Context context) {
+	String getTitleText(Context context) {
 		if (titleText == null) {
 			return context.getString(titleResId);
 		}
@@ -167,10 +189,10 @@ final class DialogManager {
 	}
 
 	void setTitleText(String titleText) {
-		DialogManager.titleText = titleText;
+		this.titleText = titleText;
 	}
 
-	static String getMessageText(Context context) {
+	String getMessageText(Context context) {
 		if (messageText == null) {
 			return context.getString(messageResId);
 		}
@@ -178,10 +200,10 @@ final class DialogManager {
 	}
 
 	void setMessageText(String messageText) {
-		DialogManager.messageText = messageText;
+		this.messageText = messageText;
 	}
 
-	static String getPositiveText(Context context) {
+	String getPositiveText(Context context) {
 		if (positiveText == null) {
 			return context.getString(textPositiveResId);
 		}
@@ -189,10 +211,10 @@ final class DialogManager {
 	}
 
 	void setPositiveText(String positiveText) {
-		DialogManager.positiveText = positiveText;
+		this.positiveText = positiveText;
 	}
 
-	static String getNeutralText(Context context) {
+	String getNeutralText(Context context) {
 		if (neutralText == null) {
 			return context.getString(textNeutralResId);
 		}
@@ -200,10 +222,10 @@ final class DialogManager {
 	}
 
 	void setNeutralText(String neutralText) {
-		DialogManager.neutralText = neutralText;
+		this.neutralText = neutralText;
 	}
 
-	static String getNegativeText(Context context) {
+	String getNegativeText(Context context) {
 		if (negativeText == null) {
 			return context.getString(textNegativeResId);
 		}
@@ -211,7 +233,14 @@ final class DialogManager {
 	}
 
 	void setNegativeText(String negativeText) {
-		DialogManager.negativeText = negativeText;
+		this.negativeText = negativeText;
+	}
+}
+final class IntentHelper {
+
+	private static final String GOOGLE_PLAY_PACKAGE_NAME = "com.android.vending";
+
+	private IntentHelper() {
 	}
 
 	static Intent createIntentForGooglePlay(Context context) {
@@ -226,6 +255,19 @@ final class DialogManager {
 	static Intent createIntentForAmazonAppstore(Context context) {
 		String packageName = context.getPackageName();
 		return new Intent(Intent.ACTION_VIEW, getAmazonAppstore(packageName));
+	}
+
+}
+interface OnClickButtonListener {
+	void onClickButton(int which);
+}
+final class UriHelper {
+
+	private static final String GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=";
+
+	private static final String AMAZON_APPSTORE = "amzn://apps/android?p=";
+
+	private UriHelper() {
 	}
 
 	static Uri getGooglePlay(String packageName) {
@@ -243,6 +285,11 @@ final class DialogManager {
 			if (packageInfo.packageName.equals(targetPackage)) return true;
 		}
 		return false;
+	}
+}
+final class Utils {
+
+	private Utils() {
 	}
 
 	private static boolean underHoneyComb() {
@@ -265,13 +312,9 @@ final class DialogManager {
 			return new AlertDialog.Builder(context, getDialogTheme());
 		}
 	}
-}
 
+}
 enum StoreType {
 	GOOGLEPLAY,
 	AMAZON
-}
-
-interface OnClickButtonListener {
-	void onClickButton(int which);
 }

@@ -1,7 +1,5 @@
 package mgks.os.swv;
 
-// following source code is taken from - @hotchemi (https://github.com/hotchemi/Android-Rate)
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +8,14 @@ import android.view.View;
 
 import java.util.Date;
 
+import static mgks.os.swv.DialogManager.create;
+import static mgks.os.swv.PreferenceHelper.getInstallDate;
+import static mgks.os.swv.PreferenceHelper.getIsAgreeShowDialog;
+import static mgks.os.swv.PreferenceHelper.getLaunchTimes;
+import static mgks.os.swv.PreferenceHelper.getRemindInterval;
+import static mgks.os.swv.PreferenceHelper.isFirstLaunch;
+import static mgks.os.swv.PreferenceHelper.setInstallDate;
+
 public final class AppRate {
 
     @SuppressLint("StaticFieldLeak")
@@ -17,21 +23,17 @@ public final class AppRate {
 
     private final Context context;
 
+    private final DialogOptions options = new DialogOptions();
+
     private int installDate = 10;
+
     private int launchTimes = 10;
+
     private int remindInterval = 1;
 
     private boolean isDebug = false;
 
-	private static final String PREF_FILE_NAME = "android_rate_pref_file";
-	private static final String PREF_KEY_INSTALL_DATE = "android_rate_install_date";
-	private static final String PREF_KEY_LAUNCH_TIMES = "android_rate_launch_times";
-	private static final String PREF_KEY_IS_AGREE_SHOW_DIALOG = "android_rate_is_agree_show_dialog";
-	private static final String PREF_KEY_REMIND_INTERVAL = "android_rate_remind_interval";
-
-	DialogManager options = new DialogManager();
-
-	private AppRate(Context context) {
+    private AppRate(Context context) {
         this.context = context.getApplicationContext();
     }
 
@@ -46,13 +48,10 @@ public final class AppRate {
         return singleton;
     }
 
-    static void showRateDialogIfMeetsConditions(Context context) {
+    static void showRateDialogIfMeetsConditions(Activity activity) {
         boolean isMeetsConditions = singleton.isDebug || singleton.shouldShowRateDialog();
         if (isMeetsConditions) {
-			if (context instanceof Activity) {
-				Activity activity = (Activity) context;
-				singleton.showRateDialog(activity);
-			}
+            singleton.showRateDialog(activity);
         }
 	}
 
@@ -70,8 +69,8 @@ public final class AppRate {
         return this;
     }
 
-    AppRate setRemindInterval() {
-        this.remindInterval = 2;
+    AppRate setRemindInterval(int remindInterval) {
+        this.remindInterval = remindInterval;
         return this;
     }
 
@@ -91,18 +90,18 @@ public final class AppRate {
     }
 
     public AppRate clearAgreeShowDialog() {
-        setAgreeShowDialog(context, true);
+        PreferenceHelper.setAgreeShowDialog(context, true);
         return this;
     }
 
     public AppRate clearSettingsParam() {
-        setAgreeShowDialog(context, true);
-        clearSharedPreferences(context);
+        PreferenceHelper.setAgreeShowDialog(context, true);
+        PreferenceHelper.clearSharedPreferences(context);
         return this;
     }
 
     public AppRate setAgreeShowDialog(boolean clear) {
-        setAgreeShowDialog(context, clear);
+        PreferenceHelper.setAgreeShowDialog(context, clear);
         return this;
     }
 
@@ -180,12 +179,12 @@ public final class AppRate {
         if (isFirstLaunch(context)) {
             setInstallDate(context);
         }
-        setLaunchTimes(context, getLaunchTimes(context) + 1);
+        PreferenceHelper.setLaunchTimes(context, getLaunchTimes(context) + 1);
     }
 
     private void showRateDialog(Activity activity) {
         if (!activity.isFinishing()) {
-            options.create(activity, options).show();
+            create(activity, options).show();
         }
     }
 
@@ -217,7 +216,20 @@ public final class AppRate {
         return this;
     }
 
-	private void PreferenceHelper() {
+}
+final class PreferenceHelper {
+
+	private static final String PREF_FILE_NAME = "android_rate_pref_file";
+
+	private static final String PREF_KEY_INSTALL_DATE = "android_rate_install_date";
+
+	private static final String PREF_KEY_LAUNCH_TIMES = "android_rate_launch_times";
+
+	private static final String PREF_KEY_IS_AGREE_SHOW_DIALOG = "android_rate_is_agree_show_dialog";
+
+	private static final String PREF_KEY_REMIND_INTERVAL = "android_rate_remind_interval";
+
+	private PreferenceHelper() {
 	}
 
 	private static SharedPreferences getPreferences(Context context) {

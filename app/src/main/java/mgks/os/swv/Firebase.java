@@ -15,9 +15,6 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
 public class Firebase extends FirebaseMessagingService {
-	private final int fcm_id = SmartWebView.ASWV_FCM_ID;
-	private final String fcm_channel = SmartWebView.asw_fcm_channel;
-
 	public void onNewToken(String s) {
 		super.onNewToken(s);
 		if (!s.isEmpty()) {
@@ -38,10 +35,10 @@ public class Firebase extends FirebaseMessagingService {
 		final int flag =  Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_ONE_SHOT;
 		pendingIntent = PendingIntent.getActivity(this, 0, intent, flag);
 
-		int notification_id = nid!=null ? Integer.parseInt(nid) : fcm_id;
+		int notification_id = nid!=null ? Integer.parseInt(nid) : MainActivity.ASWV_FCM_ID;
 
 		Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, fcm_channel)
+		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, MainActivity.asw_fcm_channel)
 				.setSmallIcon(R.mipmap.ic_launcher)
 				.setContentTitle(title+" "+notification_id)
 				.setContentText(message)
