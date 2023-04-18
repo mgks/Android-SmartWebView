@@ -256,7 +256,7 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 ## Support the Project
 
-<img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/beta/res/swv_banner.jpg">
+<img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/res/swv_banner.jpg">
 
 #### There are few ways to support the project -
 
