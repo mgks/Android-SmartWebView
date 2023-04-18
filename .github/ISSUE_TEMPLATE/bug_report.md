@@ -1,23 +1,22 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-labels: 
-
+name: Bug Report
+about: Create a report to help the project improve
+labels:
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is, better if you can attach a log.
+**Bug Description**
+# A clear and concise description of what the bug is, better if you can attach a log.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Expected Behavior**
+# A clear and concise description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Any Logs/Screenshots**
+# If applicable, add a log or screenshot(s) to help explain your problem.
 
-**Device (please complete the following information):**
- - Device name/variant: [e.g. Samsung Galaxy, J2]
- - Build [e.g. arm, x86]
- - Android Version [e.g. API 27 or Oreo]
+**Device(s) (recommended):**
+ - Device name/variant: [e.g. Google Pixel/6, Samsung Galaxy/J2]
+ - Build: [e.g. arm, x86]
+ - Android Version: [e.g. API 27 or Oreo]
 
-**Additional context**
-Add any other context about the problem here.
+**Additional Context**
+# Any other optional context/comment about the problem.
