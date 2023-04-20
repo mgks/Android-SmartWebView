@@ -10,9 +10,6 @@ package mgks.os.swv;
  * Giving right credits to developers encourages them to keep improving their projects :)
  */
 
-import static mgks.os.swv.Functions.aswm_fcm_id;
-import static mgks.os.swv.Functions.aswm_host;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.net.Uri;
@@ -93,14 +90,14 @@ public class SmartWebView {
 	/* -- following variables are used in MainActivity and Functions classes -- */
 	// internal variable initialization
 	static String TAG = MainActivity.class.getSimpleName();
-	static String ASWV_HOST = aswm_host(ASWV_URL);
+	static String ASWV_HOST = Functions.aswm_host(ASWV_URL);
 	static String asw_fcm_channel = "1";
 	static String CURR_URL = ASWV_URL;
 	static String fcm_token;
 	static String asw_pcam_message;
 	static String asw_vcam_message;
 
-	static int ASWV_FCM_ID = aswm_fcm_id();
+	static int ASWV_FCM_ID = Functions.aswm_fcm_id();
 	static int asw_error_counter = 0;
 	static int asw_file_req = 1;
 	static int loc_perm = 1;
