@@ -419,7 +419,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	}
 
 	//Creating image file for upload
-	public File create_image(Context context) throws IOException {
+	public static File create_image(Context context) throws IOException {
 		@SuppressLint("SimpleDateFormat")
 		String file_name = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
 		String new_name = "file_" + file_name + "_";
@@ -428,7 +428,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	}
 
 	//Creating video file for upload
-	public File create_video(Context context) throws IOException {
+	public static File create_video(Context context) throws IOException {
 		@SuppressLint("SimpleDateFormat")
 		String file_name = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
 		String new_name = "file_" + file_name + "_";

@@ -14,6 +14,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -36,8 +37,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-public class FileProcessing extends AppCompatActivity {
-/*	@SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
+public class FileProcessing {
+	/*	@SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 

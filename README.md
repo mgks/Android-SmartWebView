@@ -24,7 +24,7 @@
 
 Smart WebView is a lightweight and powerful framework designed to streamline the development of advanced hybrid webview applications.
 
-This easy-to-use solution provides a wide range of features that work seamlessly right out of the box, including GPS location tracking, FCM notifications, AdMob integration, Chrome tabs, file uploads, camera input processing, downloads handler, custom rating systems, and multiple user interfaces. Whether you're a seasoned developer or just starting out, Smart WebView offers a user-friendly approach to creating high-performance webview apps that your users will love.
+This easy-to-use solution provides a wide range of features that work seamlessly right out of the box, including GPS location tracking, FCM notifications, AdMob integration, chrome tabs, file uploads, camera input processing, downloads handler, custom rating systems, multiple UIs, deep linking, and error handling. Whether you're a seasoned developer or just starting out, Smart WebView offers a user-friendly approach to creating high-performance webview apps that your users will love.
 
 ## Table of Contents
 
