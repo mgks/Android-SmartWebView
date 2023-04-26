@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 33
+	compileSdk 33
 	buildToolsVersion '33.0.1'
 	defaultConfig {
 		applicationId 'mgks.os.swv'
 		minSdkVersion 21
 		targetSdkVersion 33
-		versionCode 3
-		versionName 'p_0.3'
+		versionCode 7
+		versionName '7.0'
 		multiDexEnabled true
 	}
 	buildTypes {
