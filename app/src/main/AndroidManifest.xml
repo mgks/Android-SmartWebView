@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
+ * Smart WebView 7.0 (May 2023)
  * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
@@ -12,7 +13,6 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	package="mgks.os.swv"
 	android:installLocation="auto">
 
 	<supports-screens
@@ -28,21 +28,23 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-		android:maxSdkVersion="29"
-		tools:ignore="ScopedStorage" />
 	<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
 		android:maxSdkVersion="33"
 		tools:ignore="QueryAllPackagesPermission" />
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+	<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+	<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+		tools:ignore="ScopedStorage" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
 	<!-- remove location.gps feature if not using permission ACCESS_FINE_LOCATION -->
 	<uses-feature android:name="android.hardware.location.gps" />
+	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
 	<!--<uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />-->
