@@ -1,6 +1,7 @@
 package mgks.os.swv;
 
 /*
+ * Smart WebView 7.0 (May 2023)
  * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).

@@ -1,6 +1,7 @@
 package mgks.os.swv;
 
 /*
+ * Smart WebView 7.0 (May 2023)
  * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
@@ -98,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 
 		// calling for file upload and processing method
-		//FileProcessing fileProcessing = new FileProcessing();
-		//fileProcessing.onCreate(savedInstanceState);
 
 		act_result_launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 			//Log.d("SLOG_TRUE_ONLINE", String.valueOf(true_online));
@@ -363,10 +362,12 @@ public class MainActivity extends AppCompatActivity {
 		if (SmartWebView.ASWP_ADMOB) {
 			MobileAds.initialize(this, initializationStatus -> {
 			});
-			/*List<String> testDeviceIds = List.of("4C304B10577C757E3A3C3B667FF84F8C");
+			/*
+			List<String> testDeviceIds = List.of("4C304B10577C757E3A3C3B667FF84F8C");
 			RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
 			MobileAds.setRequestConfiguration(configuration);
-			MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(List.of("4C304B10577C757E3A3C3B667FF84F8C")).build());*/
+			MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(List.of("4C304B10577C757E3A3C3B667FF84F8C")).build());
+			*/
 			SmartWebView.asw_ad_view = findViewById(R.id.msw_ad_view);
 		}
 
