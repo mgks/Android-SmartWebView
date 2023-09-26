@@ -30,6 +30,7 @@ A small build with features working out of the box: Live GPS Location, Notificat
 ## Table of Contents
 
 * [Getting Started](#getting-started)
+  * *[YouTube Playlist](https://www.youtube.com/watch?v=vE_GsHwspH4&list=PLUvke9lIV6YMGU5XdQ5zOtDOWxslsg6mT&pp=gAQBiAQB) (external link)*
   * [Prerequisites](#prerequisites)
   * [Setup](#setup)
 * [Configurations](#configurations)
@@ -55,6 +56,8 @@ A small build with features working out of the box: Live GPS Location, Notificat
 ## Getting Started
 
 These instructions will help you get your Smart WebView copy up and running on your local machine for development and testing purposes.
+
+**YouTube Playlist - [Getting Started with Smart WebView](https://www.youtube.com/watch?v=vE_GsHwspH4&list=PLUvke9lIV6YMGU5XdQ5zOtDOWxslsg6mT&pp=gAQBiAQB)**
 
 ### Prerequisites
 
@@ -267,8 +270,9 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 ### Known Bugs
 ```
-
+...
 ```
+*Check [Issues](https://github.com/mgks/Android-SmartWebView/issues) tab for more.*
 
 ## License
 
