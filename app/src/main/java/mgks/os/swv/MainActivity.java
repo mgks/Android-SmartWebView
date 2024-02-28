@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		SmartWebView.asw_view = findViewById(R.id.msw_view);
+		//** add permission to print; allow only then to exec print_view
 		SmartWebView.print_view = (WebView) findViewById(R.id.print_view); //view on which you want to take a printout
 		//asw_view.addJavascriptInterface(new JSInterface(), "JSOUT");
 		//asw_view.addJavascriptInterface(new MainActivity.WebViewJavaScriptInterface(this), "androidapp"); //
@@ -236,12 +237,14 @@ public class MainActivity extends AppCompatActivity {
 			pullfresh.setEnabled(false);
 		}
 
+		// progress bar permission loop
 		if (SmartWebView.ASWP_PBAR) {
 			SmartWebView.asw_progress = findViewById(R.id.msw_progress);
 		} else {
 			findViewById(R.id.msw_progress).setVisibility(View.GONE);
 		}
 		SmartWebView.asw_loading_text = findViewById(R.id.msw_loading_text);
+
 		Handler handler = new Handler();
 
 		//Launching app rating request
@@ -317,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
 		getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
 		webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 		SmartWebView.asw_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-		SmartWebView.asw_view.setVerticalScrollBarEnabled(false);
+		SmartWebView.asw_view.setVerticalScrollBarEnabled(false); //** set this as permission variable
 		SmartWebView.asw_view.setWebViewClient(new Callback());
 
 		//Reading incoming intents
