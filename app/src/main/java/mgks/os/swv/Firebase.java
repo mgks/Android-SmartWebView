@@ -25,7 +25,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
-public class Firebase extends FirebaseMessagingServices {
+public class Firebase extends FirebaseMessagingService {
 	private final int fcm_id = SmartWebView.ASWV_FCM_ID;
 	private final String fcm_channel = SmartWebView.asw_fcm_channel;
 

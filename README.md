@@ -14,7 +14,7 @@
 
 <h1>Android Smart WebView</h1>
 
-[![alt text](https://img.shields.io/badge/variant-java-red.svg)](#config-variables) [![alt text](https://img.shields.io/badge/version-p__0.3-green.svg)](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE)
+[![alt text](https://img.shields.io/badge/variant-java-red.svg)](#config-variables) [![alt text](https://img.shields.io/badge/version-7.0 beta-green.svg)](https://github.com/mgks/Android-SmartWebView/releases) [![MIT Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE)
 
 </span><span align="center" style="text-align:center">
 
