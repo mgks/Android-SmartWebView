@@ -1,6 +1,7 @@
 package mgks.os.swv;
 
 /*
+ * Smart WebView 7.0 (May 2023)
  * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
@@ -244,6 +245,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	// checking permission for storage and camera for writing and uploading images
 	public void get_file_perm(Activity activity) {
 		String[] perms = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA};
+		String[] perms2 = {Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO};
 
 		//Checking for storage permission to write images for upload
 		if (SmartWebView.ASWP_FUPLOAD && SmartWebView.ASWP_CAMUPLOAD && !check_permission(2, activity.getApplicationContext()) && !check_permission(3, activity.getApplicationContext())) {
@@ -419,7 +421,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	}
 
 	//Creating image file for upload
-	public File create_image(Context context) throws IOException {
+	public static File create_image(Context context) throws IOException {
 		@SuppressLint("SimpleDateFormat")
 		String file_name = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
 		String new_name = "file_" + file_name + "_";
@@ -428,7 +430,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	}
 
 	//Creating video file for upload
-	public File create_video(Context context) throws IOException {
+	public static File create_video(Context context) throws IOException {
 		@SuppressLint("SimpleDateFormat")
 		String file_name = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
 		String new_name = "file_" + file_name + "_";

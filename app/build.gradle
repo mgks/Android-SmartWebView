@@ -1,14 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 33
-	buildToolsVersion '33.0.1'
+	compileSdk 34
+	// buildToolsVersion '33.0.1'
 	defaultConfig {
 		applicationId 'mgks.os.swv'
 		minSdkVersion 21
-		targetSdkVersion 33
-		versionCode 3
-		versionName 'p_0.3'
+		targetSdk 34
+		targetSdkVersion 34
+		targetCompatibility = 34
+		versionCode 7
+		versionName '7.0'
 		multiDexEnabled true
 	}
 	buildTypes {
@@ -17,11 +19,14 @@ android {
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
-	productFlavors {
+	buildFeatures {
+		buildConfig true
 	}
 	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_11
-		targetCompatibility JavaVersion.VERSION_11
+		sourceCompatibility targetCompatibility
+		targetCompatibility targetCompatibility
+	}
+	productFlavors {
 	}
     namespace 'mgks.os.swv'
 }
@@ -34,25 +39,29 @@ dependencies {
 
 	implementation 'androidx.multidex:multidex:2.0.1'
 
-	//implementation platform('com.google.firebase:firebase-bom:26.0.0')
-	implementation 'com.google.firebase:firebase-core:21.1.1'
-	implementation 'com.google.firebase:firebase-auth:21.3.0'
-	implementation 'com.google.firebase:firebase-config:21.3.0'
-	implementation 'com.google.firebase:firebase-appindexing:20.0.0'
-	implementation 'com.google.firebase:firebase-messaging:23.1.2'
-	implementation 'com.google.firebase:firebase-iid:21.1.0'
-	implementation 'com.google.firebase:firebase-analytics:21.2.2'
+	implementation platform('com.google.firebase:firebase-bom:32.7.2')
 
-	implementation 'com.google.android.material:material:1.8.0'
+	/*
+	implementation platform('com.google.firebase:firebase-bom:26.0.0')
+	implementation 'com.google.firebase:firebase-core:21.1.1'
+	implementation 'com.google.firebase:firebase-auth:22.3.1'
+	implementation 'com.google.firebase:firebase-config:21.6.1'
+	implementation 'com.google.firebase:firebase-appindexing:20.0.0'
+	implementation 'com.google.firebase:firebase-messaging:23.4.1'
+	implementation 'com.google.firebase:firebase-iid:21.1.0'
+	implementation 'com.google.firebase:firebase-analytics:21.5.1'
+	 */
+
+	implementation 'com.google.android.material:material:1.11.0'
 	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 	implementation 'androidx.appcompat:appcompat:1.6.1'
-	implementation 'androidx.browser:browser:1.5.0'
-	implementation 'androidx.work:work-runtime:2.8.1'
+	implementation 'androidx.browser:browser:1.7.0'
+	implementation 'androidx.work:work-runtime:2.9.0'
 
-    implementation 'com.google.android.gms:play-services-auth:20.5.0'
-	implementation 'com.google.android.gms:play-services-ads:22.0.0'
-	implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+	implementation 'com.google.android.gms:play-services-ads:22.6.0'
+	implementation 'com.google.android.gms:play-services-location:21.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

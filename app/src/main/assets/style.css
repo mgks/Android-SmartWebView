@@ -1,1 +1,126 @@
-body,input#inputFile{background-color:#52a73d}::selection{background-color:transparent}::-moz-selection{background-color:transparent}*{-webkit-user-select:none;-moz-user-select:-moz-none;-ms-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}[contenteditable],input[type=text],textarea{-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}body{margin:2.5em 0;font-family: segoe ui, sans-serif;}.head-logo{max-width:15em;width:90%;display:block;margin:1em auto}a,a:active,a:visited{text-decoration:none;font-family: inherit;color: #555;}h3{color: #fff;font-size:1em;font-weight: 500;}.cont,.pale b,.pale i{color: #555;}.hidden{display:none}input#inputFile{border: 2px solid #388326;color: #555;}.gallery img{max-width:90%;max-height:240px;margin:1em}.pale{background-color: #fff;padding: 1em 1.5em;color: #2a2a2a;margin: 1em;border-radius:5px;box-shadow: 1px 1px 10px -5px #266218;}.pale b{margin: 0 0 1em;display:block;border-bottom: 1px solid #f1f1f1;padding-bottom: 1em;font-size: 16px;}.pale i{font-size:.7em}.cont{font-size:.9em;font-weight:700;margin:2em;text-align:center}.paypal{background-color:#0080ff;font-size:1.25em;border:0;padding:.5em 2em;border-radius:3px;cursor:pointer;color:#fff;display:block;margin:2em auto;box-shadow:0 0 10px -2px #d6823c}.header-t{text-align:center}a{text-decoration:underline}sup a {font-family: monospace;font-size: 12px}
+/*
+ * Smart WebView 7.0 (May 2023)
+ * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
+ * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
+ * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
+ * Please mention project source or developer credits in your Application's License(s) Wiki.
+ * Contribute to the project (https://github.com/mgks/Android-SmartWebView/discussions)
+ * Sponsor the project (https://github.com/sponsors/mgks)
+ * Giving right credits to developers encourages them to keep improving their projects :)
+ */
+
+body,
+input#inputFile {
+  background-color: #52a73d;
+}
+::selection {
+  background-color: transparent;
+}
+::-moz-selection {
+  background-color: transparent;
+}
+* {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+[contenteditable],
+input[type="text"],
+textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+body {
+  margin: 2.5em 0;
+  font-family: segoe ui, sans-serif;
+}
+.head-logo {
+  max-width: 15em;
+  width: 90%;
+  display: block;
+  margin: 1em auto;
+}
+a,
+a:active,
+a:visited {
+  text-decoration: none;
+  font-family: inherit;
+  color: #555;
+}
+h3 {
+  color: #fff;
+  font-size: 1em;
+  font-weight: 500;
+}
+.cont,
+.pale b,
+.pale i {
+  color: #555;
+}
+.hidden {
+  display: none;
+}
+input#inputFile {
+  border: 2px solid #388326;
+  color: #555;
+}
+.gallery img {
+  max-width: 90%;
+  max-height: 240px;
+  margin: 1em;
+}
+.pale {
+  background-color: #fff;
+  padding: 1em 1.5em;
+  color: #2a2a2a;
+  margin: 1em;
+  border-radius: 5px;
+  box-shadow: 1px 1px 10px -5px #266218;
+}
+.pale b {
+  margin: 0 0 1em;
+  display: block;
+  border-bottom: 1px solid #f1f1f1;
+  padding-bottom: 1em;
+  font-size: 16px;
+}
+.pale i {
+  font-size: 0.7em;
+}
+.cont {
+  font-size: 0.9em;
+  font-weight: 700;
+  margin: 2em;
+  text-align: center;
+}
+.paypal {
+  background-color: #0080ff;
+  font-size: 1.25em;
+  border: 0;
+  padding: 0.5em 2em;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #fff;
+  display: block;
+  margin: 2em auto;
+  box-shadow: 0 0 10px -2px #d6823c;
+}
+.header-t {
+  text-align: center;
+}
+a {
+  text-decoration: underline;
+}
+sup a {
+  font-family: monospace;
+  font-size: 12px;
+}
+.sponsor-button{
+  max-width:275px;
+  display:block;
+  margin:0 auto
+}

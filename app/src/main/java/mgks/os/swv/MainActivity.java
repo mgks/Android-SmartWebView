@@ -1,6 +1,7 @@
 package mgks.os.swv;
 
 /*
+ * Smart WebView 7.0 (May 2023)
  * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
@@ -98,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 
 		// calling for file upload and processing method
-		//FileProcessing fileProcessing = new FileProcessing();
-		//fileProcessing.onCreate(savedInstanceState);
 
 		act_result_launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 			//Log.d("SLOG_TRUE_ONLINE", String.valueOf(true_online));
@@ -197,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		SmartWebView.asw_view = findViewById(R.id.msw_view);
+		//** add permission to print; allow only then to exec print_view
 		SmartWebView.print_view = (WebView) findViewById(R.id.print_view); //view on which you want to take a printout
 		//asw_view.addJavascriptInterface(new JSInterface(), "JSOUT");
 		//asw_view.addJavascriptInterface(new MainActivity.WebViewJavaScriptInterface(this), "androidapp"); //
@@ -237,12 +237,14 @@ public class MainActivity extends AppCompatActivity {
 			pullfresh.setEnabled(false);
 		}
 
+		// progress bar permission loop
 		if (SmartWebView.ASWP_PBAR) {
 			SmartWebView.asw_progress = findViewById(R.id.msw_progress);
 		} else {
 			findViewById(R.id.msw_progress).setVisibility(View.GONE);
 		}
 		SmartWebView.asw_loading_text = findViewById(R.id.msw_loading_text);
+
 		Handler handler = new Handler();
 
 		//Launching app rating request
@@ -318,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
 		getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
 		webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 		SmartWebView.asw_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-		SmartWebView.asw_view.setVerticalScrollBarEnabled(false);
+		SmartWebView.asw_view.setVerticalScrollBarEnabled(false); //** set this as permission variable
 		SmartWebView.asw_view.setWebViewClient(new Callback());
 
 		//Reading incoming intents
@@ -363,10 +365,12 @@ public class MainActivity extends AppCompatActivity {
 		if (SmartWebView.ASWP_ADMOB) {
 			MobileAds.initialize(this, initializationStatus -> {
 			});
-			/*List<String> testDeviceIds = List.of("4C304B10577C757E3A3C3B667FF84F8C");
+			/*
+			List<String> testDeviceIds = List.of("4C304B10577C757E3A3C3B667FF84F8C");
 			RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
 			MobileAds.setRequestConfiguration(configuration);
-			MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(List.of("4C304B10577C757E3A3C3B667FF84F8C")).build());*/
+			MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(List.of("4C304B10577C757E3A3C3B667FF84F8C")).build());
+			*/
 			SmartWebView.asw_ad_view = findViewById(R.id.msw_ad_view);
 		}
 

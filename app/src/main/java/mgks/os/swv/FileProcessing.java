@@ -1,6 +1,7 @@
 package mgks.os.swv;
 
 /*
+ * Smart WebView 7.0 (May 2023)
  * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
@@ -14,6 +15,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -36,8 +38,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-public class FileProcessing extends AppCompatActivity {
-/*	@SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
+public class FileProcessing {
+	/*	@SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 

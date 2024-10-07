@@ -1,6 +1,7 @@
 package mgks.os.swv;
 
 /*
+ * Smart WebView 7.0 (May 2023)
  * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
  * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
  * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
@@ -9,9 +10,6 @@ package mgks.os.swv;
  * Sponsor the project (https://github.com/sponsors/mgks)
  * Giving right credits to developers encourages them to keep improving their projects :)
  */
-
-import static mgks.os.swv.Functions.aswm_fcm_id;
-import static mgks.os.swv.Functions.aswm_host;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -31,6 +29,9 @@ public class SmartWebView {
 	public SmartWebView(){
 		// smart webview constructor here
 	}
+
+	// DEBUG MODE (keep false for production apps)
+	static boolean SWV_DEBUGMODE	  = false;	// enable debug mode for detailed reports in log and toast alerts for errors and warnings
 
 	// permission variables
 	static boolean ASWP_JSCRIPT       = true;         // enable JavaScript for webview
@@ -93,14 +94,14 @@ public class SmartWebView {
 	/* -- following variables are used in MainActivity and Functions classes -- */
 	// internal variable initialization
 	static String TAG = MainActivity.class.getSimpleName();
-	static String ASWV_HOST = aswm_host(ASWV_URL);
+	static String ASWV_HOST = Functions.aswm_host(ASWV_URL);
 	static String asw_fcm_channel = "1";
 	static String CURR_URL = ASWV_URL;
 	static String fcm_token;
 	static String asw_pcam_message;
 	static String asw_vcam_message;
 
-	static int ASWV_FCM_ID = aswm_fcm_id();
+	static int ASWV_FCM_ID = Functions.aswm_fcm_id();
 	static int asw_error_counter = 0;
 	static int asw_file_req = 1;
 	static int loc_perm = 1;
