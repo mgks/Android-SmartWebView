@@ -1,6 +1,6 @@
 package mgks.os.swv;
 
-// following source code is taken from - @hotchemi (https://github.com/hotchemi/Android-Rate)
+// code source - @hotchemi (https://github.com/hotchemi/Android-Rate)
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
