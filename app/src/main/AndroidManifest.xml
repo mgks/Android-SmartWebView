@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
- * Smart WebView 7.0 (May 2023)
- * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
- * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
- * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
- * Please mention project source or developer credits in your Application's License(s) Wiki.
- * Contribute to the project (https://github.com/mgks/Android-SmartWebView/discussions)
- * Sponsor the project (https://github.com/sponsors/mgks)
- * Giving right credits to developers encourages them to keep improving their projects :)
+ * Smart WebView 7.0
+ * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Original source (https://github.com/mgks/Android-SmartWebView)
+ * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT)
+ * Join the discussion (https://github.com/mgks/Android-SmartWebView/discussions)
+ * Support Smart WebView (https://github.com/sponsors/mgks)
+ * Acknowledging project sources and developers helps them continue their valuable work. Thank you for your support :)
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -44,7 +42,8 @@
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
 	<!-- remove location.gps feature if not using permission ACCESS_FINE_LOCATION -->
-	<uses-feature android:name="android.hardware.location.gps" />
+	<uses-feature android:name="android.hardware.location.gps"
+		android:required="false" />
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
@@ -62,7 +61,6 @@
 		tools:ignore="AllowBackup,UnusedAttribute">
 		<activity
 			android:name="mgks.os.swv.SplashScreen"
-			android:screenOrientation="fullSensor"
 			android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -71,8 +69,8 @@
 		</activity>
 		<activity
 			android:name="mgks.os.swv.MainActivity"
-			android:screenOrientation="fullSensor"
-			android:exported="true">		<!-- remove or alter as your apps requirement -->
+			android:exported="true">
+			<!-- alter as per your app requirements -->
 			<intent-filter android:label="@string/app_name">
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
