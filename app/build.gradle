@@ -1,14 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdk 34
-	// buildToolsVersion '33.0.1'
+	compileSdk 35
+// buildToolsVersion '35.0.1'
 	defaultConfig {
 		applicationId 'mgks.os.swv'
 		minSdk 23
-		targetSdk 34
-		targetSdkVersion 34
-		targetCompatibility = 34
+		targetSdk 35
+		targetCompatibility = 35
 		versionCode 7
 		versionName '7.0'
 		multiDexEnabled true
@@ -43,10 +42,10 @@ dependencies {
 	implementation platform('com.google.firebase:firebase-bom:33.1.2')
 	*/
 	implementation 'com.google.firebase:firebase-core:21.1.1'
-	implementation 'com.google.firebase:firebase-auth:23.0.0'
-	implementation 'com.google.firebase:firebase-config:22.0.0'
+	implementation 'com.google.firebase:firebase-auth:23.1.0'
+	implementation 'com.google.firebase:firebase-config:22.0.1'
 	implementation 'com.google.firebase:firebase-appindexing:20.0.0'
-	implementation 'com.google.firebase:firebase-messaging:24.0.2'
+	implementation 'com.google.firebase:firebase-messaging:24.0.3'
 	implementation 'com.google.firebase:firebase-iid:21.1.0'
 	implementation 'com.google.firebase:firebase-analytics:22.1.2'
 
