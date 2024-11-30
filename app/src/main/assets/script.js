@@ -1,34 +1,107 @@
 /*
- * Smart WebView 7.0 (May 2023)
- * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
- * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
- * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
- * Please mention project source or developer credits in your Application's License(s) Wiki.
- * Contribute to the project (https://github.com/mgks/Android-SmartWebView/discussions)
- * Sponsor the project (https://github.com/sponsors/mgks)
- * Giving right credits to developers encourages them to keep improving their projects :)
+ * Smart WebView 7.0
+ * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Original source (https://github.com/mgks/Android-SmartWebView)
+ * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT)
+ * Join the discussion (https://github.com/mgks/Android-SmartWebView/discussions)
+ * Support Smart WebView (https://github.com/sponsors/mgks)
+ * Acknowledging project sources and developers helps them continue their valuable work. Thank you for your support :)
  */
 
-document.querySelector(document).ready(function(){
-    var imagesPreview = function(input, placeToInsertImagePreview) {
-        if (input.files) {
-            var filesAmount = input.files.length;
-            for (i = 0; i < filesAmount; i++) {
-                var reader = new FileReader();
-                reader.onload = function(event) {
-                    document.querySelector($.parseHTML('<img>')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+document.addEventListener('DOMContentLoaded', function() { // use DOMContentLoaded
+
+    const input = document.getElementById('add-img');
+    const gallery = document.querySelector('.gallery');
+	const urlParams = new URLSearchParams(window.location.search);
+	const locParam = urlParams.get('loc');
+    const MAX_WIDTH = 240;
+
+    input.addEventListener('change', function() {
+        gallery.innerHTML = ''; // clear previous previews
+
+        for (const file of Array.from(this.files)) {
+            const reader = new FileReader();
+
+            reader.addEventListener('load', function () {
+                const img = document.createElement('img');
+                img.src = this.result;
+
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_WIDTH) {
+                            width *= MAX_WIDTH / height;
+                            height = MAX_WIDTH;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    gallery.appendChild(canvas);
                 }
-                reader.readAsDataURL(input.files[i]);
-            }
+            });
+            reader.readAsDataURL(file);
         }
-    };
-    document.querySelector('#gallery-photo-add').addEventListener('change', function() {
-    	document.querySelector(".gallery").html("");
-        imagesPreview(this, 'div.gallery');
     });
-	var loc = getUrlVars()["loc"].split(',');
-	document.querySelector(".locf").replaceWith("Latitude: "+loc[0]+"<br>Longitude: "+loc[1]);
-})
-function getUrlVars(){
-	for(var t,e=[],i=window.location.href.slice(window.location.href.indexOf("?")+1).split("&"),r=0;r<i.length;r++)t=i[r].split("="),e.push(t[0]),e[t[0]]=t[1];return e
+});
+
+// cookies handling function
+function get_cookies(name) {
+	const value = `; ${document.cookie}`;
+	const parts = value.split(`; ${name}=`);
+	if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function get_location() {
+	console.log(window.location);
+
+	let latitude = null;
+	let longitude = null;
+
+	// first, try getting location from cookies (online case)
+	const latCookie = get_cookies('lat');
+	const longCookie = get_cookies('long');
+
+	if (latCookie && longCookie) {  // check if cookies exist and are defined
+		latitude = parseFloat(latCookie);
+		longitude = parseFloat(longCookie);
+	} else {
+		// second, if cookies not available (offline), try URL parameters
+		const urlParams = new URLSearchParams(window.location.search);
+		const locParam = urlParams.get('loc');
+		if (locParam) {
+			const loc = locParam.split(',');
+			if (loc.length === 2) {
+				latitude = parseFloat(loc[0]);
+				longitude = parseFloat(loc[1]);
+			} else {
+				console.error("Invalid 'loc' parameter format");
+			}
+		}
+	}
+
+	if (latitude !== null && longitude !== null) {
+		const locationDiv = document.createElement('div');
+		locationDiv.className = 'fetch-loc';
+		locationDiv.innerHTML = "<br><b>Latitude: "+latitude+"<br>Longitude: "+longitude+"</b>";
+		const locElement = document.querySelector('.fetch-loc');
+
+		if(locElement) { // ensure the element exists. If not create new
+			locElement.replaceWith(locationDiv);
+		} else {
+			document.body.appendChild(locationDiv); // or wherever you want it
+		}
+	}
+}
+
+function print_page(){
+	window.print();
 }

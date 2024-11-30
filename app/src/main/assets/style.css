@@ -1,17 +1,17 @@
 /*
- * Smart WebView 7.0 (May 2023)
- * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
- * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
- * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
- * Please mention project source or developer credits in your Application's License(s) Wiki.
- * Contribute to the project (https://github.com/mgks/Android-SmartWebView/discussions)
- * Sponsor the project (https://github.com/sponsors/mgks)
- * Giving right credits to developers encourages them to keep improving their projects :)
+ * Smart WebView 7.0
+ * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Original source (https://github.com/mgks/Android-SmartWebView)
+ * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT)
+ * Join the discussion (https://github.com/mgks/Android-SmartWebView/discussions)
+ * Support Smart WebView (https://github.com/sponsors/mgks)
+ * Acknowledging project sources and developers helps them continue their valuable work. Thank you for your support :)
  */
 
-body,
-input#inputFile {
-  background-color: #52a73d;
+body, input#inputFile {
+    background-color: #459930;
+    color: #fff;
+    font-family: monospace;
+
 }
 ::selection {
   background-color: transparent;
@@ -35,32 +35,30 @@ textarea {
   user-select: text;
 }
 body {
-  margin: 2.5em 0;
-  font-family: segoe ui, sans-serif;
+    margin: 2.5em 0;
+
 }
 .head-logo {
-  max-width: 15em;
-  width: 90%;
-  display: block;
-  margin: 1em auto;
+    max-width: 25em;
+    width: 90%;
+    display: block;
+    margin: 5% auto;
 }
 a,
 a:active,
 a:visited {
-  text-decoration: none;
-  font-family: inherit;
-  color: #555;
+    text-decoration: none;
+    color: inherit;
+
 }
-h3 {
-  color: #fff;
-  font-size: 1em;
-  font-weight: 500;
+h2 {
+    font-weight: 500;
+    margin: 0 0 1em;
+
 }
 .cont,
 .pale b,
-.pale i {
-  color: #555;
-}
+.pale i {}
 .hidden {
   display: none;
 }
@@ -74,28 +72,25 @@ input#inputFile {
   margin: 1em;
 }
 .pale {
-  background-color: #fff;
-  padding: 1em 1.5em;
-  color: #2a2a2a;
-  margin: 1em;
-  border-radius: 5px;
-  box-shadow: 1px 1px 10px -5px #266218;
+    background-color: #368325;
+    padding: 2%;
+    color: #fff;
+    margin: 5%;
+    border-radius: 5px;
+    box-shadow: 1px 1px 10px -5px #266218;
+
 }
 .pale b {
-  margin: 0 0 1em;
-  display: block;
-  border-bottom: 1px solid #f1f1f1;
-  padding-bottom: 1em;
-  font-size: 16px;
+    margin: 0 0 1em;
+    display: block;
+
 }
 .pale i {
   font-size: 0.7em;
 }
 .cont {
-  font-size: 0.9em;
-  font-weight: 700;
-  margin: 2em;
-  text-align: center;
+    text-align: center;
+
 }
 .paypal {
   background-color: #0080ff;
@@ -109,18 +104,40 @@ input#inputFile {
   margin: 2em auto;
   box-shadow: 0 0 10px -2px #d6823c;
 }
-.header-t {
-  text-align: center;
+.sv-icons {
+	max-width: 3em;
+	height: 3.5em;
 }
-a {
-  text-decoration: underline;
+.header-t {
+    text-align: center;
 }
 sup a {
-  font-family: monospace;
-  font-size: 12px;
+    font-size: 1em;
+    font-weight: 100;
+
 }
 .sponsor-button{
-  max-width:275px;
-  display:block;
-  margin:0 auto
+    max-width: 20em;
+    display:block;
+    margin: 0 auto;
+    border-radius: 5px;
+
+}
+.mono-f {
+    font-family: monospace;
+    font-size: 2em;
+}
+.mono-b {
+    font-family: monospace;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+form input {
+    font-family: monospace;
+
+}
+.cent {
+    text-align: center;
+
 }
