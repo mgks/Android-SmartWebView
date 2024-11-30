@@ -81,7 +81,7 @@
 				<!-- if you want only a specific directory from your website to be opened in the app through external links -->
 			</intent-filter>
 			<intent-filter android:label="OpenURI">
-				<action android:name="Open_URI" />
+				<action android:name="OPEN_URI" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -95,7 +95,7 @@
 			</intent-filter>
 		</activity>
 		<!--<receiver android:name=".NotificationPausePlay" />-->
-		<service android:name="mgks.os.swv.Firebase"
+		<service android:name=".Firebase"
 			android:exported="false">
 			<intent-filter>
 				<action android:name="com.google.firebase.MESSAGING_EVENT" />
