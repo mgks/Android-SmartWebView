@@ -10,8 +10,8 @@ package mgks.os.swv;
  */
 
 import android.Manifest;
+
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -38,12 +38,14 @@ import android.os.Environment;
 import android.os.Handler;
 
 import android.provider.MediaStore;
+
 import android.util.Log;
 
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import android.webkit.ConsoleMessage;
 import android.webkit.GeolocationPermissions;
 import android.webkit.ServiceWorkerClient;
 import android.webkit.ServiceWorkerController;
@@ -56,18 +58,23 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+
 import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import androidx.core.app.ActivityCompat;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -78,6 +85,8 @@ import com.google.android.material.navigation.NavigationView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Matcher;
 
@@ -85,7 +94,7 @@ import java.util.regex.Matcher;
 
 public class MainActivity extends AppCompatActivity {
 	ActivityResultLauncher<Intent> act_result_launcher;
-	private final static Functions fns = new Functions();
+	static Functions fns = new Functions();
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
@@ -96,16 +105,20 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		SmartWebView.setAppContext(this);
+
+		fns.fcm_token();
+
 		// calling for file upload and processing method
 
 		act_result_launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 			//Log.d("SLOG_TRUE_ONLINE", String.valueOf(true_online));
 
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-			getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+			//getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 			Uri[] results = null;
 			if (result.getResultCode() == Activity.RESULT_CANCELED) {
-				// If the file request was cancelled (i.e. user exited camera),
+				// if the file request was cancelled (i.e. user exited camera),
 				// we must still send a null value in order to ensure that future attempts
 				// to pick files will still work.
 				SmartWebView.asw_file_path.onReceiveValue(null);
@@ -139,8 +152,9 @@ public class MainActivity extends AppCompatActivity {
 					} else {
 						try {
 							assert result.getData() != null;
-							Bitmap cam_photo = (Bitmap) result.getData().getExtras().get("data");
+							Bitmap cam_photo = (Bitmap) Objects.requireNonNull(result.getData().getExtras()).get("data");
 							ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+							assert cam_photo != null;
 							cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 							stringData = MediaStore.Images.Media.insertImage(getContentResolver(), cam_photo, null, null);
 						} catch (Exception ignored) {
@@ -157,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 		String cookie_orientation = !(boolean) SmartWebView.ASWP_OFFLINE ? fns.get_cookies("ORIENT") : "";
 		fns.set_orientation((!Objects.equals(cookie_orientation, "") ? Integer.parseInt(cookie_orientation) : SmartWebView.ASWV_ORIENTATION), false, getApplicationContext());
 
-		// use Service Worker
+		// use service worker
 		if (Build.VERSION.SDK_INT >= 24) {
 			ServiceWorkerController swController = ServiceWorkerController.getInstance();
 			swController.setServiceWorkerClient(new ServiceWorkerClient() {
@@ -195,15 +209,9 @@ public class MainActivity extends AppCompatActivity {
 
 		SmartWebView.asw_view = findViewById(R.id.msw_view);
 		//** add permission to print; allow only then to exec print_view
-		SmartWebView.print_view = (WebView) findViewById(R.id.print_view); //view on which you want to take a printout
+		SmartWebView.print_view = findViewById(R.id.print_view); // view on which you want to take a printout
 		//asw_view.addJavascriptInterface(new JSInterface(), "JSOUT");
 		//asw_view.addJavascriptInterface(new MainActivity.WebViewJavaScriptInterface(this), "androidapp"); //
-		// "androidapp is used to call methods exposed from javascript interface, in this example case print
-		// method can be called by androidapp.print(String)"
-		// load your data from the URL in web view
-
-		/// exp
-		//// end exp
 
 		// requesting new FCM token; updating final cookie variable
 		fns.fcm_token();
@@ -218,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
 			notificationChannel.enableVibration(true);
 			notificationChannel.setShowBadge(true);
 			assert notificationManager != null;
-			notificationManager.createNotificationChannel(notificationChannel);
 			notificationManager.createNotificationChannel(notificationChannel);
 		}
 
@@ -245,12 +252,12 @@ public class MainActivity extends AppCompatActivity {
 
 		Handler handler = new Handler();
 
-		//Launching app rating request
+		// launching app rating request
 		if (SmartWebView.ASWP_RATINGS) {
 			handler.postDelayed(fns.get_rating(getApplicationContext()), 1000 * 60); //running request after few moments
 		}
 
-		//Getting basic device information
+		// getting basic device information
 		fns.get_info();
 
 		//Getting GPS location of device if given permission
@@ -259,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 		fns.get_location(getApplicationContext());
 
-		//Webview settings; defaults are customized for best performance
+		// webview settings; defaults are customized for best performance
 		WebSettings webSettings = SmartWebView.asw_view.getSettings();
 
 		// setting custom user agent
@@ -274,9 +281,7 @@ public class MainActivity extends AppCompatActivity {
 			webSettings.setUserAgentString(userAgent);
 		}
 
-		if (!SmartWebView.ASWP_OFFLINE) {
-			webSettings.setJavaScriptEnabled(SmartWebView.ASWP_JSCRIPT);
-		}
+		webSettings.setJavaScriptEnabled(true);
 		webSettings.setSaveFormData(SmartWebView.ASWP_SFORM);
 		webSettings.setSupportZoom(SmartWebView.ASWP_ZOOM);
 		webSettings.setGeolocationEnabled(SmartWebView.ASWP_LOCATION);
@@ -321,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
 		SmartWebView.asw_view.setVerticalScrollBarEnabled(false); //** set this as permission variable
 		SmartWebView.asw_view.setWebViewClient(new Callback());
 
-		//Reading incoming intents
+		// reading incoming intents
 		Intent read_int = getIntent();
 		Log.d("SLOG_INTENT", read_int.toUri(0));
 		String uri = read_int.getStringExtra("uri");
@@ -329,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
 		String share_img = read_int.getStringExtra("s_img");
 
 		if (share != null) {
-			//Processing shared content
+			// processing shared content
 			Log.d("SLOG_SHARE_INTENT", share);
 			Matcher matcher = Functions.url_pattern().matcher(share);
 			String urlStr = "";
@@ -344,18 +349,18 @@ public class MainActivity extends AppCompatActivity {
 			fns.aswm_view(red_url, false, SmartWebView.asw_error_counter, getApplicationContext());
 
 		} else if (share_img != null) {
-			//Processing shared content
+			// processing shared image
 			Log.d("SLOG_SHARE_INTENT", share_img);
 			Toast.makeText(this, share_img, Toast.LENGTH_LONG).show();
 			fns.aswm_view(SmartWebView.ASWV_URL, false, SmartWebView.asw_error_counter, getApplicationContext());
 
 		} else if (uri != null) {
-			//Opening notification
+			// opening notification
 			Log.d("SLOG_NOTIFI_INTENT", uri);
 			fns.aswm_view(uri, false, SmartWebView.asw_error_counter, getApplicationContext());
 
 		} else {
-			//Rendering the default URL
+			// rendering the default URL
 			Log.d("SLOG_MAIN_INTENT", SmartWebView.ASWV_URL);
 			fns.aswm_view(SmartWebView.ASWV_URL, false, SmartWebView.asw_error_counter, getApplicationContext());
 		}
@@ -375,6 +380,15 @@ public class MainActivity extends AppCompatActivity {
 		//
 		SmartWebView.asw_view.setWebChromeClient(new WebChromeClient() {
 
+			@Override
+			public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+				if(SmartWebView.SWV_DEBUGMODE) {
+					Log.d("SWVJS", consoleMessage.message() + " -- From line " +
+						consoleMessage.lineNumber() + " of " + consoleMessage.sourceId());
+				}
+				return true;
+			}
+
 			public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
 				if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 					if (SmartWebView.ASWP_FUPLOAD) {
@@ -385,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
 							boolean includeVideo = false;
 							boolean includePhoto = false;
 
-							// Check the accept parameter to determine which intent(s) to include.
+							// checking parameter to determine which intent(s) to include
 							paramCheck:
 							for (String acceptTypes : fileChooserParams.getAcceptTypes()) {
 								// Although it's an array, it still seems to be the whole value.
@@ -407,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
 								}
 							}
 
-							// If no `accept` parameter was specified, allow both photo and video.
+							// if no `accept` parameter was specified, allow both photo and video.
 							if (fileChooserParams.getAcceptTypes().length == 0) {
 								includePhoto = true;
 								includeVideo = true;
@@ -418,7 +432,7 @@ public class MainActivity extends AppCompatActivity {
 								if (takePictureIntent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
 									File photoFile = null;
 									try {
-										photoFile = fns.create_image(getApplicationContext());
+										photoFile = Functions.create_image(getApplicationContext());
 										takePictureIntent.putExtra("PhotoPath", SmartWebView.asw_pcam_message);
 									} catch (IOException ex) {
 										Log.e("SLOG_ERROR", "Image file creation failed", ex);
@@ -437,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
 								if (takeVideoIntent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
 									File videoFile = null;
 									try {
-										videoFile = fns.create_video(getApplicationContext());
+										videoFile = Functions.create_video(getApplicationContext());
 									} catch (IOException ex) {
 										Log.e("SLOG_ERROR", "Video file creation failed", ex);
 									}
@@ -498,7 +512,7 @@ public class MainActivity extends AppCompatActivity {
 
 			// overload the geoLocations permissions prompt to always allow instantly as app permission was granted previously
 			public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-				if (Build.VERSION.SDK_INT < 23 || fns.check_permission(1, getApplicationContext())) {
+				if (fns.check_permission(1, getApplicationContext())) {
 					// location permissions were granted previously so auto-approve
 					callback.invoke(origin, true, false);
 				} else {
@@ -520,6 +534,10 @@ public class MainActivity extends AppCompatActivity {
             */
 			fns.aswm_view(path, false, SmartWebView.asw_error_counter, getApplicationContext());
 		}
+		// debug mode logging data
+		if(SmartWebView.SWV_DEBUGMODE){
+			Log.d("SWV_DEBUG", "URL: "+SmartWebView.CURR_URL+"\nDEVICE INFO: "+ Arrays.toString(fns.get_info()));
+		}
 	}
 
 	@Override
@@ -532,17 +550,15 @@ public class MainActivity extends AppCompatActivity {
 	public void onResume() {
 		super.onResume();
 		SmartWebView.asw_view.onResume();
-		//Coloring the "recent apps" tab header; doing it onResume, as an insurance
-		if (Build.VERSION.SDK_INT >= 23) {
-			Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-			ActivityManager.TaskDescription taskDesc;
-			taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, getColor(R.color.colorPrimary));
-			this.setTaskDescription(taskDesc);
-		}
+		// coloring the "recent apps" tab header; doing it onResume, as an insurance
+		Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+		ActivityManager.TaskDescription taskDesc;
+		taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, getColor(R.color.colorPrimary));
+		this.setTaskDescription(taskDesc);
 		fns.get_location(getApplicationContext());
 	}
 
-	//Checking if users allowed the requested permissions or not
+	// checking if users allowed the requested permissions or not
 	@SuppressLint("MissingSuperCall")
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -553,7 +569,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	//Action on back key tap/click
+	// action on back key tap/click
 	@Override
 	public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -595,7 +611,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+	protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		SmartWebView.asw_view.restoreState(savedInstanceState);
 	}
@@ -610,7 +626,7 @@ public class MainActivity extends AppCompatActivity {
 		*/
 	}
 
-	//Setting activity layout visibility
+	// setting activity layout visibility
 	private class Callback extends WebViewClient {
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 			fns.get_location(getApplicationContext());
@@ -621,22 +637,7 @@ public class MainActivity extends AppCompatActivity {
 			findViewById(R.id.msw_view).setVisibility(View.VISIBLE);
 		}
 
-		//For android below API 23
-		@Override
-		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-			Toast.makeText(getApplicationContext(), getString(R.string.went_wrong), Toast.LENGTH_SHORT).show();
-			fns.aswm_view("file:///android_asset/error.html", false, SmartWebView.asw_error_counter, getApplicationContext());
-		}
-
-		//Overriding webview URLs
-		@Override
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			SmartWebView.CURR_URL = url;
-			return fns.url_actions(view, url, getApplicationContext());
-		}
-
-		//Overriding webview URLs for API 23+ [suggested by github.com/JakePou]
-		@TargetApi(Build.VERSION_CODES.N)
+		// overriding webview URLs [suggested by github.com/JakePou]
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
 			SmartWebView.CURR_URL = request.getUrl().toString();
