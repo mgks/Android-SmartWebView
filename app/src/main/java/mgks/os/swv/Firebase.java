@@ -1,5 +1,6 @@
 package mgks.os.swv;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,6 +16,13 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
 public class Firebase extends FirebaseMessagingService {
+	private Context appContext;
+	public Firebase() { // default constructor (no arguments)
+	}
+	public Firebase(Context context) { // context constructor
+		this.appContext = context;
+	}
+
 	private final int fcm_id = SmartWebView.ASWV_FCM_ID;
 	private final String fcm_channel = SmartWebView.asw_fcm_channel;
 
@@ -26,33 +34,48 @@ public class Firebase extends FirebaseMessagingService {
 	}
 	public void onMessageReceived(RemoteMessage message) {
 		if (message.getNotification() != null) {
-			sendMyNotification(message.getNotification().getTitle(), message.getNotification().getBody(), message.getNotification().getClickAction(), message.getData().get("uri"), message.getData().get("tag"), message.getData().get("nid"));
+			String uri = message.getData().get("uri");
+			String click_action = message.getNotification().getClickAction();
+			if (uri == null) {
+				uri = SmartWebView.ASWV_URL; // Set a default URI (your app's main URL) if it's missing in the notification data
+			}
+			if(click_action==null){
+				click_action = "OPEN_URI";
+			}
+			sendMyNotification(message.getNotification().getTitle(), message.getNotification().getBody(), click_action, uri, message.getData().get("tag"), message.getData().get("nid"));
 		}
 	}
-	private void sendMyNotification(String title, String message, String click_action, String uri, String tag, String nid) {
-		//On click of notification it redirect to this Activity
-		Intent intent = new Intent(click_action);
-		intent.putExtra("uri", uri);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		PendingIntent pendingIntent;
-		final int flag =  Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_ONE_SHOT;
-		pendingIntent = PendingIntent.getActivity(this, 0, intent, flag);
+	public void sendMyNotification(String title, String message, String click_action, String uri, String tag, String nid) {
+		Intent intent;
+		if (uri == null || uri.isEmpty() || uri.startsWith("file://")) { //Check for empty, null, or file://
+			intent = new Intent(appContext, MainActivity.class); // open MainActivity for these cases
+		} else {
+			intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri)); // use the provided URI for other cases
+		}
+		if(click_action == null) {
+			click_action = "OPEN_URI"; // default click action
+		}
+		intent.setAction(click_action); // Set click action to intent
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Add flags
+
+		final int flag = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT | (Build.VERSION.SDK_INT >= 31 ? PendingIntent.FLAG_MUTABLE : 0);
+		@SuppressLint("UnspecifiedImmutableFlag")
+		PendingIntent pendingIntent = PendingIntent.getActivity(appContext, 0, intent, flag);
 
 		int notification_id = nid!=null ? Integer.parseInt(nid) : fcm_id;
 
-		Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, fcm_channel)
+		Uri sound_uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(appContext, fcm_channel)
 				.setSmallIcon(R.mipmap.ic_launcher)
 				.setContentTitle(title+" "+notification_id)
 				.setContentText(message)
 				.setAutoCancel(true)
-				.setSound(soundUri)
+				.setSound(sound_uri)
 				.setContentIntent(pendingIntent);
-		Notification noti = notificationBuilder.build();
-		noti.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+		Notification notification_builder = notificationBuilder.build();
+		notification_builder.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 
-		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-		notificationManager.notify(notification_id, notificationBuilder.build());
+		NotificationManager notificationManager = (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.notify(notification_id, notification_builder);
 	}
 }

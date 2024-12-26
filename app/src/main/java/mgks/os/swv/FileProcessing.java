@@ -28,7 +28,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class FileProcessing {
-	/*	@SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
+	/*
+	@SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -199,5 +200,6 @@ public class FileProcessing {
 				}
 			}
 		});
-	}*/
+	}
+	*/
 }

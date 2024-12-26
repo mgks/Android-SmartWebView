@@ -13,26 +13,21 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.print.PrintAttributes;
-import android.print.PrintDocumentAdapter;
-import android.print.PrintJob;
-import android.print.PrintManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
@@ -42,14 +37,19 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+
 import com.google.firebase.BuildConfig;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.math.BigInteger;
+
 import java.security.SecureRandom;
+
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.regex.Pattern;
 
@@ -61,6 +61,42 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	// random ID creation function to help get fresh cache every-time webview reloaded
 	public String random_id() {
 		return new BigInteger(130, random).toString(32);
+	}
+
+	static void print_page(WebView view, String print_name, boolean manual, Context context) {
+		view.evaluateJavascript("window.print();", null);
+
+		/*
+		PrintManager printManager = (PrintManager) context.getSystemService(Context.PRINT_SERVICE);
+		PrintDocumentAdapter printAdapter = view.createPrintDocumentAdapter(print_name);
+		PrintAttributes.Builder builder = new PrintAttributes.Builder();
+		builder.setMediaSize(PrintAttributes.MediaSize.ISO_A5);
+		PrintJob printJob = printManager.print(print_name, printAdapter, builder.build());
+		if (printJob.isCompleted()) {
+			Toast.makeText(context, R.string.print_complete, Toast.LENGTH_LONG).show();
+		} else if (printJob.isFailed()) {
+			//view.evaluateJavascript("print_page();", null);
+			Toast.makeText(context, R.string.print_failed, Toast.LENGTH_LONG).show();
+		}
+		 */
+	}
+
+	public static boolean isInternetAvailable(Context context) {
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivityManager == null) {
+			Log.e("NetworkUtils", "ConnectivityManager is null");
+			return false; // handling the absence of ConnectivityManager as needed
+		}
+		Network network = connectivityManager.getActiveNetwork();
+		if (network == null) {
+			return false;
+		}
+		NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+		return capabilities != null &&
+			(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+				capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+				capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
+				capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN));
 	}
 
 	// opening URLs inside webview with request
@@ -94,14 +130,19 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		}
 	}
 
+	public static void pushtojs(WebView view, String class_name, String html) {
+		view.evaluateJavascript(
+			"document.getElementsByClassName('" + class_name + "')[0].innerHTML = `" + html + "`;", null);
+	}
+
 	/*--- actions based on URL structure ---*/
 	public boolean url_actions(WebView view, String url, Context context) {
 		boolean a = true;
 		// show toast error if not connected to the network
-		if (!SmartWebView.ASWP_OFFLINE && !DetectConnection.isInternetAvailable(context)) {
+		if (!SmartWebView.ASWP_OFFLINE && !isInternetAvailable(context)) {
 			Toast.makeText(context, context.getString(R.string.check_connection), Toast.LENGTH_SHORT).show();
 
-			// use this in a hyperlink to redirect back to default URL :: href="refresh:android"
+		// use this in a hyperlink to redirect back to default URL :: href="refresh:android"
 		} else if (url.startsWith("refresh:")) {
 			String ref_sch = (Uri.parse(url).toString()).replace("refresh:", "");
 			if (ref_sch.matches("URL")) {
@@ -109,15 +150,16 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 			}
 			pull_fresh(context);
 
-			// use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
+		// use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
 		} else if (url.startsWith("tel:")) {
 			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 			context.startActivity(intent);
 
+		// printing the page in view
 		} else if (url.startsWith("print:")) {
 			print_page(view, view.getTitle(), true, context);
 
-			// use this to open your apps page on google play store app :: href="rate:android"
+		// use this to open your apps page on google play store app :: href="rate:android"
 		} else if (url.startsWith("rate:")) {
 			final String app_package = context.getPackageName(); //requesting app package name from Context or Activity object
 			try {
@@ -126,7 +168,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 				context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
 			}
 
-			// sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
+		// sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
 		} else if (url.startsWith("share:")) {
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
@@ -134,22 +176,61 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle() + "\nVisit: " + (Uri.parse(url).toString()).replace("share:", ""));
 			context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_w_friends)));
 
-			// use this in a hyperlink to exit your app :: href="exit:android"
+		// use this in a hyperlink to exit your app :: href="exit:android"
 		} else if (url.startsWith("exit:")) {
 			exit_app(context);
 
-			// getting location for offline files
-		} else if (url.startsWith("offloc:")) {
-			String offloc = SmartWebView.ASWV_URL + "?loc=" + get_location(context);
-			aswm_view(offloc, false, SmartWebView.asw_error_counter, context);
-			Log.d("SLOG_OFFLINE_LOC_REQ", offloc);
+		// getting location for offline files
+		} else if (url.startsWith("getloc:")) {
+			String[] loc = get_location(context).split(",");
+			pushtojs(SmartWebView.asw_view, "fetch-loc", "<br><b>Latitude: "+loc[0]+"<br>Longitude: "+loc[1]+"</b>");
 
-			// creating firebase notification for offline files
+			/*
+			String off_loc = SmartWebView.ASWV_URL + "?loc="+loc[0]+","+loc[1];
+			aswm_view(off_loc, false, SmartWebView.asw_error_counter, context);
+			*/
+
+			if(SmartWebView.SWV_DEBUGMODE) {
+				Log.d("SLOG_OFFLINE_LOC_REQ", loc[0]+","+loc[1]);
+			}
+
+		// creating firebase notification for offline files
 		} else if (url.startsWith("fcm:")) {
-			String fcm = SmartWebView.ASWV_URL + "?fcm=" + fcm_token();
-			aswm_view(fcm, false, SmartWebView.asw_error_counter, context);
-			Log.d("SLOG_OFFLINE_FCM_TOKEN", fcm);
+			String fcm = SmartWebView.ASWV_URL + "?fcm=" + SmartWebView.fcm_token;
 
+			//aswm_view(fcm, false, SmartWebView.asw_error_counter, context);
+
+			if(SmartWebView.SWV_DEBUGMODE) {
+				Log.d("SLOG_OFFLINE_FCM_TOKEN", fcm);
+			}
+
+			Uri uri = Uri.parse(fcm); // url parsing remains the same
+			String title = uri.getQueryParameter("title");
+			String body = uri.getQueryParameter("body");
+			String nuri = uri.getQueryParameter("uri");
+
+			if (title == null || title.isEmpty()) {
+				title = "Default Title";
+			}
+			if (body == null || body.isEmpty()) {
+				body = "Default Body";
+			}
+			if(nuri == null || nuri.isEmpty()) {
+				nuri = SmartWebView.ASWV_URL; // default url
+			}
+			Context appContext = SmartWebView.getAppContext(); // Get the application context from SmartWebView
+
+			if (appContext != null) { // Ensure SmartWebView.appContext is initialized in MainActivity onCreate or attachBaseContext
+				Firebase firebase = new Firebase(context.getApplicationContext());
+				firebase.sendMyNotification(title, body, "NO_ACTION", nuri, null, String.valueOf(SmartWebView.ASWV_FCM_ID));
+			} else {
+				Log.e("SWV/FCM", "Application context is null");
+			}
+
+			// Call sendMyNotification in your Firebase class instead of MainActivity
+			/*Firebase firebase = new Firebase(context.getApplicationContext());
+			firebase.sendMyNotification(title, body, "OPEN_URI", nuri, null, String.valueOf(SmartWebView.ASWV_FCM_ID));
+*/
 			// opening external URLs in android default web browser
 		} else if (SmartWebView.ASWP_EXTURL && !aswm_host(url).equals(SmartWebView.ASWV_HOST) && !SmartWebView.ASWV_EXC_LIST.contains(aswm_host(url))) {
 			aswm_view(url, true, SmartWebView.asw_error_counter, context);
@@ -167,7 +248,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 
 	//Getting host name
 	public static String aswm_host(String url) {
-		if (url == null || url.length() == 0) {
+		if (url == null || url.isEmpty()) {
 			return "";
 		}
 		int dslash = url.indexOf("//");
@@ -186,7 +267,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 
 	// reloading current page
 	public void pull_fresh(Context context) {
-		aswm_view((!SmartWebView.CURR_URL.equals("") ? SmartWebView.CURR_URL : SmartWebView.ASWV_URL), false, SmartWebView.asw_error_counter, context);
+		aswm_view((!SmartWebView.CURR_URL.isEmpty() ? SmartWebView.CURR_URL : SmartWebView.ASWV_URL), false, SmartWebView.asw_error_counter, context);
 	}
 
 	// changing port view
@@ -217,24 +298,32 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 			SmartWebView.cookie_manager = CookieManager.getInstance();
 			SmartWebView.cookie_manager.setAcceptCookie(true);
 			SmartWebView.cookie_manager.setCookie(SmartWebView.ASWV_URL, data);
-			Log.d("SLOG_COOKIES", SmartWebView.cookie_manager.getCookie(SmartWebView.ASWV_URL));
+			if(SmartWebView.SWV_DEBUGMODE) {
+				Log.d("SLOG_COOKIES", SmartWebView.cookie_manager.getCookie(SmartWebView.ASWV_URL));
+			}
 		}
 	}
 
 	//Getting device basic information
-	public void get_info() {
-		set_cookie("DEVICE=android");
-		DeviceDetails dv = new DeviceDetails();
-		set_cookie("DEVICE_INFO=" + dv.pull());
-		set_cookie("DEV_API=" + Build.VERSION.SDK_INT);
-		set_cookie("APP_ID=" + com.google.firebase.BuildConfig.LIBRARY_PACKAGE_NAME);
-		set_cookie("APP_VER=" + com.google.firebase.BuildConfig.BUILD_TYPE + "/" + BuildConfig.VERSION_NAME);
+	public String[] get_info() {
+		String[] info = new String[3];
+		info[0] = "android";
+		info[1] = new MetaPull().device();
+		info[2] = new MetaPull().swv();
+
+		set_cookie("DEVICE_TYPE=" + info[0]);
+		set_cookie("DEVICE_INFO=" + info[1]);
+		set_cookie("APP_INFO=" + info[2]);
+
+		return info;
 	}
 
 	// checking permission for storage and camera for writing and uploading images
 	public void get_file_perm(Activity activity) {
-		String[] perms = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA};
-		String[] perms2 = {Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO};
+		String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			String[] perms2 = {Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO};
+		}
 
 		//Checking for storage permission to write images for upload
 		if (SmartWebView.ASWP_FUPLOAD && SmartWebView.ASWP_CAMUPLOAD && !check_permission(2, activity.getApplicationContext()) && !check_permission(3, activity.getApplicationContext())) {
@@ -242,11 +331,11 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 
 			//Checking for WRITE_EXTERNAL_STORAGE permission
 		} else if (SmartWebView.ASWP_FUPLOAD && !check_permission(2, activity.getApplicationContext())) {
-			ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, SmartWebView.file_perm);
+			ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, SmartWebView.file_perm);
 
 			//Checking for CAMERA permissions
 		} else if (SmartWebView.ASWP_CAMUPLOAD && !check_permission(3, activity.getApplicationContext())) {
-			ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.CAMERA}, SmartWebView.file_perm);
+			ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, SmartWebView.file_perm);
 		}
 	}
 
@@ -254,7 +343,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	public String get_location(Context context) {
 		String newloc = "0,0";
 		//Checking for location permissions
-		if (SmartWebView.ASWP_LOCATION && (Build.VERSION.SDK_INT < 23 || check_permission(1, context))) {
+		if (SmartWebView.ASWP_LOCATION && check_permission(1, context)) {
 			GPSTrack gps;
 			gps = new GPSTrack(context);
 			double latitude = gps.getLatitude();
@@ -266,14 +355,20 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 						set_cookie("long=" + longitude);
 						set_cookie("LATLANG=" + latitude + "x" + longitude);
 					}
-					//Log.d("SLOG_NEW_LOCATION", latitude + "," + longitude);  //enable to test dummy latitude and longitude
 					newloc = latitude + "," + longitude;
+					if(SmartWebView.SWV_DEBUGMODE) {
+						Log.d("SLOG_NEW_LOCATION", newloc);  //enable to test dummy latitude and longitude
+					}
 				} else {
-					Log.d("SLOG_UPDATED_LOCATION", "NULL");
+					if(SmartWebView.SWV_DEBUGMODE) {
+						Log.d("SLOG_UPDATED_LOCATION", "NULL");
+					}
 				}
 			} else {
 				show_notification(1, 1, context);
-				Log.d("SLOG_UPDATED_LOCATION", "FAIL");
+				if(SmartWebView.SWV_DEBUGMODE) {
+					Log.d("SLOG_UPDATED_LOCATION", "FAIL");
+				}
 			}
 		}
 		return newloc;
@@ -295,8 +390,10 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 					}
 				}
 			}else{
-				Log.d("SLOG_COOKIES", "Cookies either NULL or Empty");
 				value = "";
+				if(SmartWebView.SWV_DEBUGMODE) {
+					Log.d("SLOG_COOKIES", "Cookies either NULL or Empty");
+				}
 			}
 		}else{
 			Log.w("SLOG_NETWORK","DEVICE NOT ONLINE");
@@ -385,22 +482,31 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 			fcm_token[0] = FirebaseMessaging.getInstance().getToken().getResult();
 			if (!SmartWebView.ASWP_OFFLINE) {
 				set_cookie("FCM_TOKEN=" + fcm_token[0]);
-				Log.d("SLOG_FCM_BAKED", "YES");
-				//Log.d("SLOG_COOKIES", cookieManager.getCookie(ASWV_URL));
+				if(SmartWebView.SWV_DEBUGMODE) {
+					Log.d("SLOG_FCM_BAKED", "YES");
+					Log.d("SLOG_COOKIES", get_cookies(SmartWebView.ASWV_URL));
+				}
 			}
-			Log.d("SLOG_REQ_FCM_TOKEN", fcm_token[0]);
-		}).addOnFailureListener(e -> Log.d("SLOG_REQ_FCM_TOKEN", "FAILED"));
-		return fcm_token[0];
+			SmartWebView.fcm_token = fcm_token[0];
+			if(SmartWebView.SWV_DEBUGMODE) {
+				Log.d("SLOG_REQ_FCM_TOKEN", fcm_token[0]);
+			}
+
+		}).addOnFailureListener(e -> {
+			SmartWebView.fcm_token = "";
+			Log.e("SLOG_REQ_FCM_TOKEN", "FAILED");
+		});
+		return SmartWebView.fcm_token;
 	}
 
 	//Checking if particular permission is given or not
 	public boolean check_permission(int permission, Context context) {
 		switch (permission) {
 			case 1:
-				return ContextCompat.checkSelfPermission(context.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+				return ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
 			case 2:
-				return Build.VERSION.SDK_INT >= 30 || ContextCompat.checkSelfPermission(context.getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+				return Build.VERSION.SDK_INT >= 30 || ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
 			case 3:
 				return ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
@@ -429,9 +535,8 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 
 	//Launching app rating dialog [developed by github.com/hotchemi]
 	public Runnable get_rating(Context context) {
-		if (DetectConnection.isInternetAvailable(context)) {
+		if (isInternetAvailable(context)) {
 			AppRate.with(context)
-					.setStoreType(StoreType.GOOGLEPLAY)     //default is Google Play, other option is Amazon App Store
 					.setInstallDays(SmartWebView.ASWR_DAYS)
 					.setLaunchTimes(SmartWebView.ASWR_TIMES)
 					.setRemindInterval()
@@ -502,21 +607,8 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		SmartWebView.asw_notification.notify(id, SmartWebView.asw_notification_new);
 	}
 
-	//Printing pages
-	private void print_page(WebView view, String print_name, boolean manual, Context context) {
-		PrintManager printManager = (PrintManager) context.getSystemService(Context.PRINT_SERVICE);
-		PrintDocumentAdapter printAdapter = view.createPrintDocumentAdapter(print_name);
-		PrintAttributes.Builder builder = new PrintAttributes.Builder();
-		builder.setMediaSize(PrintAttributes.MediaSize.ISO_A5);
-		PrintJob printJob = printManager.print(print_name, printAdapter, builder.build());
-
-		if (printJob.isCompleted()) {
-			Toast.makeText(context, R.string.print_complete, Toast.LENGTH_LONG).show();
-		} else if (printJob.isFailed()) {
-			Toast.makeText(context, R.string.print_failed, Toast.LENGTH_LONG).show();
-		}
-	}
-
+	// printing pages
+	/*
 	private void doWebViewPrint(String ss, Context context) {
 		SmartWebView.print_view.setWebViewClient(new WebViewClient() {
 
@@ -539,7 +631,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		});
 		// Generate an HTML document on the fly:
 		SmartWebView.print_view.loadDataWithBaseURL(null, ss, "text/html", "UTF-8", null);
-	}
+	}*/
 
 	public void exit_app(Context context) {
 		Intent intent = new Intent(Intent.ACTION_MAIN);

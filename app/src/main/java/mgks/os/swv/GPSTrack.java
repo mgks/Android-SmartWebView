@@ -21,27 +21,19 @@ public class GPSTrack extends Service implements LocationListener {
 
     private final Context mContext;
 
-    // flag for GPS status
-    boolean isGPSEnabled = false;
-
-    // flag for network status
-    boolean isNetworkEnabled = false;
-
-    // flag for GPS status
-    boolean canGetLocation = false;
+    boolean isGPSEnabled = false; // flag for GPS status
+    boolean isNetworkEnabled = false; // flag for network status
+    boolean canGetLocation = false; // flag for GPS status
 
     Location location; // location
     public static double latitude; // latitude
     public static double longitude; // longitude
 
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meter
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // minimum distance to change updates in meters
 
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 5; // 5 second
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 5; // minimum time between updates in milliseconds
 
-    // Declaring a Location Manager
-    protected LocationManager locationManager;
+    protected LocationManager locationManager; // declaring location manager
 
     public GPSTrack(Context context) {
         this.mContext = context;
@@ -103,87 +95,57 @@ public class GPSTrack extends Service implements LocationListener {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("GPS LOG","GPS ERROR",e);
         }
-
         return location;
     }
 
-    /**
-     * Stop using GPS listener
-     * Calling this function will stop using GPS in your app
-     * */
+	// to stop GPS usage
     public void stopUsingGPS() {
         if (locationManager != null) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             locationManager.removeUpdates(GPSTrack.this);
         }
     }
 
-    /**
-     * Function to get latitude
-     * */
+	// to get latitude
     public double getLatitude(){
         if(location != null){
             latitude = location.getLatitude();
         }
-
-        // return latitude
         return latitude;
     }
 
-    /**
-     * Function to get longitude
-     * */
+	// to get longitude
     public double getLongitude(){
         if(location != null){
             longitude = location.getLongitude();
         }
-
-        // return longitude
         return longitude;
     }
 
-    /**
-     * Function to check GPS/wifi enabled
-     * @return boolean
-     * */
+	// checking if GPS/WIFI is enabled
     public boolean canGetLocation() {
         return this.canGetLocation;
     }
 
-    /**
-     * Function to show settings alert dialog
-     * On pressing Settings button will launch Settings Options
-     * */
+	// showing settings alert dialog
     public void showSettingsAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
-
-        // Setting Dialog Title
         alertDialog.setTitle("GPS is disabled");
-
-        // Setting Dialog Message
         alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
-
-        // On pressing Settings button
+		// opening location settings on device
         alertDialog.setPositiveButton("Settings", (dialog, which) -> {
 			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 			mContext.startActivity(intent);
 		});
 
-        // on pressing cancel button
+        // cancel dialog button
         alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
-        // Showing Alert Message
+        // showing alert dialog
         alertDialog.show();
     }
 
@@ -207,7 +169,6 @@ public class GPSTrack extends Service implements LocationListener {
 
     @Override
     public IBinder onBind(Intent arg0) {
-        return null;
+		return null;
     }
-
 }

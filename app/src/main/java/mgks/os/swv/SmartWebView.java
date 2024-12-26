@@ -9,9 +9,12 @@ package mgks.os.swv;
  * Acknowledging project sources and developers helps them continue their valuable work. Thank you for your support :)
  */
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
@@ -28,14 +31,23 @@ public class SmartWebView {
 		// smart webview constructor here
 	}
 
+	private static Context appContext; // Application context
+	public static void setAppContext(Context context) {
+		appContext = context.getApplicationContext(); // Store context in attachBaseContext for robustness and consistency
+	}
+	public static Context getAppContext() {
+		return appContext;
+	}
+
 	// DEBUG MODE (keep false for production apps)
-	static boolean SWV_DEBUGMODE	  = false;	// enable debug mode for detailed reports in log and toast alerts for errors and warnings
+	static boolean SWV_DEBUGMODE	  = true;	// enable debug mode for detailed reports in log and toast alerts for errors and warnings
 
 	// permission variables
-	static boolean ASWP_JSCRIPT       = true;         // enable JavaScript for webview
+	static boolean ASWP_OFFLINE       = true;        // set `true` if building a completely offline app (DISABLES GPS, FIREBASE and other online features)
+
 	static boolean ASWP_FUPLOAD       = true;         // upload file from webview
 	static boolean ASWP_CAMUPLOAD     = true;         // enable upload from camera for photos
-	static boolean ASWP_ONLYCAM       = false;        // incase you want only camera files to upload
+	static boolean ASWP_ONLYCAM       = false;        // if you want only camera files to upload
 	static boolean ASWP_MULFILE       = true;         // upload multiple files in webview
 	static boolean ASWP_LOCATION      = true;         // track GPS locations
 	static boolean ASWP_COPYPASTE     = false;        // enable copy/paste within webview
@@ -44,7 +56,6 @@ public class SmartWebView {
 	static boolean ASWP_PBAR          = true;         // show progress bar in app
 	static boolean ASWP_ZOOM          = false;        // zoom control for webpages view
 	static boolean ASWP_SFORM         = false;        // save form cache and auto-fill information
-	static boolean ASWP_OFFLINE       = false;        // whether the loading webpages are offline or online
 	static boolean ASWP_EXTURL        = true;         // open external url with default browser instead of app webview
 
 	static boolean ASWP_TAB           = true;         // instead of default browser, open external URLs in chrome tab
@@ -55,7 +66,6 @@ public class SmartWebView {
 	// security variables
 	static boolean ASWP_CERT_VERI     = false;         // verify whether HTTPS port needs certificate verification
 
-
 	// config variables
 	static int ASWV_ORIENTATION	  	  = 0;		      // change device orientation to portrait (1)(default) or landscape (2) or unspecified (0)
 
@@ -63,9 +73,10 @@ public class SmartWebView {
 	static int ASWV_LAYOUT            = 0;            // default=0; for clear fullscreen layout, and =1 for drawer layout
 
 	// URL configs
-	static String ASWV_URL_ONLINE	  = "https://mgks.dev/app/swv/?android=true";	// if online URL is not provided, offline URL will be loaded by default
-	static String ASWV_URL_OFFLINE	  = "file:///android_asset/offline.html";	// if ASWP_OFFLINE is set false or ASWV_URL_ONLINE is empty
-	static String ASWV_URL            = ASWP_OFFLINE || (ASWV_URL_ONLINE == null || ASWV_URL_ONLINE.length() == 0) ? ASWV_URL_OFFLINE : ASWV_URL_ONLINE;	// complete URL of your website or offline webpage "file:///android_asset/offline.html";
+	static String ASWV_APP_URL	  	  = "file:///android_asset/offline.html";	// default app URL (web or file address)
+
+	static String ASWV_OFFLINE_URL	  = "file:///android_asset/offline.html";	// default app address if ASWP_OFFLINE is set `true` OR ASWV_APP_URL is empty; basically a fail-safe page with no online features
+	static String ASWV_URL            = ASWP_OFFLINE ? ASWV_OFFLINE_URL : ASWV_APP_URL;	// finalising app URL to load
 	static String ASWV_SEARCH         = "https://www.google.com/search?q=";         // search query will start by the end of the present string
 	static String ASWV_SHARE_URL      = ASWV_URL + "?share=";                       // URL where you process external content shared with the app
 
@@ -131,7 +142,7 @@ public class SmartWebView {
 			field.set(this, value);
 			return true;
 		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
+			Log.e("ERROR", String.valueOf(e));
 			return false;
 		}
 	}
