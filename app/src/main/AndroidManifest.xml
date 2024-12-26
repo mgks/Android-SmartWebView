@@ -95,7 +95,7 @@
 			</intent-filter>
 		</activity>
 		<!--<receiver android:name=".NotificationPausePlay" />-->
-		<service android:name=".Firebase"
+		<service android:name="mgks.os.swv.Firebase"
 			android:exported="false">
 			<intent-filter>
 				<action android:name="com.google.firebase.MESSAGING_EVENT" />
