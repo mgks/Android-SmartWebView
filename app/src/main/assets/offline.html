@@ -1,109 +1,106 @@
 <!DOCTYPE html>
-
 <!--
- * Smart WebView 7.0 (May 2023)
- * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Available on GitHub (https://github.com/mgks/Android-SmartWebView).
- * Initially developed by Ghazi Khan (https://github.com/mgks) under MIT Open Source License.
- * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT).
- * Please mention project source or developer credits in your Application's License(s) Wiki.
- * Contribute to the project (https://github.com/mgks/Android-SmartWebView/discussions)
- * Sponsor the project (https://github.com/sponsors/mgks)
- * Giving right credits to developers encourages them to keep improving their projects :)
+ * Smart WebView 7.0
+ * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Original source (https://github.com/mgks/Android-SmartWebView)
+ * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT)
+ * Join the discussion (https://github.com/mgks/Android-SmartWebView/discussions)
+ * Support Smart WebView (https://github.com/sponsors/mgks)
+ * Acknowledging project sources and developers helps them continue their valuable work. Thank you for your support :)
 -->
-
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 	<title>Smart WebView Offline</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<script type="text/javascript" src="script.js"></script>
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-NZ912F6EB8"></script>
+	<script src="script.js" type="text/javascript"></script>
+	<!--<script src="https://www.googletagmanager.com/gtag/js?id=G-7XXC1C7CRQ"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
-		function gtag(){
-			dataLayer.push(arguments);
-		}
-		gtag("js", new Date()); gtag("config", "G-NZ912F6EB8");
-	</script>
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-7XXC1C7CRQ');
+	</script>-->
 </head>
 <body>
-<div class="pale cen cont">SWV is currently offline, to test more features you need to go online.</div>
-<img src="front_splash.png" class="head-logo" />
-<!--<h3 class="header-t"></h3>-->
-<div class="pale cen">
-	<b>Image File(s) Handling <sup>
-		<a href="#n1">[1]</a>
-	</sup>
-	</b>
-	<form id="form1">
-		<input type="file" accept="image/*" id="gallery-photo-add" multiple="multiple">
+	<div class="pale cen cont">SWV is in offline mode, to test more features you need to go online.</div>
+	<img src="front_splash.png" class="head-logo" />
+	<!--<h3 class="header-t"></h3>-->
+	<div class="pale cen">
+		<h2>Image Files <sup><a href="#n1">[1]</a></sup></h2>
+		<form id="form1">
+			<input type="file" accept="image/*" id="add-img" multiple="multiple">
+			<br/>
+			<div class="gallery"></div>
+		</form>
+	</div>
+	<div class="pale cen">
+		<h2>Video Files <sup><a href="#n1">[2]</a></sup></h2>
+		<form id="form2">
+			<input type="file" accept="video/*">
+		</form>
+	</div>
+	<div class="pale cen">
+		<h2>GPS Location <sup><a href="#n3">[3]</a></sup></h2>
+		<a href="getloc:" onclick="get_location()">
+			<div>
+          		<span class="get-location">TAP FOR CURRENT LOCATION</span>
+				<span class="fetch-loc"></span>
+				<br />Refresh Location
+			</div>
+		</a>
+	</div>
+	<div class="pale cen">
+		<h2>Firebase Notifications <sup><a href="#n4">[4]</a></sup></h2>
+		<a href="fcm:">
+			<div>
+				<span class="push_fcm">TAP FOR NOTIFICATION</span>
+			</div>
+		</a>
+	</div>
+	<div class="pale cen">
+		<h2>Printing <sup><a href="#n4">[4]</a></sup></h2>
+		<!--JAVASCRIPT: <a href="javascript:;" onclick="window.print();">Print this page</a><br>MANUAL: -->
+		<a href="print:" onclick="print_page()">PRINT PAGE</a>
+	</div>
+	<div class="pale cen">
+		<h2>Advanced Plugins <sup><a href="#n5">[5]</a></sup></h2>
+		<a href="javascript:;">
+			<div>
+				<span class="plugins-list">In Works: Auth, PQL, QR Reader, Service Workers, Vision API</span>
+			</div>
+		</a>
+	</div>
+	<!--<div class="pale cen"><b>Barcode Reader <sup><a href="#n4">[4]</a></sup></b><a href="scan:">Scan Barcode or QR Code</a></div>-->
+	<div class="pale cen">
 		<br />
-		<div class="gallery"></div>
-	</form>
-</div>
-<div class="pale cen">
-	<b>Video File Handling <sup>
-		<a href="#n1">[2]</a>
-	</sup>
-	</b>
-	<form id="form2">
-		<input type="file" accept="video/*">
-	</form>
-</div>
-<div class="pale cen">
-	<b>Live GPS Location <sup>
-		<a href="#n3">[3]</a>
-	</sup>
-	</b>
-	<a href="offloc:">
-		<div>
-          <span class="locf">Tap here to Get Your Current Location <br>
-          </span>
-			<br />Refresh Location
-		</div>
-	</a>
-</div>
-<div class="pale cen">
-	<b>Printing Page <sup>
-		<a href="#n4">[4]</a>
-	</sup>
-	</b>
-	<!--JAVASCRIPT: <a href="javascript:;" onclick="window.print();">Print this page</a><br>MANUAL: -->
-	<a href="print:">Print current page</a>
-</div>
-<!--<div class="pale cen"><b>Barcode Reader <sup><a href="#n4">[4]</a></sup></b><a href="scan:">Scan Barcode or QR Code</a></div>-->
-<div class="pale cen">
-	<b style="text-align:center">Love Smart WebView?<br />Help this project grow with your little support.</b>
-	<a href="https://github.com/sponsors/mgks">
-		<img src="sponsor.png" class="sponsor-button">
-	</a>
-</div>
-<div class="pale cen">
-	<b>Notes / Ref.:</b>
-	<code>
-		<span>Online demo consists of more demo features to test, including firebase push notifications, screen orientation, and other cookie based features.</span><br />
+		<b class="cont">Like Smart WebView?<br />Help the project grow with your little support.</b>
+		<a href="https://github.com/sponsors/mgks">
+			<img src="sponsor.png" class="sponsor-button">
+		</a>
 		<br />
-		<span id="n1">[1][2]</span> &minus; This is just a preview page, sometimes it may fail to show gallery previews, but all files can be processed once files are selected. Behind preview, a small jQuery snippet is used and your method can vary from ours. <br />Video section has no preview at all, as of now. All videos are processed as 3gpp file by default handler. <br />
-		<br />
-		<span id="n3">[3]</span> &minus; If not getting GPS axis, check whether location permission is enabled/allowed or not. <br />
-		<br />
-		<span id="n5">[5]</span> &minus; PQL: Simple micro data storage system to create seamless information exchange between client JS and Java. </code>
-</div>
-<div class="cont">
-	<p>
-		<a class="github-button" href="https://github.com/mgks" data-size="large" title="Follow @mgks on GitHub">Follow @mgks</a>
-	</p>
-	<p>
-		<a class="github-button" href="https://github.com/mgks/Android-SmartWebView" title="Star mgks/Android-SmartWebView on GitHub">Star to receive updates</a>
-	</p>
-</div>
-<div class="cont">
-	<a href="https://github.com/mgks/Android-SmartWebView/issues">
-		<p>Facing any issue or have any question? <br />Submit it here </p>
-	</a>
-</div>
-<br />
-<br />
+	</div>
+	<div class="pale cen">
+		<b>Notes / Ref.:</b>
+		<code>
+			<span>Online demo consists of more demo features to test, including firebase push notifications, screen orientation, and other cookie based features.</span><br/>
+			<br/>
+			<span id="n1">[1][2]</span> &minus; This is just a preview page, sometimes it may fail to show gallery previews, but all files can be processed once files are selected. Behind preview, a small jQuery snippet is used and your method can vary from ours. <br/>Video section has no preview at all, as of now. All videos are processed as 3gpp file by default handler. <br/>
+			<br/>
+			<span id="n3">[3]</span> &minus; If not getting GPS axis, check whether location permission is enabled/allowed or not. <br/>
+			<br/>
+			<span id="n4">[4]</span> &minus; Printing page with custom JavaScript script. <br/>
+			<br/>
+			<span id="n5">[5]</span> &minus; PQL: Simple micro data storage system to create seamless information exchange between client JS and Java. </code>
+	</div>
+	<br />
+	<div class="cont">
+		<p><a class="github-button" href="https://github.com/mgks" data-size="large" title="Follow @mgks on GitHub">Follow @mgks</a></p>
+		<p><a class="github-button" href="https://github.com/mgks/Android-SmartWebView" title="Star mgks/Android-SmartWebView on GitHub">Star project on GitHub</a></p>
+	</div>
+	<div class="cont">
+		<a href="https://github.com/mgks/Android-SmartWebView/issues"><b>Submit issues / Join discussion</b></a>
+	</div>
+<br/>
 </body>
 </html>

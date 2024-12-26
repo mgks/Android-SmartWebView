@@ -83,7 +83,7 @@ function get_location() {
 				latitude = parseFloat(loc[0]);
 				longitude = parseFloat(loc[1]);
 			} else {
-				console.error("Invalid 'loc' parameter format");
+				console.error("SWVJS Invalid 'loc' parameter format");
 			}
 		}
 	}
