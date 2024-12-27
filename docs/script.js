@@ -105,3 +105,26 @@ function get_location() {
 function print_page(){
 	window.print();
 }
+
+// Function to load gtag.js (Google Analytics)
+function load_gtag() {
+    // Create the script tag
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7XXC1C7CRQ'; // Replace with your actual GA ID
+
+    // Get the first script tag on the page
+    var firstScript = document.getElementsByTagName('script')[0];
+
+    // Insert the script before the first script
+    firstScript.parentNode.insertBefore(script, firstScript);
+
+    // Initialize the dataLayer and configure gtag.js
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7XXC1C7CRQ'); // Replace with your actual GA ID
+}
+
+// Add an event listener to call loadGtag() after the page has finished loading
+window.addEventListener('load', load_gtag);
