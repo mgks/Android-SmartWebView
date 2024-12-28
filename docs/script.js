@@ -124,7 +124,6 @@ function load_gtag() {
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-7XXC1C7CRQ'); // Replace with your actual GA ID
-}
 
-// Add an event listener to call loadGtag() after the page has finished loading
-window.addEventListener('load', load_gtag);
+    console.log("Google Analytics (gtag.js) loaded.");
+}
