@@ -6,7 +6,7 @@
  * Support Smart WebView (https://github.com/sponsors/mgks)
  * Acknowledging project sources and developers helps them continue their valuable work. Thank you for your support :)
  */
-
+/*
 document.addEventListener('DOMContentLoaded', function() { // use DOMContentLoaded
 
     const input = document.getElementById('add-img');
@@ -105,11 +105,12 @@ function get_location() {
 function print_page(){
 	window.print();
 }
-
+*/
 // Function to load gtag.js (Google Analytics)
 function load_gtag() {
+    console.log("Google Analytics (gtag.js) loaded.");
+
     // Create the script tag
-    /*
     var script = document.createElement('script');
     script.async = true;
     script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7XXC1C7CRQ'; // Replace with your actual GA ID
@@ -125,6 +126,4 @@ function load_gtag() {
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-7XXC1C7CRQ'); // Replace with your actual GA ID
-*/
-    console.log("Google Analytics (gtag.js) loaded.");
 }
