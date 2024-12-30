@@ -70,8 +70,8 @@ public final class AppRate {
 		return this;
 	}
 
-	AppRate setRemindInterval() {
-		this.remindInterval = 2;
+	AppRate setRemindInterval(int remindInterval) {
+		this.remindInterval = remindInterval;
 		return this;
 	}
 
