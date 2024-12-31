@@ -8,6 +8,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() { // use DOMContentLoaded
+
     const input = document.getElementById('add-img');
     const gallery = document.querySelector('.gallery');
 	const urlParams = new URLSearchParams(window.location.search);

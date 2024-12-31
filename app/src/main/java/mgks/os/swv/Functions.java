@@ -1,5 +1,21 @@
 package mgks.os.swv;
 
+/*
+  Smart WebView 7.0
+
+  MIT License (https://opensource.org/licenses/MIT)
+
+  Smart WebView is an Open Source project that integrates native features into
+  WebView to help create advanced hybrid applications (https://github.com/mgks/Android-SmartWebView).
+
+  Explore plugins and enhanced capabilities: (https://mgks.dev/blog/smart-webview-plugins)
+  Join the discussion: (https://github.com/mgks/Android-SmartWebView/discussions)
+  Support Smart WebView: (https://github.com/sponsors/mgks)
+
+  Your support and acknowledgment of the project's source are greatly appreciated.
+  Giving credit to developers encourages them to create better projects.
+*/
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -19,6 +35,10 @@ import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintJob;
+import android.print.PrintManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -37,13 +57,12 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
-
-import com.google.firebase.BuildConfig;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.File;
 import java.io.IOException;
 
+import java.lang.reflect.Field;
 import java.math.BigInteger;
 
 import java.security.SecureRandom;
@@ -56,36 +75,44 @@ import java.util.regex.Pattern;
 public class Functions implements NavigationView.OnNavigationItemSelectedListener {
 	private final SecureRandom random = new SecureRandom();
 
-	/* --- internal functions --- */
-
-	// random ID creation function to help get fresh cache every-time webview reloaded
+	// Random ID creation function to help get fresh cache every-time webview reloaded
 	public String random_id() {
 		return new BigInteger(130, random).toString(32);
 	}
 
-	static void print_page(WebView view, String print_name, boolean manual, Context context) {
-		view.evaluateJavascript("window.print();", null);
-
-		/*
-		PrintManager printManager = (PrintManager) context.getSystemService(Context.PRINT_SERVICE);
+	// Printing the page in view
+	static void print_page(WebView view, String print_name, Activity activityContext){
+		// Create a PrintDocumentAdapter
 		PrintDocumentAdapter printAdapter = view.createPrintDocumentAdapter(print_name);
+
+		// Create PrintAttributes (optional)
 		PrintAttributes.Builder builder = new PrintAttributes.Builder();
-		builder.setMediaSize(PrintAttributes.MediaSize.ISO_A5);
-		PrintJob printJob = printManager.print(print_name, printAdapter, builder.build());
-		if (printJob.isCompleted()) {
-			Toast.makeText(context, R.string.print_complete, Toast.LENGTH_LONG).show();
-		} else if (printJob.isFailed()) {
-			//view.evaluateJavascript("print_page();", null);
-			Toast.makeText(context, R.string.print_failed, Toast.LENGTH_LONG).show();
+		builder.setMediaSize(PrintAttributes.MediaSize.ISO_A5); // Customize as needed
+
+		// Get the PrintManager service using the activity context
+		PrintManager printManager = (PrintManager) activityContext.getSystemService(Context.PRINT_SERVICE);
+
+		// Start the print job
+		if (printManager != null) {
+			PrintJob printJob = printManager.print(print_name, printAdapter, builder.build());
+
+			// Monitor print job status (optional)
+			if (printJob.isCompleted()) {
+				Toast.makeText(activityContext, R.string.print_complete, Toast.LENGTH_LONG).show();
+			} else if (printJob.isFailed()) {
+				Toast.makeText(activityContext, R.string.print_failed, Toast.LENGTH_LONG).show();
+			}
+		} else {
+			Toast.makeText(activityContext, R.string.print_error, Toast.LENGTH_LONG).show();
 		}
-		 */
 	}
 
+	// Checking if internet/network is available
 	public static boolean isInternetAvailable(Context context) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		if (connectivityManager == null) {
 			Log.e("NetworkUtils", "ConnectivityManager is null");
-			return false; // handling the absence of ConnectivityManager as needed
+			return false; // Handling the absence of ConnectivityManager as needed
 		}
 		Network network = connectivityManager.getActiveNetwork();
 		if (network == null) {
@@ -99,7 +126,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 				capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN));
 	}
 
-	// opening URLs inside webview with request
+	// Opening URLs inside webview with request
 	void aswm_view(String url, Boolean tab, int error_counter, Context context) {
 		if (error_counter > 2) {
 			exit_app(context);
@@ -123,26 +150,49 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 					context.startActivity(intent);
 				}
 			} else {
-				// check to see whether the url already has query parameters and handle appropriately
+				// Check to see whether the url already has query parameters and handle appropriately
 				url = url + (url.contains("?") ? "&" : "?") + "rid=" + random_id();
 				SmartWebView.asw_view.loadUrl(url);
 			}
 		}
 	}
 
-	public static void pushtojs(WebView view, String class_name, String html) {
+	// Push JavaScript into webview
+	public static void push_js(WebView view, String class_name, String html) {
 		view.evaluateJavascript(
 			"document.getElementsByClassName('" + class_name + "')[0].innerHTML = `" + html + "`;", null);
 	}
 
-	/*--- actions based on URL structure ---*/
-	public boolean url_actions(WebView view, String url, Context context) {
+	// Get data from webview DOM field
+	public Object swv_get(String fieldName) throws NoSuchFieldException, IllegalAccessException {
+		Field field = getClass().getDeclaredField(fieldName);
+		field.setAccessible(true);
+		return field.get(this);
+	}
+
+	// Set data to webview DOM field
+	public boolean swv_set(String fieldName, Object value) {
+		try {
+			Field field = getClass().getDeclaredField(fieldName);
+			field.setAccessible(true);
+			field.set(this, value);
+			return true;
+		} catch (NoSuchFieldException | IllegalAccessException e) {
+			Log.e("ERROR", String.valueOf(e));
+			return false;
+		}
+	}
+
+	// URL actions based on URL structure
+	public boolean url_actions(WebView view, String url, Activity activity) {
 		boolean a = true;
-		// show toast error if not connected to the network
+		Context context = activity.getApplicationContext();
+
+		// Show toast error if not connected to the network
 		if (!SmartWebView.ASWP_OFFLINE && !isInternetAvailable(context)) {
 			Toast.makeText(context, context.getString(R.string.check_connection), Toast.LENGTH_SHORT).show();
 
-		// use this in a hyperlink to redirect back to default URL :: href="refresh:android"
+		// Redirect back to default URL :: refresh:android
 		} else if (url.startsWith("refresh:")) {
 			String ref_sch = (Uri.parse(url).toString()).replace("refresh:", "");
 			if (ref_sch.matches("URL")) {
@@ -150,103 +200,101 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 			}
 			pull_fresh(context);
 
-		// use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
+		// Launch default phone dialer for specific number :: tel:+919876543210
 		} else if (url.startsWith("tel:")) {
 			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 			context.startActivity(intent);
 
-		// printing the page in view
-		} else if (url.startsWith("print:")) {
-			print_page(view, view.getTitle(), true, context);
-
-		// use this to open your apps page on google play store app :: href="rate:android"
+		// Open google play store app page :: rate:android
 		} else if (url.startsWith("rate:")) {
-			final String app_package = context.getPackageName(); //requesting app package name from Context or Activity object
+			final String app_package = context.getPackageName(); // Requesting app package name from Context or Activity object
 			try {
 				context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + app_package)));
 			} catch (ActivityNotFoundException anfe) {
 				context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
 			}
 
-		// sharing content from your webview to external apps :: href="share:URL" and remember to place the URL you want to share after share:___
+		// Sharing content from webview to external apps :: share:URL (link to be shared)
 		} else if (url.startsWith("share:")) {
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
 			intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
-			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle() + "\nVisit: " + (Uri.parse(url).toString()).replace("share:", ""));
+			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle() + " Visit: " + (Uri.parse(url).toString()).replace("share:", ""));
 			context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_w_friends)));
 
-		// use this in a hyperlink to exit your app :: href="exit:android"
+		// Exit app manually :: exit:android
 		} else if (url.startsWith("exit:")) {
 			exit_app(context);
 
-		// getting location for offline files
+		// Getting location for offline files
 		} else if (url.startsWith("getloc:")) {
 			String[] loc = get_location(context).split(",");
-			pushtojs(SmartWebView.asw_view, "fetch-loc", "<br><b>Latitude: "+loc[0]+"<br>Longitude: "+loc[1]+"</b>");
-
-			/*
-			String off_loc = SmartWebView.ASWV_URL + "?loc="+loc[0]+","+loc[1];
-			aswm_view(off_loc, false, SmartWebView.asw_error_counter, context);
-			*/
+			push_js(SmartWebView.asw_view, "fetch-loc", "<br><b>Latitude: "+loc[0]+"<br>Longitude: "+loc[1]+"</b>");
 
 			if(SmartWebView.SWV_DEBUGMODE) {
 				Log.d("SLOG_OFFLINE_LOC_REQ", loc[0]+","+loc[1]);
 			}
 
-		// creating firebase notification for offline files
+		// Creating firebase notification
 		} else if (url.startsWith("fcm:")) {
-			String fcm = SmartWebView.ASWV_URL + "?fcm=" + SmartWebView.fcm_token;
+			String title = null, body = null, nuri = null;
 
-			//aswm_view(fcm, false, SmartWebView.asw_error_counter, context);
-
-			if(SmartWebView.SWV_DEBUGMODE) {
-				Log.d("SLOG_OFFLINE_FCM_TOKEN", fcm);
+			// Manually parse parameters from fcm: URL
+			String[] parts = url.substring(4).split("&"); // Remove "fcm:" and split by &
+			for (String part : parts) {
+				String[] keyValue = part.split("=");
+				if (keyValue.length == 2) {
+					String key = keyValue[0];
+					String value = keyValue[1];
+					switch (key) {
+						case "title":
+							title = value;
+							break;
+						case "body":
+							body = value;
+							break;
+						case "uri":
+							nuri = value;
+							break;
+					}
+				}
 			}
 
-			Uri uri = Uri.parse(fcm); // url parsing remains the same
-			String title = uri.getQueryParameter("title");
-			String body = uri.getQueryParameter("body");
-			String nuri = uri.getQueryParameter("uri");
-
+			// Set default values if not found
 			if (title == null || title.isEmpty()) {
-				title = "Default Title";
+				title = "Hello Developer!";
 			}
 			if (body == null || body.isEmpty()) {
-				body = "Default Body";
+				body = "This is a test notification from Smart WebView.";
 			}
-			if(nuri == null || nuri.isEmpty()) {
-				nuri = SmartWebView.ASWV_URL; // default url
-			}
-			Context appContext = SmartWebView.getAppContext(); // Get the application context from SmartWebView
-
-			if (appContext != null) { // Ensure SmartWebView.appContext is initialized in MainActivity onCreate or attachBaseContext
-				Firebase firebase = new Firebase(context.getApplicationContext());
-				firebase.sendMyNotification(title, body, "NO_ACTION", nuri, null, String.valueOf(SmartWebView.ASWV_FCM_ID));
-			} else {
-				Log.e("SWV/FCM", "Application context is null");
+			if (nuri == null || nuri.isEmpty()) {
+				nuri = SmartWebView.ASWV_URL;
 			}
 
-			// Call sendMyNotification in your Firebase class instead of MainActivity
-			/*Firebase firebase = new Firebase(context.getApplicationContext());
-			firebase.sendMyNotification(title, body, "OPEN_URI", nuri, null, String.valueOf(SmartWebView.ASWV_FCM_ID));
-*/
-			// opening external URLs in android default web browser
+			if(check_permission(4, context)) {
+				// Send the notification
+				Firebase firebase = new Firebase();
+				firebase.sendMyNotification(title, body, "OPEN_URI", nuri, null, String.valueOf(SmartWebView.ASWV_FCM_ID), context);
+			}else{
+				get_permissions(4, activity);
+			}
+
+		// Opening external URLs in android default web browser
 		} else if (SmartWebView.ASWP_EXTURL && !aswm_host(url).equals(SmartWebView.ASWV_HOST) && !SmartWebView.ASWV_EXC_LIST.contains(aswm_host(url))) {
 			aswm_view(url, true, SmartWebView.asw_error_counter, context);
 
-			// set the device orientation on request
+		// Setting device orientation on request
 		} else if (url.startsWith("orient:")) {
 			set_orientation(5, true, context);
 
-			// else return false for no special action
+		// Else return false
 		} else {
 			a = false;
 		}
 		return a;
 	}
 
-	//Getting host name
+	// Getting host name
 	public static String aswm_host(String url) {
 		if (url == null || url.isEmpty()) {
 			return "";
@@ -265,16 +313,15 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		return url.substring(dslash, end);
 	}
 
-	// reloading current page
+	// Reloading current page
 	public void pull_fresh(Context context) {
 		aswm_view((!SmartWebView.CURR_URL.isEmpty() ? SmartWebView.CURR_URL : SmartWebView.ASWV_URL), false, SmartWebView.asw_error_counter, context);
 	}
 
-	// changing port view
+	// Changing port view
 	@SuppressLint("SourceLockedOrientationActivity")
 	public void set_orientation(int orientation, boolean cookie, Context context) { // setting the view port var
-		if (context instanceof Activity) {
-			Activity activity = (Activity) context;
+		if (context instanceof Activity activity) {
 			if (orientation == 1) {
 				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 			} else if (orientation == 2) {
@@ -290,11 +337,10 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		}
 	}
 
-	// setting cookies
+	// Setting cookies
 	public void set_cookie(String data) {
-		//boolean log = true;
 		if(SmartWebView.true_online) {
-			// cookie manager initialisation
+			// Cookie manager initialisation
 			SmartWebView.cookie_manager = CookieManager.getInstance();
 			SmartWebView.cookie_manager.setAcceptCookie(true);
 			SmartWebView.cookie_manager.setCookie(SmartWebView.ASWV_URL, data);
@@ -304,7 +350,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		}
 	}
 
-	//Getting device basic information
+	// Getting device basic information
 	public String[] get_info() {
 		String[] info = new String[3];
 		info[0] = "android";
@@ -318,63 +364,53 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		return info;
 	}
 
-	// checking permission for storage and camera for writing and uploading images
-	public void get_file_perm(Activity activity) {
-		String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			String[] perms2 = {Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO};
-		}
-
-		//Checking for storage permission to write images for upload
-		if (SmartWebView.ASWP_FUPLOAD && SmartWebView.ASWP_CAMUPLOAD && !check_permission(2, activity.getApplicationContext()) && !check_permission(3, activity.getApplicationContext())) {
-			ActivityCompat.requestPermissions(activity, perms, SmartWebView.file_perm);
-
-			//Checking for WRITE_EXTERNAL_STORAGE permission
-		} else if (SmartWebView.ASWP_FUPLOAD && !check_permission(2, activity.getApplicationContext())) {
-			ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, SmartWebView.file_perm);
-
-			//Checking for CAMERA permissions
-		} else if (SmartWebView.ASWP_CAMUPLOAD && !check_permission(3, activity.getApplicationContext())) {
-			ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, SmartWebView.file_perm);
-		}
-	}
-
-	// using cookies to update user locations
+	// Using cookies to update user locations
 	public String get_location(Context context) {
-		String newloc = "0,0";
-		//Checking for location permissions
-		if (SmartWebView.ASWP_LOCATION && check_permission(1, context)) {
+		String new_loc = "0,0";
+
+		// Check for the user's preference
+		if (!SmartWebView.ASWP_LOCATION) {
+			Log.d("SmartWebView", "Location access is disabled by the user.");
+			return new_loc; // Or return a message indicating location is disabled
+		}
+
+		// Check for location permissions
+		if (check_permission(1, context)) {
 			GPSTrack gps;
 			gps = new GPSTrack(context);
 			double latitude = gps.getLatitude();
 			double longitude = gps.getLongitude();
 			if (gps.canGetLocation()) {
 				if (latitude != 0 || longitude != 0) {
-					if(SmartWebView.true_online) {
+					if (SmartWebView.true_online) {
 						set_cookie("lat=" + latitude);
 						set_cookie("long=" + longitude);
 						set_cookie("LATLANG=" + latitude + "x" + longitude);
 					}
-					newloc = latitude + "," + longitude;
-					if(SmartWebView.SWV_DEBUGMODE) {
-						Log.d("SLOG_NEW_LOCATION", newloc);  //enable to test dummy latitude and longitude
+					new_loc = latitude + "," + longitude;
+					if (SmartWebView.SWV_DEBUGMODE) {
+						Log.d("SLOG_NEW_LOCATION", new_loc);
 					}
 				} else {
-					if(SmartWebView.SWV_DEBUGMODE) {
+					if (SmartWebView.SWV_DEBUGMODE) {
 						Log.d("SLOG_UPDATED_LOCATION", "NULL");
 					}
 				}
 			} else {
-				show_notification(1, 1, context);
-				if(SmartWebView.SWV_DEBUGMODE) {
-					Log.d("SLOG_UPDATED_LOCATION", "FAIL");
-				}
+				// Handle the case where location is not available
+				Log.d("SmartWebView", "Cannot get location. GPS turned off or service not available.");
+				// You can show a message to the user here if you want
 			}
+		} else {
+			// Handle the case where location permissions are not granted
+			Log.d("SmartWebView", "Location permission not granted.");
+			// You can show a rationale and request permissions again if needed
+			show_notification(1, 1, context);
 		}
-		return newloc;
+		return new_loc;
 	}
 
-	// get cookie value
+	// Get cookie value
 	public String get_cookies(String cookie) {
 		String value = "";
 		if(SmartWebView.true_online) {
@@ -401,18 +437,25 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		return value;
 	}
 
+	// Divide the URL pattern into pieces
 	public static Pattern url_pattern() {
 		return Pattern.compile("(?:^|\\W)((ht|f)tp(s?)://|www\\.)" + "(([\\w\\-]+\\.)+([\\w\\-.~]+/?)*" + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 	}
 
+	// Options menu for drawer theme
 	@SuppressLint("ResourceAsColor")
 	public boolean onCreateOptionsMenu(Menu menu, Activity context) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		context.getMenuInflater().inflate(R.menu.main, menu);
 		SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
 		final SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-		searchView.setSearchableInfo(searchManager.getSearchableInfo(context.getComponentName()));
-		searchView.setQueryHint(context.getString(R.string.search_hint));
+		if (searchView != null) {
+			searchView.setSearchableInfo(searchManager.getSearchableInfo(context.getComponentName()));
+		}
+		if (searchView != null) {
+			searchView.setQueryHint(context.getString(R.string.search_hint));
+		}
+		assert searchView != null;
 		searchView.setIconified(true);
 		searchView.setIconifiedByDefault(true);
 		searchView.clearFocus();
@@ -433,6 +476,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		return true;
 	}
 
+	// Options trigger for drawer theme
 	public boolean onOptionsItemSelected(MenuItem item, Context context) {
 		int id = item.getItemId();
 		if (id == R.id.action_exit) {
@@ -442,6 +486,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		return onOptionsItemSelected(item, context);
 	}
 
+	// Options filter for drawer theme
 	public boolean onNavigationItemSelected(MenuItem item, Context context) {
 		int id = item.getItemId();
 		if (id == R.id.nav_home) {
@@ -470,89 +515,99 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		return true;
 	}
 
-	public static int aswm_fcm_id() {
-		//Date now = new Date();
-		//Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
-		return 1;
+	public interface TokenCallback {
+		void onTokenReceived(String token);
+		void onTokenFailed(Exception e);
 	}
 
-	public String fcm_token() {
-		final String[] fcm_token = {""};
-		FirebaseMessaging.getInstance().getToken().addOnSuccessListener(instanceIdResult -> {
-			fcm_token[0] = FirebaseMessaging.getInstance().getToken().getResult();
-			if (!SmartWebView.ASWP_OFFLINE) {
-				set_cookie("FCM_TOKEN=" + fcm_token[0]);
-				if(SmartWebView.SWV_DEBUGMODE) {
-					Log.d("SLOG_FCM_BAKED", "YES");
-					Log.d("SLOG_COOKIES", get_cookies(SmartWebView.ASWV_URL));
+	// Get fresh firebase tokens
+	public void fcm_token(final TokenCallback callback) {
+		FirebaseMessaging.getInstance().getToken()
+			.addOnSuccessListener(token -> {
+				if (!SmartWebView.ASWP_OFFLINE) {
+					set_cookie("FCM_TOKEN=" + token);
+					if (SmartWebView.SWV_DEBUGMODE) {
+						Log.d("SLOG_FCM_BAKED", "YES");
+						Log.d("SLOG_COOKIES", get_cookies(SmartWebView.ASWV_URL));
+					}
 				}
-			}
-			SmartWebView.fcm_token = fcm_token[0];
-			if(SmartWebView.SWV_DEBUGMODE) {
-				Log.d("SLOG_REQ_FCM_TOKEN", fcm_token[0]);
-			}
-
-		}).addOnFailureListener(e -> {
-			SmartWebView.fcm_token = "";
-			Log.e("SLOG_REQ_FCM_TOKEN", "FAILED");
-		});
-		return SmartWebView.fcm_token;
+				SmartWebView.fcm_token = token;
+				if (SmartWebView.SWV_DEBUGMODE) {
+					Log.d("SLOG_REQ_FCM_TOKEN", token);
+				}
+				callback.onTokenReceived(token); // Pass token to callback
+			})
+			.addOnFailureListener(e -> {
+				SmartWebView.fcm_token = "";
+				Log.e("SLOG_REQ_FCM_TOKEN", "FAILED", e);
+				callback.onTokenFailed(e); // Pass exception to callback
+			});
 	}
 
-	//Checking if particular permission is given or not
+	// Injecting Google Analytics (gtag.js)
+	public void inject_gtag(WebView webView, String gaId) {
+		String gtag_code = "function load_gtag(){var script = document.createElement('script');script.async = true;script.src = 'https://www.googletagmanager.com/gtag/js?id=" + gaId + "';var firstScript = document.getElementsByTagName('script')[0];firstScript.parentNode.insertBefore(script, firstScript);window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '" + gaId + "');console.log('Google Analytics (gtag.js) loaded.');} load_gtag();";
+		webView.evaluateJavascript(gtag_code, null);
+	}
+
+	// Checking if particular permission is given or not
 	public boolean check_permission(int permission, Context context) {
-		switch (permission) {
-			case 1:
-				return ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+		return switch (permission) {
+			case 1 ->
+				ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+			case 2 ->
+				ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+			case 3 ->
+				ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+			case 4 ->
+				Build.VERSION.SDK_INT < 33 || ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+			default -> false;
+		};
+	}
 
-			case 2:
-				return Build.VERSION.SDK_INT >= 30 || ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-
-			case 3:
-				return ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-
+	// Get permissions for different activities
+	public void get_permissions(int req, Activity activity) {
+		if (req == 1 && !check_permission(1, activity)) {
+			ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, SmartWebView.loc_perm);
+		} else if (req == 2 && !check_permission(2, activity)) {
+			// Checking for storage permission
+			if (Build.VERSION.SDK_INT >= 33) {
+				ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO}, SmartWebView.file_perm);
+			} else {
+				ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, SmartWebView.file_perm);
+			}
+		} else if (req == 3 && !check_permission(3, activity)) {
+			// Checking for camera permission
+			if (Build.VERSION.SDK_INT >= 33) {
+				// Camera permission is still needed for capturing from camera
+				ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO}, SmartWebView.cam_perm);
+			} else {
+				ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, SmartWebView.cam_perm);
+			}
+		} else if (req == 4 && Build.VERSION.SDK_INT >= 33 && !check_permission(4, activity)) {
+			ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, SmartWebView.noti_perm);
 		}
-		return false;
 	}
 
-	//Creating image file for upload
-	public static File create_image(Context context) throws IOException {
-		@SuppressLint("SimpleDateFormat")
-		String file_name = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
-		String new_name = "file_" + file_name + "_";
-		File sd_directory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-		return File.createTempFile(new_name, ".jpg", sd_directory);
-	}
-
-	//Creating video file for upload
-	public static File create_video(Context context) throws IOException {
-		@SuppressLint("SimpleDateFormat")
-		String file_name = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
-		String new_name = "file_" + file_name + "_";
-		File sd_directory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-		return File.createTempFile(new_name, ".3gp", sd_directory);
-	}
-
-	//Launching app rating dialog [developed by github.com/hotchemi]
+	// Launching app rating dialog [developed by github.com/hotchemi]
 	public Runnable get_rating(Context context) {
 		if (isInternetAvailable(context)) {
 			AppRate.with(context)
-					.setInstallDays(SmartWebView.ASWR_DAYS)
-					.setLaunchTimes(SmartWebView.ASWR_TIMES)
-					.setRemindInterval()
-					.setTitle(R.string.rate_dialog_title)
-					.setMessage(R.string.rate_dialog_message)
-					.setTextLater(R.string.rate_dialog_cancel)
-					.setTextNever(R.string.rate_dialog_no)
-					.setTextRateNow(R.string.rate_dialog_ok)
-					.monitor();
+				.setInstallDays(SmartWebView.ASWR_DAYS)
+				.setLaunchTimes(SmartWebView.ASWR_TIMES)
+				.setRemindInterval(SmartWebView.ASWR_INTERVAL)
+				.setTitle(R.string.rate_dialog_title)
+				.setMessage(R.string.rate_dialog_message)
+				.setTextLater(R.string.rate_dialog_cancel)
+				.setTextNever(R.string.rate_dialog_no)
+				.setTextRateNow(R.string.rate_dialog_ok)
+				.monitor();
 			AppRate.showRateDialogIfMeetsConditions(context);
 		}
-		//for more customizations, look for AppRate and DialogManager
 		return null;
 	}
 
-	//Creating custom notifications with IDs
+	// Creating custom notifications with IDs
 	public void show_notification(int type, int id, Context context) {
 		long when = System.currentTimeMillis();
 		String cont_title = "", cont_text = "", cont_desc = "";
@@ -574,7 +629,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 		PendingIntent pendingIntent;
-		final int flag =  Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
+		final int flag = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
 		pendingIntent = PendingIntent.getActivity(context, 0, i, flag);
 		Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -607,32 +662,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		SmartWebView.asw_notification.notify(id, SmartWebView.asw_notification_new);
 	}
 
-	// printing pages
-	/*
-	private void doWebViewPrint(String ss, Context context) {
-		SmartWebView.print_view.setWebViewClient(new WebViewClient() {
-
-			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				return false;
-			}
-
-			//use Service Worker
-			@Nullable
-			@Override
-			public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-				return super.shouldInterceptRequest(view, request);
-			}
-
-			@Override
-			public void onPageFinished(WebView view, String url) {
-				print_page(view, view.getTitle(), false, context);
-				super.onPageFinished(view, url);
-			}
-		});
-		// Generate an HTML document on the fly:
-		SmartWebView.print_view.loadDataWithBaseURL(null, ss, "text/html", "UTF-8", null);
-	}*/
-
+	// Exit app
 	public void exit_app(Context context) {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.addCategory(Intent.CATEGORY_HOME);
@@ -643,7 +673,6 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	// Creating exit dialogue
 	public void ask_exit(Context context) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
 		builder.setTitle(context.getString(R.string.exit_title));
 		builder.setMessage(context.getString(R.string.exit_subtitle));
 		builder.setCancelable(true);
