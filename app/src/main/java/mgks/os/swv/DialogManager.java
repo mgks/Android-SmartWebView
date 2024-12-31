@@ -1,6 +1,6 @@
 package mgks.os.swv;
 
-// following source code is taken from - @hotchemi (https://github.com/hotchemi/Android-Rate)
+// Modified source code from @hotchemi (https://github.com/hotchemi/Android-Rate)
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.view.View;
 
 import java.lang.ref.Reference;
@@ -47,42 +46,42 @@ final class DialogManager {
 
 	private static Reference<OnClickButtonListener> listener;
 
-    Dialog create(final Context context, DialogManager options) {
-        AlertDialog.Builder builder = getDialogBuilder(context);
-        builder.setMessage(getMessageText(context));
+	Dialog create(final Context context, DialogManager options) {
+		AlertDialog.Builder builder = getDialogBuilder(context);
+		builder.setMessage(getMessageText(context));
 
-        if (shouldShowTitle()) builder.setTitle(getTitleText(context));
+		if (shouldShowTitle()) builder.setTitle(getTitleText(context));
 
-        builder.setCancelable(getCancelable());
+		builder.setCancelable(getCancelable());
 
-        View view = getView();
-        if (view != null) builder.setView(view);
+		View view = getView();
+		if (view != null) builder.setView(view);
 
-        final OnClickButtonListener listener = getListener();
+		final OnClickButtonListener listener = getListener();
 
-        builder.setPositiveButton(getPositiveText(context), (dialog, which) -> {
+		builder.setPositiveButton(getPositiveText(context), (dialog, which) -> {
 			final Intent intentToAppstore = getStoreType() == StoreType.GOOGLEPLAY ?
-			createIntentForGooglePlay(context) : createIntentForAmazonAppstore(context);
+				createIntentForGooglePlay(context) : createIntentForAmazonAppstore(context);
 			context.startActivity(intentToAppstore);
 			AppRate.setAgreeShowDialog(context, false);
 			if (listener != null) listener.onClickButton(which);
 		});
 
-        if (shouldShowNeutralButton()) {
-            builder.setNeutralButton(getNeutralText(context), (dialog, which) -> {
+		if (shouldShowNeutralButton()) {
+			builder.setNeutralButton(getNeutralText(context), (dialog, which) -> {
 				AppRate.setRemindInterval(context);
 				if (listener != null) listener.onClickButton(which);
 			});
-        }
+		}
 
-        if (shouldShowNegativeButton()) {
-            builder.setNegativeButton(getNegativeText(context), (dialog, which) -> {
+		if (shouldShowNegativeButton()) {
+			builder.setNegativeButton(getNegativeText(context), (dialog, which) -> {
 				AppRate.setAgreeShowDialog(context, false);
 				if (listener != null) listener.onClickButton(which);
 			});
-        }
-        return builder.create();
-    }
+		}
+		return builder.create();
+	}
 
 	boolean shouldShowNeutralButton() {
 		return showNeutralButton;
@@ -245,25 +244,9 @@ final class DialogManager {
 		return false;
 	}
 
-	private static boolean underHoneyComb() {
-		return false;
-	}
-
-	private static boolean isLollipop() {
-		return Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP || Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1;
-	}
-
-	private static int getDialogTheme() {
-		return isLollipop() ? R.style.CustomLollipopDialogStyle : 0;
-	}
-
 	@SuppressLint("NewApi")
 	static AlertDialog.Builder getDialogBuilder(Context context) {
-		if (underHoneyComb()) {
-			return new AlertDialog.Builder(context);
-		} else {
-			return new AlertDialog.Builder(context, getDialogTheme());
-		}
+		return new AlertDialog.Builder(context, 0);
 	}
 }
 

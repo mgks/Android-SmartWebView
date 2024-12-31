@@ -13,24 +13,24 @@ public class ShareActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// get intent, action and MIME type
+		// Get intent, action and MIME type
 		Intent intent = getIntent();
 		String action = intent.getAction();
 		String type = intent.getType();
 
 		if (Intent.ACTION_SEND.equals(action) && type != null) {
 			if("text/plain".equals(type)){
-				handleSendText(intent);		// handle text being sent
+				handleSendText(intent); // Handle text being sent
 			}else if(type.startsWith("image/")){
-				handleSendImage(intent);	// handle single image being sent
+				handleSendImage(intent); // Handle single image being sent
 			}
 		}else if(Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null){
 			if(type.startsWith("image/")){
-				handleSendMultipleImages(intent); 	// handle multiple images being sent
+				handleSendMultipleImages(intent); // Handle multiple images being sent
 			}
 		}else{
-			Intent tomain = new Intent(this, MainActivity.class);
-			startActivity(tomain);
+			Intent to_main = new Intent(this, MainActivity.class);
+			startActivity(to_main);
 		}
 	}
 
@@ -44,7 +44,7 @@ public class ShareActivity extends AppCompatActivity {
 		}
 	}
 
-	// ~ this thing kinda not working at the moment; anybody want to help?
+	// ~ This thing kinda not working at the moment -_-
 	private void handleSendImage(Intent intent) {
 		Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 		if (imageUri != null) {

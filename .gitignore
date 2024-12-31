@@ -60,3 +60,4 @@ fastlane/readme.md
 *.iml
 .gradle
 .DS_Store
+.editorconfig

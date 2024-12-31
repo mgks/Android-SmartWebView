@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
- * Smart WebView 7.0
- * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Original source (https://github.com/mgks/Android-SmartWebView)
- * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT)
- * Join the discussion (https://github.com/mgks/Android-SmartWebView/discussions)
- * Support Smart WebView (https://github.com/sponsors/mgks)
- * Acknowledging project sources and developers helps them continue their valuable work. Thank you for your support :)
+  Smart WebView 7.0
+
+  MIT License (https://opensource.org/licenses/MIT)
+
+  Smart WebView is an Open Source project that integrates native features into
+  WebView to help create advanced hybrid applications (https://github.com/mgks/Android-SmartWebView).
+
+  Explore plugins and enhanced capabilities: (https://mgks.dev/blog/smart-webview-plugins)
+  Join the discussion: (https://github.com/mgks/Android-SmartWebView/discussions)
+  Support Smart WebView: (https://github.com/sponsors/mgks)
+
+  Your support and acknowledgment of the project's source are greatly appreciated.
+  Giving credit to developers encourages them to create better projects.
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:installLocation="auto">
+	package="mgks.os.swv">
 
 	<supports-screens
 		android:anyDensity="true"
@@ -21,56 +28,61 @@
 		android:normalScreens="true"
 		android:xlargeScreens="true" />
 
-	<!-- remove permissions that your app doesn't require;
-	asking for authority over unwanted information can cause damage to your reputation among your users -->
+	<!-- Essential Permissions -->
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
-		android:maxSdkVersion="33"
-		tools:ignore="QueryAllPackagesPermission" />
+
+	<!-- Permissions for Optional Features (Add/Remove as needed) -->
+	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+
+	<!-- Permissions for File Access (Scoped Storage) -->
 	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 	<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 	<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-		tools:ignore="ScopedStorage" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-	<!-- remove location.gps feature if not using permission ACCESS_FINE_LOCATION -->
-	<uses-feature android:name="android.hardware.location.gps"
-		android:required="false" />
+	<!-- Remove if targeting API 30+ and using Scoped Storage exclusively -->
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+		tools:ignore="ScopedStorage"
+		android:maxSdkVersion="35" />
+
+	<!-- Features (Optional) -->
+	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
-	<!--<uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />-->
-
 	<application
-		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:supportsRtl="true"
 		android:theme="@style/SplashTheme"
 		android:hardwareAccelerated="true"
-		android:usesCleartextTraffic="true"
-		android:requestLegacyExternalStorage="true"
-		tools:ignore="AllowBackup,UnusedAttribute">
+		tools:ignore="UnusedAttribute">
+
+		<property
+			android:name="android.adservices.AD_SERVICES_CONFIG"
+			android:resource="@xml/gma_ad_services_config"
+			tools:replace="android:resource" />
+
+		<!-- Main Activity -->
 		<activity
-			android:name="mgks.os.swv.SplashScreen"
+			android:name=".SplashScreen"
 			android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+
+		<!-- Main Activity -->
 		<activity
-			android:name="mgks.os.swv.MainActivity"
+			android:name=".MainActivity"
+			android:configChanges="orientation|screenSize|keyboardHidden|keyboard|navigation"
 			android:exported="true">
-			<!-- alter as per your app requirements -->
 			<intent-filter android:label="@string/app_name">
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -78,34 +90,42 @@
 				<data android:scheme="https"
 					android:host="apps.mgks.dev"
 					android:pathPrefix="/swv" />
-				<!-- if you want only a specific directory from your website to be opened in the app through external links -->
 			</intent-filter>
 			<intent-filter android:label="OpenURI">
-				<action android:name="Open_URI" />
+				<action android:name="OPEN_URI" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
-		<activity android:name="mgks.os.swv.ShareActivity"
+
+		<!-- Share Activity -->
+		<activity android:name=".ShareActivity"
 			android:exported="true">
 			<intent-filter android:label="Share">
 				<action android:name="android.intent.action.SEND" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:mimeType="text/*" />
-				<!-- <data android:mimeType="image/*" /> -->
+			</intent-filter>
+			<intent-filter android:label="Share Image">
+				<action android:name="android.intent.action.SEND" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="image/*" />
+			</intent-filter>
+			<intent-filter android:label="Share Multiple Images">
+				<action android:name="android.intent.action.SEND_MULTIPLE" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="image/*" />
 			</intent-filter>
 		</activity>
-		<!--<receiver android:name=".NotificationPausePlay" />-->
-		<service android:name="mgks.os.swv.Firebase"
+
+		<!-- Firebase Service -->
+		<service android:name=".Firebase"
 			android:exported="false">
 			<intent-filter>
 				<action android:name="com.google.firebase.MESSAGING_EVENT" />
-				<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
 			</intent-filter>
 		</service>
-		<property
-			android:name="android.adservices.AD_SERVICES_CONFIG"
-			android:resource="@xml/gma_ad_services_config"
-			tools:replace="android:resource" />
+
+		<!-- File Provider -->
 		<provider
 			android:name="androidx.core.content.FileProvider"
 			android:authorities="${applicationId}.provider"
@@ -115,11 +135,14 @@
 				android:name="android.support.FILE_PROVIDER_PATHS"
 				android:resource="@xml/provider_paths" />
 		</provider>
+
 		<meta-data
 			android:name="com.google.android.gms.version"
 			android:value="@integer/google_play_services_version" />
+		<!-- AdMob -->
 		<meta-data
 			android:name="com.google.android.gms.ads.APPLICATION_ID"
 			android:value="@string/app_id"/>
+
 	</application>
 </manifest>

@@ -16,24 +16,24 @@ package mgks.os.swv;
   Giving credit to developers encourages them to create better projects.
 */
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
 
-@SuppressLint("CustomSplashScreen")
-public class SplashScreen extends Activity {
-	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+import androidx.annotation.NonNull;
 
-		int SPLASH_TIME_OUT = 5000; // timer helps showcasing your logo or banner while main activity loads
-		new Handler().postDelayed(() -> {
-			Intent i = new Intent(SplashScreen.this, MainActivity.class);
-			startActivity(i);
-			finish(); // closing splash screen
-		}, SPLASH_TIME_OUT);
-    }
+public interface PluginInterface {
+	void initialize(Activity activity, WebView webView);
+	String getPluginName();
+	String[] getOverriddenUrls();
+	void handlePermissionRequest(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
+	void handleActivityResult(int requestCode, int resultCode, Intent data);
+	boolean shouldOverrideUrlLoading(WebView view, String url);
+	void onPageStarted(String url);
+	void onPageFinished(String url);
+
+	boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request);
+
+	void onQRCodeScanResult(String result);
 }

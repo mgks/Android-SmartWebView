@@ -1,6 +1,6 @@
 package mgks.os.swv;
 
-// code source - @hotchemi (https://github.com/hotchemi/Android-Rate)
+// Modified source code from @hotchemi (https://github.com/hotchemi/Android-Rate)
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,16 +12,16 @@ import java.util.Date;
 
 public final class AppRate {
 
-    @SuppressLint("StaticFieldLeak")
+	@SuppressLint("StaticFieldLeak")
 	private static volatile AppRate singleton;
 
-    private final Context context;
+	private final Context context;
 
-    private int installDate = 10;
-    private int launchTimes = 10;
-    private int remindInterval = 1;
+	private int installDate = 10;
+	private int launchTimes = 10;
+	private int remindInterval = 1;
 
-    private boolean isDebug = false;
+	private boolean isDebug = false;
 
 	private static final String PREF_FILE_NAME = "android_rate_pref_file";
 	private static final String PREF_KEY_INSTALL_DATE = "android_rate_install_date";
@@ -32,192 +32,188 @@ public final class AppRate {
 	DialogManager options = new DialogManager();
 
 	private AppRate(Context context) {
-        this.context = context.getApplicationContext();
-    }
-
-    public static AppRate with(Context context) {
-        if (singleton == null) {
-            synchronized (AppRate.class) {
-                if (singleton == null) {
-                    singleton = new AppRate(context);
-                }
-            }
-        }
-        return singleton;
-    }
-
-    static void showRateDialogIfMeetsConditions(Context context) {
-        boolean isMeetsConditions = singleton.isDebug || singleton.shouldShowRateDialog();
-        if (isMeetsConditions) {
-			if (context instanceof Activity) {
-				Activity activity = (Activity) context;
-				singleton.showRateDialog(activity);
-			}
-        }
+		this.context = context.getApplicationContext();
 	}
 
-    private static boolean isOverDate(long targetDate, int threshold) {
-        return new Date().getTime() - targetDate >= (long) threshold * 24 * 60 * 60 * 1000;
-    }
+	public static AppRate with(Context context) {
+		if (singleton == null) {
+			synchronized (AppRate.class) {
+				if (singleton == null) {
+					singleton = new AppRate(context);
+				}
+			}
+		}
+		return singleton;
+	}
 
-    AppRate setLaunchTimes(int launchTimes) {
-        this.launchTimes = launchTimes;
-        return this;
-    }
+	static void showRateDialogIfMeetsConditions(Context context) {
+		boolean isMeetsConditions = singleton.isDebug || singleton.shouldShowRateDialog();
+		if (isMeetsConditions) {
+			if (context instanceof Activity activity) {
+				singleton.showRateDialog(activity);
+			}
+		}
+	}
 
-    AppRate setInstallDays(int installDate) {
-        this.installDate = installDate;
-        return this;
-    }
+	private static boolean isOverDate(long targetDate, int threshold) {
+		return new Date().getTime() - targetDate >= (long) threshold * 24 * 60 * 60 * 1000;
+	}
 
-    AppRate setRemindInterval() {
-        this.remindInterval = 2;
-        return this;
-    }
+	AppRate setLaunchTimes(int launchTimes) {
+		this.launchTimes = launchTimes;
+		return this;
+	}
 
-    public AppRate setShowLaterButton(boolean isShowNeutralButton) {
-        options.setShowNeutralButton(isShowNeutralButton);
-        return this;
-    }
+	AppRate setInstallDays(int installDate) {
+		this.installDate = installDate;
+		return this;
+	}
 
-    public AppRate setShowNeverButton(boolean isShowNeverButton) {
-        options.setShowNegativeButton(isShowNeverButton);
-        return this;
-    }
+	AppRate setRemindInterval(int remindInterval) {
+		this.remindInterval = remindInterval;
+		return this;
+	}
 
-    public AppRate setShowTitle(boolean isShowTitle) {
-        options.setShowTitle(isShowTitle);
-        return this;
-    }
+	public AppRate setShowLaterButton(boolean isShowNeutralButton) {
+		options.setShowNeutralButton(isShowNeutralButton);
+		return this;
+	}
 
-    public AppRate clearAgreeShowDialog() {
-        setAgreeShowDialog(context, true);
-        return this;
-    }
+	public AppRate setShowNeverButton(boolean isShowNeverButton) {
+		options.setShowNegativeButton(isShowNeverButton);
+		return this;
+	}
 
-    public AppRate clearSettingsParam() {
-        setAgreeShowDialog(context, true);
-        clearSharedPreferences(context);
-        return this;
-    }
+	public AppRate setShowTitle(boolean isShowTitle) {
+		options.setShowTitle(isShowTitle);
+		return this;
+	}
 
-    public AppRate setAgreeShowDialog(boolean clear) {
-        setAgreeShowDialog(context, clear);
-        return this;
-    }
+	public AppRate clearAgreeShowDialog() {
+		setAgreeShowDialog(context, true);
+		return this;
+	}
 
-    public AppRate setView(View view) {
-        options.setView(view);
-        return this;
-    }
+	public AppRate clearSettingsParam() {
+		setAgreeShowDialog(context, true);
+		clearSharedPreferences(context);
+		return this;
+	}
 
-    public AppRate setOnClickButtonListener(OnClickButtonListener listener) {
-        options.setListener(listener);
-        return this;
-    }
+	public AppRate setAgreeShowDialog(boolean clear) {
+		setAgreeShowDialog(context, clear);
+		return this;
+	}
 
-    public AppRate setTitle(int resourceId) {
-        options.setTitleResId(resourceId);
-        return this;
-    }
+	public AppRate setView(View view) {
+		options.setView(view);
+		return this;
+	}
 
-    public AppRate setTitle(String title) {
-        options.setTitleText(title);
-        return this;
-    }
+	AppRate setOnClickButtonListener(OnClickButtonListener listener) {
+		options.setListener(listener);
+		return this;
+	}
 
-    AppRate setMessage(int resourceId) {
-        options.setMessageResId(resourceId);
-        return this;
-    }
+	public AppRate setTitle(int resourceId) {
+		options.setTitleResId(resourceId);
+		return this;
+	}
 
-    public AppRate setMessage(String message) {
-        options.setMessageText(message);
-        return this;
-    }
+	public AppRate setTitle(String title) {
+		options.setTitleText(title);
+		return this;
+	}
 
-    AppRate setTextRateNow(int resourceId) {
-        options.setTextPositiveResId(resourceId);
-        return this;
-    }
+	AppRate setMessage(int resourceId) {
+		options.setMessageResId(resourceId);
+		return this;
+	}
 
-    public AppRate setTextRateNow(String positiveText) {
-        options.setPositiveText(positiveText);
-        return this;
-    }
+	public AppRate setMessage(String message) {
+		options.setMessageText(message);
+		return this;
+	}
 
-    AppRate setTextLater(int resourceId) {
-        options.setTextNeutralResId(resourceId);
-        return this;
-    }
+	AppRate setTextRateNow(int resourceId) {
+		options.setTextPositiveResId(resourceId);
+		return this;
+	}
 
-    public AppRate setTextLater(String neutralText) {
-        options.setNeutralText(neutralText);
-        return this;
-    }
+	public AppRate setTextRateNow(String positiveText) {
+		options.setPositiveText(positiveText);
+		return this;
+	}
 
-    AppRate setTextNever(int resourceId) {
-        options.setTextNegativeResId(resourceId);
-        return this;
-    }
+	AppRate setTextLater(int resourceId) {
+		options.setTextNeutralResId(resourceId);
+		return this;
+	}
 
-    public AppRate setTextNever(String negativeText) {
-        options.setNegativeText(negativeText);
-        return this;
-    }
+	public AppRate setTextLater(String neutralText) {
+		options.setNeutralText(neutralText);
+		return this;
+	}
 
-    public AppRate setCancelable(boolean cancelable) {
-        options.setCancelable(cancelable);
-        return this;
-    }
+	AppRate setTextNever(int resourceId) {
+		options.setTextNegativeResId(resourceId);
+		return this;
+	}
 
-    AppRate setStoreType(StoreType appstore) {
-        options.setStoreType(appstore);
-        return this;
-    }
+	public AppRate setTextNever(String negativeText) {
+		options.setNegativeText(negativeText);
+		return this;
+	}
 
-    void monitor() {
-        if (isFirstLaunch(context)) {
-            setInstallDate(context);
-        }
-        setLaunchTimes(context, getLaunchTimes(context) + 1);
-    }
+	public AppRate setCancelable(boolean cancelable) {
+		options.setCancelable(cancelable);
+		return this;
+	}
 
-    private void showRateDialog(Activity activity) {
-        if (!activity.isFinishing()) {
-            options.create(activity, options).show();
-        }
-    }
+	AppRate setStoreType(StoreType appstore) {
+		options.setStoreType(appstore);
+		return this;
+	}
 
-    private boolean shouldShowRateDialog() {
-        return getIsAgreeShowDialog(context) &&
-                isOverLaunchTimes() &&
-                isOverInstallDate() &&
-                isOverRemindDate();
-    }
+	void monitor() {
+		if (isFirstLaunch(context)) {
+			setInstallDate(context);
+		}
+		setLaunchTimes(context, getLaunchTimes(context) + 1);
+	}
 
-    private boolean isOverLaunchTimes() {
-        return getLaunchTimes(context) >= launchTimes;
-    }
+	private void showRateDialog(Activity activity) {
+		if (!activity.isFinishing()) {
+			options.create(activity, options).show();
+		}
+	}
 
-    private boolean isOverInstallDate() {
-        return isOverDate(getInstallDate(context), installDate);
-    }
+	private boolean shouldShowRateDialog() {
+		return getIsAgreeShowDialog(context) &&
+			isOverLaunchTimes() &&
+			isOverInstallDate() &&
+			isOverRemindDate();
+	}
 
-    private boolean isOverRemindDate() {
-        return isOverDate(getRemindInterval(context), remindInterval);
-    }
+	private boolean isOverLaunchTimes() {
+		return getLaunchTimes(context) >= launchTimes;
+	}
 
-    public boolean isDebug() {
-        return isDebug;
-    }
+	private boolean isOverInstallDate() {
+		return isOverDate(getInstallDate(context), installDate);
+	}
 
-    public AppRate setDebug(boolean isDebug) {
-        this.isDebug = isDebug;
-        return this;
-    }
+	private boolean isOverRemindDate() {
+		return isOverDate(getRemindInterval(context), remindInterval);
+	}
 
-	private void PreferenceHelper() {
+	public boolean isDebug() {
+		return isDebug;
+	}
+
+	public AppRate setDebug(boolean isDebug) {
+		this.isDebug = isDebug;
+		return this;
 	}
 
 	private static SharedPreferences getPreferences(Context context) {
@@ -228,11 +224,6 @@ public final class AppRate {
 		return getPreferences(context).edit();
 	}
 
-	/**
-	 * Clear data in shared preferences.<br/>
-	 *
-	 * @param context context
-	 */
 	static void clearSharedPreferences(Context context) {
 		SharedPreferences.Editor editor = getPreferencesEditor(context);
 		editor.remove(PREF_KEY_INSTALL_DATE);
@@ -240,13 +231,6 @@ public final class AppRate {
 		editor.apply();
 	}
 
-	/**
-	 * Set agree flag about show dialog.<br/>
-	 * If it is false, rate dialog will never shown unless data is cleared.
-	 *
-	 * @param context context
-	 * @param isAgree agree with showing rate dialog
-	 */
 	static void setAgreeShowDialog(Context context, boolean isAgree) {
 		SharedPreferences.Editor editor = getPreferencesEditor(context);
 		editor.putBoolean(PREF_KEY_IS_AGREE_SHOW_DIALOG, isAgree);
