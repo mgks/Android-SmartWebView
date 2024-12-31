@@ -2,7 +2,9 @@ import com.google.gms.googleservices.GoogleServicesPlugin
 
 ext {
 	targetCompatibility = 1.8
-}// Top-level build file where you can add configuration options common to all sub-projects/modules.
+}
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
 	repositories {
