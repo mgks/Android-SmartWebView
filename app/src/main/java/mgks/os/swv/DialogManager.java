@@ -1,6 +1,6 @@
 package mgks.os.swv;
 
-// slightly modified from code source - @hotchemi (https://github.com/hotchemi/Android-Rate)
+// Modified source code from @hotchemi (https://github.com/hotchemi/Android-Rate)
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

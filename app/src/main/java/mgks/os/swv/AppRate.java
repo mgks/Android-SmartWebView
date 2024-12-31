@@ -1,6 +1,6 @@
 package mgks.os.swv;
 
-// slightly modified from code source - @hotchemi (https://github.com/hotchemi/Android-Rate)
+// Modified source code from @hotchemi (https://github.com/hotchemi/Android-Rate)
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -49,8 +49,7 @@ public final class AppRate {
 	static void showRateDialogIfMeetsConditions(Context context) {
 		boolean isMeetsConditions = singleton.isDebug || singleton.shouldShowRateDialog();
 		if (isMeetsConditions) {
-			if (context instanceof Activity) {
-				Activity activity = (Activity) context;
+			if (context instanceof Activity activity) {
 				singleton.showRateDialog(activity);
 			}
 		}
@@ -225,11 +224,6 @@ public final class AppRate {
 		return getPreferences(context).edit();
 	}
 
-	/**
-	 * Clear data in shared preferences.<br/>
-	 *
-	 * @param context context
-	 */
 	static void clearSharedPreferences(Context context) {
 		SharedPreferences.Editor editor = getPreferencesEditor(context);
 		editor.remove(PREF_KEY_INSTALL_DATE);
@@ -237,13 +231,6 @@ public final class AppRate {
 		editor.apply();
 	}
 
-	/**
-	 * Set agree flag about show dialog.<br/>
-	 * If it is false, rate dialog will never shown unless data is cleared.
-	 *
-	 * @param context context
-	 * @param isAgree agree with showing rate dialog
-	 */
 	static void setAgreeShowDialog(Context context, boolean isAgree) {
 		SharedPreferences.Editor editor = getPreferencesEditor(context);
 		editor.putBoolean(PREF_KEY_IS_AGREE_SHOW_DIALOG, isAgree);
