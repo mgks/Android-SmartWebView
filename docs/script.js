@@ -1,11 +1,18 @@
 /*
- * Smart WebView 7.0
- * Smart WebView is an Open Source project that integrates native features into webview to help create advanced hybrid applications. Original source (https://github.com/mgks/Android-SmartWebView)
- * This program is free to use for private and commercial purposes under MIT License (https://opensource.org/licenses/MIT)
- * Join the discussion (https://github.com/mgks/Android-SmartWebView/discussions)
- * Support Smart WebView (https://github.com/sponsors/mgks)
- * Acknowledging project sources and developers helps them continue their valuable work. Thank you for your support :)
- */
+  Smart WebView 7.0
+
+  MIT License (https://opensource.org/licenses/MIT)
+
+  Smart WebView is an Open Source project that integrates native features into
+  WebView to help create advanced hybrid applications (https://github.com/mgks/Android-SmartWebView).
+
+  Explore plugins and enhanced capabilities: (https://mgks.dev/app/smart-webview-documentation#plugins)
+  Join the discussion: (https://github.com/mgks/Android-SmartWebView/discussions)
+  Support Smart WebView: (https://github.com/sponsors/mgks)
+
+  Your support and acknowledgment of the project's source are greatly appreciated.
+  Giving credit to developers encourages them to create better projects.
+*/
 
 document.addEventListener('DOMContentLoaded', function() { // use DOMContentLoaded
 
