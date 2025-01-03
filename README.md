@@ -1,5 +1,5 @@
 <!--
-  Smart WebView 7.0
+  Smart WebView 7.0 
 
   MIT License (https://opensource.org/licenses/MIT)
   Copyright (c) 2023 mgks (https://github.com/mgks)
@@ -14,25 +14,28 @@
   Giving credit to developers encourages them to create better projects.
 -->
 
-<div align="center">
-  <a href="https://github.com/mgks/Android-SmartWebView/"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="100" alt="Smart WebView Icon"></a>
-  <h1>Android Smart WebView</h1>
-  <p>
-    <a href="#config-variables"><img alt="Variant" src="https://img.shields.io/badge/variant-java-red.svg"></a>
-    <a href="https://github.com/mgks/Android-SmartWebView/releases"><img alt="Version" src="https://img.shields.io/badge/version-7.0-green.svg"></a>
-    <a href="https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
-  </p>
-  <p>
+# Android Smart WebView
+
+<div>
+<!---
+  <div>
     <strong>
       <a href="#getting-started">GETTING STARTED</a> &middot;
-      <a href="https://mgks.dev/blog/smart-webview-plugins">PLUGINS</a> &middot;
-      <a href="https://mgks.dev/blog/smart-webview-documentation#index">DOCUMENTATION</a> &middot;
+      <a href="https://mgks.dev/app/smart-webview-documentation#index">DOCUMENTATION</a> &middot;
+      <a href="https://mgks.dev/app/smart-webview-documentation#plugins">PLUGINS</a> &middot;
       <a href="https://github.com/mgks/Android-SmartWebView/issues">ISSUES</a>
     </strong>
-  </p>
-</div>
+  </div>
+-->
 
-Smart WebView introduces a powerful plugin architecture, empowering developers to seamlessly extend and customize their hybrid applications. This update enhances core functionalities and streamlines the development process, making it easier to integrate advanced features like QR code scanning, Google Analytics, and more.
+  <a href="https://github.com/mgks/Android-SmartWebView/">
+    <img align="right" src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="150" alt="Smart WebView Icon">
+  </a>
+  <p>
+    <a href="#config-variables"><img alt="Variant" src="https://img.shields.io/badge/language-java-red.svg"></a> <a href="https://github.com/mgks/Android-SmartWebView/releases"><img alt="Version" src="https://img.shields.io/badge/version-7.0-green.svg"></a> <a href="https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+  </p>  
+  <p>Smart WebView introduces a powerful plugin architecture, empowering developers to seamlessly extend and customize their hybrid applications. This update enhances core functionalities and streamlines the development process, making it easier to integrate advanced features like QR code scanning, Google Analytics, and more.</p>
+</div>
 
 ## Table of Contents
 
@@ -64,7 +67,7 @@ Smart WebView introduces a powerful plugin architecture, empowering developers t
 
 These instructions will help you get your Smart WebView copy up and running on your local machine for development and testing purposes.
 
-**Video Tutorial - [Getting Started with Smart WebView](https://www.youtube.com/watch?v=vE_GsHwspH4&list=PLUvke9lIV6YMGU5XdQ5zOtDOWxslsg6mT&pp=gAQBiAQB)**
+**[<img src="https://raw.githubusercontent.com/CLorant/readme-social-icons/main/medium/colored/youtube.svg" align="left"> Getting Started with Smart WebView (Video Tutorial)](https://www.youtube.com/watch?v=vE_GsHwspH4&list=PLUvke9lIV6YMGU5XdQ5zOtDOWxslsg6mT&pp=gAQBiAQB)**
 
 ### Prerequisites
 
@@ -78,7 +81,7 @@ Project is built on Android Studio and requires minimum Android API 23+ (6.0 Mar
 
         `git clone https://github.com/mgks/Android-SmartWebView`
 
-2. **Download `google-services.json` file from Firebase** ([instructions](https://github.com/mgks/Android-SmartWebView#firebase-messaging))
+2. **(Important) Download `google-services.json` file from Firebase** ([instructions](#firebase-cloud-messaging))
 
 3. **Load project in Android Studio**
 
@@ -92,7 +95,7 @@ Project is built on Android Studio and requires minimum Android API 23+ (6.0 Mar
 
 ## Configurations
 
-For detailed configuration, check project [Documentation](https://mgks.dev/blog/smart-webview-documentation#config).
+For detailed configuration, check project [Documentation](https://mgks.dev/app/smart-webview-documentation#config).
 
 ### Permissions
 
@@ -136,7 +139,8 @@ You can remove any of the following permissions if your app does not require the
 You can set/change variables in `SmartWebView.java`.
 
 ```java
-static boolean ASWP_OFFLINE       = ASWV_APP_URL.matches("^(file)://.*$") && Functions.isInternetAvailable(appContext);        // `true` if app loads from local file or no internet connection is available (DISABLES GPS, FIREBASE and other online features)
+static boolean ASWP_OFFLINE       = ASWV_APP_URL.matches("^(file)://.*$") && Functions.isInternetAvailable(appContext);
+// `true` if app loads from local file or no internet connection is available (DISABLES GPS, FIREBASE and other online features)
 
 static boolean ASWP_FUPLOAD       = true;         // upload file from webview
 static boolean ASWP_CAMUPLOAD     = true;         // enable upload from camera for photos
@@ -152,7 +156,7 @@ static boolean ASWP_EXTURL        = true;         // open external url with defa
 
 static boolean ASWP_TAB           = true;         // instead of default browser, open external URLs in chrome tab
 
-static boolean ASWP_EXITDIAL	  = true;         // confirm to exit app on back press
+static boolean ASWP_EXITDIAL      = true;         // confirm to exit app on back press
 ```
 
 ### Security
@@ -179,7 +183,7 @@ static String USER_AGENT_POSTFIX     = "SWVAndroid"; // useful for identifying t
 static String CUSTOM_USER_AGENT      = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Mobile Safari/537.36"; // custom user-agent
 
 // config analytics
-static String ASWV_GTAG     = "G-7XXC1C7CRQ"; // your unique analytics ID
+static String ASWV_GTAG     = "G-7******CRQ"; // your unique analytics ID
 
 // to upload any file type using "*/*"; check file type references for more
 static String ASWV_F_TYPE   = "*/*";
@@ -291,6 +295,8 @@ Firebase Cloud Messaging (FCM) is integrated to enable push notifications. The `
 2. Add an Android app to your Firebase project and follow the instructions to download the `google-services.json` file.
 3. Place the `google-services.json` file in the `app/` directory of your project.
 
+*[Official instructions to setup firebase](https://support.google.com/firebase/answer/7015592?hl=en#zippy=%2Cin-this-article)*
+
 **Sending Notifications:**
 
 You can send notifications from the Firebase console or use the FCM API to send notifications from your server.
@@ -375,9 +381,9 @@ If you want to contribute to the project, you're most welcome to do so. Just:
 
 **[GitHub Sponsors](https://github.com/sponsors/mgks):** Support this project and my other work by becoming a GitHub sponsor, it means a lot :)
 
-**[Get Smart WebView Plugins](https://mgks.dev/blog/smart-webview#plugins):** You can also support this project by getting plugins made specifically for Smart WebView. Some of the features/plugins include - Google Login, QR/Barcode Reader, and more.
+**[Get Smart WebView Plugins](https://mgks.dev/app/smart-webview-documentation#plugins):** You can also support this project by getting plugins made specifically for Smart WebView. Some of the features/plugins include - Google AdMob, Authentication, QR/Barcode Reader, and more.
 
-**[Join Discussions](https://github.com/mgks/Android-SmartWebView/discussions):** Feedbacks have helped this project become what it is today, share your honest feedback in [Discussion Board](https://github.com/mgks/Android-SmartWebView/discussions), [Email me](mailto:hello@mgks.dev) or report your project [Issues](https://github.com/mgks/Android-SmartWebView/issues) here.
+**[Join Discussions](https://github.com/mgks/Android-SmartWebView/discussions):** Feedbacks have helped this project become what it is today, share your honest feedback on discussions board, [Email me](mailto:hello@mgks.dev) or report your project [Issues](https://github.com/mgks/Android-SmartWebView/issues) here.
 
 **[Follow Me](https://github.com/mgks) on GitHub** | **Add Project to Watchlist** | **Star the Project**
 
