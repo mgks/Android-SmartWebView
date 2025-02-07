@@ -12,23 +12,23 @@
             android:icon="@drawable/ic_doc"
             android:title="Documentation" />
 		<item
-			android:id="@+id/nav_fcm"
-			android:title="FCM" />
+			android:id="@+id/nav_plugins"
+			android:title="Plugins" />
 		<item
-			android:id="@+id/nav_admob"
-			android:title="AdMob" />
+			android:id="@+id/nav_fcm"
+			android:title="Firebase Messaging" />
 		<item
 			android:id="@+id/nav_gps"
 			android:title="GPS" />
 		<item
-			android:id="@+id/nav_share"
-			android:title="Sharing" />
+			android:id="@+id/nav_url_handling"
+			android:title="URL Handling" />
 		<item
-			android:id="@+id/nav_lay"
-			android:title="Layouts" />
+			android:id="@+id/nav_changelog"
+			android:title="Changelog" />
 		<item
 			android:id="@+id/nav_support"
 			android:icon="@drawable/ic_help"
-			android:title="Support/Help" />
+			android:title="Need Help?" />
 	</group>
 </menu>
