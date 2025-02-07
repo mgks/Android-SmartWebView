@@ -203,7 +203,12 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		// Launch default phone dialer for specific number :: tel:+919876543210
 		} else if (url.startsWith("tel:")) {
 			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
-			context.startActivity(intent);
+			try {
+				context.startActivity(intent);
+			} catch (ActivityNotFoundException e) {
+				Toast.makeText(context, "No dialer app found.", Toast.LENGTH_SHORT).show();
+				Log.e("FCM_ERROR", "PORT_TEL", e);
+			}
 
 		// Open google play store app page :: rate:android
 		} else if (url.startsWith("rate:")) {
