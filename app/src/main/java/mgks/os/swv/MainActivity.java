@@ -44,6 +44,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 
+import android.os.Looper;
 import android.util.Log;
 
 import android.view.KeyEvent;
@@ -213,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 			toggle.syncState();
 
 			NavigationView navigationView = findViewById(R.id.nav_view);
-			navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
+			navigationView.setNavigationItemSelectedListener(fns);
 		} else {
 			setContentView(R.layout.activity_main);
 		}
@@ -500,7 +501,8 @@ public class MainActivity extends AppCompatActivity {
 			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				// Location permission granted
 				if (SmartWebView.ASWP_LOCATION) {
-					fns.get_location(getApplicationContext());
+					// Use a Handler to delay the call to get_location()
+					new Handler(Looper.getMainLooper()).post(() -> fns.get_location(getApplicationContext()));
 				}
 			} else {
 				// Location permission denied
