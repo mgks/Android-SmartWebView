@@ -491,35 +491,6 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		return onOptionsItemSelected(item, context);
 	}
 
-	// Options filter for drawer theme
-	public boolean onNavigationItemSelected(MenuItem item, Context context) {
-		int id = item.getItemId();
-		if (id == R.id.nav_home) {
-			aswm_view("file:///android_asset/offline.html", false, SmartWebView.asw_error_counter, context);
-		} else if (id == R.id.nav_doc) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/tree/master/documentation", false, SmartWebView.asw_error_counter, context);
-		} else if (id == R.id.nav_fcm) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/fcm.md", false, SmartWebView.asw_error_counter, context);
-		} else if (id == R.id.nav_admob) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/admob.md", false, SmartWebView.asw_error_counter, context);
-		} else if (id == R.id.nav_gps) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/gps.md", false, SmartWebView.asw_error_counter, context);
-		} else if (id == R.id.nav_share) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/share.md", false, SmartWebView.asw_error_counter, context);
-		} else if (id == R.id.nav_lay) {
-			aswm_view("https://github.com/mgks/Android-SmartWebView/blob/master/documentation/layout.md", false, SmartWebView.asw_error_counter, context);
-		} else if (id == R.id.nav_support) {
-			Intent intent = new Intent(Intent.ACTION_SENDTO);
-			intent.setData(Uri.parse("mailto:hello@mgks.dev"));
-			intent.putExtra(Intent.EXTRA_SUBJECT, "SWV Help");
-			context.startActivity(Intent.createChooser(intent, "Send Email"));
-		}
-
-		DrawerLayout drawer = ((Activity) context).findViewById(R.id.drawer_layout);
-		drawer.closeDrawer(GravityCompat.START);
-		return true;
-	}
-
 	public interface TokenCallback {
 		void onTokenReceived(String token);
 		void onTokenFailed(Exception e);
@@ -697,7 +668,44 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 
 	@Override
 	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-		return false;
+		// Handle navigation view item clicks here.
+		int id = item.getItemId();
+		Context context = SmartWebView.getAppContext(); // Use the getAppContext method
+
+		if (id == R.id.nav_home) {
+			aswm_view("https://mgks.github.io/Android-SmartWebView/", false, 0, context);
+		} else if (id == R.id.nav_doc) {
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#config", false, 0, context);
+		} else if (id == R.id.nav_plugins) {
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#plugins", false, 0, context);
+		} else if (id == R.id.nav_fcm) {
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#push-notifications", false, 0, context);
+		} else if (id == R.id.nav_gps) {
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#geolocation", false, 0, context);
+		} else if (id == R.id.nav_url_handling) {
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#url-handling", false, 0, context);
+		} else if (id == R.id.nav_changelog) {
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#changelog", false, 0, context);
+		} else if (id == R.id.nav_support) {
+			Intent intent = new Intent(Intent.ACTION_SENDTO);
+			intent.setData(Uri.parse("mailto:hello@mgks.dev"));
+			intent.putExtra(Intent.EXTRA_SUBJECT, "Android Smart WebView Help");
+			// Use try-catch to handle ActivityNotFoundException
+			try {
+				context.startActivity(Intent.createChooser(intent, "Send Email"));
+			} catch (ActivityNotFoundException e) {
+				Toast.makeText(context, "No email app found.", Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		// Close the drawer after handling the click
+		if (SmartWebView.asw_view !=null && SmartWebView.ASWV_LAYOUT == 1) { //check if drawer is enabled
+			DrawerLayout drawer = ((Activity) context).findViewById(R.id.drawer_layout);
+			if(drawer != null) { //drawer may not be initialized
+				drawer.closeDrawer(GravityCompat.START);
+			}
+		}
+		return true;
 	}
 }
 
