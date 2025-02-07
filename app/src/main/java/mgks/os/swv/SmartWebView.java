@@ -71,7 +71,7 @@ public class SmartWebView {
 	static int ASWV_ORIENTATION	  	  = 0;		      // change device orientation to portrait (1)(default) or landscape (2) or unspecified (0)
 
 	// Layout configs
-	static int ASWV_LAYOUT            = 0;            // default=0; for clear fullscreen layout, and =1 for drawer layout
+	static int ASWV_LAYOUT            = 1;            // default=0; for clear fullscreen layout, and =1 for drawer layout
 
 	static String ASWV_URL            = ASWP_OFFLINE ? ASWV_OFFLINE_URL : ASWV_APP_URL;	// finalising app URL to load
 	static String ASWV_SHARE_URL      = ASWV_URL + "?share=";                       // URL where you process external content shared with the app
@@ -123,4 +123,8 @@ public class SmartWebView {
 	static NotificationManager asw_notification;
 	static Notification asw_notification_new;
 	static ValueCallback<Uri[]> asw_file_path;
+
+	public static Context getAppContext() {
+		return appContext;
+	}
 }
