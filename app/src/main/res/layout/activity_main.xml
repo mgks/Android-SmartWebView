@@ -60,16 +60,14 @@
 		android:layout_height="0dp"
 		android:visibility="gone" />
 
-	<com.google.android.gms.ads.AdView
-		xmlns:ads="http://schemas.android.com/apk/res-auto"
-		android:id="@+id/msw_ad_view"
-		android:layout_width="wrap_content"
+	<LinearLayout
+		android:id="@+id/msw_ad_container"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
+		android:orientation="vertical"
 		android:layout_alignParentBottom="true"
-		ads:adSize="BANNER"
-		ads:adUnitId="@string/ad_banner">
-	</com.google.android.gms.ads.AdView>
+		android:gravity="center_horizontal"/>
+
     <ProgressBar
         android:id="@+id/msw_progress"
         style="@android:style/Widget.ProgressBar.Horizontal"
