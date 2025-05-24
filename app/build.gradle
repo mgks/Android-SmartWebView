@@ -25,10 +25,11 @@ android {
 
 	defaultConfig {
 		applicationId 'mgks.os.swv'
-		minSdk 23 // minimum Android 6.0
+        minSdk 24
+        // minimum Android 6.0
 		targetSdk 35 // target Android 14
 		versionCode 7
-		versionName '7.0'
+		versionName '7.1'
 		multiDexEnabled true // enable if method count exceeds 64K
 	}
 
@@ -62,22 +63,22 @@ dependencies {
 	implementation 'androidx.multidex:multidex:2.0.1'
 
 	// Firebase
-	implementation 'com.google.firebase:firebase-auth:23.1.0'
-	implementation 'com.google.firebase:firebase-config:22.0.1'
-	implementation 'com.google.firebase:firebase-messaging:24.1.0'
-	implementation 'com.google.firebase:firebase-analytics:22.1.2'
+	implementation 'com.google.firebase:firebase-auth:23.2.0'
+	implementation 'com.google.firebase:firebase-config:22.1.1'
+	implementation 'com.google.firebase:firebase-messaging:24.1.1'
+	implementation 'com.google.firebase:firebase-analytics:22.4.0'
 
 	implementation 'com.google.android.gms:play-services-auth:21.3.0'
-	implementation 'com.google.android.gms:play-services-ads:23.6.0'
+	implementation 'com.google.android.gms:play-services-ads:24.2.0'
 	implementation 'com.google.android.gms:play-services-location:21.3.0'
 
 	implementation 'com.google.android.material:material:1.12.0'
 
-	implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+	implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
 	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 	implementation 'androidx.appcompat:appcompat:1.7.0'
 	implementation 'androidx.browser:browser:1.8.0'
-	implementation 'androidx.work:work-runtime:2.10.0'
+	implementation 'androidx.work:work-runtime:2.10.1'
 
 	// Plugins
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0' // ZXing library for QR code scanning
