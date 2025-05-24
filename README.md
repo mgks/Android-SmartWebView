@@ -35,7 +35,6 @@
     <a href="#config-variables"><img alt="Variant" src="https://img.shields.io/badge/language-java-red.svg"></a> <a href="https://github.com/mgks/Android-SmartWebView/releases"><img alt="Version" src="https://img.shields.io/badge/version-7.0-green.svg"></a> <a href="https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
   </p>  
   <p>Smart WebView introduces a powerful plugin architecture, empowering developers to seamlessly extend and customize their hybrid applications. This update enhances core functionalities and streamlines the development process, making it easier to integrate advanced features like QR code scanning, Google Analytics, and more.</p>
-   <a href="https://www.producthunt.com/posts/smart-webview?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-smart&#0045;webview" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=945361&theme=light&t=1743225632021" alt="Smart&#0032;WebView - Build&#0032;advanced&#0032;hybrid&#0032;apps&#0032;w&#0047;&#0032;SWV&#0032;open&#0032;source&#0032;webview&#0032;frame&#0046; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 </div>
 
 ## Table of Contents
