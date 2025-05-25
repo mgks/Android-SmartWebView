@@ -39,3 +39,8 @@ output.json
 #NDK
 obj/
 .externalNativeBuild
+
+#AI
+createContext.js
+.cursorignore
+roadmap.md
