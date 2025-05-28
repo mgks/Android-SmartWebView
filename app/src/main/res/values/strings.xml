@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Smart WebView</string>
+    <string name="app_name">Meus Processos</string>
 	<string name="app_desc">A simple use webview integrated w/ native features to help build advanced hybrid applications.</string>
     <string name="image_view">Image View</string>
 	<string name="loading">Loading</string>

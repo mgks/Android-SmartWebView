@@ -49,16 +49,17 @@ public class SmartWebView {
 	static boolean ASWP_OFFLINE       = ASWV_APP_URL.matches("^(file)://.*$") && Functions.isInternetAvailable(appContext);        // `true` if app loads from local file or no internet connection is available (DISABLES GPS, FIREBASE and other online features)
 
 	static boolean ASWP_FUPLOAD       = true;         // upload file from webview
-	static boolean ASWP_CAMUPLOAD     = true;         // enable upload from camera for photos
+	static boolean ASWP_CAMUPLOAD     = false;         // enable upload from camera for photos
+	static boolean ASWP_ONLYCAM       = false;		  // only allow camera uploads
 	static boolean ASWP_MULFILE       = true;         // upload multiple files in webview
-	static boolean ASWP_LOCATION      = true;         // track GPS locations
+	static boolean ASWP_LOCATION      = false;         // track GPS locations
 	static boolean ASWP_COPYPASTE     = false;        // enable copy/paste within webview
 	static boolean ASWP_RATINGS       = true;         // show ratings dialog; auto configured ; edit method get_rating() for customizations
 	static boolean ASWP_PULLFRESH     = true;         // pull refresh current url
 	static boolean ASWP_PBAR          = true;         // show progress bar in app
 	static boolean ASWP_ZOOM          = false;        // zoom control for webpages view
 	static boolean ASWP_SFORM         = false;        // save form cache and auto-fill information
-	static boolean ASWP_EXTURL        = true;         // open external url with default browser instead of app webview
+	static boolean ASWP_EXTURL        = false;         // open external url with default browser instead of app webview
 
 	static boolean ASWP_TAB           = true;         // instead of default browser, open external URLs in chrome tab
 
@@ -73,7 +74,7 @@ public class SmartWebView {
 	// Layout configs
 	static int ASWV_LAYOUT            = 1;            // default=0; for clear fullscreen layout, and =1 for drawer layout
 
-	static String ASWV_URL            = ASWP_OFFLINE ? ASWV_OFFLINE_URL : ASWV_APP_URL;	// finalising app URL to load
+	static String ASWV_URL            = "https://www.jusbrasil.com.br/consulta-processual/";	// finalising app URL to load
 	static String ASWV_SHARE_URL      = ASWV_URL + "?share=";                       // URL where you process external content shared with the app
 
 	// Domains allowed to be opened inside webview
