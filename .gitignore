@@ -28,19 +28,25 @@ Thumbs.db
 # Android Studio
 *.iml
 .idea
-
-#.idea/workspace.xml - remove # and delete .idea if it better suit your needs.
 .gradle/
 build/
 .navigation
 captures/
 output.json
 
-#NDK
+# NDK
 obj/
 .externalNativeBuild
 
-#AI
+# Ignoring internal files
+AdMobPlugin.java
+JSInterfacePlugin.java
+GoogleAuthPlugin.java
+BiometricAuthPlugin.java
+QRBarcodeReaderPlugin.java
+ImageCompressPlugin.java
+CSSInjectorPlugin.java
+PaymentGatewayPlugin.java
 createContext.js
 .cursorignore
 roadmap.md
