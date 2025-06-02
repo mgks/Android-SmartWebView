@@ -39,6 +39,11 @@ obj/
 .externalNativeBuild
 
 # Ignoring internal files
+createContext.js
+.cursorignore
+roadmap.md
+context.md
+PLUGINS.md
 AdMobPlugin.java
 JSInterfacePlugin.java
 GoogleAuthPlugin.java
@@ -47,8 +52,3 @@ QRBarcodeReaderPlugin.java
 ImageCompressPlugin.java
 CSSInjectorPlugin.java
 PaymentGatewayPlugin.java
-createContext.js
-.cursorignore
-roadmap.md
-context.md
-PLUGINS.md
