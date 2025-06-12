@@ -43,7 +43,7 @@
 *   **Downloads & Printing:** Handle file downloads and print web content.
 *   **Modern WebView:** Secure, up-to-date, and highly configurable via `SmartWebView.java` and `MainActivity.java`.
 
-## Plugin System (v7.1+)
+## Plugins (v7.1+)
 
 Smart WebView features a plugin system to add new features with minimal effort.
 *   **Understanding Plugins:**
@@ -55,12 +55,14 @@ Smart WebView features a plugin system to add new features with minimal effort.
 *   **Included Plugins:** The project includes an example plugin for Toasts. Plugins are designed to be self-registering.
 *   **Premium Plugins:** List of premium plugins for **[Project Sponsors](https://github.com/sponsors/mgks)**.
     - [**Admob**](https://docs.mgks.dev/smart-webview/plugins/admob): Integrate Google AdMob ads into your app.
-    - [**Google Auth**](https://docs.mgks.dev/smart-webview/plugins/google-auth): Add Google authentication for seamless sign-in.
+    - [**Google Auth**](https://docs.mgks.dev/smart-webview/plugins/google-auth)<sup>*</sup>: Add Google authentication for seamless sign-in.
     - [**QR & Barcode Reader**](https://docs.mgks.dev/smart-webview/plugins/qr-barcode-reader): Scan QR codes and barcodes directly from your app.
     - [**Biometric Auth**](https://docs.mgks.dev/smart-webview/plugins/biometric-auth): Enable fingerprint or face authentication.
     - [**Image Compression**](https://docs.mgks.dev/smart-webview/plugins/image-compression): Compress images before uploading for better performance.
     - [**CSS Injection**](https://docs.mgks.dev/smart-webview/plugins/css-injection): Dynamically inject custom CSS into your web pages.
-    - [**Payment Gateway**](https://docs.mgks.dev/smart-webview/plugins/payment-gateway): Integrate payment solutions for in-app purchases.
+    - [**Payment Gateway**](https://docs.mgks.dev/smart-webview/plugins/payment-gateway)<sup>*</sup>: Integrate payment solutions for in-app purchases.
+
+    *<sup>\*</sup> Under-development and will be added to the plugins bundle once finished.*
 
 ## Quick Start
 
