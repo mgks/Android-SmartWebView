@@ -1,21 +1,23 @@
 package mgks.os.swv;
 
 /*
-  Smart WebView 7.0
+  Smart WebView v7
+  https://github.com/mgks/Android-SmartWebView
 
-  MIT License (https://opensource.org/licenses/MIT)
+  A modern, open-source WebView wrapper for building advanced hybrid Android apps.
+  Native features, modular plugins, and full customisation—built for developers.
 
-  Smart WebView is an Open Source project that integrates native features into
-  WebView to help create advanced hybrid applications (https://github.com/mgks/Android-SmartWebView).
+  - Documentation: https://docs.mgks.dev/smart-webview  
+  - Plugins: https://docs.mgks.dev/smart-webview/plugins  
+  - Discussions: https://github.com/mgks/Android-SmartWebView/discussions  
+  - Sponsor the Project: https://github.com/sponsors/mgks  
 
-  Explore plugins and enhanced capabilities: (https://mgks.dev/app/smart-webview-documentation#plugins)
-  Join the discussion: (https://github.com/mgks/Android-SmartWebView/discussions)
-  Support Smart WebView: (https://github.com/sponsors/mgks)
+  MIT License — https://opensource.org/licenses/MIT  
 
-  Your support and acknowledgment of the project's source are greatly appreciated.
-  Giving credit to developers encourages them to create better projects.
+  Mentioning Smart WebView in your project helps others find it and keeps the dev loop alive.
 */
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -26,105 +28,202 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Configuration and utility class for Smart WebView
+ * Contains all the configuration variables and shared objects between activities
+ */
 public class SmartWebView {
 
-	public SmartWebView(){
-		// Smart webview constructor here
-	}
-
-	private static Context appContext; // application context
-	public static void setAppContext(Context context) {
-		appContext = context.getApplicationContext(); // store context in attachBaseContext for robustness and consistency
-	}
-
-	// DEBUG MODE (set to `false` for production apps)
-	static boolean SWV_DEBUGMODE	  = true;	// enable debug mode for detailed reports in log and toast alerts for errors and warnings
-
-	// URL configs
-	static String ASWV_APP_URL	  	  = "https://mgks.github.io/Android-SmartWebView/";	// default app URL (web or file address)
-	static String ASWV_OFFLINE_URL	  = "file:///android_asset/offline.html";	// default app address if ASWP_OFFLINE is set `true` OR ASWV_APP_URL is empty; basically a fail-safe page with no online features
-	static String ASWV_SEARCH         = "https://www.google.com/search?q=";         // search query will start by the end of the present string
-
-	// Permission variables
-	static boolean ASWP_OFFLINE       = ASWV_APP_URL.matches("^(file)://.*$") && Functions.isInternetAvailable(appContext);        // `true` if app loads from local file or no internet connection is available (DISABLES GPS, FIREBASE and other online features)
-
-	static boolean ASWP_FUPLOAD       = true;         // upload file from webview
-	static boolean ASWP_CAMUPLOAD     = true;         // enable upload from camera for photos
-	static boolean ASWP_MULFILE       = true;         // upload multiple files in webview
-	static boolean ASWP_LOCATION      = true;         // track GPS locations
-	static boolean ASWP_COPYPASTE     = false;        // enable copy/paste within webview
-	static boolean ASWP_RATINGS       = true;         // show ratings dialog; auto configured ; edit method get_rating() for customizations
-	static boolean ASWP_PULLFRESH     = true;         // pull refresh current url
-	static boolean ASWP_PBAR          = true;         // show progress bar in app
-	static boolean ASWP_ZOOM          = false;        // zoom control for webpages view
-	static boolean ASWP_SFORM         = false;        // save form cache and auto-fill information
-	static boolean ASWP_EXTURL        = true;         // open external url with default browser instead of app webview
-
-	static boolean ASWP_TAB           = true;         // instead of default browser, open external URLs in chrome tab
-
-	static boolean ASWP_EXITDIAL	  = true;         // confirm to exit app on back press
-
-	// Security variables
-	static boolean ASWP_CERT_VERI	  = true;		  // verify SSL certificate (Recommended: Keep this true for security)
-
-	// Config variables
-	static int ASWV_ORIENTATION	  	  = 0;		      // change device orientation to portrait (1)(default) or landscape (2) or unspecified (0)
-
-	// Layout configs
-	static int ASWV_LAYOUT            = 1;            // default=0; for clear fullscreen layout, and =1 for drawer layout
-
-	static String ASWV_URL            = ASWP_OFFLINE ? ASWV_OFFLINE_URL : ASWV_APP_URL;	// finalising app URL to load
-	static String ASWV_SHARE_URL      = ASWV_URL + "?share=";                       // URL where you process external content shared with the app
-
-	// Domains allowed to be opened inside webview
-	static String ASWV_EXC_LIST       = "mgks.dev,mgks.github.io,github.com";       //separate domains with a comma (,)
-
-	// Custom user agent defaults
-	static boolean POSTFIX_USER_AGENT       = true;         // set to true to append USER_AGENT_POSTFIX to user agent
-	static boolean OVERRIDE_USER_AGENT      = false;        // set to true to use USER_AGENT instead of default one
-	static String USER_AGENT_POSTFIX        = "SWVAndroid"; // useful for identifying traffic, e.g. in Google Analytics
-	static String CUSTOM_USER_AGENT         = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Mobile Safari/537.36";    // custom user-agent
-
-	// Upload any file type using "*/*"; check file type references for more
-	static String ASWV_F_TYPE         = "*/*";
-
-	// Config analytics
-	static String ASWV_GTAG           = "7XXC1C7CRQ";		// your unique analytics ID
-
-	// Rating config
-	static int ASWR_DAYS      = 3;            // after how many days of usage would you like to show the dialog
-	static int ASWR_TIMES     = 10;           // overall request launch times being ignored
-	static int ASWR_INTERVAL  = 2;            // reminding users to rate after days interval
-
-	/* -- Following variables are used in MainActivity and Functions classes -- */
-	// Internal variable initialization
-	static String ASWV_HOST = Functions.aswm_host(ASWV_URL);
-	static String CURR_URL = ASWV_URL;
-	static String fcm_token;
-	static String asw_pcam_message;
-	static String asw_vcam_message;
-	static String asw_fcm_channel = "1";
-
-	static int ASWV_FCM_ID = (int) System.currentTimeMillis();
-	static int asw_error_counter = 0;
-
-	static int loc_perm = 1;
-	static int file_perm = 2;
-	static int cam_perm = 3;
-	static int noti_perm = 4;
-
-	static boolean true_online = !ASWP_OFFLINE;
-
-	static WebView asw_view;
-	static WebView print_view;
-	static CookieManager cookie_manager;
-	static ProgressBar asw_progress;
-	static TextView asw_loading_text;
-	static NotificationManager asw_notification;
-	static Notification asw_notification_new;
-	static ValueCallback<Uri[]> asw_file_path;
-
-	public static Context getAppContext() {
-		return appContext;
-	}
+    // ===============================================================================================
+    // CORE CONFIGURATION
+    // ===============================================================================================
+    
+    // Debug options
+    public static boolean SWV_DEBUGMODE = true;  // Enable for detailed logs and toast alerts
+    
+    // Version information
+    public static String ASWV_VERSION = "7.1";
+    
+    // ===============================================================================================
+    // URL CONFIGURATION
+    // ===============================================================================================
+    
+    // URL configurations
+    public static String ASWV_APP_URL = "https://mgks.github.io/Android-SmartWebView/";
+    public static String ASWV_OFFLINE_URL = "file:///android_asset/offline.html";
+    public static String ASWV_SEARCH = "https://www.google.com/search?q=";
+    
+    // Determine app URL based on offline status
+    public static String ASWV_URL;
+    public static String ASWV_SHARE_URL;
+    public static String ASWV_HOST;
+    public static String CURR_URL;
+    
+    // External URL handling
+    public static String ASWV_EXC_LIST = "mgks.dev,mgks.github.io,github.com";  // Comma-separated domains
+    
+    // ===============================================================================================
+    // FEATURE FLAGS
+    // ===============================================================================================
+    
+    // Core features
+    public static boolean ASWP_OFFLINE;       // True if app loads from local file or no internet
+    public static boolean ASWP_FUPLOAD = true;     // Upload file from webview
+    public static boolean ASWP_CAMUPLOAD = true;   // Enable upload from camera for photos
+    public static boolean ASWP_MULFILE = true;     // Upload multiple files in webview
+    public static boolean ASWP_LOCATION = true;    // Track GPS locations
+    public static boolean ASWP_COPYPASTE = false;  // Enable copy/paste within webview
+    public static boolean ASWP_RATINGS = true;     // Show ratings dialog
+    public static boolean ASWP_PULLFRESH = true;   // Pull refresh current url
+    public static boolean ASWP_PBAR = true;        // Show progress bar in app
+    public static boolean ASWP_ZOOM = false;       // Zoom control for webpages view
+    public static boolean ASWP_SFORM = false;      // Save form cache and auto-fill
+    public static boolean ASWP_EXTURL = true;      // Open external url with default browser
+    public static boolean ASWP_TAB = true;         // Use Chrome tabs for external URLs
+    public static boolean ASWP_EXITDIAL = true;    // Confirm exit on back press
+    
+    // Security options
+    public static boolean ASWP_CERT_VERI = true;   // Verify SSL certificate (recommended)
+    
+    // Layout and display
+    public static int ASWV_ORIENTATION = 0;        // 0: unspecified, 1: portrait, 2: landscape
+    public static int ASWV_LAYOUT = 0;             // 0: fullscreen, 1: drawer layout
+    
+    // User agent configuration
+    public static boolean POSTFIX_USER_AGENT = true;
+    public static boolean OVERRIDE_USER_AGENT = false;
+    public static String USER_AGENT_POSTFIX = "SWVAndroid";
+    public static String CUSTOM_USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Mobile Safari/537.36";
+    
+    // File upload configuration
+    public static String ASWV_F_TYPE = "*/*";      // Upload file type (use "*/*" for any file)
+    
+    // Analytics
+    public static String ASWV_GTAG = "G-7XXC1C7CRQ";   // Analytics ID
+    
+    // ===============================================================================================
+    // RATING CONFIGURATION
+    // ===============================================================================================
+    
+    static int ASWR_DAYS = 3;         // Days before showing the dialog
+    static int ASWR_TIMES = 10;       // Launch times before showing
+    static int ASWR_INTERVAL = 2;     // Days interval for reminders
+    
+    // ===============================================================================================
+    // INTERNAL STATE VARIABLES
+    // ===============================================================================================
+    
+    // Shared UI components
+    static WebView asw_view;
+    static WebView print_view;
+    static CookieManager cookie_manager;
+    static ProgressBar asw_progress;
+    static TextView asw_loading_text;
+    static NotificationManager asw_notification;
+    static Notification asw_notification_new;
+    static ValueCallback<Uri[]> asw_file_path;
+    
+    // Permission request codes
+    static int loc_perm = 1;
+    static int file_perm = 2;
+    static int cam_perm = 3;
+    static int noti_perm = 4;
+    
+    // State tracking
+    static String fcm_token;
+    static String asw_pcam_message;
+    static String asw_vcam_message;
+    static String asw_fcm_channel = "1";
+    static int ASWV_FCM_ID = (int) System.currentTimeMillis();
+    static int asw_error_counter = 0;
+    static boolean true_online = !ASWP_OFFLINE;
+    
+    // ===============================================================================================
+    // INITIALIZATION MANAGEMENT
+    // ===============================================================================================
+    
+    private static Context appContext;
+    private static PluginManager pluginManagerInstance;
+    private static boolean isInitialized = false;
+    private static List<Runnable> initCallbacks = new ArrayList<>();
+    
+    /**
+     * Default constructor
+     */
+    public SmartWebView() {
+        // Empty constructor
+    }
+    
+    /**
+     * Set the application context
+     * @param context Application context
+     */
+    public static void setAppContext(Context context) {
+        appContext = context.getApplicationContext();
+        
+        // Initialize URL configuration after context is set
+        ASWP_OFFLINE = ASWV_APP_URL.matches("^(file)://.*$") && Functions.isInternetAvailable(appContext);
+        ASWV_URL = ASWP_OFFLINE ? ASWV_OFFLINE_URL : ASWV_APP_URL;
+        ASWV_SHARE_URL = ASWV_URL + "?share=";
+        ASWV_HOST = Functions.aswm_host(ASWV_URL);
+        CURR_URL = ASWV_URL;
+    }
+    
+    /**
+     * Get the application context
+     * @return Application context
+     */
+    public static Context getAppContext() {
+        return appContext;
+    }
+    
+    /**
+     * Get the plugin manager instance (singleton)
+     * @return PluginManager instance
+     */
+    public static synchronized PluginManager getPluginManager() {
+        if (pluginManagerInstance == null) {
+            pluginManagerInstance = new PluginManager();
+        }
+        return pluginManagerInstance;
+    }
+    
+    /**
+     * Initialize Smart WebView with required components
+     * @param activity Activity instance
+     * @param webView WebView instance
+     * @param functions Functions instance
+     */
+    public static void init(Activity activity, WebView webView, Functions functions) {
+        getPluginManager().setContext(activity, webView, functions);
+        initializePlugins();
+    }
+    
+    /**
+     * Initialize plugins and trigger callbacks
+     */
+    public static void initializePlugins() {
+        if (!isInitialized) {
+            isInitialized = true;
+            for (Runnable callback : initCallbacks) {
+                callback.run();
+            }
+            initCallbacks.clear();
+        }
+    }
+    
+    /**
+     * Register callback for plugin initialization
+     * @param callback Callback to run after initialization
+     */
+    public static void onPluginsInitialized(Runnable callback) {
+        if (isInitialized) {
+            callback.run();
+        } else {
+            initCallbacks.add(callback);
+        }
+    }
 }
