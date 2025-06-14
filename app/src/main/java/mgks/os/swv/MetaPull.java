@@ -1,31 +1,32 @@
 package mgks.os.swv;
 
 /*
-  Smart WebView 7.0
+  Smart WebView v7
+  https://github.com/mgks/Android-SmartWebView
 
-  MIT License (https://opensource.org/licenses/MIT)
+  A modern, open-source WebView wrapper for building advanced hybrid Android apps.
+  Native features, modular plugins, and full customisation—built for developers.
 
-  Smart WebView is an Open Source project that integrates native features into
-  WebView to help create advanced hybrid applications (https://github.com/mgks/Android-SmartWebView).
+  - Documentation: https://docs.mgks.dev/smart-webview  
+  - Plugins: https://docs.mgks.dev/smart-webview/plugins  
+  - Discussions: https://github.com/mgks/Android-SmartWebView/discussions  
+  - Sponsor the Project: https://github.com/sponsors/mgks  
 
-  Explore plugins and enhanced capabilities: (https://mgks.dev/app/smart-webview-documentation#plugins)
-  Join the discussion: (https://github.com/mgks/Android-SmartWebView/discussions)
-  Support Smart WebView: (https://github.com/sponsors/mgks)
+  MIT License — https://opensource.org/licenses/MIT  
 
-  Your support and acknowledgment of the project's source are greatly appreciated.
-  Giving credit to developers encourages them to create better projects.
+  Mentioning Smart WebView in your project helps others find it and keeps the dev loop alive.
 */
 
 import android.os.Build;
 
 public class MetaPull {
 	String swv(){
-		return "SWV.RELEASE : 7.0"
+		return "SWV.RELEASE : 7.1"
 			+"\nSWV.BUILD : 7"
 			+"\nSWV.SDK.MIN : 23"
 			+"\nSWV.SDK.MAX : 35"
 			+"\nSWV.BUILD.TYPE : release"
-			+"\nSWV.BUILD.NAME : 7.0"
+			+"\nSWV.BUILD.NAME : 7.1"
 			+"\nSWV.PACKAGE.NAME : mgks.os.swv";
 	}
 
