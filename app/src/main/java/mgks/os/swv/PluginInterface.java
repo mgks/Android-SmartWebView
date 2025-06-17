@@ -1,39 +1,36 @@
 package mgks.os.swv;
 
 /*
-  Smart WebView 7.0
+  Smart WebView v7
+  https://github.com/mgks/Android-SmartWebView
 
-  MIT License (https://opensource.org/licenses/MIT)
+  A modern, open-source WebView wrapper for building advanced hybrid Android apps.
+  Native features, modular plugins, and full customisation—built for developers.
 
-  Smart WebView is an Open Source project that integrates native features into
-  WebView to help create advanced hybrid applications (https://github.com/mgks/Android-SmartWebView).
+  - Documentation: https://docs.mgks.dev/smart-webview  
+  - Plugins: https://docs.mgks.dev/smart-webview/plugins  
+  - Discussions: https://github.com/mgks/Android-SmartWebView/discussions  
+  - Sponsor the Project: https://github.com/sponsors/mgks  
 
-  Explore plugins and enhanced capabilities: (https://mgks.dev/app/smart-webview-documentation#plugins)
-  Join the discussion: (https://github.com/mgks/Android-SmartWebView/discussions)
-  Support Smart WebView: (https://github.com/sponsors/mgks)
+  MIT License — https://opensource.org/licenses/MIT  
 
-  Your support and acknowledgment of the project's source are greatly appreciated.
-  Giving credit to developers encourages them to create better projects.
+  Mentioning Smart WebView in your project helps others find it and keeps the dev loop alive.
 */
 
 import android.app.Activity;
 import android.content.Intent;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
-
+import java.util.Map;
 import androidx.annotation.NonNull;
 
 public interface PluginInterface {
-	void initialize(Activity activity, WebView webView);
+	void initialize(Activity activity, WebView webView, Functions functions, Map<String, Object> config);
 	String getPluginName();
-	String[] getOverriddenUrls();
-	void handlePermissionRequest(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
-	void handleActivityResult(int requestCode, int resultCode, Intent data);
+	void onActivityResult(int requestCode, int resultCode, Intent data);
+	void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
 	boolean shouldOverrideUrlLoading(WebView view, String url);
 	void onPageStarted(String url);
 	void onPageFinished(String url);
-
-	boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request);
-
-	void onQRCodeScanResult(String result);
+	void onDestroy();
+	void evaluateJavascript(String script);
 }
