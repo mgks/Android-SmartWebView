@@ -1,27 +1,26 @@
 package mgks.os.swv;
 
 /*
-  Smart WebView 7.0
+  Smart WebView v7
+  https://github.com/mgks/Android-SmartWebView
 
-  MIT License (https://opensource.org/licenses/MIT)
+  A modern, open-source WebView wrapper for building advanced hybrid Android apps.
+  Native features, modular plugins, and full customisation—built for developers.
 
-  Smart WebView is an Open Source project that integrates native features into
-  WebView to help create advanced hybrid applications (https://github.com/mgks/Android-SmartWebView).
+  - Documentation: https://docs.mgks.dev/smart-webview  
+  - Plugins: https://docs.mgks.dev/smart-webview/plugins  
+  - Discussions: https://github.com/mgks/Android-SmartWebView/discussions  
+  - Sponsor the Project: https://github.com/sponsors/mgks  
 
-  Explore plugins and enhanced capabilities: (https://mgks.dev/app/smart-webview-documentation#plugins)
-  Join the discussion: (https://github.com/mgks/Android-SmartWebView/discussions)
-  Support Smart WebView: (https://github.com/sponsors/mgks)
+  MIT License — https://opensource.org/licenses/MIT  
 
-  Your support and acknowledgment of the project's source are greatly appreciated.
-  Giving credit to developers encourages them to create better projects.
+  Mentioning Smart WebView in your project helps others find it and keeps the dev loop alive.
 */
 
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
-
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -31,54 +30,83 @@ import java.util.Map;
 
 public class PluginManager {
 	private static final String TAG = "PluginManager";
-	public static Activity activity;
-	public static WebView webView;
-	private static final Map<String, PluginInterface> plugins = new HashMap<>();
-	private static final List<String> overriddenUrls = new ArrayList<>();
+	private Activity activity;
+	private WebView webView;
+	private Functions functions;
+	private final List<PluginInterface> plugins = new ArrayList<>();
+	private final Map<String, Map<String, Object>> pluginConfigs = new HashMap<>();
 
-	public PluginManager(Activity activity, WebView webView) {
-		this.activity = activity;
-		this.webView = webView;
-		// Plugins will have registered themselves by now
-		logRegisteredPlugins();
-	}
+	// No constructor needed.  Initialization happens via SmartWebView.init().
 
-	public static void registerPlugin(String pluginName, PluginInterface plugin, String[] urlsToOverride) {
-		if (plugins.containsKey(pluginName)) {
+	public static void registerPlugin(PluginInterface plugin, Map<String, Object> config) {
+		PluginManager instance = SmartWebView.getPluginManager();
+		String pluginName = plugin.getPluginName();
+
+		// --- NEW: Check if plugins are globally enabled and if this specific plugin is enabled ---
+		if (!SmartWebView.ASWP_PLUGINS || !SmartWebView.ASWP_PLUGIN_SETTINGS.getOrDefault(pluginName, false)) {
+			Log.w(TAG, "Plugin registration skipped: '" + pluginName + "' is disabled in configuration.");
+			return;
+		}
+		// --- END NEW ---
+
+		if (instance.getPlugin(pluginName) != null) {
 			Log.w(TAG, "Plugin already registered: " + pluginName);
 			return;
 		}
-		plugins.put(pluginName, plugin);
-		for (String url : urlsToOverride) {
-			overriddenUrls.add(url);
-		}
-		plugin.initialize(activity, webView);
-		Log.d(TAG, "Plugin registered: " + pluginName);
-	}
+		instance.plugins.add(plugin);
+		instance.pluginConfigs.put(pluginName, config);
 
-	private void logRegisteredPlugins() {
-		Log.d(TAG, "Registered plugins:");
-		for (String pluginName : plugins.keySet()) {
-			Log.d(TAG, "- " + pluginName);
+		// If context is already available, initialize immediately.
+		if (instance.activity != null) {
+			plugin.initialize(instance.activity, instance.webView, instance.functions, config);
+			Log.d(TAG, "Plugin initialized immediately: " + pluginName);
+		} else {
+			Log.d(TAG, "Plugin registration queued: " + pluginName + ". Waiting for context...");
 		}
 	}
 
-	public void onPageStarted(String url) {
-		for (PluginInterface plugin : plugins.values()) {
-			plugin.onPageStarted(url);
+	/**
+	 * Sets the context and initializes all queued plugins.
+	 */
+	public void setContext(Activity activity, WebView webView, Functions functions) {
+		this.activity = activity;
+		this.webView = webView;
+		this.functions = functions;
+
+		// Initialize any plugins that were registered before the context was available.
+		for (PluginInterface plugin : plugins) {
+			Map<String, Object> config = pluginConfigs.get(plugin.getPluginName());
+			// Check if the plugin was already initialized (can happen if context is set late)
+			// A simple check could be to see if a key member like 'activity' is already set in the plugin if it were public,
+			// but for now, we re-initialize. A more robust system might have an isInitialized() flag in the plugin interface.
+			plugin.initialize(activity, webView, functions, config);
+			Log.d(TAG, "Delayed plugin initialization completed for: " + plugin.getPluginName());
 		}
 	}
 
-	public void onPageFinished(String url) {
-		for (PluginInterface plugin : plugins.values()) {
-			plugin.onPageFinished(url);
+	private PluginInterface getPlugin(String pluginName) {
+		for (PluginInterface plugin : plugins) {
+			if (plugin.getPluginName().equals(pluginName)) {
+				return plugin;
+			}
+		}
+		return null;
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		for (PluginInterface plugin : plugins) {
+			plugin.onActivityResult(requestCode, resultCode, data);
 		}
 	}
 
-	// Updated to use the shouldOverrideUrlLoading method of each plugin
-	public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-		String url = request.getUrl().toString();
-		for (PluginInterface plugin : plugins.values()) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		for (PluginInterface plugin : plugins) {
+			plugin.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		}
+	}
+
+	public boolean shouldOverrideUrlLoading(WebView view, String url) {
+		for (PluginInterface plugin : plugins) {
 			if (plugin.shouldOverrideUrlLoading(view, url)) {
 				return true;
 			}
@@ -86,15 +114,38 @@ public class PluginManager {
 		return false;
 	}
 
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		for (PluginInterface plugin : plugins.values()) {
-			plugin.handlePermissionRequest(requestCode, permissions, grantResults);
+	public void onPageStarted(String url) {
+		for (PluginInterface plugin : plugins) {
+			plugin.onPageStarted(url);
 		}
 	}
 
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		for (PluginInterface plugin : plugins.values()) {
-			plugin.handleActivityResult(requestCode, resultCode, data);
+	public void onPageFinished(String url) {
+		for (PluginInterface plugin : plugins) {
+			plugin.onPageFinished(url);
+		}
+	}
+
+	public void onDestroy() {
+		for (PluginInterface plugin : plugins) {
+			plugin.onDestroy();
+		}
+		plugins.clear();
+		pluginConfigs.clear();
+	}
+
+	public PluginInterface getPluginInstance(String pluginName) {
+		for (PluginInterface plugin : plugins) {
+			if (plugin.getPluginName().equals(pluginName)) {
+				return plugin;
+			}
+		}
+		return null;
+	}
+
+	public void evaluateJavascript(String script) {
+		if (webView != null) {
+			webView.evaluateJavascript(script, null);
 		}
 	}
 }
