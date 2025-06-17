@@ -29,7 +29,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Configuration and utility class for Smart WebView
@@ -40,35 +42,35 @@ public class SmartWebView {
     // ===============================================================================================
     // CORE CONFIGURATION
     // ===============================================================================================
-    
+
     // Debug options
     public static boolean SWV_DEBUGMODE = true;  // Enable for detailed logs and toast alerts
-    
+
     // Version information
     public static String ASWV_VERSION = "7.1";
-    
+
     // ===============================================================================================
     // URL CONFIGURATION
     // ===============================================================================================
-    
+
     // URL configurations
     public static String ASWV_APP_URL = "https://mgks.github.io/Android-SmartWebView/";
     public static String ASWV_OFFLINE_URL = "file:///android_asset/offline.html";
     public static String ASWV_SEARCH = "https://www.google.com/search?q=";
-    
+
     // Determine app URL based on offline status
     public static String ASWV_URL;
     public static String ASWV_SHARE_URL;
     public static String ASWV_HOST;
     public static String CURR_URL;
-    
+
     // External URL handling
     public static String ASWV_EXC_LIST = "mgks.dev,mgks.github.io,github.com";  // Comma-separated domains
-    
+
     // ===============================================================================================
     // FEATURE FLAGS
     // ===============================================================================================
-    
+
     // Core features
     public static boolean ASWP_OFFLINE;       // True if app loads from local file or no internet
     public static boolean ASWP_FUPLOAD = true;     // Upload file from webview
@@ -84,38 +86,57 @@ public class SmartWebView {
     public static boolean ASWP_EXTURL = true;      // Open external url with default browser
     public static boolean ASWP_TAB = true;         // Use Chrome tabs for external URLs
     public static boolean ASWP_EXITDIAL = true;    // Confirm exit on back press
-    
+
     // Security options
     public static boolean ASWP_CERT_VERI = true;   // Verify SSL certificate (recommended)
-    
+
     // Layout and display
     public static int ASWV_ORIENTATION = 0;        // 0: unspecified, 1: portrait, 2: landscape
     public static int ASWV_LAYOUT = 0;             // 0: fullscreen, 1: drawer layout
-    
+
     // User agent configuration
     public static boolean POSTFIX_USER_AGENT = true;
     public static boolean OVERRIDE_USER_AGENT = false;
     public static String USER_AGENT_POSTFIX = "SWVAndroid";
     public static String CUSTOM_USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Mobile Safari/537.36";
-    
+
     // File upload configuration
     public static String ASWV_F_TYPE = "*/*";      // Upload file type (use "*/*" for any file)
-    
+
     // Analytics
     public static String ASWV_GTAG = "G-7XXC1C7CRQ";   // Analytics ID
-    
+
+    // ===============================================================================================
+    // PLUGIN CONFIGURATION
+    // ===============================================================================================
+
+    // Master switch for all plugins
+    public static boolean ASWP_PLUGINS = true; // Globally enable or disable all plugins
+
+    // Individual plugin switches
+    public static Map<String, Boolean> ASWP_PLUGIN_SETTINGS = new HashMap<String, Boolean>() {{
+        put("AdMobPlugin", true);
+        put("JSInterfacePlugin", true);
+        put("ToastPlugin", true);
+        put("QRScannerPlugin", true);
+        put("BiometricPlugin", true);
+        put("ImageCompressionPlugin", true);
+        // To disable a plugin, just set it to false, e.g., put("AdMobPlugin", false);
+        // New plugins can be added here.
+    }};
+
     // ===============================================================================================
     // RATING CONFIGURATION
     // ===============================================================================================
-    
+
     static int ASWR_DAYS = 3;         // Days before showing the dialog
     static int ASWR_TIMES = 10;       // Launch times before showing
     static int ASWR_INTERVAL = 2;     // Days interval for reminders
-    
+
     // ===============================================================================================
     // INTERNAL STATE VARIABLES
     // ===============================================================================================
-    
+
     // Shared UI components
     static WebView asw_view;
     static WebView print_view;
@@ -125,13 +146,13 @@ public class SmartWebView {
     static NotificationManager asw_notification;
     static Notification asw_notification_new;
     static ValueCallback<Uri[]> asw_file_path;
-    
+
     // Permission request codes
     static int loc_perm = 1;
     static int file_perm = 2;
     static int cam_perm = 3;
     static int noti_perm = 4;
-    
+
     // State tracking
     static String fcm_token;
     static String asw_pcam_message;
@@ -140,38 +161,38 @@ public class SmartWebView {
     static int ASWV_FCM_ID = (int) System.currentTimeMillis();
     static int asw_error_counter = 0;
     static boolean true_online = !ASWP_OFFLINE;
-    
+
     // ===============================================================================================
     // INITIALIZATION MANAGEMENT
     // ===============================================================================================
-    
+
     private static Context appContext;
     private static PluginManager pluginManagerInstance;
-    private static boolean isInitialized = false;
-    private static List<Runnable> initCallbacks = new ArrayList<>();
-    
+    private static boolean arePluginsInitialized = false; // Flag to track initialization
+    private static final List<Runnable> onInitCallbacks = new ArrayList<>(); // List of tasks to run after init
+
     /**
      * Default constructor
      */
     public SmartWebView() {
         // Empty constructor
     }
-    
+
     /**
      * Set the application context
      * @param context Application context
      */
     public static void setAppContext(Context context) {
         appContext = context.getApplicationContext();
-        
+
         // Initialize URL configuration after context is set
-        ASWP_OFFLINE = ASWV_APP_URL.matches("^(file)://.*$") && Functions.isInternetAvailable(appContext);
+        ASWP_OFFLINE = ASWV_APP_URL.matches("^(file)://.*$") && !Functions.isInternetAvailable(appContext);
         ASWV_URL = ASWP_OFFLINE ? ASWV_OFFLINE_URL : ASWV_APP_URL;
-        ASWV_SHARE_URL = ASWV_URL + "?share=";
+        ASWV_SHARE_URL = ASWV_URL + "/?share="; // A more standard share URL
         ASWV_HOST = Functions.aswm_host(ASWV_URL);
         CURR_URL = ASWV_URL;
     }
-    
+
     /**
      * Get the application context
      * @return Application context
@@ -179,7 +200,7 @@ public class SmartWebView {
     public static Context getAppContext() {
         return appContext;
     }
-    
+
     /**
      * Get the plugin manager instance (singleton)
      * @return PluginManager instance
@@ -190,40 +211,37 @@ public class SmartWebView {
         }
         return pluginManagerInstance;
     }
-    
+
     /**
-     * Initialize Smart WebView with required components
-     * @param activity Activity instance
-     * @param webView WebView instance
-     * @param functions Functions instance
+     * Initializes the core components of SmartWebView and signals that plugins can be initialized.
+     * @param activity The main activity.
+     * @param webView The main WebView.
+     * @param functions The utility functions instance.
      */
     public static void init(Activity activity, WebView webView, Functions functions) {
         getPluginManager().setContext(activity, webView, functions);
-        initializePlugins();
-    }
-    
-    /**
-     * Initialize plugins and trigger callbacks
-     */
-    public static void initializePlugins() {
-        if (!isInitialized) {
-            isInitialized = true;
-            for (Runnable callback : initCallbacks) {
+
+        // Now that the context is set, we can consider plugins initialized.
+        // Run all pending callbacks.
+        if (!arePluginsInitialized) {
+            arePluginsInitialized = true;
+            for (Runnable callback : onInitCallbacks) {
                 callback.run();
             }
-            initCallbacks.clear();
+            onInitCallbacks.clear();
         }
     }
-    
+
     /**
-     * Register callback for plugin initialization
-     * @param callback Callback to run after initialization
+     * Registers a task to be executed once the plugin system is fully initialized.
+     * If the system is already initialized, the task runs immediately.
+     * @param callback The task (Runnable) to execute.
      */
     public static void onPluginsInitialized(Runnable callback) {
-        if (isInitialized) {
-            callback.run();
+        if (arePluginsInitialized) {
+            callback.run(); // Already initialized, run immediately.
         } else {
-            initCallbacks.add(callback);
+            onInitCallbacks.add(callback); // Not yet initialized, queue the callback.
         }
     }
 }
