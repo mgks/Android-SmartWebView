@@ -220,9 +220,6 @@ public class SmartWebView {
      */
     public static void init(Activity activity, WebView webView, Functions functions) {
         getPluginManager().setContext(activity, webView, functions);
-
-        // Now that the context is set, we can consider plugins initialized.
-        // Run all pending callbacks.
         if (!arePluginsInitialized) {
             arePluginsInitialized = true;
             for (Runnable callback : onInitCallbacks) {
