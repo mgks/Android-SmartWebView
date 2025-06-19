@@ -57,9 +57,6 @@ public class Playground {
     public Playground(Activity activity, WebView webView, Functions functions) {
         this.activity = activity;
         this.webView = webView;
-
-        // Listen for plugin initialization, then run our tests.
-        // This is the key change that fixes the race condition.
         SmartWebView.onPluginsInitialized(this::onPluginsReady);
     }
 
