@@ -19,10 +19,12 @@ package mgks.os.swv;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.DownloadManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -37,6 +39,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -58,6 +61,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,6 +72,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -83,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     static Functions fns = new Functions();
     private FileProcessing fileProcessing;
     private LinearLayout adContainer;
+    private ActivityResultLauncher<Intent> fileUploadLauncher;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -95,11 +101,64 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Initialize the ActivityResultLauncher here, before it's needed
+        fileUploadLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    Uri[] results = null;
+                    if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                        // If the file request was cancelled, we must send a null value
+                        if (SmartWebView.asw_file_path != null) {
+                            SmartWebView.asw_file_path.onReceiveValue(null);
+                        }
+                        return;
+                    }
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (null == SmartWebView.asw_file_path) {
+                            return;
+                        }
+                        ClipData clipData;
+                        String stringData;
+                        try {
+                            clipData = result.getData().getClipData();
+                            stringData = result.getData().getDataString();
+                        } catch (Exception e) {
+                            clipData = null;
+                            stringData = null;
+                        }
+
+                        if (clipData == null && stringData == null && (SmartWebView.asw_pcam_message != null || SmartWebView.asw_vcam_message != null)) {
+                            results = new Uri[]{Uri.parse(SmartWebView.asw_pcam_message != null ? SmartWebView.asw_pcam_message : SmartWebView.asw_vcam_message)};
+                        } else {
+                            if (null != clipData) {
+                                final int numSelectedFiles = clipData.getItemCount();
+                                results = new Uri[numSelectedFiles];
+                                for (int i = 0; i < numSelectedFiles; i++) {
+                                    results[i] = clipData.getItemAt(i).getUri();
+                                }
+                            } else {
+                                try {
+                                    Bitmap cam_photo = (Bitmap) result.getData().getExtras().get("data");
+                                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                                    cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                                    stringData = MediaStore.Images.Media.insertImage(getContentResolver(), cam_photo, null, null);
+                                } catch (Exception ignored) {}
+                                results = new Uri[]{Uri.parse(stringData)};
+                            }
+                        }
+                    }
+                    if (SmartWebView.asw_file_path != null) {
+                        SmartWebView.asw_file_path.onReceiveValue(results);
+                        SmartWebView.asw_file_path = null;
+                    }
+                }
+        );
+
         // Initialize app context
         SmartWebView.setAppContext(getApplicationContext());
 
-        // Initialize file processing
-        fileProcessing = new FileProcessing(this);
+        // Initialize file processing, passing the new launcher
+        fileProcessing = new FileProcessing(this, fileUploadLauncher);
 
         // Set screen orientation from cookie or default
         String cookie_orientation = !SmartWebView.ASWP_OFFLINE ? fns.get_cookies("ORIENT") : "";
@@ -285,14 +344,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setupFeatures() {
         // Setup service worker if supported
-        if (Build.VERSION.SDK_INT >= 24) {
-            ServiceWorkerController.getInstance().setServiceWorkerClient(new ServiceWorkerClient() {
-                @Override
-                public WebResourceResponse shouldInterceptRequest(WebResourceRequest request) {
-                    return null;
-                }
-            });
-        }
+        ServiceWorkerController.getInstance().setServiceWorkerClient(new ServiceWorkerClient() {
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebResourceRequest request) {
+                return null;
+            }
+        });
 
         // Prevent app from being started again when it is still alive in the background
         if (!isTaskRoot()) {
