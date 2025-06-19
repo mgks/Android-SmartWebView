@@ -47,67 +47,16 @@ import java.util.Date;
 public class FileProcessing {
 
 	private final Activity activity;
-	private ActivityResultLauncher<Intent> resultLauncher;
+	private final ActivityResultLauncher<Intent> resultLauncher; // Launcher is now passed in
 	Functions fns = new Functions();
 
-	public FileProcessing(Activity activity) {
+	// Modified constructor to accept the launcher
+	public FileProcessing(Activity activity, ActivityResultLauncher<Intent> resultLauncher) {
 		this.activity = activity;
-		registerActivityResultLauncher(); // Call it here to initialize resultLauncher
+		this.resultLauncher = resultLauncher;
 	}
 
-	public void registerActivityResultLauncher() {
-		resultLauncher = ((AppCompatActivity) activity).registerForActivityResult(
-			new ActivityResultContracts.StartActivityForResult(),
-			result -> {
-				Uri[] results = null;
-				if (result.getResultCode() == Activity.RESULT_CANCELED) {
-					// If the file request was cancelled (i.e. user exited camera), we must still send a null value in order to ensure that future attempts to pick files will still work.
-					SmartWebView.asw_file_path.onReceiveValue(null);
-					return;
-				} else if (result.getResultCode() == Activity.RESULT_OK) {
-					if (null == SmartWebView.asw_file_path) {
-						return;
-					}
-					ClipData clipData;
-					String stringData;
-					try {
-						assert result.getData() != null;
-						clipData = result.getData().getClipData();
-						stringData = result.getData().getDataString();
-					} catch (Exception e) {
-						clipData = null;
-						stringData = null;
-					}
-
-					if (clipData == null && stringData == null && (SmartWebView.asw_pcam_message != null || SmartWebView.asw_vcam_message != null)) {
-						results = new Uri[]{Uri.parse(SmartWebView.asw_pcam_message != null ? SmartWebView.asw_pcam_message : SmartWebView.asw_vcam_message)};
-					} else {
-						// Checking if multiple files are selected
-						if (null != clipData) {
-							final int numSelectedFiles = clipData.getItemCount();
-							results = new Uri[numSelectedFiles];
-							for (int i = 0; i < numSelectedFiles; i++) {
-								results[i] = clipData.getItemAt(i).getUri();
-							}
-						} else {
-							try {
-								assert result.getData() != null;
-								Bitmap cam_photo = (Bitmap) result.getData().getExtras().get("data");
-								ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-								assert cam_photo != null;
-								cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-								stringData = MediaStore.Images.Media.insertImage(activity.getContentResolver(), cam_photo, null, null);
-							} catch (Exception ignored) {
-							}
-							results = new Uri[]{Uri.parse(stringData)};
-						}
-					}
-				}
-				SmartWebView.asw_file_path.onReceiveValue(results);
-				SmartWebView.asw_file_path = null;
-			}
-		);
-	}
+	// The registerActivityResultLauncher() method is now removed from this class.
 
 	public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
 		if (!SmartWebView.ASWP_FUPLOAD) {
