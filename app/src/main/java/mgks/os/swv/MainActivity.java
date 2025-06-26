@@ -101,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SmartWebView.loadPlugins();
+
         // Initialize the ActivityResultLauncher here, before it's needed
         fileUploadLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -117,14 +119,13 @@ public class MainActivity extends AppCompatActivity {
                         if (null == SmartWebView.asw_file_path) {
                             return;
                         }
-                        ClipData clipData;
-                        String stringData;
-                        try {
-                            clipData = result.getData().getClipData();
-                            stringData = result.getData().getDataString();
-                        } catch (Exception e) {
-                            clipData = null;
-                            stringData = null;
+                        ClipData clipData = null;
+                        String stringData = null;
+                        Intent data = result.getData(); // Get the intent once
+
+                        if (data != null) { // SAFET-Y CHECK 1
+                            clipData = data.getClipData();
+                            stringData = data.getDataString();
                         }
 
                         if (clipData == null && stringData == null && (SmartWebView.asw_pcam_message != null || SmartWebView.asw_vcam_message != null)) {
@@ -137,13 +138,23 @@ public class MainActivity extends AppCompatActivity {
                                     results[i] = clipData.getItemAt(i).getUri();
                                 }
                             } else {
-                                try {
-                                    Bitmap cam_photo = (Bitmap) result.getData().getExtras().get("data");
-                                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                                    cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                                    stringData = MediaStore.Images.Media.insertImage(getContentResolver(), cam_photo, null, null);
-                                } catch (Exception ignored) {}
-                                results = new Uri[]{Uri.parse(stringData)};
+                                // SAFETY CHECK 2: Check both data and extras
+                                if (data != null && data.getExtras() != null) {
+                                    try {
+                                        Bitmap cam_photo = (Bitmap) data.getExtras().get("data");
+                                        if (cam_photo != null) { // SAFETY CHECK 3: Check if bitmap is not null
+                                            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                                            cam_photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                                            stringData = MediaStore.Images.Media.insertImage(getContentResolver(), cam_photo, "CameraPhoto", null);
+                                        }
+                                    } catch (Exception e) {
+                                        Log.e(TAG, "Error processing camera photo", e);
+                                    }
+                                }
+                                // Use stringData only if it was successfully populated
+                                if(stringData != null) {
+                                    results = new Uri[]{Uri.parse(stringData)};
+                                }
                             }
                         }
                     }
