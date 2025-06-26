@@ -22,6 +22,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
@@ -33,11 +34,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mgks.os.swv.plugins.*;
+
 /**
  * Configuration and utility class for Smart WebView
  * Contains all the configuration variables and shared objects between activities
  */
 public class SmartWebView {
+
+    private static final String TAG = "SmartWebView";
 
     // ===============================================================================================
     // CORE CONFIGURATION
@@ -239,6 +244,36 @@ public class SmartWebView {
             callback.run(); // Already initialized, run immediately.
         } else {
             onInitCallbacks.add(callback); // Not yet initialized, queue the callback.
+        }
+    }
+
+    public static void loadPlugins() {
+        if (ASWP_PLUGINS) {
+            // An array of all plugin classes
+            Class<?>[] pluginClasses = {
+                    AdMobPlugin.class,
+                    BiometricPlugin.class,
+                    ImageCompressionPlugin.class,
+                    JSInterfacePlugin.class,
+                    QRScannerPlugin.class,
+                    ToastPlugin.class
+            };
+
+            for (Class<?> pluginClass : pluginClasses) {
+                try {
+                    // By referencing the class, we force the static block to be executed
+                    Class.forName(pluginClass.getName());
+                } catch (ClassNotFoundException e) {
+                    // This will happen if a developer removes a plugin file.
+                    // We log it for debugging but do not crash the app.
+                    if (SWV_DEBUGMODE) {
+                        Log.w(TAG, "Plugin not found (likely removed): " + pluginClass.getSimpleName() + ". Skipping registration.");
+                    }
+                } catch (ExceptionInInitializerError e) {
+                    // This happens if the static block itself throws an exception.
+                    Log.e(TAG, "Failed to initialize plugin: " + pluginClass.getSimpleName(), e);
+                }
+            }
         }
     }
 }
