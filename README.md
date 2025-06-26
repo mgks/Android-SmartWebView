@@ -59,10 +59,10 @@ Smart WebView features a plugin system to add new features with minimal effort.
     - [**QR & Barcode Reader**](https://docs.mgks.dev/smart-webview/plugins/qr-barcode-reader): Scan QR codes and barcodes directly from your app.
     - [**Biometric Auth**](https://docs.mgks.dev/smart-webview/plugins/biometric-auth): Enable fingerprint or face authentication.
     - [**Image Compression**](https://docs.mgks.dev/smart-webview/plugins/image-compression): Compress images before uploading for better performance.
-    - [**CSS Injection**](https://docs.mgks.dev/smart-webview/plugins/css-injection): Dynamically inject custom CSS into your web pages.
+    - [**CSS Injection**](https://docs.mgks.dev/smart-webview/plugins/css-injection)<sup>*</sup>: Dynamically inject custom CSS into your web pages.
     - [**Payment Gateway**](https://docs.mgks.dev/smart-webview/plugins/payment-gateway)<sup>*</sup>: Integrate payment solutions for in-app purchases.
 
-    *<sup>\*</sup> Under-development and will be added to the plugins bundle once finished.*
+    *<sup>\*</sup> Under-development and will be added to the plugins bundle once completed.*
 
 ## Quick Start
 
