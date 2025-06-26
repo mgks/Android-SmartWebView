@@ -29,7 +29,7 @@
 
 **Android Smart WebView** is a modern, open-source solution for building advanced hybrid Android apps. It allows you to effortlessly extend your app with plugins, native features, and a customizable UI.
 
-**[DOCUMENTATION](https://docs.mgks.dev/smart-webview/)** | **[GET PLUGINS](https://github.com/sponsors/mgks)** | **[ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[DOCUMENTATION](https://docs.mgks.dev/smart-webview/)** | **[PREMIUM PLUGINS](https://github.com/sponsors/mgks/sponsorships?sponsor=mgks&tier_id=468838)** | **[ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 ## Core Features
 
