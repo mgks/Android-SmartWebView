@@ -8,12 +8,12 @@ package mgks.os.swv.plugins;
 
   This plugin provides a simple way to display toast messages.
 
-  Features:
+  FEATURES:
   - Display toast messages from native code
   - Display toast messages from JavaScript
   - Configurable duration
 
-  Usage:
+  USAGE:
   1. Get the plugin instance: ToastPlugin plugin = (ToastPlugin) SmartWebView.getPluginManager().getPluginInstance("ToastPlugin");
   2. Show a toast: plugin.showToast("Hello World!");
   3. From JavaScript: window.ToastInterface.showToast("Hello from JavaScript!");
@@ -121,6 +121,8 @@ public class ToastPlugin implements PluginInterface {
 
         evaluateJavascript(toastSupportJs);
     }
+
+    @Override public void onResume() {}
 
     @Override
     public void onDestroy() {
