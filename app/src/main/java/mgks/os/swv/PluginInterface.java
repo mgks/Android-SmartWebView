@@ -31,6 +31,7 @@ public interface PluginInterface {
 	boolean shouldOverrideUrlLoading(WebView view, String url);
 	void onPageStarted(String url);
 	void onPageFinished(String url);
+	void onResume();
 	void onDestroy();
 	void evaluateJavascript(String script);
 }

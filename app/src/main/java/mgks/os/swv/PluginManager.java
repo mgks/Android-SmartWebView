@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
+import androidx.core.util.Consumer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,18 +37,22 @@ public class PluginManager {
 	private final List<PluginInterface> plugins = new ArrayList<>();
 	private final Map<String, Map<String, Object>> pluginConfigs = new HashMap<>();
 
+	private Playground playground;
+	public void setPlayground(Playground playground) {
+		this.playground = playground;
+	}
+
 	// No constructor needed.  Initialization happens via SmartWebView.init().
 
 	public static void registerPlugin(PluginInterface plugin, Map<String, Object> config) {
 		PluginManager instance = SmartWebView.getPluginManager();
 		String pluginName = plugin.getPluginName();
 
-		// --- NEW: Check if plugins are globally enabled and if this specific plugin is enabled ---
-		if (!SmartWebView.ASWP_PLUGINS || !SmartWebView.ASWP_PLUGIN_SETTINGS.getOrDefault(pluginName, false)) {
+		// Check if plugins are globally enabled and if this specific plugin is enabled
+		if (!SmartWebView.ASWP_PLUGIN_SETTINGS.getOrDefault(pluginName, false)) {
 			Log.w(TAG, "Plugin registration skipped: '" + pluginName + "' is disabled in configuration.");
 			return;
 		}
-		// --- END NEW ---
 
 		if (instance.getPlugin(pluginName) != null) {
 			Log.w(TAG, "Plugin already registered: " + pluginName);
@@ -93,6 +98,16 @@ public class PluginManager {
 		return null;
 	}
 
+	/**
+	 * Retrieves the configuration map for a given plugin.
+	 * This is used by Playground to apply configurations externally.
+	 * @param pluginName The name of the plugin.
+	 * @return The configuration map, or null if the plugin is not found.
+	 */
+	public Map<String, Object> getPluginConfig(String pluginName) {
+		return pluginConfigs.get(pluginName);
+	}
+
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		for (PluginInterface plugin : plugins) {
 			plugin.onActivityResult(requestCode, resultCode, data);
@@ -123,6 +138,15 @@ public class PluginManager {
 	public void onPageFinished(String url) {
 		for (PluginInterface plugin : plugins) {
 			plugin.onPageFinished(url);
+		}
+		if (this.playground != null) { // Add this check and call
+			this.playground.onPageFinished();
+		}
+	}
+
+	public void onResume() {
+		for (PluginInterface plugin : plugins) {
+			plugin.onResume();
 		}
 	}
 
