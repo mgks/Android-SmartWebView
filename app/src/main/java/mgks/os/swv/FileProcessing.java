@@ -42,7 +42,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class FileProcessing {
 
@@ -64,106 +66,109 @@ public class FileProcessing {
 		}
 
 		SmartWebView.asw_file_path = filePathCallback;
+		String[] acceptTypes = fileChooserParams.getAcceptTypes();
+		boolean allowImage = false;
+		boolean allowVideo = false;
+
+		// Determine allowed types from the `accept` attribute
+		if (acceptTypes.length > 0 && !acceptTypes[0].isEmpty()) {
+			for (String type : acceptTypes) {
+				if (type.startsWith("image/")) {
+					allowImage = true;
+				}
+				if (type.startsWith("video/")) {
+					allowVideo = true;
+				}
+			}
+		} else {
+			// If no specific type is defined, allow both
+			allowImage = true;
+			allowVideo = true;
+		}
+
+
 		Intent takePictureIntent = null;
 		Intent takeVideoIntent = null;
 
-		boolean needCamera = false;
 		if (SmartWebView.ASWP_CAMUPLOAD) {
-			needCamera = true;
-		}
-
-		if (needCamera) {
-			// Request camera permission if needed
 			if (!fns.check_permission(3, activity)) {
 				fns.get_permissions(3, activity);
 				SmartWebView.asw_file_path = null;
 				return false;
 			}
-			// Create camera intent for photos
-			takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-				File photoFile = null;
-				try {
-					photoFile = create_image(activity);
-					takePictureIntent.putExtra("PhotoPath", SmartWebView.asw_pcam_message);
-				} catch (IOException ex) {
-					Log.e("FileProcessing", "Image file creation failed", ex);
-					Toast.makeText(activity, "Error creating image file", Toast.LENGTH_SHORT).show();
-				}
-				if (photoFile != null) {
-					SmartWebView.asw_pcam_message = "file:" + photoFile.getAbsolutePath();
-					Uri photoURI = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", photoFile);
-					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-				} else {
-					takePictureIntent = null;
+			// Only add camera intent if images are allowed
+			if (allowImage) {
+				takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+					File photoFile = null;
+					try {
+						photoFile = create_image(activity);
+						takePictureIntent.putExtra("PhotoPath", SmartWebView.asw_pcam_message);
+					} catch (IOException ex) {
+						Log.e("FileProcessing", "Image file creation failed", ex);
+					}
+					if (photoFile != null) {
+						SmartWebView.asw_pcam_message = "file:" + photoFile.getAbsolutePath();
+						Uri photoURI = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", photoFile);
+						takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+					} else {
+						takePictureIntent = null;
+					}
 				}
 			}
 
-			// Create camera intent for videos
-			takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-			if (takeVideoIntent.resolveActivity(activity.getPackageManager()) != null) {
-				File videoFile = null;
-				try {
-					videoFile = create_video(activity);
-					takeVideoIntent.putExtra("VideoPath", SmartWebView.asw_vcam_message);
-				} catch (IOException ex) {
-					Log.e("FileProcessing", "Video file creation failed", ex);
-					Toast.makeText(activity, "Error creating video file", Toast.LENGTH_SHORT).show();
-				}
-				if (videoFile != null) {
-					SmartWebView.asw_vcam_message = "file:" + videoFile.getAbsolutePath();
-					Uri videoURI = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", videoFile);
-					takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoURI);
-				} else {
-					takeVideoIntent = null;
+			// Only add video recorder intent if videos are allowed
+			if (allowVideo) {
+				takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+				if (takeVideoIntent.resolveActivity(activity.getPackageManager()) != null) {
+					File videoFile = null;
+					try {
+						videoFile = create_video(activity);
+					} catch (IOException ex) {
+						Log.e("FileProcessing", "Video file creation failed", ex);
+					}
+					if (videoFile != null) {
+						SmartWebView.asw_vcam_message = "file:" + videoFile.getAbsolutePath();
+						Uri videoURI = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", videoFile);
+						takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoURI);
+					} else {
+						takeVideoIntent = null;
+					}
 				}
 			}
 		}
 
-		// Create file chooser intent
 		Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
 		contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-		contentSelectionIntent.setType("*/*"); // Allow all file types initially
+		contentSelectionIntent.setType("*/*"); // Set general type
+		if (acceptTypes.length > 0) {
+			contentSelectionIntent.putExtra(Intent.EXTRA_MIME_TYPES, acceptTypes); // And specific types
+		}
 
-		// Set multiple file selection if enabled
 		if (SmartWebView.ASWP_MULFILE) {
 			contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
 		}
 
-		// Set accepted file types based on file chooser parameters
-		String[] acceptTypes = fileChooserParams.getAcceptTypes();
-		if (acceptTypes != null && acceptTypes.length > 0) {
-			contentSelectionIntent.setType(String.join(",", acceptTypes));
-		}
+		List<Intent> intentList = new ArrayList<>();
+		if (takePictureIntent != null) intentList.add(takePictureIntent);
+		if (takeVideoIntent != null) intentList.add(takeVideoIntent);
+		Intent[] intentArray = intentList.toArray(new Intent[0]);
 
-		// Intent array for the chooser
-		Intent[] intentArray;
-		if (takePictureIntent != null && takeVideoIntent != null) {
-			intentArray = new Intent[]{takePictureIntent, takeVideoIntent};
-		} else if (takePictureIntent != null) {
-			intentArray = new Intent[]{takePictureIntent};
-		} else if (takeVideoIntent != null) {
-			intentArray = new Intent[]{takeVideoIntent};
-		} else {
-			intentArray = new Intent[0];
-		}
-
-		// Create and launch the chooser intent
 		Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
 		chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
 		chooserIntent.putExtra(Intent.EXTRA_TITLE, activity.getString(R.string.fl_chooser));
 		chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
 
-		// Use the activity result launcher to start the intent
 		if (resultLauncher != null) {
 			resultLauncher.launch(chooserIntent);
 		} else {
 			Log.e("FileProcessing", "ResultLauncher is null. Cannot launch intent.");
-			SmartWebView.asw_file_path.onReceiveValue(null);
-			SmartWebView.asw_file_path = null;
+			if (SmartWebView.asw_file_path != null) {
+				SmartWebView.asw_file_path.onReceiveValue(null);
+				SmartWebView.asw_file_path = null;
+			}
 			return false;
 		}
-
 		return true;
 	}
 
