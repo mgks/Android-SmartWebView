@@ -96,9 +96,9 @@ function get_location() {
 	}
 
 	if (latitude !== null && longitude !== null) {
-		const locationDiv = document.querySelector('.fetch-loc');
+		const locationDiv = document.querySelector('.fetch-loc-area');
         if(locationDiv) {
-            locationDiv.innerHTML = "<b>Latitude:</b> " + latitude.toFixed(6) + "<br><b>Longitude:</b> " + longitude.toFixed(6);
+            locationDiv.innerHTML = "<div class=\"fetch-loc\"><b>Latitude:</b> " + latitude.toFixed(6) + "<br><b>Longitude:</b> " + longitude.toFixed(6) + "</div>";
         }
 	}
 }

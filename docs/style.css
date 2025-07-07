@@ -51,7 +51,7 @@ a {
 .header-logo {
     max-width: 250px;
     width: 80%;
-    margin-bottom: 1rem;
+    margin: 1rem 0;
 }
 
 .app-header h1 {
@@ -119,7 +119,7 @@ input[type="file"] {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 1rem;
+    margin: .5rem 0;
 }
 
 .gallery canvas {
@@ -184,7 +184,7 @@ input[type="file"] {
 
 .app-footer {
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 3rem;
     font-size: 0.9rem;
     color: #65676b;
 }
