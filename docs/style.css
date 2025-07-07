@@ -7,11 +7,12 @@
     --background-color: #f0f2f5;
     --card-background: #ffffff;
     --text-color: #1c1e21;
-    --primary-color: #52a73d;
+    --primary-color: #449a2f;
     --primary-dark: #3e862c;
     --accent-color: #4285f4;
     --border-radius: 12px;
     --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
 }
 
 * {
@@ -45,13 +46,16 @@ a {
     background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
     color: white;
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 1rem;
+
 }
 
 .header-logo {
     max-width: 250px;
     width: 80%;
-    margin: 1rem 0;
+    margin: 1rem auto;
+    display: block;
+
 }
 
 .app-header h1 {
@@ -94,6 +98,7 @@ a {
 
 .card p {
     margin-bottom: 1rem;
+
 }
 
 input[type="file"] {
@@ -107,8 +112,8 @@ input[type="file"] {
     border-radius: 6px;
     cursor: pointer;
     display: inline-block;
-    margin-bottom: 1rem;
     font-weight: 500;
+
 }
 
 .file-input-label:hover {
@@ -158,15 +163,22 @@ input[type="file"] {
     margin-top: 1rem;
 }
 
-.fetch-loc {
+.fetch-loc, .feature-list-block {
     margin-top: 1rem;
     padding: 0.75rem;
-    background-color: #f0f2f5;
-    border-radius: 6px;
+    background-color: #e2eaf6;
+    border-radius: var(--border-radius);
+
 }
 
 .fetch-loc b {
     font-weight: 600;
+}
+
+.premium-button {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: color(display-p3 0.39 0.246 0.012);
+
 }
 
 .sponsor-button {
@@ -180,6 +192,40 @@ input[type="file"] {
     height: 1.5rem;
     width: auto;
     margin-right: 0.5rem;
+}
+
+.feature-list {
+	margin: 0;
+	padding-left: 1.2em;
+	list-style: none;
+}
+
+.feature-list li {
+    margin: 0.5em 0;
+    font-size: 0.85em;
+    font-weight: 500;
+
+}
+
+.feature-list-block h3 {
+    color: #515152;
+    margin: .5rem 0;
+
+}
+
+.feature-list-block small {
+    font-size: .85em;
+    font-weight: bold;
+}
+
+.app-header b {
+    font-weight: 500;
+    font-size: .95em;
+}
+
+.alt-features small {
+	display: block;
+	margin-top: 0.5em;
 }
 
 .app-footer {
