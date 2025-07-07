@@ -36,5 +36,6 @@
 	<string name="print_failed">Printing failed</string>
 	<string name="msg_no_internet">No internet connection!</string>
 	<string name="print_error">Error printing!</string>
-    <string name="loading_app" tools:ignore="TypographyEllipsis">Loading App View ...</string>
+    <string name="loading_app" tools:ignore="TypographyEllipsis">Launching app preview...</string>
+    <string name="authenticate">Authenticate</string>
 </resources>

@@ -17,4 +17,32 @@
 		tools:ignore="MissingConstraints"
 		tools:layout_editor_absoluteY="50dp" />
 
+	<RelativeLayout
+		android:id="@+id/security_overlay"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		android:background="@color/colorPrimary"
+		android:visibility="gone"
+		android:clickable="true"
+		android:focusable="true"
+		android:gravity="bottom|center_horizontal"
+		android:paddingBottom="100sp">
+
+		<Button
+			android:id="@+id/retry_auth_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:backgroundTint="@color/colorPrimaryDark"
+			android:padding="21dp"
+			android:text="@string/authenticate"
+			android:textColor="@color/white"
+			android:textSize="16sp" />
+
+	</RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

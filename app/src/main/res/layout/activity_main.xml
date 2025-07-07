@@ -22,31 +22,17 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         tools:ignore="RtlHardcoded">
-        <ImageView
-            android:id="@+id/msw_logo"
-            android:layout_width="275dip"
-            android:layout_height="100dip"
-            android:src="@raw/front_splash"
-            android:gravity="center_vertical|center_horizontal|center"
-            android:contentDescription="@string/image_view"
-            android:layout_gravity="top"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
 
-        <TextView
-            android:id="@+id/msw_loading_text"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|center_horizontal|center"
-            android:layout_width="match_parent"
-            tools:ignore="NotSibling"
-            android:text="@string/loading_app"
-            android:textSize="21sp"
-            android:textStyle="bold"
-            android:textColor="@color/cardview_light_background"
-            android:layout_marginTop="32dp"
-            android:layout_below="@+id/msw_logo"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+		<TextView
+			android:id="@+id/msw_loading_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal|center"
+			android:text="@string/loading_app"
+			android:textColor="@color/cardview_light_background"
+			android:textSize="21sp"
+			android:textStyle="bold"
+			tools:ignore="NotSibling" />
 
     </RelativeLayout>
     <WebView
@@ -77,5 +63,29 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:visibility="visible" />
+
+	<RelativeLayout
+		android:id="@+id/security_overlay"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/colorPrimary"
+		android:clickable="true"
+		android:focusable="true"
+		android:gravity="bottom|center_horizontal"
+		android:paddingBottom="100sp"
+		android:visibility="gone">
+
+		<Button
+			android:id="@+id/retry_auth_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:backgroundTint="@color/colorPrimaryDark"
+			android:padding="21dp"
+			android:text="@string/authenticate"
+			android:textColor="@color/white"
+			android:textSize="16sp" />
+
+	</RelativeLayout>
 </RelativeLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
