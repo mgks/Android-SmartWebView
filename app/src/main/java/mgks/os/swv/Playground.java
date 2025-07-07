@@ -67,7 +67,7 @@ public class Playground {
         runPluginAction("BiometricPlugin", plugin -> {
             Map<String, Object> config = SmartWebView.getPluginManager().getPluginConfig("BiometricPlugin");
             if (config != null) {
-                config.put("authOnAppLaunch", true);
+                config.put("authOnAppLaunch", false);
                 Log.d(TAG, "BiometricPlugin configured for launch auth. The plugin will handle triggering it.");
             }
         });
