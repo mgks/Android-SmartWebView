@@ -74,6 +74,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SmartWebView.loadPlugins();
+        SmartWebView.loadPlugins(this);
 
         // Initialize the ActivityResultLauncher here, before it's needed
         fileUploadLauncher = registerForActivityResult(
@@ -232,8 +233,9 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Smart WebView with current context. This will set up the PluginManager.
         SmartWebView.init(this, SmartWebView.asw_view, fns);
 
-        // Instantiate Playground. It will now correctly wait for the onPluginsInitialized callback.
-        new Playground(this, SmartWebView.asw_view, fns);
+        // Instantiate Playground and register it with the manager
+        Playground playground = new Playground(this, SmartWebView.asw_view, fns);
+        SmartWebView.getPluginManager().setPlayground(playground);
 
         // Configure WebView settings
         WebSettings webSettings = SmartWebView.asw_view.getSettings();
@@ -427,7 +429,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (SmartWebView.ASWP_PULLFRESH) {
             pullRefresh.setOnRefreshListener(() -> {
-                fns.pull_fresh(getApplicationContext());
+                // Pass the current activity context to the pull_fresh method
+                fns.pull_fresh(MainActivity.this);
                 pullRefresh.setRefreshing(false);
             });
 
@@ -487,16 +490,16 @@ public class MainActivity extends AppCompatActivity {
         } else if (shareImg != null) {
             Log.d(TAG, "Share image intent: " + shareImg);
             Toast.makeText(this, shareImg, Toast.LENGTH_LONG).show();
-            fns.aswm_view(SmartWebView.ASWV_URL, false, SmartWebView.asw_error_counter, getApplicationContext());
+            fns.aswm_view(SmartWebView.ASWV_URL, false, SmartWebView.asw_error_counter, this);
         } else if (uri != null) {
             Log.d(TAG, "Notification intent: " + uri);
-            fns.aswm_view(uri, false, SmartWebView.asw_error_counter, getApplicationContext());
+            fns.aswm_view(uri, false, SmartWebView.asw_error_counter, this);
         } else if (intent.getData() != null) {
             String path = intent.getDataString();
-            fns.aswm_view(path, false, SmartWebView.asw_error_counter, getApplicationContext());
+            fns.aswm_view(path, false, SmartWebView.asw_error_counter, this);
         } else {
             Log.d(TAG, "Main intent: " + SmartWebView.ASWV_URL);
-            fns.aswm_view(SmartWebView.ASWV_URL, false, SmartWebView.asw_error_counter, getApplicationContext());
+            fns.aswm_view(SmartWebView.ASWV_URL, false, SmartWebView.asw_error_counter, this);
         }
     }
 
@@ -523,7 +526,7 @@ public class MainActivity extends AppCompatActivity {
                 "&link=" + urlStr +
                 "&image_url=";
 
-        fns.aswm_view(redirectUrl, false, SmartWebView.asw_error_counter, getApplicationContext());
+        fns.aswm_view(redirectUrl, false, SmartWebView.asw_error_counter, this);
     }
 
     // Standard activity lifecycle methods
@@ -537,6 +540,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         SmartWebView.asw_view.onResume();
+        SmartWebView.getPluginManager().onResume();
 
         // Update recent apps appearance
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);

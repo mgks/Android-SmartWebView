@@ -29,11 +29,14 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dalvik.system.DexFile;
 import mgks.os.swv.plugins.*;
 
 /**
@@ -52,7 +55,7 @@ public class SmartWebView {
     public static boolean SWV_DEBUGMODE = true;  // Enable for detailed logs and toast alerts
 
     // Version information
-    public static String ASWV_VERSION = "7.1";
+    public static String ASWV_VERSION = "7.2";
 
     // ===============================================================================================
     // URL CONFIGURATION
@@ -70,7 +73,7 @@ public class SmartWebView {
     public static String CURR_URL;
 
     // External URL handling
-    public static String ASWV_EXC_LIST = "mgks.dev,mgks.github.io,github.com";  // Comma-separated domains
+    public static String ASWV_EXC_LIST = "mgks.dev,mgks.github.io";  // Comma-separated domains
 
     // ===============================================================================================
     // FEATURE FLAGS
@@ -115,10 +118,7 @@ public class SmartWebView {
     // PLUGIN CONFIGURATION
     // ===============================================================================================
 
-    // Master switch for all plugins
-    public static boolean ASWP_PLUGINS = true; // Globally enable or disable all plugins
-
-    // Individual plugin switches
+    // Master switch for plugins
     public static Map<String, Boolean> ASWP_PLUGIN_SETTINGS = new HashMap<String, Boolean>() {{
         put("AdMobPlugin", true);
         put("JSInterfacePlugin", true);
@@ -126,9 +126,14 @@ public class SmartWebView {
         put("QRScannerPlugin", true);
         put("BiometricPlugin", true);
         put("ImageCompressionPlugin", true);
-        // To disable a plugin, just set it to false, e.g., put("AdMobPlugin", false);
+
         // New plugins can be added here.
+        // To disable a plugin, just set it to false, e.g., put("AdMobPlugin", false);
     }};
+
+    public static boolean SWV_PLAYGROUND = true; // Enable to show the plugin test UI and run diagnostics. Set to false for production.
+
+    // For Individual Plugin Config check configurePlugins() method in Playground
 
     // ===============================================================================================
     // RATING CONFIGURATION
@@ -247,33 +252,31 @@ public class SmartWebView {
         }
     }
 
-    public static void loadPlugins() {
-        if (ASWP_PLUGINS) {
-            // An array of all plugin classes
-            Class<?>[] pluginClasses = {
-                    AdMobPlugin.class,
-                    BiometricPlugin.class,
-                    ImageCompressionPlugin.class,
-                    JSInterfacePlugin.class,
-                    QRScannerPlugin.class,
-                    ToastPlugin.class
-            };
+    public static void loadPlugins(Context context) {
+        try {
+            String packageCodePath = context.getPackageCodePath();
+            DexFile df = new DexFile(packageCodePath);
+            String pluginPackageName = "mgks.os.swv.plugins";
 
-            for (Class<?> pluginClass : pluginClasses) {
-                try {
-                    // By referencing the class, we force the static block to be executed
-                    Class.forName(pluginClass.getName());
-                } catch (ClassNotFoundException e) {
-                    // This will happen if a developer removes a plugin file.
-                    // We log it for debugging but do not crash the app.
-                    if (SWV_DEBUGMODE) {
-                        Log.w(TAG, "Plugin not found (likely removed): " + pluginClass.getSimpleName() + ". Skipping registration.");
+            for (Enumeration<String> iter = df.entries(); iter.hasMoreElements(); ) {
+                String className = iter.nextElement();
+                if (className.startsWith(pluginPackageName) && !className.contains("$")) { // Ignore inner classes
+                    try {
+                        final Class<?> pluginClass = Class.forName(className);
+                        // Check if the class implements our interface
+                        if (PluginInterface.class.isAssignableFrom(pluginClass)) {
+                            // The static block of the plugin class will be triggered here,
+                            // which calls PluginManager.registerPlugin().
+                            Log.d(TAG, "Successfully loaded plugin: " + pluginClass.getSimpleName());
+                        }
+                    } catch (ClassNotFoundException | NoClassDefFoundError e) {
+                        // This will catch errors if a plugin class has dependencies that are not met.
+                        Log.e(TAG, "Could not load plugin class: " + className, e);
                     }
-                } catch (ExceptionInInitializerError e) {
-                    // This happens if the static block itself throws an exception.
-                    Log.e(TAG, "Failed to initialize plugin: " + pluginClass.getSimpleName(), e);
                 }
             }
+        } catch (IOException e) {
+            Log.e(TAG, "Error scanning for plugins", e);
         }
     }
 }

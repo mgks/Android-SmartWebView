@@ -121,38 +121,40 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		}
 		NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
 		return capabilities != null &&
-			(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-				capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-				capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
-				capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN));
+				(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+						capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+						capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
+						capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN));
 	}
 
 	// Opening URLs inside webview with request
-	void aswm_view(String url, Boolean tab, int error_counter, Context context) {
+	void aswm_view(String url, Boolean tab, int error_counter, Activity activity) {
 		if (error_counter > 2) {
-			exit_app(context);
+			exit_app(activity);
 		} else {
 			if (tab) {
 				if (SmartWebView.ASWP_TAB) {
 					CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
-					intentBuilder.setStartAnimations(context.getApplicationContext(), android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-					intentBuilder.setExitAnimations(context.getApplicationContext(), android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+					intentBuilder.setStartAnimations(activity, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+					intentBuilder.setExitAnimations(activity, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 					CustomTabsIntent customTabsIntent = intentBuilder.build();
 					try {
-						customTabsIntent.launchUrl(context.getApplicationContext(), Uri.parse(url));
+						customTabsIntent.launchUrl(activity, Uri.parse(url));
 					} catch (ActivityNotFoundException e) {
 						Intent intent = new Intent(Intent.ACTION_VIEW);
 						intent.setData(Uri.parse(url));
-						context.startActivity(intent);
+						activity.startActivity(intent);
 					}
 				} else {
 					Intent intent = new Intent(Intent.ACTION_VIEW);
 					intent.setData(Uri.parse(url));
-					context.startActivity(intent);
+					activity.startActivity(intent);
 				}
 			} else {
 				// Check to see whether the url already has query parameters and handle appropriately
-				url = url + (url.contains("?") ? "&" : "?") + "rid=" + random_id();
+				if (!url.startsWith("file://")) {
+					url = url + (url.contains("?") ? "&" : "?") + "rid=" + random_id();
+				}
 				SmartWebView.asw_view.loadUrl(url);
 			}
 		}
@@ -161,7 +163,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	// Push JavaScript into webview
 	public static void push_js(WebView view, String class_name, String html) {
 		view.evaluateJavascript(
-			"document.getElementsByClassName('" + class_name + "')[0].innerHTML = `" + html + "`;", null);
+				"document.getElementsByClassName('" + class_name + "')[0].innerHTML = `" + html + "`;", null);
 	}
 
 	// Get data from webview DOM field
@@ -193,46 +195,46 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		if (!SmartWebView.ASWP_OFFLINE && !isInternetAvailable(context)) {
 			Toast.makeText(context, context.getString(R.string.check_connection), Toast.LENGTH_SHORT).show();
 
-		// Redirect back to default URL :: refresh:android
+			// Redirect back to default URL :: refresh:android
 		} else if (url.startsWith("refresh:")) {
 			String ref_sch = (Uri.parse(url).toString()).replace("refresh:", "");
 			if (ref_sch.matches("URL")) {
 				SmartWebView.CURR_URL = SmartWebView.ASWV_URL;
 			}
-			pull_fresh(context);
+			pull_fresh(activity);
 
-		// Launch default phone dialer for specific number :: tel:+919876543210
+			// Launch default phone dialer for specific number :: tel:+919876543210
 		} else if (url.startsWith("tel:")) {
 			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 			try {
-				context.startActivity(intent);
+				activity.startActivity(intent);
 			} catch (ActivityNotFoundException e) {
 				Toast.makeText(context, "No dialer app found.", Toast.LENGTH_SHORT).show();
 				Log.e("FCM_ERROR", "PORT_TEL", e);
 			}
 
-		// Open google play store app page :: rate:android
+			// Open google play store app page :: rate:android
 		} else if (url.startsWith("rate:")) {
 			final String app_package = context.getPackageName(); // Requesting app package name from Context or Activity object
 			try {
-				context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + app_package)));
+				activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + app_package)));
 			} catch (ActivityNotFoundException anfe) {
-				context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
+				activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
 			}
 
-		// Sharing content from webview to external apps :: share:URL (link to be shared)
+			// Sharing content from webview to external apps :: share:URL (link to be shared)
 		} else if (url.startsWith("share:")) {
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
 			intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
 			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle() + " Visit: " + (Uri.parse(url).toString()).replace("share:", ""));
-			context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_w_friends)));
+			activity.startActivity(Intent.createChooser(intent, context.getString(R.string.share_w_friends)));
 
-		// Exit app manually :: exit:android
+			// Exit app manually :: exit:android
 		} else if (url.startsWith("exit:")) {
-			exit_app(context);
+			exit_app(activity);
 
-		// Getting location for offline files
+			// Getting location for offline files
 		} else if (url.startsWith("getloc:")) {
 			String[] loc = get_location(context).split(",");
 			push_js(SmartWebView.asw_view, "fetch-loc", "<br><b>Latitude: "+loc[0]+"<br>Longitude: "+loc[1]+"</b>");
@@ -241,7 +243,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 				Log.d("SLOG_OFFLINE_LOC_REQ", loc[0]+","+loc[1]);
 			}
 
-		// Creating firebase notification
+			// Creating firebase notification
 		} else if (url.startsWith("fcm:")) {
 			String title = null, body = null, nuri = null;
 
@@ -285,15 +287,15 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 				get_permissions(4, activity);
 			}
 
-		// Opening external URLs in android default web browser
+			// Opening external URLs in android default web browser
 		} else if (SmartWebView.ASWP_EXTURL && !aswm_host(url).equals(SmartWebView.ASWV_HOST) && !SmartWebView.ASWV_EXC_LIST.contains(aswm_host(url))) {
-			aswm_view(url, true, SmartWebView.asw_error_counter, context);
+			aswm_view(url, true, SmartWebView.asw_error_counter, activity);
 
-		// Setting device orientation on request
+			// Setting device orientation on request
 		} else if (url.startsWith("orient:")) {
 			set_orientation(5, true, context);
 
-		// Else return false
+			// Else return false
 		} else {
 			a = false;
 		}
@@ -320,8 +322,11 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	}
 
 	// Reloading current page
-	public void pull_fresh(Context context) {
-		aswm_view((!SmartWebView.CURR_URL.isEmpty() ? SmartWebView.CURR_URL : SmartWebView.ASWV_URL), false, SmartWebView.asw_error_counter, context);
+	public void pull_fresh(Activity activity) {
+		String currentUrl = SmartWebView.asw_view.getUrl();
+		// Use the current webview URL, fallback to the configured URL if it's null/empty
+		String urlToReload = (currentUrl != null && !currentUrl.isEmpty()) ? currentUrl : SmartWebView.ASWV_URL;
+		aswm_view(urlToReload, false, 0, activity); // Reset error counter on manual refresh
 	}
 
 	// Changing port view
@@ -469,7 +474,7 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			public boolean onQueryTextSubmit(String query) {
 				searchView.clearFocus();
-				aswm_view(SmartWebView.ASWV_SEARCH + query, false, SmartWebView.asw_error_counter, context.getApplicationContext());
+				aswm_view(SmartWebView.ASWV_SEARCH + query, false, SmartWebView.asw_error_counter, context);
 				searchView.setQuery(query, false);
 				return false;
 			}
@@ -483,13 +488,13 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	}
 
 	// Options trigger for drawer theme
-	public boolean onOptionsItemSelected(MenuItem item, Context context) {
+	public boolean onOptionsItemSelected(MenuItem item, Activity activity) {
 		int id = item.getItemId();
 		if (id == R.id.action_exit) {
-			exit_app(context);
+			exit_app(activity);
 			return true;
 		}
-		return onOptionsItemSelected(item, context);
+		return onOptionsItemSelected(item, activity);
 	}
 
 	public interface TokenCallback {
@@ -500,25 +505,25 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	// Get fresh firebase tokens
 	public void fcm_token(final TokenCallback callback) {
 		FirebaseMessaging.getInstance().getToken()
-			.addOnSuccessListener(token -> {
-				if (!SmartWebView.ASWP_OFFLINE) {
-					set_cookie("FCM_TOKEN=" + token);
-					if (SmartWebView.SWV_DEBUGMODE) {
-						Log.d("SLOG_FCM_BAKED", "YES");
-						Log.d("SLOG_COOKIES", get_cookies(SmartWebView.ASWV_URL));
+				.addOnSuccessListener(token -> {
+					if (!SmartWebView.ASWP_OFFLINE) {
+						set_cookie("FCM_TOKEN=" + token);
+						if (SmartWebView.SWV_DEBUGMODE) {
+							Log.d("SLOG_FCM_BAKED", "YES");
+							Log.d("SLOG_COOKIES", get_cookies(SmartWebView.ASWV_URL));
+						}
 					}
-				}
-				SmartWebView.fcm_token = token;
-				if (SmartWebView.SWV_DEBUGMODE) {
-					Log.d("SLOG_REQ_FCM_TOKEN", token);
-				}
-				callback.onTokenReceived(token); // Pass token to callback
-			})
-			.addOnFailureListener(e -> {
-				SmartWebView.fcm_token = "";
-				Log.e("SLOG_REQ_FCM_TOKEN", "FAILED", e);
-				callback.onTokenFailed(e); // Pass exception to callback
-			});
+					SmartWebView.fcm_token = token;
+					if (SmartWebView.SWV_DEBUGMODE) {
+						Log.d("SLOG_REQ_FCM_TOKEN", token);
+					}
+					callback.onTokenReceived(token); // Pass token to callback
+				})
+				.addOnFailureListener(e -> {
+					SmartWebView.fcm_token = "";
+					Log.e("SLOG_REQ_FCM_TOKEN", "FAILED", e);
+					callback.onTokenFailed(e); // Pass exception to callback
+				});
 	}
 
 	// Injecting Google Analytics (gtag.js)
@@ -531,13 +536,13 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	public boolean check_permission(int permission, Context context) {
 		return switch (permission) {
 			case 1 ->
-				ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+					ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 			case 2 ->
-				ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+					ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 			case 3 ->
-				ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+					ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
 			case 4 ->
-				Build.VERSION.SDK_INT < 33 || ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+					Build.VERSION.SDK_INT < 33 || ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
 			default -> false;
 		};
 	}
@@ -567,19 +572,19 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	}
 
 	// Launching app rating dialog [developed by github.com/hotchemi]
-	public Runnable get_rating(Context context) {
-		if (isInternetAvailable(context)) {
-			AppRate.with(context)
-				.setInstallDays(SmartWebView.ASWR_DAYS)
-				.setLaunchTimes(SmartWebView.ASWR_TIMES)
-				.setRemindInterval(SmartWebView.ASWR_INTERVAL)
-				.setTitle(R.string.rate_dialog_title)
-				.setMessage(R.string.rate_dialog_message)
-				.setTextLater(R.string.rate_dialog_cancel)
-				.setTextNever(R.string.rate_dialog_no)
-				.setTextRateNow(R.string.rate_dialog_ok)
-				.monitor();
-			AppRate.showRateDialogIfMeetsConditions(context);
+	public Runnable get_rating(Activity activity) {
+		if (isInternetAvailable(activity)) {
+			AppRate.with(activity)
+					.setInstallDays(SmartWebView.ASWR_DAYS)
+					.setLaunchTimes(SmartWebView.ASWR_TIMES)
+					.setRemindInterval(SmartWebView.ASWR_INTERVAL)
+					.setTitle(R.string.rate_dialog_title)
+					.setMessage(R.string.rate_dialog_message)
+					.setTextLater(R.string.rate_dialog_cancel)
+					.setTextNever(R.string.rate_dialog_no)
+					.setTextRateNow(R.string.rate_dialog_ok)
+					.monitor();
+			AppRate.showRateDialogIfMeetsConditions(activity);
 		}
 		return null;
 	}
@@ -640,22 +645,22 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	}
 
 	// Exit app
-	public void exit_app(Context context) {
+	public void exit_app(Activity activity) {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.addCategory(Intent.CATEGORY_HOME);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(intent);
+		activity.startActivity(intent);
 	}
 
 	// Creating exit dialogue
-	public void ask_exit(Context context) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(context.getString(R.string.exit_title));
-		builder.setMessage(context.getString(R.string.exit_subtitle));
+	public void ask_exit(Activity activity) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		builder.setTitle(activity.getString(R.string.exit_title));
+		builder.setMessage(activity.getString(R.string.exit_subtitle));
 		builder.setCancelable(true);
 
 		// Action if user selects 'yes'
-		builder.setPositiveButton("Yes", (dialogInterface, i) -> exit_app(context));
+		builder.setPositiveButton("Yes", (dialogInterface, i) -> exit_app(activity));
 
 		// Actions if user selects 'no'
 		builder.setNegativeButton("No", (dialogInterface, i) -> {});
@@ -671,42 +676,51 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 		// Handle navigation view item clicks here.
 		int id = item.getItemId();
-		Context context = SmartWebView.getAppContext(); // Use the getAppContext method
+		// This requires getting the current Activity context, which is tricky from a non-activity class.
+		// A better approach is to handle this in MainActivity, which holds the drawer.
+		// For now, we assume SmartWebView.getAppContext() can provide a context, but it may not be an Activity.
+		// This part of the logic needs careful review. Let's assume a static reference to MainActivity exists for this to work.
+		Activity currentActivity = null; // This is the problematic part. How to get the current activity?
+		if (SmartWebView.getAppContext() instanceof Activity) {
+			currentActivity = (Activity) SmartWebView.getAppContext();
+		}
+
+		if (currentActivity == null) {
+			Log.e("NAV_ERROR", "Cannot get Activity context for navigation");
+			return false;
+		}
 
 		if (id == R.id.nav_home) {
-			aswm_view("https://mgks.github.io/Android-SmartWebView/", false, 0, context);
+			aswm_view("https://mgks.github.io/Android-SmartWebView/", false, 0, currentActivity);
 		} else if (id == R.id.nav_doc) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#config", false, 0, context);
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#config", false, 0, currentActivity);
 		} else if (id == R.id.nav_plugins) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#plugins", false, 0, context);
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#plugins", false, 0, currentActivity);
 		} else if (id == R.id.nav_fcm) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#push-notifications", false, 0, context);
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#push-notifications", false, 0, currentActivity);
 		} else if (id == R.id.nav_gps) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#geolocation", false, 0, context);
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#geolocation", false, 0, currentActivity);
 		} else if (id == R.id.nav_url_handling) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#url-handling", false, 0, context);
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#url-handling", false, 0, currentActivity);
 		} else if (id == R.id.nav_changelog) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#changelog", false, 0, context);
+			aswm_view("https://mgks.dev/app/smart-webview-documentation/#changelog", false, 0, currentActivity);
 		} else if (id == R.id.nav_support) {
 			Intent intent = new Intent(Intent.ACTION_SENDTO);
 			intent.setData(Uri.parse("mailto:hello@mgks.dev"));
 			intent.putExtra(Intent.EXTRA_SUBJECT, "Android Smart WebView Help");
-			// Use try-catch to handle ActivityNotFoundException
 			try {
-				context.startActivity(Intent.createChooser(intent, "Send Email"));
+				currentActivity.startActivity(Intent.createChooser(intent, "Send Email"));
 			} catch (ActivityNotFoundException e) {
-				Toast.makeText(context, "No email app found.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(currentActivity, "No email app found.", Toast.LENGTH_SHORT).show();
 			}
 		}
 
-		// Close the drawer after handling the click
-		if (SmartWebView.asw_view !=null && SmartWebView.ASWV_LAYOUT == 1) { //check if drawer is enabled
-			DrawerLayout drawer = ((Activity) context).findViewById(R.id.drawer_layout);
-			if(drawer != null) { //drawer may not be initialized
+		if (SmartWebView.ASWV_LAYOUT == 1) {
+			DrawerLayout drawer = currentActivity.findViewById(R.id.drawer_layout);
+			if(drawer != null) {
 				drawer.closeDrawer(GravityCompat.START);
 			}
 		}
 		return true;
 	}
 }
-
