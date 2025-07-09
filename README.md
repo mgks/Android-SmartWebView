@@ -29,7 +29,8 @@
 
 **Android Smart WebView** is a modern, open-source solution for building advanced hybrid Android apps. It allows you to effortlessly extend your app with plugins, native features, and a customizable UI.
 
-**[DOCUMENTATION](https://docs.mgks.dev/smart-webview/)** | **[PREMIUM PLUGINS](https://github.com/sponsors/mgks/sponsorships?sponsor=mgks&tier_id=468838)** | **[ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+**[DOCUMENTATION](https://docs.mgks.dev/smart-webview/)** | **[GET PREMIUM PLUGINS](https://github.com/sponsors/mgks/sponsorships?sponsor=mgks&tier_id=468838)** | **[ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
+
 
 ## Core Features
 
@@ -43,26 +44,32 @@
 *   **Downloads & Printing:** Handle file downloads and print web content.
 *   **Modern WebView:** Secure, up-to-date, and highly configurable via `SmartWebView.java` and `MainActivity.java`.
 
-## Plugins (v7.1+)
+## Plugins
 
 Smart WebView features a plugin system to add new features with minimal effort.
+
 *   **Understanding Plugins:**
     *   The core contract is defined in `PluginInterface.java`.
     *   Plugin lifecycle and registration are managed by `PluginManager.java`.
-    *   Example plugins (`AdMobPlugin.java`, `JSInterfacePlugin.java`, `ToastPlugin.java`) are located in `/plugins/`. These serve as excellent references for creating new plugins.
+    *   Example plugins (`ToastPlugin.java`, `JSInterfacePlugin.java`) are located in `/plugins/`. These serve as excellent references for creating new plugins.
+
 *   **Testing Plugins:**
     *   `Playground.java` is used to configure, test, and demonstrate plugin functionality during development.
-*   **Included Plugins:** The project includes an example plugin for Toasts. Plugins are designed to be self-registering.
-*   **Premium Plugins:** List of premium plugins for **[Project Sponsors](https://github.com/sponsors/mgks)**.
-    - [**Admob**](https://docs.mgks.dev/smart-webview/plugins/admob): Integrate Google AdMob ads into your app.
-    - [**Google Auth**](https://docs.mgks.dev/smart-webview/plugins/google-auth)<sup>*</sup>: Add Google authentication for seamless sign-in.
-    - [**QR & Barcode Reader**](https://docs.mgks.dev/smart-webview/plugins/qr-barcode-reader): Scan QR codes and barcodes directly from your app.
-    - [**Biometric Auth**](https://docs.mgks.dev/smart-webview/plugins/biometric-auth): Enable fingerprint or face authentication.
-    - [**Image Compression**](https://docs.mgks.dev/smart-webview/plugins/image-compression): Compress images before uploading for better performance.
-    - [**CSS Injection**](https://docs.mgks.dev/smart-webview/plugins/css-injection)<sup>*</sup>: Dynamically inject custom CSS into your web pages.
-    - [**Payment Gateway**](https://docs.mgks.dev/smart-webview/plugins/payment-gateway)<sup>*</sup>: Integrate payment solutions for in-app purchases.
 
-    *<sup>\*</sup> Under-development and will be added to the plugins bundle once completed.*
+*  **Premium Plugins ⭐:** List of premium plugins for **[Project Sponsors](https://github.com/sponsors/mgks)**.
+    - ✅ **AdMob**: Integrate Google AdMob into your app; Includes Banner, Interstitial and Rewarded ad units.
+    - ✅ **Biometric Auth**: Enable fingerprint or face authentication for overall app or trigger on demand with JavaScript.
+    - ✅ **QR & Barcode Reader**: Scan QR codes and barcodes directly from your app.
+    - ✅ **Image Compression**: Compress images before uploading for better performance.
+    - ✅ **JS Interface**: Allows JavaScript code to call native methods and receive callbacks.
+    - 🚧 **Google Auth**: Add Google authentication for seamless sign-in.
+    - 🚧 **Payment Gateway**: Integrate payment solutions for in-app purchases.
+    - 🚧 **Enhanced Video Player**: Handle requests for fullscreen video playback (e.g., from YouTube or Vimeo embeds).
+    - 🚧 **CSS Injection**: Dynamically inject custom CSS into your web pages.
+    - 🚧 **WebRTC**: Build rich, real-time communication features directly into your web app.
+    - 🚧 **Local Network Access**: Host app with local network (e.g., for a dev server or an enterprise intranet).
+
+   *<sup>🚧</sup> Currently in development; availability in final bundle is subject to change.*
 
 ## Quick Start
 
@@ -88,10 +95,8 @@ Most configuration is done within `SmartWebView.java`:
     *   Enable or disable features (file uploads, camera access, location services, pull-to-refresh, etc.) by modifying the boolean `ASWP_*` variables.
 *   **Permissions:**
     *   Review and adjust permissions in `AndroidManifest.xml` based on the features you enable. For example, `CAMERA` for camera uploads, `ACCESS_FINE_LOCATION` for GPS.
-*   **Adding/Modifying Plugins:**
-    *   Plugins are Java classes that implement `PluginInterface`.
-    *   They typically self-register with the `PluginManager` using a static block.
-    *   Refer to the existing plugins in the `/plugins/` directory for examples on how to create and integrate them.
+*   **Plugin Configuration:**
+    *   Plugin behavior (like AdMob IDs or Biometric Auth on launch) is configured in `Playground.java`. This allows you to change settings without modifying the plugin source code itself.
 
 ## Further Information & Understanding the Code
 
@@ -99,8 +104,9 @@ The best way to understand the project in depth is to explore the source code:
 *   **`SmartWebView.java`**: Contains most global configurations and constants.
 *   **`MainActivity.java`**: The main entry point, handles WebView setup, and integrates core features.
 *   **`Functions.java`**: Utility functions used throughout the app.
-*   **`PluginInterface.java`, `PluginManager.java`, `Playground.java`**: Key components of the plugin architecture.
-*   The `/plugins/` directory: Contains example plugin implementations.
+*   **`PluginInterface.java`, `PluginManager.java`**: Key components of the plugin architecture.
+*   **`Playground.java`**: The central place for configuring and testing plugins.
+*   The `plugins/` directory: Contains example and premium plugin implementations.
 *   Inline comments throughout the code provide additional context.
 
 ## Contributing & Support
