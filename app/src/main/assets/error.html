@@ -2,43 +2,28 @@
 <!--
   Smart WebView v7
   https://github.com/mgks/Android-SmartWebView
-
-  A modern, open-source WebView wrapper for building advanced hybrid Android apps.
-  Native features, modular plugins, and full customisation—built for developers.
-
-  - Documentation: https://docs.mgks.dev/smart-webview  
-  - Plugins: https://docs.mgks.dev/smart-webview/plugins  
-  - Discussions: https://github.com/mgks/Android-SmartWebView/discussions  
-  - Sponsor the Project: https://github.com/sponsors/mgks  
-
-  MIT License — https://opensource.org/licenses/MIT  
-
-  Mentioning Smart WebView in your project helps others find it and keeps the dev loop alive.
 -->
-<html>
+<html lang="en">
 <head>
-	<meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
-	<meta content="width=device-width,initial-scale=1,maximum-scale=1" name="viewport">
-	<title>Smart WebView Offline</title>
-	<link href="style.css" rel="stylesheet" type="text/css">
-	<script src="script.js" type="text/javascript"></script>
-	<!--<script src="https://www.googletagmanager.com/gtag/js?id=G-7XXC1C7CRQ"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-		gtag('config', 'G-7XXC1C7CRQ');
-	</script>-->
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+	<title>Connection Error</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-	<img class="head-logo" src="front_splash.png"/>
-	<h3 class="header-t mono-f">INTERNET CONNECTION ERROR!</h3>
-	<a href="refresh:URL">
-		<div class="pale cen">
-			<h3 class="header-t mono-b"><svg xmlns="http://www.w3.org/2000/svg" class="sv-icons" x="0px" y="0px" viewBox="0,0,300,150">
-				<g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(8.53333,8.53333)"><path d="M15,3c-2.9686,0 -5.69718,1.08344 -7.79297,2.875c-0.28605,0.22772 -0.42503,0.59339 -0.36245,0.95363c0.06258,0.36023 0.31676,0.6576 0.66286,0.77549c0.3461,0.1179 0.72895,0.03753 0.99842,-0.20959c1.74821,-1.49444 4.01074,-2.39453 6.49414,-2.39453c5.19656,0 9.45099,3.93793 9.95117,9h-2.95117l4,6l4,-6h-3.05078c-0.51129,-6.14834 -5.67138,-11 -11.94922,-11zM4,10l-4,6h3.05078c0.51129,6.14834 5.67138,11 11.94922,11c2.9686,0 5.69718,-1.08344 7.79297,-2.875c0.28605,-0.22772 0.42504,-0.59339 0.36245,-0.95363c-0.06258,-0.36023 -0.31676,-0.6576 -0.66286,-0.7755c-0.3461,-0.1179 -0.72895,-0.03753 -0.99842,0.20959c-1.74821,1.49444 -4.01074,2.39453 -6.49414,2.39453c-5.19656,0 -9.45099,-3.93793 -9.95117,-9h2.95117z"></path></g></g>
-			</svg><br/><br/>TAP HERE TO TRY AGAIN</h3>
-		</div>
+<main class="error-container">
+	<div class="error-icon">⚠️</div>
+	<h1 class="error-title">No Internet Connection</h1>
+	<p class="error-message">
+		You are offline. Please check your internet connection and try again.
+	</p>
+	<a href="refresh:URL" class="retry-button">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+			<path d="M17.65,6.35C16.2,4.9,14.21,4,12,4A8,8,0,0,0,4,12a8,8,0,0,0,8,8c3.73,0,6.84-2.55,7.73-6h-2.08c-.82,2.33-3.04,4-5.65,4-3.31,0-6-2.69-6-6s2.69-6,6-6c1.66,0,3.14.69,4.22,1.78L13,11h7V4l-2.35,2.35z"/>
+		</svg>
+		<span>Retry</span>
 	</a>
+</main>
 </body>
 </html>
