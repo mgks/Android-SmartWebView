@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home"
-            android:title="Home" />
+		<item
+			android:id="@+id/nav_home"
+			android:icon="@drawable/ic_home"
+			android:title="@string/home" />
         <item
             android:id="@+id/nav_doc"
             android:icon="@drawable/ic_doc"
-            android:title="Documentation" />
+            android:title="@string/documentation" />
 		<item
 			android:id="@+id/nav_plugins"
-			android:title="Plugins" />
+			android:icon="@android:drawable/btn_star_big_on"
+			android:title="@string/plugins" />
 		<item
-			android:id="@+id/nav_fcm"
-			android:title="Firebase Messaging" />
-		<item
-			android:id="@+id/nav_gps"
-			android:title="GPS" />
-		<item
-			android:id="@+id/nav_url_handling"
-			android:title="URL Handling" />
-		<item
-			android:id="@+id/nav_changelog"
-			android:title="Changelog" />
+			android:id="@+id/nav_psg"
+			android:icon="@drawable/googleg_standard_color_18"
+			android:title="@string/play_store_guide" />
 		<item
 			android:id="@+id/nav_support"
 			android:icon="@drawable/ic_help"
-			android:title="Need Help?" />
+			android:title="@string/need_help" />
 	</group>
 </menu>

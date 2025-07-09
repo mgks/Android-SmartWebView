@@ -38,4 +38,13 @@
 	<string name="print_error">Error printing!</string>
     <string name="loading_app" tools:ignore="TypographyEllipsis">Launching app preview...</string>
     <string name="authenticate">Authenticate</string>
+    <string name="documentation">Documentation</string>
+	<string name="home">Home</string>
+	<string name="plugins">Plugins</string>
+	<string name="firebase_messaging">Firebase Messaging</string>
+	<string name="gps">GPS</string>
+	<string name="url_handling">URL Handling</string>
+	<string name="changelog">Changelog</string>
+	<string name="need_help">Need Help?</string>
+    <string name="play_store_guide">Play Store Guide</string>
 </resources>
