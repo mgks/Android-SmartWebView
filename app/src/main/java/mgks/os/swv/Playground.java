@@ -88,22 +88,7 @@ public class Playground {
     /**
      * Handles actions that should run once on app launch.
      */
-    private void handleLaunchActions() {
-        // Trigger Biometric Auth on Launch if configured
-        runPluginAction("BiometricPlugin", plugin -> {
-            Map<String, Object> config = SmartWebView.getPluginManager().getPluginConfig("BiometricPlugin");
-            if (config != null && (boolean) config.getOrDefault("authOnAppLaunch", false)) {
-                // We need to cast to the specific plugin type to call its methods.
-                // This is safe because runPluginAction already confirmed the plugin exists.
-                // We need to find a way to do this without a direct import.
-                // The best way is to have a generic "execute" method on the plugin interface.
-                // For now, let's just trigger it via JS as a workaround.
-                Log.d(TAG, "Triggering Biometric Auth on launch.");
-                new Handler(Looper.getMainLooper()).postDelayed(() ->
-                        webView.evaluateJavascript("if(window.Biometric) { window.Biometric.authenticate(); }", null), 500);
-            }
-        });
-    }
+    private void handleLaunchActions() {}
 
 
     private void runAllDiagnostics() {
