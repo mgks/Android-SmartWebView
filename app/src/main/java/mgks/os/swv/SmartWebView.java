@@ -73,7 +73,7 @@ public class SmartWebView {
     public static String CURR_URL;
 
     // External URL handling
-    public static String ASWV_EXC_LIST = "mgks.dev,mgks.github.io";  // Comma-separated domains
+    public static String ASWV_EXC_LIST = "mgks.dev,docs.mgks.dev,mgks.github.io";  // Comma-separated domains
 
     // ===============================================================================================
     // FEATURE FLAGS

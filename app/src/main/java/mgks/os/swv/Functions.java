@@ -237,7 +237,10 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 			// Getting location for offline files
 		} else if (url.startsWith("getloc:")) {
 			String[] loc = get_location(context).split(",");
-			push_js(SmartWebView.asw_view, "fetch-loc", "<br><b>Latitude: "+loc[0]+"<br>Longitude: "+loc[1]+"</b>");
+
+			// Call a JS function instead of pushing raw HTML
+			String js_call = String.format("if(window.updateLocationDisplay){ window.updateLocationDisplay(%s, %s); }", loc[0], loc[1]);
+			SmartWebView.asw_view.evaluateJavascript(js_call, null);
 
 			if(SmartWebView.SWV_DEBUGMODE) {
 				Log.d("SLOG_OFFLINE_LOC_REQ", loc[0]+","+loc[1]);
@@ -693,21 +696,15 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 		if (id == R.id.nav_home) {
 			aswm_view("https://mgks.github.io/Android-SmartWebView/", false, 0, currentActivity);
 		} else if (id == R.id.nav_doc) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#config", false, 0, currentActivity);
+			aswm_view("https://docs.mgks.dev/smart-webview/", false, 0, currentActivity);
 		} else if (id == R.id.nav_plugins) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#plugins", false, 0, currentActivity);
-		} else if (id == R.id.nav_fcm) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#push-notifications", false, 0, currentActivity);
-		} else if (id == R.id.nav_gps) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#geolocation", false, 0, currentActivity);
-		} else if (id == R.id.nav_url_handling) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#url-handling", false, 0, currentActivity);
-		} else if (id == R.id.nav_changelog) {
-			aswm_view("https://mgks.dev/app/smart-webview-documentation/#changelog", false, 0, currentActivity);
+			aswm_view("https://docs.mgks.dev/smart-webview/plugins/", false, 0, currentActivity);
+		} else if (id == R.id.nav_psg) {
+			aswm_view("https://docs.mgks.dev/smart-webview/play-store-guide/", false, 0, currentActivity);
 		} else if (id == R.id.nav_support) {
 			Intent intent = new Intent(Intent.ACTION_SENDTO);
 			intent.setData(Uri.parse("mailto:hello@mgks.dev"));
-			intent.putExtra(Intent.EXTRA_SUBJECT, "Android Smart WebView Help");
+			intent.putExtra(Intent.EXTRA_SUBJECT, "Help: Smart WebView");
 			try {
 				currentActivity.startActivity(Intent.createChooser(intent, "Send Email"));
 			} catch (ActivityNotFoundException e) {
