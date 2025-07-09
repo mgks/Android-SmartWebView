@@ -228,6 +228,63 @@ input[type="file"] {
 	margin-top: 0.5em;
 }
 
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    padding: 1rem;
+}
+
+.error-icon {
+    font-size: 4rem;
+    color: var(--error-color);
+    line-height: 1;
+}
+
+.error-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--error-color);
+    margin: 1rem 0 0.5rem;
+}
+
+.error-message {
+    font-size: 1rem;
+    color: #65676b;
+    max-width: 400px;
+    margin-bottom: 2rem;
+}
+
+.retry-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px; /* Pill shape */
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: var(--box-shadow);
+    transition: transform 0.2s ease;
+}
+
+.retry-button:hover {
+    transform: scale(1.05);
+}
+
+.retry-button svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    fill: white;
+}
+
 .app-footer {
     text-align: center;
     padding: 2rem 1rem 3rem;
