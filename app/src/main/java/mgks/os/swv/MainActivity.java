@@ -24,6 +24,7 @@ import android.app.ActivityManager;
 import android.app.DownloadManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +43,8 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
@@ -52,6 +55,7 @@ import android.webkit.SslErrorHandler;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -65,9 +69,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -82,7 +88,7 @@ import java.util.regex.Matcher;
  * Main Activity for Smart WebView
  * Handles WebView configuration, lifecycle events and user interactions
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     // Class members
     private static final String TAG = "MainActivity";
 
@@ -188,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Debug mode logging
         if(SmartWebView.SWV_DEBUGMODE){
-            Log.d(TAG, "URL: "+SmartWebView.CURR_URL+"DEVICE INFO: "+ Arrays.toString(fns.get_info()));
+            Log.d(TAG, "URL: "+SmartWebView.CURR_URL+"DEVICE INFO: "+ Arrays.toString(fns.get_info(this)));
         }
     }
 
@@ -211,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             toggle.syncState();
 
             NavigationView navigationView = findViewById(R.id.nav_view);
-            navigationView.setNavigationItemSelectedListener(fns);
+            navigationView.setNavigationItemSelectedListener(this);
         } else {
             setContentView(R.layout.activity_main);
         }
@@ -390,11 +396,95 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Log device info and handle location permissions
-        fns.get_info();
+        fns.get_info(this);
         handleLocationPermission();
 
         // Get FCM token for notifications
         setupFirebaseMessaging();
+    }
+
+    // Options menu for drawer theme
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
+        if (searchView != null) {
+            searchView.setQueryHint(getString(R.string.search_hint));
+        }
+        assert searchView != null;
+        searchView.setIconified(true);
+        searchView.setIconifiedByDefault(true);
+        searchView.clearFocus();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                fns.aswm_view(SmartWebView.ASWV_SEARCH + query, false, SmartWebView.asw_error_counter, MainActivity.this);
+                searchView.setQuery(query, false);
+                return false;
+            }
+
+            public boolean onQueryTextChange(String query) {
+                return false;
+            }
+        });
+        //searchView.setQuery(SmartWebView.asw_view.getUrl(),false);
+        return true;
+    }
+
+    // Options trigger for drawer theme
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_exit) {
+            fns.exit_app(this);
+            return true;
+        }
+        return onOptionsItemSelected(item);
+    }
+
+    /**
+     * Navigation menu item setup, config in SmartWebView.java
+     */
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        // Look up the configuration for the clicked item
+        SmartWebView.NavItem navItem = SmartWebView.ASWV_DRAWER_MENU.get(id);
+
+        if (navItem != null) {
+            String action = navItem.action;
+
+            if (action.startsWith("mailto:")) {
+                // Handle special mailto action
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(action));
+                try {
+                    startActivity(Intent.createChooser(intent, "Send Email"));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(this, "No email app found.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // Handle standard URL action
+                fns.aswm_view(action, false, 0, this);
+            }
+        } else {
+            // Optional: Log if a menu item is clicked but not configured
+            Log.w(TAG, "No action configured for menu item ID: " + id);
+        }
+
+        // Close the drawer
+        if (SmartWebView.ASWV_LAYOUT == 1) {
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            if (drawer != null) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        }
+        return true;
     }
 
     /**
@@ -683,6 +773,39 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return fns.url_actions(view, url, MainActivity.this);
             }
+        }
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            // This method is called when a page load fails.
+            // We will ignore errors for non-main frame resources (like images or CSS).
+            if (request.isForMainFrame()) {
+                // Check if the error is a network-related issue.
+                // A list of common network error codes for Android WebView.
+                int errorCode = error.getErrorCode();
+                if (errorCode == ERROR_HOST_LOOKUP ||
+                        errorCode == ERROR_TIMEOUT ||
+                        errorCode == ERROR_CONNECT ||
+                        errorCode == ERROR_UNKNOWN ||
+                        errorCode == ERROR_IO) {
+
+                    Log.e(TAG, "Network Error Occurred: " + error.getDescription());
+
+                    // Redirect to the custom offline URL.
+                    // It's important to use post() to avoid issues with modifying the WebView
+                    // while it's in the middle of a callback.
+                    view.post(() -> {
+                        // First, try to load the primary offline page
+                        if (SmartWebView.ASWV_OFFLINE_URL != null && !SmartWebView.ASWV_OFFLINE_URL.isEmpty()) {
+                            view.loadUrl(SmartWebView.ASWV_OFFLINE_URL);
+                        } else {
+                            // As a final fallback, load the basic error page
+                            view.loadUrl("file:///android_asset/error.html");
+                        }
+                    });
+                }
+            }
+            super.onReceivedError(view, request, error);
         }
 
         @SuppressLint("WebViewClientOnReceivedSslError")

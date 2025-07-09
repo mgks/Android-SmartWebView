@@ -54,9 +54,6 @@ public class SmartWebView {
     // Debug options
     public static boolean SWV_DEBUGMODE = true;  // Enable for detailed logs and toast alerts
 
-    // Version information
-    public static String ASWV_VERSION = "7.2";
-
     // ===============================================================================================
     // URL CONFIGURATION
     // ===============================================================================================
@@ -100,7 +97,7 @@ public class SmartWebView {
 
     // Layout and display
     public static int ASWV_ORIENTATION = 0;        // 0: unspecified, 1: portrait, 2: landscape
-    public static int ASWV_LAYOUT = 0;             // 0: fullscreen, 1: drawer layout
+    public static int ASWV_LAYOUT = 0;             // 0: fullscreen; 1: drawer layout
 
     // User agent configuration
     public static boolean POSTFIX_USER_AGENT = true;
@@ -134,6 +131,19 @@ public class SmartWebView {
     public static boolean SWV_PLAYGROUND = true; // Enable to show the plugin test UI and run diagnostics. Set to false for production.
 
     // For Individual Plugin Config check configurePlugins() method in Playground
+
+    // ===============================================================================================
+    // NAVIGATION DRAWER CONFIGURATION (for ASWV_LAYOUT = 1)
+    // ===============================================================================================
+    public static final Map<Integer, NavItem> ASWV_DRAWER_MENU = new HashMap<Integer, NavItem>() {{
+        put(R.id.nav_home, new NavItem(R.id.nav_home, "https://mgks.github.io/Android-SmartWebView/"));
+        put(R.id.nav_doc, new NavItem(R.id.nav_doc, "https://docs.mgks.dev/smart-webview/"));
+        put(R.id.nav_plugins, new NavItem(R.id.nav_plugins, "https://docs.mgks.dev/smart-webview/plugins/"));
+        put(R.id.nav_psg, new NavItem(R.id.nav_psg, "https://docs.mgks.dev/smart-webview/play-store-guide/"));
+
+        // Special action for the email link
+        put(R.id.nav_support, new NavItem(R.id.nav_support, "mailto:hello@mgks.dev?subject=Help: Smart WebView"));
+    }};
 
     // ===============================================================================================
     // RATING CONFIGURATION
@@ -277,6 +287,16 @@ public class SmartWebView {
             }
         } catch (IOException e) {
             Log.e(TAG, "Error scanning for plugins", e);
+        }
+    }
+
+    public static class NavItem {
+        public final int id;
+        public final String action; // Can be a URL or a special command like "email"
+
+        public NavItem(int id, String action) {
+            this.id = id;
+            this.action = action;
         }
     }
 }

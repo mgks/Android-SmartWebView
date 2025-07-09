@@ -42,8 +42,6 @@ import android.print.PrintJob;
 import android.print.PrintManager;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.widget.Toast;
@@ -57,7 +55,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.File;
@@ -73,7 +70,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class Functions implements NavigationView.OnNavigationItemSelectedListener {
+public class Functions{
 	private final SecureRandom random = new SecureRandom();
 
 	// Random ID creation function to help get fresh cache every-time webview reloaded
@@ -365,11 +362,11 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	}
 
 	// Getting device basic information
-	public String[] get_info() {
+	public String[] get_info(Context context) { // Add context parameter
 		String[] info = new String[3];
 		info[0] = "android";
-		info[1] = new MetaPull().device();
-		info[2] = new MetaPull().swv();
+		info[1] = new MetaPull(context).device(); // Pass context
+		info[2] = new MetaPull(context).swv(); // Pass context
 
 		set_cookie("DEVICE_TYPE=" + info[0]);
 		set_cookie("DEVICE_INFO=" + info[1]);
@@ -454,50 +451,6 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 	// Divide the URL pattern into pieces
 	public static Pattern url_pattern() {
 		return Pattern.compile("(?:^|\\W)((ht|f)tp(s?)://|www\\.)" + "(([\\w\\-]+\\.)+([\\w\\-.~]+/?)*" + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-	}
-
-	// Options menu for drawer theme
-	@SuppressLint("ResourceAsColor")
-	public boolean onCreateOptionsMenu(Menu menu, Activity context) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		context.getMenuInflater().inflate(R.menu.main, menu);
-		SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
-		final SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-		if (searchView != null) {
-			searchView.setSearchableInfo(searchManager.getSearchableInfo(context.getComponentName()));
-		}
-		if (searchView != null) {
-			searchView.setQueryHint(context.getString(R.string.search_hint));
-		}
-		assert searchView != null;
-		searchView.setIconified(true);
-		searchView.setIconifiedByDefault(true);
-		searchView.clearFocus();
-
-		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-			public boolean onQueryTextSubmit(String query) {
-				searchView.clearFocus();
-				aswm_view(SmartWebView.ASWV_SEARCH + query, false, SmartWebView.asw_error_counter, context);
-				searchView.setQuery(query, false);
-				return false;
-			}
-
-			public boolean onQueryTextChange(String query) {
-				return false;
-			}
-		});
-		//searchView.setQuery(SmartWebView.asw_view.getUrl(),false);
-		return true;
-	}
-
-	// Options trigger for drawer theme
-	public boolean onOptionsItemSelected(MenuItem item, Activity activity) {
-		int id = item.getItemId();
-		if (id == R.id.action_exit) {
-			exit_app(activity);
-			return true;
-		}
-		return onOptionsItemSelected(item, activity);
 	}
 
 	public interface TokenCallback {
@@ -673,51 +626,5 @@ public class Functions implements NavigationView.OnNavigationItemSelectedListene
 
 		// Finally, display the dialog when user press back button
 		dialog.show();
-	}
-
-	@Override
-	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-		// Handle navigation view item clicks here.
-		int id = item.getItemId();
-		// This requires getting the current Activity context, which is tricky from a non-activity class.
-		// A better approach is to handle this in MainActivity, which holds the drawer.
-		// For now, we assume SmartWebView.getAppContext() can provide a context, but it may not be an Activity.
-		// This part of the logic needs careful review. Let's assume a static reference to MainActivity exists for this to work.
-		Activity currentActivity = null; // This is the problematic part. How to get the current activity?
-		if (SmartWebView.getAppContext() instanceof Activity) {
-			currentActivity = (Activity) SmartWebView.getAppContext();
-		}
-
-		if (currentActivity == null) {
-			Log.e("NAV_ERROR", "Cannot get Activity context for navigation");
-			return false;
-		}
-
-		if (id == R.id.nav_home) {
-			aswm_view("https://mgks.github.io/Android-SmartWebView/", false, 0, currentActivity);
-		} else if (id == R.id.nav_doc) {
-			aswm_view("https://docs.mgks.dev/smart-webview/", false, 0, currentActivity);
-		} else if (id == R.id.nav_plugins) {
-			aswm_view("https://docs.mgks.dev/smart-webview/plugins/", false, 0, currentActivity);
-		} else if (id == R.id.nav_psg) {
-			aswm_view("https://docs.mgks.dev/smart-webview/play-store-guide/", false, 0, currentActivity);
-		} else if (id == R.id.nav_support) {
-			Intent intent = new Intent(Intent.ACTION_SENDTO);
-			intent.setData(Uri.parse("mailto:hello@mgks.dev"));
-			intent.putExtra(Intent.EXTRA_SUBJECT, "Help: Smart WebView");
-			try {
-				currentActivity.startActivity(Intent.createChooser(intent, "Send Email"));
-			} catch (ActivityNotFoundException e) {
-				Toast.makeText(currentActivity, "No email app found.", Toast.LENGTH_SHORT).show();
-			}
-		}
-
-		if (SmartWebView.ASWV_LAYOUT == 1) {
-			DrawerLayout drawer = currentActivity.findViewById(R.id.drawer_layout);
-			if(drawer != null) {
-				drawer.closeDrawer(GravityCompat.START);
-			}
-		}
-		return true;
 	}
 }
