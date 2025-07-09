@@ -44,12 +44,8 @@
 	<!-- Permissions for File Access (Scoped Storage) -->
 	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 	<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-
-	<!-- Remove if targeting API 30+ and using Scoped Storage exclusively -->
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-		tools:ignore="ScopedStorage"
-		android:maxSdkVersion="35" />
 
 	<!-- Features (Optional) -->
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
