@@ -16,7 +16,7 @@
     <string name="loc_perm">Allow Permission for Location</string>
     <string name="loc_perm_text">Give this app permission to check your location.</string>
     <string name="loc_perm_more">Please allow this app to know your location for better overall experience.</string>
-	<string name="dl_downloading">Downloading file…</string>
+	<string name="dl_downloading" tools:ignore="TypographyEllipsis">Downloading file...</string>
 	<string name="dl_downloading2">Downloading File</string>
 	<string name="fl_chooser">File Chooser</string>
 	<string name="went_wrong">Something Went Wrong!</string>
@@ -29,9 +29,9 @@
 	<string name="open">Open</string>
 	<string name="close">Close</string>
 	<string name="search_hint">Enter your query here</string>
-	<string name="connecting">Connecting…</string>
+	<string name="connecting" tools:ignore="TypographyEllipsis">Connecting...</string>
 	<string name="exit_title">Exit confirmation</string>
-	<string name="exit_subtitle">You sure you want to exit SWV?</string>
+	<string name="exit_subtitle">Are you sure you want to exit?</string>
 	<string name="print_complete">Printing complete</string>
 	<string name="print_failed">Printing failed</string>
 	<string name="msg_no_internet">No internet connection!</string>
