@@ -22,11 +22,21 @@
 </head>
 <body>
 <header class="app-header">
-	<img src="swv_logo.png" class="header-logo" alt="Smart WebView Logo" />
+	<img src="swv_splash_white.png" class="header-logo" alt="Smart WebView Logo" />
 	<b>Preview Native Features Available in Smart WebView</b>
 </header>
 
 <main class="container">
+	<div class="card">
+		<h2><span class="icon">🎨</span> Theme</h2>
+		<p>Switch between light and dark themes. The initial theme is based on your system setting.</p>
+		<div class="theme-switcher" id="theme-switcher">
+			<button data-theme="light">Light</button>
+			<button data-theme="dark">Dark</button>
+			<button data-theme="system">System</button>
+		</div>
+	</div>
+
 	<div class="card">
 		<h2><span class="icon">🖼️</span> File Handling</h2>
 		<p>Select multiple images and videos. Previews are shown for images.</p>

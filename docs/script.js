@@ -3,6 +3,9 @@
   https://github.com/mgks/Android-SmartWebView
 */
 
+// This variable will store the theme detected by the native app
+let nativeThemePreference = 'light';
+
 document.addEventListener('DOMContentLoaded', function() {
 
     const imageInput = document.getElementById('add-img');
@@ -57,10 +60,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         this.parentElement.appendChild(fileNameDisplay);
     });
+
+    // Theme switcher logic
+    const themeSwitcher = document.getElementById('theme-switcher');
+    if (themeSwitcher) {
+        themeSwitcher.addEventListener('click', (event) => {
+            if (event.target.tagName === 'BUTTON') {
+                const theme = event.target.dataset.theme;
+                setTheme(theme);
+            }
+        });
+    }
+    const savedTheme = localStorage.getItem('swv-theme');
+    if (savedTheme && savedTheme !== 'system') {
+        setTheme(savedTheme);
+    } else {
+        setTheme(nativeThemePreference, true);
+    }
 });
 
-
-// cookies handling function
 function get_cookies(name) {
 	const value = `; ${document.cookie}`;
 	const parts = value.split(`; ${name}=`);
@@ -105,4 +123,44 @@ function get_location() {
 
 function print_page(){
 	window.print();
+}
+
+function applyInitialTheme(nativeTheme) {
+    if (nativeTheme) {
+        nativeThemePreference = nativeTheme;
+    }
+}
+
+function setTheme(theme, isSystem = false) {
+    const body = document.body;
+    // Get the themeSwitcher inside the function to ensure it exists when called.
+    const themeSwitcher = document.getElementById('theme-switcher');
+    let activeTheme = theme;
+
+    if (theme === 'system') {
+        localStorage.removeItem('swv-theme');
+        activeTheme = nativeThemePreference;
+        isSystem = true;
+    }
+
+    if (activeTheme === 'dark') {
+        body.classList.add('dark-mode');
+    } else {
+        body.classList.remove('dark-mode');
+    }
+
+    if (themeSwitcher) {
+        themeSwitcher.querySelectorAll('button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        const buttonToActivate = isSystem ? 'system' : activeTheme;
+        const activeButton = themeSwitcher.querySelector(`[data-theme="${buttonToActivate}"]`);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+    }
+
+    if (!isSystem) {
+        localStorage.setItem('swv-theme', theme);
+    }
 }
