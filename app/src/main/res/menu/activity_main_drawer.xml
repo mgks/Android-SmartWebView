@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
-    <group android:checkableBehavior="single">
+	tools:showIn="navigation_view">
+	<group android:checkableBehavior="single">
 		<item
 			android:id="@+id/nav_home"
 			android:icon="@drawable/ic_home"
 			android:title="@string/home" />
-        <item
-            android:id="@+id/nav_doc"
-            android:icon="@drawable/ic_doc"
-            android:title="@string/documentation" />
+		<item
+			android:id="@+id/nav_doc"
+			android:icon="@drawable/ic_doc"
+			android:title="@string/documentation" />
 		<item
 			android:id="@+id/nav_plugins"
 			android:icon="@android:drawable/btn_star_big_on"
@@ -25,4 +25,16 @@
 			android:icon="@drawable/ic_help"
 			android:title="@string/need_help" />
 	</group>
+
+	<!-- Add this new item for the switch -->
+	<item android:title="@string/dark_mode"
+		android:iconTint="@color/textColorPrimary">
+		<menu>
+			<item
+				android:id="@+id/nav_dark_mode_switch"
+				android:title=""
+				app:actionLayout="@layout/drawer_switch_item"
+				app:showAsAction="always" />
+		</menu>
+	</item>
 </menu>

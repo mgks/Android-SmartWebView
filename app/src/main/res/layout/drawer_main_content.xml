@@ -25,7 +25,7 @@
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		android:background="@color/colorPrimary"
+		android:background="@color/colorAccent"
 		android:visibility="gone"
 		android:clickable="true"
 		android:focusable="true"
@@ -37,10 +37,10 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerInParent="true"
-			android:backgroundTint="@color/colorPrimaryDark"
+			android:backgroundTint="@color/colorPrimary"
 			android:padding="21dp"
 			android:text="@string/authenticate"
-			android:textColor="@color/white"
+			android:textColor="@color/textColorPrimary"
 			android:textSize="16sp" />
 
 	</RelativeLayout>

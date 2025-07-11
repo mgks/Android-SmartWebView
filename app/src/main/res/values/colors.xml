@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#52a73d</color>
-    <color name="colorPrimaryDark">#3e862c</color>
-	<color name="colorPrimaryDarker">#3e8611</color>
-	<color name="colorAccent">#f56fac60</color>
+	<!-- Light Mode Theme -->
+	<color name="colorPrimary">#FFFFFF</color>
+	<color name="colorPrimaryDark">#F0F0F0</color>
+	<color name="colorPrimaryDarker">#EAEAEA</color>
+	<color name="colorAccent">#4AAB33</color>
+	<color name="colorAccentDark">#399623</color>
+	<color name="textColorPrimary">#2a2a2a</color>
+	<color name="textColorSecondary">#555555</color>
+	<color name="iconTint">#449a2f</color>
 	<color name="white">#ffffff</color>
 	<color name="black">#000000</color>
 </resources>

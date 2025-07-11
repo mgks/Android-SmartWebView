@@ -47,4 +47,5 @@
 	<string name="changelog">Changelog</string>
 	<string name="need_help">Need Help?</string>
     <string name="play_store_guide">Play Store Guide</string>
+	<string name="dark_mode">Dark Mode</string>
 </resources>

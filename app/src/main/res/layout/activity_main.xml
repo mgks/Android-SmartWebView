@@ -29,7 +29,7 @@
 			android:layout_height="wrap_content"
 			android:gravity="center_vertical|center_horizontal|center"
 			android:text="@string/loading_app"
-			android:textColor="@color/cardview_light_background"
+			android:textColor="@color/textColorPrimary"
 			android:textSize="21sp"
 			android:textStyle="bold"
 			tools:ignore="NotSibling" />

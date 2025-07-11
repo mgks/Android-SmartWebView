@@ -51,7 +51,7 @@
 			android:layout_marginTop="26dp"
 			android:gravity="center_vertical|center_horizontal|center"
 			android:text="@string/connecting"
-			android:textColor="?android:attr/textColorTertiary"
+			android:textColor="@color/textColorPrimary"
 			android:textSize="18sp"
 			android:textStyle="normal|bold"
 			tools:ignore="NotSibling" />
@@ -66,7 +66,7 @@
 			android:layout_marginTop="110dp"
 			android:gravity="center_vertical|center_horizontal|center"
 			android:text="@string/loading2"
-			android:textColor="?android:attr/textColorTertiary"
+			android:textColor="@color/textColorPrimary"
 			android:textSize="18sp"
 			android:textStyle="normal|bold"
 			android:visibility="gone"
@@ -81,8 +81,8 @@
 		android:fitsSystemWindows="true"
 		app:headerLayout="@layout/drawer_main_header"
 		app:menu="@menu/activity_main_drawer"
-		android:background="@color/white"
-		app:itemTextColor="@color/black"
-		app:itemIconTint="@color/black" />
+		android:background="@color/colorPrimary"
+		app:itemTextColor="@color/textColorPrimary"
+		app:itemIconTint="@color/textColorPrimary" />
 </androidx.drawerlayout.widget.DrawerLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

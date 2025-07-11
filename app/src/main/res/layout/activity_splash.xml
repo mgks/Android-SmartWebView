@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary" >
 
-	<ImageView
-		android:layout_width="325sp"
-		android:layout_height="120sp"
-		android:layout_centerInParent="true"
-		android:contentDescription=""
-		android:src="@raw/front_splash"
-		tools:ignore="ContentDescription" />
+    <ImageView
+        android:layout_width="275dip"
+        android:layout_height="100dip"
+        android:layout_centerInParent="true"
+        android:contentDescription=""
+        android:src="@raw/front_splash"
+        tools:ignore="ContentDescription" />
 
 </RelativeLayout>
