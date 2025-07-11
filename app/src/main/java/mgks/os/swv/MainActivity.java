@@ -49,6 +49,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
 import android.webkit.ServiceWorkerClient;
 import android.webkit.ServiceWorkerController;
 import android.webkit.SslErrorHandler;
@@ -69,7 +70,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -212,12 +215,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
             DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close);
+            final SwipeRefreshLayout pullRefresh = findViewById(R.id.pullfresh);
+
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close) {
+                @Override
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+                    super.onDrawerSlide(drawerView, slideOffset);
+                    // Disable pull-to-refresh while the drawer is being dragged
+                    if (slideOffset > 0 && pullRefresh.isEnabled()) {
+                        pullRefresh.setEnabled(false);
+                    }
+                }
+
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                    // Re-enable pull-to-refresh when the drawer is closed
+                    if (!pullRefresh.isEnabled() && SmartWebView.ASWP_PULLFRESH) {
+                        pullRefresh.setEnabled(true);
+                    }
+                }
+            };
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 
             NavigationView navigationView = findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
+
+            // The footer is part of the NavigationView's own view hierarchy.
+            MenuItem switchItem = navigationView.getMenu().findItem(R.id.nav_dark_mode_switch);
+            SwitchCompat themeSwitch = (SwitchCompat) switchItem.getActionView().findViewById(R.id.drawer_theme_switch);
+            if (themeSwitch != null) {
+                int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                themeSwitch.setChecked(currentNightMode == Configuration.UI_MODE_NIGHT_YES);
+
+                themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    AppCompatDelegate.setDefaultNightMode(
+                            isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+                    );
+                });
+            }
+
         } else {
             setContentView(R.layout.activity_main);
         }
@@ -283,6 +321,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set WebView clients
         SmartWebView.asw_view.setWebViewClient(new WebViewCallback());
         SmartWebView.asw_view.setWebChromeClient(createWebChromeClient());
+        SmartWebView.asw_view.setBackgroundColor(getColor(R.color.colorPrimary));
+        SmartWebView.asw_view.addJavascriptInterface(new WebAppInterface(), "AndroidInterface");
 
         // Setup download listener
         setupDownloadListener();
@@ -534,6 +574,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
+     * Sets the app's theme to light or dark and restarts the activity to apply changes.
+     * @param isDarkMode true for dark mode, false for light mode.
+     */
+    private void setAppTheme(boolean isDarkMode) {
+        int mode = isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
+        AppCompatDelegate.setDefaultNightMode(mode);
+        // No need to restart for modern apps, but if UI glitches appear, a restart can be forced.
+        // Forcing a restart:
+        // Intent intent = getIntent();
+        // finish();
+        // startActivity(intent);
+    }
+
+    /**
      * Handle location permission and tracking
      */
     private void handleLocationPermission() {
@@ -619,6 +673,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fns.aswm_view(redirectUrl, false, SmartWebView.asw_error_counter, this);
     }
 
+    public class WebAppInterface {
+        @JavascriptInterface
+        public void setNativeTheme(String theme) {
+            runOnUiThread(() -> {
+                int newMode;
+                if ("dark".equals(theme)) {
+                    newMode = AppCompatDelegate.MODE_NIGHT_YES;
+                } else if ("light".equals(theme)) {
+                    newMode = AppCompatDelegate.MODE_NIGHT_NO;
+                } else {
+                    newMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+                }
+
+                if (AppCompatDelegate.getDefaultNightMode() != newMode) {
+                    AppCompatDelegate.setDefaultNightMode(newMode);
+                    recreate();
+                }
+            });
+        }
+    }
+
     // Standard activity lifecycle methods
     @Override
     public void onPause() {
@@ -663,6 +738,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        String theme = (newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES ? "dark" : "light";
+        String script = "if(typeof setTheme === 'function') { setTheme('" + theme + "', true); }";
+        if (SmartWebView.asw_view != null) {
+            SmartWebView.asw_view.evaluateJavascript(script, null);
+        }
     }
 
     @Override
@@ -751,9 +831,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             findViewById(R.id.msw_welcome).setVisibility(View.GONE);
             findViewById(R.id.msw_view).setVisibility(View.VISIBLE);
+
+            // Inject Google Analytics if configured
             if(SmartWebView.ASWV_GTAG != null && !SmartWebView.ASWV_GTAG.isEmpty()) {
                 fns.inject_gtag(view, SmartWebView.ASWV_GTAG);
             }
+
+            // Inject theme preference
+            String theme = SmartWebView.ASWP_DARK_MODE ? "dark" : "light";
+            String script = "if(typeof applyInitialTheme === 'function') { applyInitialTheme('" + theme + "'); }";
+            view.evaluateJavascript(script, null);
         }
 
         @Override

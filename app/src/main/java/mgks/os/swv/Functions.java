@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -368,11 +369,20 @@ public class Functions{
 		info[1] = new MetaPull(context).device(); // Pass context
 		info[2] = new MetaPull(context).swv(); // Pass context
 
+		// Set dark mode status
+		SmartWebView.ASWP_DARK_MODE = is_night_mode(context);
+
 		set_cookie("DEVICE_TYPE=" + info[0]);
 		set_cookie("DEVICE_INFO=" + info[1]);
 		set_cookie("APP_INFO=" + info[2]);
 
 		return info;
+	}
+
+	// Check if the device is in dark mode
+	public static boolean is_night_mode(Context context) {
+		int nightModeFlags = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+		return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
 	}
 
 	// Using cookies to update user locations

@@ -150,33 +150,35 @@ public class Playground {
         String demoJs =
                 "// Create demo UI in web pages\n" +
                         "function createDemoUI(pluginStatus) {\n" +
-                        "  if (document.getElementById('swv-playground-container')) return;\n" +
+                        "  if (document.getElementById('swv-pg-container-999')) return;\n" +
                         "  \n" +
                         "  const premiumUrl = 'https://github.com/sponsors/mgks/sponsorships?sponsor=mgks&tier_id=468838';\n" +
                         "  const css = `\n" +
-                        "    #swv-playground-container { position: fixed; bottom: 15px; right: 15px; z-index: 10000; font-family: sans-serif; }\n" +
-                        "    #swv-playground-toggle { width: 60px; height: 60px; background-color: #4285f4; color: white; border-radius: 50%; border: none; font-size: 28px; line-height: 60px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; }\n" +
-                        "    #swv-playground-panel { display: none; position: absolute; bottom: 75px; right: 0; width: 280px; background-color: rgba(20,20,20,0.85); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); color: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }\n" +
-                        "    #swv-playground-panel.visible { display: block; }\n" +
-                        "    #swv-playground-panel h4 { margin: 5px 0 15px; text-align: center; font-weight: bold; }\n" +
-                        "    .swv-playground-btn { display: block; width: 100%; padding: 12px; margin: 6px 0; background-color: #555; color: white; border: none; border-radius: 6px; text-align: left; cursor: pointer; font-size: 14px; }\n" +
-                        "    .swv-playground-btn:disabled { background-color: #444; color: #888; cursor: pointer; }\n" +
-                        "    .swv-playground-btn.premium { background: linear-gradient(45deg, #FFD700, #FFA500); font-weight: bold; text-align: center; color: #333; }\n" +
+                        "    #swv-pg-container-999 { all: initial; position: fixed; bottom: 15px; right: 15px; z-index: 2147483647; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }\n" +
+                        "    #swv-pg-toggle-999 { all: initial; width: 60px; height: 60px; background-color: #4285f4; color: white; border-radius: 50%; border: none; font-size: 28px; line-height: 60px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; }\n" +
+                        "    #swv-pg-panel-999 { all: initial; display: none; position: absolute; bottom: 75px; right: 0; width: 280px; background-color: rgba(20,20,20,0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }\n" +
+                        "    #swv-pg-panel-999.visible { display: block; }\n" +
+                        "    #swv-pg-panel-999 h4 { all: initial; margin: 5px 0 15px; text-align: center; font-weight: bold; font-size: 16px; color: white; display: block; }\n" +
+                        "    .swv-pg-btn-999 { all: initial; display: block; width: 94%; padding: 12px 3%; margin: 6px 0; background-color: #555; color: white; border: none; border-radius: 6px; text-align: left; cursor: pointer; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }\n" +
+                        "    .swv-pg-btn-999:disabled { background-color: #444; color: #888; cursor: not-allowed; }\n" +
+                        "    .swv-pg-btn-999.premium { background: linear-gradient(45deg, #FFD700, #FFA500); font-weight: bold; text-align: center; color: #333; }\n" +
+                        "    #swv-pg-panel-999 a { all: initial; text-decoration: none; display: block; }\n" +
                         "  `;\n" +
                         "  \n" +
                         "  const style = document.createElement('style');\n" +
+                        "  style.id = 'swv-pg-styles-999';\n" +
                         "  style.textContent = css;\n" +
                         "  document.head.appendChild(style);\n" +
                         "  \n" +
                         "  const container = document.createElement('div');\n" +
-                        "  container.id = 'swv-playground-container';\n" +
+                        "  container.id = 'swv-pg-container-999';\n" +
                         "  \n" +
                         "  const panel = document.createElement('div');\n" +
-                        "  panel.id = 'swv-playground-panel';\n" +
+                        "  panel.id = 'swv-pg-panel-999';\n" +
                         "  panel.innerHTML = '<h4>Plugin Playground</h4>';\n" +
                         "  \n" +
                         "  const toggleBtn = document.createElement('button');\n" +
-                        "  toggleBtn.id = 'swv-playground-toggle';\n" +
+                        "  toggleBtn.id = 'swv-pg-toggle-999';\n" +
                         "  toggleBtn.innerHTML = '⚙';\n" +
                         "  toggleBtn.onclick = () => { panel.classList.toggle('visible'); };\n" +
                         "  \n" +
@@ -192,7 +194,7 @@ public class Playground {
                         "  \n" +
                         "  buttons.forEach(btn => {\n" +
                         "    const button = document.createElement('button');\n" +
-                        "    button.className = 'swv-playground-btn';\n" +
+                        "    button.className = 'swv-pg-btn-999';\n" +
                         "    if (pluginStatus[btn.plugin]) {\n" +
                         "      button.innerText = btn.text;\n" +
                         "      button.onclick = () => { try { eval(btn.action); } catch(e) { alert('Error: ' + e.message); } };\n" +
@@ -208,7 +210,7 @@ public class Playground {
                         "  const premiumLink = document.createElement('a');\n" +
                         "  premiumLink.href = premiumUrl;\n" +
                         "  premiumLink.target = '_blank';\n" +
-                        "  premiumLink.innerHTML = '<button class=\\\"swv-playground-btn premium\\\">⭐ Get All Premium Plugins</button>';\n" +
+                        "  premiumLink.innerHTML = '<button class=\\\"swv-pg-btn-999 premium\\\">⭐ Get All Premium Plugins</button>';\n" +
                         "  panel.appendChild(premiumLink);\n" +
                         "  \n" +
                         "  container.appendChild(panel);\n" +

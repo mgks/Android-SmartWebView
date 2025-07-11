@@ -47,16 +47,16 @@ public class SmartWebView {
 
     private static final String TAG = "SmartWebView";
 
-    // ===============================================================================================
+    // ===========================================
     // CORE CONFIGURATION
-    // ===============================================================================================
+    // ===========================================
 
     // Debug options
     public static boolean SWV_DEBUGMODE = true;  // Enable for detailed logs and toast alerts
 
-    // ===============================================================================================
+    // ===========================================
     // URL CONFIGURATION
-    // ===============================================================================================
+    // ===========================================
 
     // URL configurations
     public static String ASWV_APP_URL = "https://mgks.github.io/Android-SmartWebView/";
@@ -72,9 +72,9 @@ public class SmartWebView {
     // External URL handling
     public static String ASWV_EXC_LIST = "mgks.dev,docs.mgks.dev,mgks.github.io";  // Comma-separated domains
 
-    // ===============================================================================================
+    // ===========================================
     // FEATURE FLAGS
-    // ===============================================================================================
+    // ===========================================
 
     // Core features
     public static boolean ASWP_OFFLINE;       // True if app loads from local file or no internet
@@ -95,10 +95,6 @@ public class SmartWebView {
     // Security options
     public static boolean ASWP_CERT_VERI = true;   // Verify SSL certificate (recommended)
 
-    // Layout and display
-    public static int ASWV_ORIENTATION = 0;        // 0: unspecified, 1: portrait, 2: landscape
-    public static int ASWV_LAYOUT = 0;             // 0: fullscreen; 1: drawer layout
-
     // User agent configuration
     public static boolean POSTFIX_USER_AGENT = true;
     public static boolean OVERRIDE_USER_AGENT = false;
@@ -111,9 +107,30 @@ public class SmartWebView {
     // Analytics
     public static String ASWV_GTAG = "G-7XXC1C7CRQ";   // Analytics ID
 
-    // ===============================================================================================
+    // ===========================================
+    // UI AND THEME
+    // ===========================================
+
+    public static int ASWV_ORIENTATION = 0;        // 0: unspecified, 1: portrait, 2: landscape
+    public static int ASWV_LAYOUT = 0;             // 0: fullscreen; 1: drawer layout
+    public static boolean ASWP_DARK_MODE = false; // will be set dynamically
+
+    // ===========================================
+    // NAVIGATION DRAWER CONFIGURATION (for ASWV_LAYOUT = 1)
+    // ===========================================
+    public static final Map<Integer, NavItem> ASWV_DRAWER_MENU = new HashMap<Integer, NavItem>() {{
+        put(R.id.nav_home, new NavItem(R.id.nav_home, "https://mgks.github.io/Android-SmartWebView/"));
+        put(R.id.nav_doc, new NavItem(R.id.nav_doc, "https://docs.mgks.dev/smart-webview/"));
+        put(R.id.nav_plugins, new NavItem(R.id.nav_plugins, "https://docs.mgks.dev/smart-webview/plugins/"));
+        put(R.id.nav_psg, new NavItem(R.id.nav_psg, "https://docs.mgks.dev/smart-webview/play-store-guide/"));
+
+        // Special action for the email link
+        put(R.id.nav_support, new NavItem(R.id.nav_support, "mailto:hello@mgks.dev?subject=Help: Smart WebView"));
+    }};
+
+    // ===========================================
     // PLUGIN CONFIGURATION
-    // ===============================================================================================
+    // ===========================================
 
     // Master switch for plugins
     public static Map<String, Boolean> ASWP_PLUGIN_SETTINGS = new HashMap<String, Boolean>() {{
@@ -132,30 +149,17 @@ public class SmartWebView {
 
     // For Individual Plugin Config check configurePlugins() method in Playground
 
-    // ===============================================================================================
-    // NAVIGATION DRAWER CONFIGURATION (for ASWV_LAYOUT = 1)
-    // ===============================================================================================
-    public static final Map<Integer, NavItem> ASWV_DRAWER_MENU = new HashMap<Integer, NavItem>() {{
-        put(R.id.nav_home, new NavItem(R.id.nav_home, "https://mgks.github.io/Android-SmartWebView/"));
-        put(R.id.nav_doc, new NavItem(R.id.nav_doc, "https://docs.mgks.dev/smart-webview/"));
-        put(R.id.nav_plugins, new NavItem(R.id.nav_plugins, "https://docs.mgks.dev/smart-webview/plugins/"));
-        put(R.id.nav_psg, new NavItem(R.id.nav_psg, "https://docs.mgks.dev/smart-webview/play-store-guide/"));
-
-        // Special action for the email link
-        put(R.id.nav_support, new NavItem(R.id.nav_support, "mailto:hello@mgks.dev?subject=Help: Smart WebView"));
-    }};
-
-    // ===============================================================================================
+    // ===========================================
     // RATING CONFIGURATION
-    // ===============================================================================================
+    // ===========================================
 
     static int ASWR_DAYS = 3;         // Days before showing the dialog
     static int ASWR_TIMES = 10;       // Launch times before showing
     static int ASWR_INTERVAL = 2;     // Days interval for reminders
 
-    // ===============================================================================================
+    // ===========================================
     // INTERNAL STATE VARIABLES
-    // ===============================================================================================
+    // ===========================================
 
     // Shared UI components
     static WebView asw_view;
@@ -182,9 +186,9 @@ public class SmartWebView {
     static int asw_error_counter = 0;
     static boolean true_online = !ASWP_OFFLINE;
 
-    // ===============================================================================================
+    // ===========================================
     // INITIALIZATION MANAGEMENT
-    // ===============================================================================================
+    // ===========================================
 
     private static Context appContext;
     private static PluginManager pluginManagerInstance;
