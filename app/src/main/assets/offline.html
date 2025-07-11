@@ -13,7 +13,7 @@
 </head>
 <body>
 <header class="app-header">
-	<img src="swv_logo.png" class="header-logo" alt="Smart WebView Logo" />
+	<img src="swv_splash_white.png" class="header-logo" alt="Smart WebView Logo" />
 	<p>You are currently offline. Some features below work without an internet connection.</p>
 	<h2>Offline Mode</h2>
 </header>
@@ -21,10 +21,20 @@
 <main class="container">
 	<div class="card">
 		<a href="https://mgks.github.io/Android-SmartWebView/" class="action-button online-button">
-			<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+			<svg width="75" height="75" viewBox="0 0 2.25 2.25" fill="none" xmlns="http://www.w3.org/2000/svg"><path stroke="#fff" stroke-width=".188" stroke-linecap="round" stroke-linejoin="round" d="M1.241 1.772a.07.07 0 0 1-.071.071.07.07 0 0 1-.071-.071.071.071 0 0 1 .142 0m-.45-.193a.43.43 0 0 1 .219-.201m-.477-.054a.8.8 0 0 1 .212-.205m1.061.205a.78.78 0 0 0-.396-.293m.65.041a1.13 1.13 0 0 0-.89-.433q-.067 0-.132.008m-.757.423A1 1 0 0 1 .504.862"/><path stroke="#fff" stroke-width=".188" stroke-linecap="round" d="m.414.379 1.558 1.645"/></svg>
 			<br />
 			Go Online & Test Full Features
 		</a>
+	</div>
+
+	<div class="card">
+		<h2><span class="icon">🎨</span> Theme</h2>
+		<p>Switch between light and dark themes. The initial theme is based on your system setting.</p>
+		<div class="theme-switcher" id="theme-switcher">
+			<button data-theme="light">Light</button>
+			<button data-theme="dark">Dark</button>
+			<button data-theme="system">System</button>
+		</div>
 	</div>
 
 	<div class="card">
