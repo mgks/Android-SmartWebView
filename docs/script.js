@@ -133,14 +133,17 @@ function applyInitialTheme(nativeTheme) {
 
 function setTheme(theme, isSystem = false) {
     const body = document.body;
-    // Get the themeSwitcher inside the function to ensure it exists when called.
     const themeSwitcher = document.getElementById('theme-switcher');
     let activeTheme = theme;
+    let buttonToActivate = theme;
 
     if (theme === 'system') {
         localStorage.removeItem('swv-theme');
         activeTheme = nativeThemePreference;
         isSystem = true;
+        buttonToActivate = 'system';
+    } else {
+        localStorage.setItem('swv-theme', theme);
     }
 
     if (activeTheme === 'dark') {
@@ -150,17 +153,11 @@ function setTheme(theme, isSystem = false) {
     }
 
     if (themeSwitcher) {
-        themeSwitcher.querySelectorAll('button').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        const buttonToActivate = isSystem ? 'system' : activeTheme;
+        themeSwitcher.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
         const activeButton = themeSwitcher.querySelector(`[data-theme="${buttonToActivate}"]`);
-        if (activeButton) {
-            activeButton.classList.add('active');
-        }
+        if (activeButton) activeButton.classList.add('active');
     }
-
-    if (!isSystem) {
-        localStorage.setItem('swv-theme', theme);
+    if (window.AndroidInterface && typeof window.AndroidInterface.setNativeTheme === 'function') {
+        window.AndroidInterface.setNativeTheme(theme);
     }
 }
