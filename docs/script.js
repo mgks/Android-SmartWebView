@@ -15,31 +15,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle image previews
     imageInput.addEventListener('change', function() {
-        gallery.innerHTML = ''; // clear previous previews
-        if (!this.files) return;
+        // The 'gallery' element might not exist on all pages (like error pages).
+        const gallery = document.querySelector('.gallery');
+        if (gallery) {
+            gallery.innerHTML = ''; // Clear previous previews only if gallery exists.
+            if (!this.files) return;
 
-        for (const file of Array.from(this.files)) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    let width = img.width;
-                    let height = img.height;
+            for (const file of Array.from(this.files)) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        let width = img.width;
+                        let height = img.height;
 
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        // The gallery is guaranteed to exist inside this block.
+                        gallery.appendChild(canvas);
                     }
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    gallery.appendChild(canvas);
-                }
-            };
-            reader.readAsDataURL(file);
+                };
+                reader.readAsDataURL(file);
+            }
         }
     });
 
