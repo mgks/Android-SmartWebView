@@ -31,6 +31,19 @@ android {
 		versionCode 7
 		versionName '7.3'
 		multiDexEnabled true // enable if method count exceeds 64K
+
+		def properties = new Properties()
+		// Correctly locate the properties file in the assets folder
+		def propertiesFile = file('src/main/assets/swv.properties')
+		if (propertiesFile.exists()) {
+			properties.load(propertiesFile.newDataInputStream())
+		}
+
+		manifestPlaceholders = [
+				// Use the value from swv.properties, or a default test ID if not found.
+				// This prevents crashes if the user forgets to add the property.
+				admob_app_id: properties.getProperty("admob.app.id", "ca-app-pub-3940256099942544~3347511713")
+		]
 	}
 
 	buildTypes {
