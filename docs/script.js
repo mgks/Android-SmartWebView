@@ -90,7 +90,7 @@ function get_cookies(name) {
 	if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function fetchLiveLocation() {
+function fetchLocation() {
     const locationDiv = document.querySelector('.fetch-loc-area');
     if (locationDiv) {
         locationDiv.innerHTML = "<div class='fetch-loc'>Fetching location...</div>";
