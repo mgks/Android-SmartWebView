@@ -5,7 +5,6 @@
 		<item name="colorAccent">@color/colorAccent</item>
 		<item name="android:windowBackground">@drawable/background_splash</item>
 		<item name="android:windowActionBar">false</item>
-		<!-- This tells the Toolbar which theme to use for its popup menu -->
 		<item name="popupTheme">@style/AppTheme.PopupOverlay</item>
 	</style>
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/msw_welcome"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:gravity="center_vertical|center_horizontal|center"
+    android:visibility="visible">
+
+    <ImageView
+        android:id="@+id/msw_logo"
+        android:layout_width="275dip"
+        android:layout_height="100dip"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="top"
+        android:contentDescription="@string/image_view"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:src="@raw/front_splash" />
+
+    <TextView
+        android:id="@+id/msw_loading_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/msw_logo"
+        android:layout_marginTop="26dp"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:text="@string/loading_app"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="18sp"
+        android:textStyle="normal|bold"
+        tools:ignore="NotSibling" />
+
+</RelativeLayout>

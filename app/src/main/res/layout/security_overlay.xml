@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/security_overlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="bottom|center_horizontal"
+    android:paddingBottom="100sp"
+    android:visibility="gone">
+
+    <Button
+        android:id="@+id/retry_auth_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:padding="21dp"
+        android:text="@string/authenticate"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</RelativeLayout>

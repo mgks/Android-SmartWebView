@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Your AdMob App ID.
+        This is a sample ID. Replace with your own AdMob app ID.
+        You can find your app ID in the AdMob UI.
+        https://developers.google.com/admob/android/quick-start#your_admob_app_id
+    -->
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+</resources>
