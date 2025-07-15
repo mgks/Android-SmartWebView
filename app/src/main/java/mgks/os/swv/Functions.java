@@ -234,7 +234,7 @@ public class Functions{
 
 			// Getting location for offline files
 		} else if (url.startsWith("getloc:")) {
-			String[] loc = get_location(context).split(",");
+			String[] loc = get_location(activity).split(",");
 
 			// Call a JS function instead of pushing raw HTML
 			String js_call = String.format("if(window.updateLocationDisplay){ window.updateLocationDisplay(%s, %s); }", loc[0], loc[1]);
@@ -280,12 +280,15 @@ public class Functions{
 				nuri = SmartWebView.ASWV_URL;
 			}
 
-			if(check_permission(4, context)) {
+			PermissionManager permissionManager = new PermissionManager(activity);
+			if(permissionManager.isNotificationPermissionGranted()) {
 				// Send the notification
 				Firebase firebase = new Firebase();
 				firebase.sendMyNotification(title, body, "OPEN_URI", nuri, null, String.valueOf(SmartWebView.ASWV_FCM_ID), context);
 			}else{
-				get_permissions(4, activity);
+				// Request the permission
+				permissionManager.requestInitialPermissions(); // Or a dedicated notification request
+				Toast.makeText(context, "Please grant notification permission and try again.", Toast.LENGTH_SHORT).show();
 			}
 
 			// Opening external URLs in android default web browser
@@ -386,22 +389,24 @@ public class Functions{
 	}
 
 	// Using cookies to update user locations
-	public String get_location(Context context) {
+	// Using cookies to update user locations
+	public String get_location(Activity activity) {
 		String new_loc = "0,0";
 
 		// Check for the user's preference
 		if (!SmartWebView.ASWP_LOCATION) {
-			Log.d("SmartWebView", "Location access is disabled by the user.");
-			return new_loc; // Or return a message indicating location is disabled
+			Log.d("SmartWebView", "Location access is disabled by config.");
+			return new_loc;
 		}
 
-		// Check for location permissions
-		if (check_permission(1, context)) {
+		PermissionManager permissionManager = new PermissionManager(activity);
+
+		if (permissionManager.isLocationPermissionGranted()) {
 			GPSTrack gps;
-			gps = new GPSTrack(context);
-			double latitude = gps.getLatitude();
-			double longitude = gps.getLongitude();
+			gps = new GPSTrack(activity);
 			if (gps.canGetLocation()) {
+				double latitude = gps.getLatitude();
+				double longitude = gps.getLongitude();
 				if (latitude != 0 || longitude != 0) {
 					if (SmartWebView.true_online) {
 						set_cookie("lat=" + latitude);
@@ -418,15 +423,10 @@ public class Functions{
 					}
 				}
 			} else {
-				// Handle the case where location is not available
-				Log.d("SmartWebView", "Cannot get location. GPS turned off or service not available.");
-				// You can show a message to the user here if you want
+				Log.d("SmartWebView", "Cannot get location. GPS might be off.");
 			}
 		} else {
-			// Handle the case where location permissions are not granted
-			Log.d("SmartWebView", "Location permission not granted.");
-			// You can show a rationale and request permissions again if needed
-			show_notification(1, 1, context);
+			Log.w("SmartWebView", "Location permission not granted. Skipping location fetch.");
 		}
 		return new_loc;
 	}
@@ -496,45 +496,6 @@ public class Functions{
 	public void inject_gtag(WebView webView, String gaId) {
 		String gtag_code = "function load_gtag(){var script = document.createElement('script');script.async = true;script.src = 'https://www.googletagmanager.com/gtag/js?id=" + gaId + "';var firstScript = document.getElementsByTagName('script')[0];firstScript.parentNode.insertBefore(script, firstScript);window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '" + gaId + "');console.log('Google Analytics (gtag.js) loaded.');} load_gtag();";
 		webView.evaluateJavascript(gtag_code, null);
-	}
-
-	// Checking if particular permission is given or not
-	public boolean check_permission(int permission, Context context) {
-		return switch (permission) {
-			case 1 ->
-					ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-			case 2 ->
-					ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-			case 3 ->
-					ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-			case 4 ->
-					Build.VERSION.SDK_INT < 33 || ContextCompat.checkSelfPermission(context.getApplicationContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
-			default -> false;
-		};
-	}
-
-	// Get permissions for different activities
-	public void get_permissions(int req, Activity activity) {
-		if (req == 1 && !check_permission(1, activity)) {
-			ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, SmartWebView.loc_perm);
-		} else if (req == 2 && !check_permission(2, activity)) {
-			// Checking for storage permission
-			if (Build.VERSION.SDK_INT >= 33) {
-				ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO}, SmartWebView.file_perm);
-			} else {
-				ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, SmartWebView.file_perm);
-			}
-		} else if (req == 3 && !check_permission(3, activity)) {
-			// Checking for camera permission
-			if (Build.VERSION.SDK_INT >= 33) {
-				// Camera permission is still needed for capturing from camera
-				ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO}, SmartWebView.cam_perm);
-			} else {
-				ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, SmartWebView.cam_perm);
-			}
-		} else if (req == 4 && Build.VERSION.SDK_INT >= 33 && !check_permission(4, activity)) {
-			ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, SmartWebView.noti_perm);
-		}
 	}
 
 	// Launching app rating dialog [developed by github.com/hotchemi]

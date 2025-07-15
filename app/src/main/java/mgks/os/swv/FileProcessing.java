@@ -91,8 +91,9 @@ public class FileProcessing {
 		Intent takeVideoIntent = null;
 
 		if (SmartWebView.ASWP_CAMUPLOAD) {
-			if (!fns.check_permission(3, activity)) {
-				fns.get_permissions(3, activity);
+			PermissionManager permissionManager = new PermissionManager(activity); // Create instance here
+			if (!permissionManager.isCameraPermissionGranted()) {
+				permissionManager.requestCameraPermission();
 				SmartWebView.asw_file_path = null;
 				return false;
 			}
