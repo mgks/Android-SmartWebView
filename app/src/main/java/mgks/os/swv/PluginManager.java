@@ -49,8 +49,16 @@ public class PluginManager {
 		String pluginName = plugin.getPluginName();
 
 		// Check if plugins are globally enabled and if this specific plugin is enabled
-		if (!SmartWebView.ASWP_PLUGIN_SETTINGS.getOrDefault(pluginName, false)) {
-			Log.w(TAG, "Plugin registration skipped: '" + pluginName + "' is disabled in configuration.");
+		boolean isEnabled = false;
+		for (String enabledPlugin : SmartWebView.ASWP_ENABLED_PLUGINS) {
+			if (enabledPlugin.equals(pluginName)) {
+				isEnabled = true;
+				break;
+			}
+		}
+
+		if (!isEnabled) {
+			Log.i(TAG, "Plugin registration skipped: '" + pluginName + "' is not in the enabled list.");
 			return;
 		}
 
