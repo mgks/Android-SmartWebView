@@ -90,40 +90,27 @@ function get_cookies(name) {
 	if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function get_location() {
-	console.log(window.location);
+function fetchLiveLocation() {
+    const locationDiv = document.querySelector('.fetch-loc-area');
+    if (locationDiv) {
+        locationDiv.innerHTML = "<div class='fetch-loc'>Fetching location...</div>";
+    }
 
-	let latitude = null;
-	let longitude = null;
-
-	// first, try getting location from cookies (online case)
-	const latCookie = get_cookies('lat');
-	const longCookie = get_cookies('long');
-
-	if (latCookie && longCookie) {  // check if cookies exist and are defined
-		latitude = parseFloat(latCookie);
-		longitude = parseFloat(longCookie);
-	} else {
-		// second, if cookies not available (offline), try URL parameters
-		const urlParams = new URLSearchParams(window.location.search);
-		const locParam = urlParams.get('loc');
-		if (locParam) {
-			const loc = locParam.split(',');
-			if (loc.length === 2) {
-				latitude = parseFloat(loc[0]);
-				longitude = parseFloat(loc[1]);
-			} else {
-				console.error("SWVJS Invalid 'loc' parameter format");
-			}
-		}
-	}
-
-	if (latitude !== null && longitude !== null) {
-		const locationDiv = document.querySelector('.fetch-loc-area');
-        if(locationDiv) {
-            locationDiv.innerHTML = "<div class=\"fetch-loc\"><b>Latitude:</b> " + latitude.toFixed(6) + "<br><b>Longitude:</b> " + longitude.toFixed(6) + "</div>";
+    if (window.Location && typeof window.Location.getCurrentPosition === 'function') {
+        window.Location.getCurrentPosition(function(lat, lng, error) {
+            if (error) {
+                locationDiv.innerHTML = "<div class='fetch-loc'><b>Error:</b> " + error + "</div>";
+                return;
+            }
+            if (lat && lng) {
+                locationDiv.innerHTML = "<div class='fetch-loc'><b>Latitude:</b> " + lat.toFixed(6) + "<br><b>Longitude:</b> " + lng.toFixed(6) + "</div>";
+            }
+        });
+    } else {
+        if (locationDiv) {
+            locationDiv.innerHTML = "<div class='fetch-loc'>Location feature not available in this context.</div>";
         }
-	}
+    }
 }
 
 function print_page(){
