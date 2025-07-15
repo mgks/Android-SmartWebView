@@ -48,22 +48,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // This function is triggered by the getloc: link
-    window.get_location = function() {
-        // The native code will handle the location fetching and push the result back.
-        // We can listen for a custom event or have native code directly manipulate the DOM.
-        // For simplicity, let's assume native code will call a function like `updateLocationDisplay`.
-        const locElement = document.querySelector('.fetch-loc');
-        if (locElement) {
-            locElement.innerHTML = "Fetching location from device...";
-        }
-    };
-
     // This function can be called by native code after location is fetched.
     window.updateLocationDisplay = function(lat, long) {
         const locElement = document.querySelector('.fetch-loc');
         if (locElement) {
-            locElement.innerHTML = "<b>Latitude:</b> " + lat.toFixed(6) + "<br><b>Longitude:</b> " + long.toFixed(6);
+            if (lat && long) {
+                locElement.innerHTML = "<b>Latitude:</b> " + lat.toFixed(6) + "<br><b>Longitude:</b> " + long.toFixed(6);
+            } else {
+                locElement.innerHTML = "Could not retrieve location. Please ensure GPS is enabled and permissions are granted.";
+            }
         }
     };
 
@@ -84,6 +77,31 @@ document.addEventListener('DOMContentLoaded', function() {
         setTheme(nativeThemePreference, true);
     }
 });
+
+function fetchLocation() {
+    const locElement = document.querySelector('.fetch-loc') || document.querySelector('.fetch-loc-area');
+    if (locElement) {
+        locElement.innerHTML = "<div class='fetch-loc'>Fetching location from device...</div>";
+    }
+    // Call the new, non-conflicting object name
+    if (window.SWVLocation) {
+        window.SWVLocation.getCurrentPosition(function(lat, lng, error) {
+            // In offline.html, updateLocationDisplay is global.
+            // In docs/script.js, this logic is inside fetchLocation.
+            // We'll make it robust for both.
+            const displayDiv = document.querySelector('.fetch-loc') || document.querySelector('.fetch-loc-area');
+            if (error) {
+                displayDiv.innerHTML = "<div class='fetch-loc'><b>Error:</b> " + error + "</div>";
+                return;
+            }
+            if (lat && lng) {
+                displayDiv.innerHTML = "<div class='fetch-loc'><b>Latitude:</b> " + lat.toFixed(6) + "<br><b>Longitude:</b> " + lng.toFixed(6) + "</div>";
+            }
+        });
+    } else {
+        alert("Location feature is not available.");
+    }
+}
 
 function applyInitialTheme(nativeTheme) {
     if (nativeTheme) {

@@ -91,25 +91,27 @@ function get_cookies(name) {
 }
 
 function fetchLocation() {
-    const locationDiv = document.querySelector('.fetch-loc-area');
-    if (locationDiv) {
-        locationDiv.innerHTML = "<div class='fetch-loc'>Fetching location...</div>";
+    const locElement = document.querySelector('.fetch-loc') || document.querySelector('.fetch-loc-area');
+    if (locElement) {
+        locElement.innerHTML = "<div class='fetch-loc'>Fetching location from device...</div>";
     }
-
-    if (window.Location && typeof window.Location.getCurrentPosition === 'function') {
-        window.Location.getCurrentPosition(function(lat, lng, error) {
+    // Call the new, non-conflicting object name
+    if (window.SWVLocation) {
+        window.SWVLocation.getCurrentPosition(function(lat, lng, error) {
+            // In offline.html, updateLocationDisplay is global.
+            // In docs/script.js, this logic is inside fetchLocation.
+            // We'll make it robust for both.
+            const displayDiv = document.querySelector('.fetch-loc') || document.querySelector('.fetch-loc-area');
             if (error) {
-                locationDiv.innerHTML = "<div class='fetch-loc'><b>Error:</b> " + error + "</div>";
+                displayDiv.innerHTML = "<div class='fetch-loc'><b>Error:</b> " + error + "</div>";
                 return;
             }
             if (lat && lng) {
-                locationDiv.innerHTML = "<div class='fetch-loc'><b>Latitude:</b> " + lat.toFixed(6) + "<br><b>Longitude:</b> " + lng.toFixed(6) + "</div>";
+                displayDiv.innerHTML = "<div class='fetch-loc'><b>Latitude:</b> " + lat.toFixed(6) + "<br><b>Longitude:</b> " + lng.toFixed(6) + "</div>";
             }
         });
     } else {
-        if (locationDiv) {
-            locationDiv.innerHTML = "<div class='fetch-loc'>Location feature not available in this context.</div>";
-        }
+        alert("Location feature is not available.");
     }
 }
 
