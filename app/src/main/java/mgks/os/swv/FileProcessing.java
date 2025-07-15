@@ -19,10 +19,8 @@ package mgks.os.swv;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -31,14 +29,10 @@ import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -61,11 +55,11 @@ public class FileProcessing {
 	// The registerActivityResultLauncher() method is now removed from this class.
 
 	public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
-		if (!SmartWebView.ASWP_FUPLOAD) {
+		if (!SWVContext.ASWP_FUPLOAD) {
 			return false;
 		}
 
-		SmartWebView.asw_file_path = filePathCallback;
+		SWVContext.asw_file_path = filePathCallback;
 		String[] acceptTypes = fileChooserParams.getAcceptTypes();
 		boolean allowImage = false;
 		boolean allowVideo = false;
@@ -90,11 +84,11 @@ public class FileProcessing {
 		Intent takePictureIntent = null;
 		Intent takeVideoIntent = null;
 
-		if (SmartWebView.ASWP_CAMUPLOAD) {
+		if (SWVContext.ASWP_CAMUPLOAD) {
 			PermissionManager permissionManager = new PermissionManager(activity); // Create instance here
 			if (!permissionManager.isCameraPermissionGranted()) {
 				permissionManager.requestCameraPermission();
-				SmartWebView.asw_file_path = null;
+				SWVContext.asw_file_path = null;
 				return false;
 			}
 			// Only add camera intent if images are allowed
@@ -104,12 +98,12 @@ public class FileProcessing {
 					File photoFile = null;
 					try {
 						photoFile = create_image(activity);
-						takePictureIntent.putExtra("PhotoPath", SmartWebView.asw_pcam_message);
+						takePictureIntent.putExtra("PhotoPath", SWVContext.asw_pcam_message);
 					} catch (IOException ex) {
 						Log.e("FileProcessing", "Image file creation failed", ex);
 					}
 					if (photoFile != null) {
-						SmartWebView.asw_pcam_message = "file:" + photoFile.getAbsolutePath();
+						SWVContext.asw_pcam_message = "file:" + photoFile.getAbsolutePath();
 						Uri photoURI = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", photoFile);
 						takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 					} else {
@@ -129,7 +123,7 @@ public class FileProcessing {
 						Log.e("FileProcessing", "Video file creation failed", ex);
 					}
 					if (videoFile != null) {
-						SmartWebView.asw_vcam_message = "file:" + videoFile.getAbsolutePath();
+						SWVContext.asw_vcam_message = "file:" + videoFile.getAbsolutePath();
 						Uri videoURI = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", videoFile);
 						takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoURI);
 					} else {
@@ -146,7 +140,7 @@ public class FileProcessing {
 			contentSelectionIntent.putExtra(Intent.EXTRA_MIME_TYPES, acceptTypes); // And specific types
 		}
 
-		if (SmartWebView.ASWP_MULFILE) {
+		if (SWVContext.ASWP_MULFILE) {
 			contentSelectionIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
 		}
 
@@ -164,9 +158,9 @@ public class FileProcessing {
 			resultLauncher.launch(chooserIntent);
 		} else {
 			Log.e("FileProcessing", "ResultLauncher is null. Cannot launch intent.");
-			if (SmartWebView.asw_file_path != null) {
-				SmartWebView.asw_file_path.onReceiveValue(null);
-				SmartWebView.asw_file_path = null;
+			if (SWVContext.asw_file_path != null) {
+				SWVContext.asw_file_path.onReceiveValue(null);
+				SWVContext.asw_file_path = null;
 			}
 			return false;
 		}

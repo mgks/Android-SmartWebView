@@ -53,10 +53,10 @@ public class PermissionManager {
         List<String> permissionsToRequest = new ArrayList<>();
 
         // Iterate through the permission groups defined in SmartWebView config.
-        for (String permissionGroup : SmartWebView.ASWP_REQUIRED_PERMISSIONS) {
+        for (String permissionGroup : SWVContext.ASWP_REQUIRED_PERMISSIONS) {
             switch (permissionGroup) {
                 case "LOCATION":
-                    if (SmartWebView.ASWP_LOCATION && !isLocationPermissionGranted()) {
+                    if (!isLocationPermissionGranted()) {
                         permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION);
                     }
                     break;
@@ -70,7 +70,7 @@ public class PermissionManager {
                 case "STORAGE":
                     // Note: It's often better to request storage/media contextually.
                     // But if required on launch, this handles it.
-                    if (SmartWebView.ASWP_FUPLOAD && !isStoragePermissionGranted()) {
+                    if (SWVContext.ASWP_FUPLOAD && !isStoragePermissionGranted()) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             permissionsToRequest.add(Manifest.permission.READ_MEDIA_IMAGES);
                         } else {

@@ -24,12 +24,12 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 /**
@@ -46,13 +46,12 @@ public class Playground {
     public Playground(Activity activity, WebView webView, Functions functions) {
         this.activity = activity;
         this.webView = webView;
-        SmartWebView.onPluginsInitialized(this::onPluginsReady);
     }
 
     private void onPluginsReady() {
         configurePlugins();
         handleLaunchActions();
-        if (SmartWebView.SWV_DEBUGMODE) {
+        if (SWVContext.SWV_DEBUGMODE) {
             runAllDiagnostics();
         }
     }
@@ -65,7 +64,7 @@ public class Playground {
 
         // BiometricPlugin Configuration
         runPluginAction("BiometricPlugin", plugin -> {
-            Map<String, Object> config = SmartWebView.getPluginManager().getPluginConfig("BiometricPlugin");
+            Map<String, Object> config = SWVContext.getPluginManager().getPluginConfig("BiometricPlugin");
             if (config != null) {
                 config.put("authOnAppLaunch", false);
                 Log.d(TAG, "BiometricPlugin configured for launch auth. The plugin will handle triggering it.");
@@ -74,7 +73,7 @@ public class Playground {
 
         // AdMobPlugin Configuration
         runPluginAction("AdMobPlugin", plugin -> {
-            Map<String, Object> config = SmartWebView.getPluginManager().getPluginConfig("AdMobPlugin");
+            Map<String, Object> config = SWVContext.getPluginManager().getPluginConfig("AdMobPlugin");
             if (config != null) {
                 config.put("bannerAdUnitId", "ca-app-pub-3940256099942544/6300978111");
                 config.put("interstitialAdUnitId", "ca-app-pub-3940256099942544/1033173712");
@@ -99,6 +98,26 @@ public class Playground {
             runPluginDiagnostic("ToastPlugin", plugin -> {
                 webView.evaluateJavascript("window.Toast && window.Toast.show('ToastPlugin is Active!')", null);
                 Log.i(TAG, "SUCCESS: ToastPlugin is available.");
+            });
+
+            // Test for DialogPlugin
+            runPluginDiagnostic("DialogPlugin", plugin -> {
+                // This is a passive plugin, best tested with the UI.
+                Log.i(TAG, "SUCCESS: DialogPlugin is available.");
+            });
+
+            // Test for LocationPlugin
+            runPluginDiagnostic("LocationPlugin", plugin -> {
+                // Trigger a location fetch on launch for debugging purposes.
+                // The result will appear in the device's Logcat.
+                webView.evaluateJavascript("window.Location && window.Location.getCurrentPosition(function(lat,lng,err){ console.log('Playground Location Test:', {lat:lat, lng:lng, err:err}); })", null);
+                Log.i(TAG, "SUCCESS: LocationPlugin is available. Sent test request.");
+            });
+
+            // Test for RatingPlugin
+            runPluginDiagnostic("RatingPlugin", plugin -> {
+                // This is a passive plugin, we just confirm it's loaded.
+                Log.i(TAG, "SUCCESS: RatingPlugin is available.");
             });
 
             // Test for JSInterfacePlugin
@@ -126,9 +145,12 @@ public class Playground {
         });
     }
 
-    public void onPageFinished() {
-        if (SmartWebView.SWV_PLAYGROUND) {
-            mainHandler.post(this::setupPluginDemoUI);
+    public void onPageFinished(String url) {
+        if (SWVContext.SWV_PLAYGROUND) {
+            mainHandler.postDelayed(() -> {
+                Log.d(TAG, "Attempting to inject Playground UI...");
+                setupPluginDemoUI();
+            }, 500);
         }
     }
 
@@ -136,13 +158,14 @@ public class Playground {
         // This method will now be called from onPageFinished in PluginManager
         // ensuring it runs for every new page.
         JSONObject pluginStatus = new JSONObject();
-        PluginManager manager = SmartWebView.getPluginManager();
+        PluginManager manager = SWVContext.getPluginManager();
         try {
             pluginStatus.put("ToastPlugin", manager.getPluginInstance("ToastPlugin") != null);
             pluginStatus.put("JSInterfacePlugin", manager.getPluginInstance("JSInterfacePlugin") != null);
             pluginStatus.put("QRScannerPlugin", manager.getPluginInstance("QRScannerPlugin") != null);
             pluginStatus.put("BiometricPlugin", manager.getPluginInstance("BiometricPlugin") != null);
             pluginStatus.put("AdMobPlugin", manager.getPluginInstance("AdMobPlugin") != null);
+            pluginStatus.put("DialogPlugin", manager.getPluginInstance("DialogPlugin") != null);
         } catch (JSONException e) {
             Log.e(TAG, "Error creating plugin status JSON", e);
         }
@@ -189,7 +212,8 @@ public class Playground {
                         "    { text: 'Show Interstitial Ad', action: `window.AdMob && window.AdMob.showInterstitial()`, plugin: 'AdMobPlugin' },\n" +
                         "    { text: 'Show Rewarded Ad', action: `window.AdMob && window.AdMob.showRewarded()`, plugin: 'AdMobPlugin' },\n" +
                         "    { text: 'Scan QR Code', action: `if(window.QRScanner){window.QRScanner.onScanSuccess=function(c){alert('Scanned: '+c)};window.QRScanner.scan();}`, plugin: 'QRScannerPlugin' },\n" +
-                        "    { text: 'Biometric Auth', action: `if(window.Biometric){window.Biometric.onAuthSuccess=function(){alert('Auth OK!')};window.Biometric.authenticate();}`, plugin: 'BiometricPlugin' }\n" +
+                        "    { text: 'Biometric Auth', action: `if(window.Biometric){window.Biometric.onAuthSuccess=function(){alert('Auth OK!')};window.Biometric.authenticate();}`, plugin: 'BiometricPlugin' },\n" +
+                        "    { text: 'Show Native Dialog', action: `window.Dialog && window.Dialog.show({ title: 'Native Dialog', message: 'This was triggered from the web.', positiveText: 'Awesome!' }, (result) => alert('Dialog closed with: ' + result))`, plugin: 'DialogPlugin' }\n" +
                         "  ];\n" +
                         "  \n" +
                         "  buttons.forEach(btn => {\n" +
@@ -234,7 +258,7 @@ public class Playground {
      */
     private void runPluginDiagnostic(String pluginName, Consumer<PluginInterface> testFunction) {
         try {
-            PluginInterface pluginInstance = SmartWebView.getPluginManager().getPluginInstance(pluginName);
+            PluginInterface pluginInstance = SWVContext.getPluginManager().getPluginInstance(pluginName);
 
             if (pluginInstance != null) {
                 // Plugin exists, run the test.
@@ -256,7 +280,7 @@ public class Playground {
      * @param action     A lambda expression containing the logic to run if the plugin is found.
      */
     private void runPluginAction(String pluginName, Consumer<PluginInterface> action) {
-        PluginInterface pluginInstance = SmartWebView.getPluginManager().getPluginInstance(pluginName);
+        PluginInterface pluginInstance = SWVContext.getPluginManager().getPluginInstance(pluginName);
         if (pluginInstance != null) {
             action.accept(pluginInstance);
         } else {

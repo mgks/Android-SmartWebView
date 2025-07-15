@@ -34,16 +34,15 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class Firebase extends FirebaseMessagingService {
 
-	private final String fcm_channel = SmartWebView.asw_fcm_channel;
+	private final String fcm_channel = SWVContext.asw_fcm_channel;
 
 	@Override
 	public void onNewToken(String s) {
 		super.onNewToken(s);
 		Log.d("Firebase", "onNewToken() called"); // Prominent log to confirm if it's called
 		if (!s.isEmpty()) {
-			SmartWebView.fcm_token = s;
+			SWVContext.fcm_token = s;
 			Log.d("TOKEN_REFRESHED", s); // Log the new token
-			// Send the token to your server if needed
 		} else {
 			Log.d("TOKEN_REFRESHED", "NULL >> FAILED");
 		}
@@ -59,7 +58,7 @@ public class Firebase extends FirebaseMessagingService {
 
 			// Use default values if null
 			if (uri == null) {
-				uri = SmartWebView.ASWV_URL;
+				uri = SWVContext.ASWV_URL;
 			}
 			if (click_action == null) {
 				click_action = "OPEN_URI";
@@ -87,7 +86,7 @@ public class Firebase extends FirebaseMessagingService {
 		pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 		// Use a unique ID for each notification or a more robust default
-		int notification_id = nid != null ? Integer.parseInt(nid) : SmartWebView.ASWV_FCM_ID;
+		int notification_id = nid != null ? Integer.parseInt(nid) : SWVContext.ASWV_FCM_ID;
 
 		// Build the notification
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, fcm_channel)

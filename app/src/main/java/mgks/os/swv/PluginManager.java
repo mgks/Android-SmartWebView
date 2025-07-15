@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
-import androidx.core.util.Consumer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,12 +44,12 @@ public class PluginManager {
 	// No constructor needed.  Initialization happens via SmartWebView.init().
 
 	public static void registerPlugin(PluginInterface plugin, Map<String, Object> config) {
-		PluginManager instance = SmartWebView.getPluginManager();
+		PluginManager instance = SWVContext.getPluginManager();
 		String pluginName = plugin.getPluginName();
 
 		// Check if plugins are globally enabled and if this specific plugin is enabled
 		boolean isEnabled = false;
-		for (String enabledPlugin : SmartWebView.ASWP_ENABLED_PLUGINS) {
+		for (String enabledPlugin : SWVContext.ASWP_ENABLED_PLUGINS) {
 			if (enabledPlugin.equals(pluginName)) {
 				isEnabled = true;
 				break;
@@ -147,8 +146,9 @@ public class PluginManager {
 		for (PluginInterface plugin : plugins) {
 			plugin.onPageFinished(url);
 		}
-		if (this.playground != null) { // Add this check and call
-			this.playground.onPageFinished();
+		if (this.playground != null) {
+			// Pass the URL to the playground's handler
+			this.playground.onPageFinished(url);
 		}
 	}
 

@@ -17,26 +17,21 @@ package mgks.os.swv;
   Mentioning Smart WebView in your project helps others find it and keeps the dev loop alive.
 */
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintJob;
@@ -47,28 +42,16 @@ import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
 import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.firebase.messaging.FirebaseMessaging;
-
-import java.io.File;
-import java.io.IOException;
 
 import java.lang.reflect.Field;
 import java.math.BigInteger;
 
 import java.security.SecureRandom;
 
-import java.text.SimpleDateFormat;
-
-import java.util.Date;
 import java.util.regex.Pattern;
 
 public class Functions{
@@ -131,7 +114,7 @@ public class Functions{
 			exit_app(activity);
 		} else {
 			if (tab) {
-				if (SmartWebView.ASWP_TAB) {
+				if (SWVContext.ASWP_TAB) {
 					CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
 					intentBuilder.setStartAnimations(activity, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 					intentBuilder.setExitAnimations(activity, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -153,7 +136,7 @@ public class Functions{
 				if (!url.startsWith("file://")) {
 					url = url + (url.contains("?") ? "&" : "?") + "rid=" + random_id();
 				}
-				SmartWebView.asw_view.loadUrl(url);
+				SWVContext.asw_view.loadUrl(url);
 			}
 		}
 	}
@@ -190,61 +173,51 @@ public class Functions{
 		Context context = activity.getApplicationContext();
 
 		// Show toast error if not connected to the network
-		if (!SmartWebView.ASWP_OFFLINE && !isInternetAvailable(context)) {
+		if (!SWVContext.ASWP_OFFLINE && !isInternetAvailable(context)) {
 			Toast.makeText(context, context.getString(R.string.check_connection), Toast.LENGTH_SHORT).show();
+			return true; // We've handled it by showing a toast
+		}
 
-			// Redirect back to default URL :: refresh:android
-		} else if (url.startsWith("refresh:")) {
+		// Handle specific, known custom schemes first
+		// Redirect back to default URL :: refresh:android
+		if (url.startsWith("refresh:")) {
 			String ref_sch = (Uri.parse(url).toString()).replace("refresh:", "");
 			if (ref_sch.matches("URL")) {
-				SmartWebView.CURR_URL = SmartWebView.ASWV_URL;
+				SWVContext.CURR_URL = SWVContext.ASWV_URL;
 			}
 			pull_fresh(activity);
+			return true;
 
-			// Launch default phone dialer for specific number :: tel:+919876543210
 		} else if (url.startsWith("tel:")) {
-			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 			try {
+				Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 				activity.startActivity(intent);
 			} catch (ActivityNotFoundException e) {
 				Toast.makeText(context, "No dialer app found.", Toast.LENGTH_SHORT).show();
-				Log.e("FCM_ERROR", "PORT_TEL", e);
 			}
+			return true;
 
-			// Open google play store app page :: rate:android
 		} else if (url.startsWith("rate:")) {
-			final String app_package = context.getPackageName(); // Requesting app package name from Context or Activity object
+			final String app_package = context.getPackageName();
 			try {
 				activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + app_package)));
 			} catch (ActivityNotFoundException anfe) {
 				activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app_package)));
 			}
+			return true;
 
-			// Sharing content from webview to external apps :: share:URL (link to be shared)
 		} else if (url.startsWith("share:")) {
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
 			intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
 			intent.putExtra(Intent.EXTRA_TEXT, view.getTitle() + " Visit: " + (Uri.parse(url).toString()).replace("share:", ""));
 			activity.startActivity(Intent.createChooser(intent, context.getString(R.string.share_w_friends)));
+			return true;
 
-			// Exit app manually :: exit:android
 		} else if (url.startsWith("exit:")) {
 			exit_app(activity);
+			return true;
 
-			// Getting location for offline files
-		} else if (url.startsWith("getloc:")) {
-			String[] loc = get_location(activity).split(",");
-
-			// Call a JS function instead of pushing raw HTML
-			String js_call = String.format("if(window.updateLocationDisplay){ window.updateLocationDisplay(%s, %s); }", loc[0], loc[1]);
-			SmartWebView.asw_view.evaluateJavascript(js_call, null);
-
-			if(SmartWebView.SWV_DEBUGMODE) {
-				Log.d("SLOG_OFFLINE_LOC_REQ", loc[0]+","+loc[1]);
-			}
-
-			// Creating firebase notification
 		} else if (url.startsWith("fcm:")) {
 			String title = null, body = null, nuri = null;
 
@@ -277,33 +250,51 @@ public class Functions{
 				body = "This is a test notification from Smart WebView.";
 			}
 			if (nuri == null || nuri.isEmpty()) {
-				nuri = SmartWebView.ASWV_URL;
+				nuri = SWVContext.ASWV_URL;
 			}
 
 			PermissionManager permissionManager = new PermissionManager(activity);
 			if(permissionManager.isNotificationPermissionGranted()) {
 				// Send the notification
 				Firebase firebase = new Firebase();
-				firebase.sendMyNotification(title, body, "OPEN_URI", nuri, null, String.valueOf(SmartWebView.ASWV_FCM_ID), context);
+				firebase.sendMyNotification(title, body, "OPEN_URI", nuri, null, String.valueOf(SWVContext.ASWV_FCM_ID), context);
 			}else{
 				// Request the permission
 				permissionManager.requestInitialPermissions(); // Or a dedicated notification request
 				Toast.makeText(context, "Please grant notification permission and try again.", Toast.LENGTH_SHORT).show();
 			}
+			return true;
 
-			// Opening external URLs in android default web browser
-		} else if (SmartWebView.ASWP_EXTURL && !aswm_host(url).equals(SmartWebView.ASWV_HOST) && !SmartWebView.ASWV_EXC_LIST.contains(aswm_host(url))) {
-			aswm_view(url, true, SmartWebView.asw_error_counter, activity);
-
-			// Setting device orientation on request
-		} else if (url.startsWith("orient:")) {
-			set_orientation(5, true, context);
-
-			// Else return false
-		} else {
-			a = false;
+		} else if (url.startsWith("print:")) {
+			print_page(view, view.getTitle(), activity);
+			return true;
 		}
-		return a;
+
+		// Handle standard web protocols
+		if (url.startsWith("http:") || url.startsWith("https:")) {
+			// Check if it's an external URL that should be opened outside
+			if (SWVContext.ASWP_EXTURL && !aswm_host(url).equals(SWVContext.ASWV_HOST) && !SWVContext.ASWV_EXC_LIST.contains(aswm_host(url))) {
+				aswm_view(url, true, SWVContext.asw_error_counter, activity);
+				return true; // We've handled it by opening externally
+			}
+			// It's an internal link, so let the WebView load it
+			return false;
+		}
+		// --- THIS IS THE CATCH-ALL FOR ANY OTHER UNKNOWN SCHEME ---
+		// Includes mailto:, geo:, sms:, and any discontinued protocol
+		try {
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+			activity.startActivity(intent);
+			return true; // We've attempted to handle it
+
+		} catch (ActivityNotFoundException e) {
+			// CRASH PREVENTION: The system could not find an app to handle this URL scheme.
+			Log.w("URL_SCHEME_ERROR", "Could not handle unknown URL scheme: " + url, e);
+			if (SWVContext.SWV_DEBUGMODE) {
+				Toast.makeText(context, "Unhandled URL scheme: " + url, Toast.LENGTH_SHORT).show();
+			}
+			return true; // Return true because we've "handled" it by catching the error.
+		}
 	}
 
 	// Getting host name
@@ -327,9 +318,9 @@ public class Functions{
 
 	// Reloading current page
 	public void pull_fresh(Activity activity) {
-		String currentUrl = SmartWebView.asw_view.getUrl();
+		String currentUrl = SWVContext.asw_view.getUrl();
 		// Use the current webview URL, fallback to the configured URL if it's null/empty
-		String urlToReload = (currentUrl != null && !currentUrl.isEmpty()) ? currentUrl : SmartWebView.ASWV_URL;
+		String urlToReload = (currentUrl != null && !currentUrl.isEmpty()) ? currentUrl : SWVContext.ASWV_URL;
 		aswm_view(urlToReload, false, 0, activity); // Reset error counter on manual refresh
 	}
 
@@ -342,7 +333,7 @@ public class Functions{
 			} else if (orientation == 2) {
 				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			} else if (orientation == 5) { //experimental switch
-				SmartWebView.ASWV_ORIENTATION = (SmartWebView.ASWV_ORIENTATION == 1 ? 2 : 1);
+				SWVContext.ASWV_ORIENTATION = (SWVContext.ASWV_ORIENTATION == 1 ? 2 : 1);
 			} else {
 				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 			}
@@ -354,13 +345,13 @@ public class Functions{
 
 	// Setting cookies
 	public void set_cookie(String data) {
-		if(SmartWebView.true_online) {
+		if(SWVContext.true_online) {
 			// Cookie manager initialisation
-			SmartWebView.cookie_manager = CookieManager.getInstance();
-			SmartWebView.cookie_manager.setAcceptCookie(true);
-			SmartWebView.cookie_manager.setCookie(SmartWebView.ASWV_URL, data);
-			if(SmartWebView.SWV_DEBUGMODE) {
-				Log.d("SLOG_COOKIES", SmartWebView.cookie_manager.getCookie(SmartWebView.ASWV_URL));
+			SWVContext.cookie_manager = CookieManager.getInstance();
+			SWVContext.cookie_manager.setAcceptCookie(true);
+			SWVContext.cookie_manager.setCookie(SWVContext.ASWV_URL, data);
+			if(SWVContext.SWV_DEBUGMODE) {
+				Log.d("SLOG_COOKIES", SWVContext.cookie_manager.getCookie(SWVContext.ASWV_URL));
 			}
 		}
 	}
@@ -373,7 +364,7 @@ public class Functions{
 		info[2] = new MetaPull(context).swv(); // Pass context
 
 		// Set dark mode status
-		SmartWebView.ASWP_DARK_MODE = is_night_mode(context);
+		SWVContext.ASWP_DARK_MODE = is_night_mode(context);
 
 		set_cookie("DEVICE_TYPE=" + info[0]);
 		set_cookie("DEVICE_INFO=" + info[1]);
@@ -388,55 +379,12 @@ public class Functions{
 		return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
 	}
 
-	// Using cookies to update user locations
-	// Using cookies to update user locations
-	public String get_location(Activity activity) {
-		String new_loc = "0,0";
-
-		// Check for the user's preference
-		if (!SmartWebView.ASWP_LOCATION) {
-			Log.d("SmartWebView", "Location access is disabled by config.");
-			return new_loc;
-		}
-
-		PermissionManager permissionManager = new PermissionManager(activity);
-
-		if (permissionManager.isLocationPermissionGranted()) {
-			GPSTrack gps;
-			gps = new GPSTrack(activity);
-			if (gps.canGetLocation()) {
-				double latitude = gps.getLatitude();
-				double longitude = gps.getLongitude();
-				if (latitude != 0 || longitude != 0) {
-					if (SmartWebView.true_online) {
-						set_cookie("lat=" + latitude);
-						set_cookie("long=" + longitude);
-						set_cookie("LATLANG=" + latitude + "x" + longitude);
-					}
-					new_loc = latitude + "," + longitude;
-					if (SmartWebView.SWV_DEBUGMODE) {
-						Log.d("SLOG_NEW_LOCATION", new_loc);
-					}
-				} else {
-					if (SmartWebView.SWV_DEBUGMODE) {
-						Log.d("SLOG_UPDATED_LOCATION", "NULL");
-					}
-				}
-			} else {
-				Log.d("SmartWebView", "Cannot get location. GPS might be off.");
-			}
-		} else {
-			Log.w("SmartWebView", "Location permission not granted. Skipping location fetch.");
-		}
-		return new_loc;
-	}
-
 	// Get cookie value
 	public String get_cookies(String cookie) {
 		String value = "";
-		if(SmartWebView.true_online) {
-			SmartWebView.cookie_manager = CookieManager.getInstance();
-			String cookies = SmartWebView.cookie_manager.getCookie(SmartWebView.ASWV_URL);
+		if(SWVContext.true_online) {
+			SWVContext.cookie_manager = CookieManager.getInstance();
+			String cookies = SWVContext.cookie_manager.getCookie(SWVContext.ASWV_URL);
 			if (cookies !=null && !cookies.isEmpty()) {
 				String[] temp = cookies.split(";");
 				for (String ar1 : temp) {
@@ -448,7 +396,7 @@ public class Functions{
 				}
 			}else{
 				value = "";
-				if(SmartWebView.SWV_DEBUGMODE) {
+				if(SWVContext.SWV_DEBUGMODE) {
 					Log.d("SLOG_COOKIES", "Cookies either NULL or Empty");
 				}
 			}
@@ -472,21 +420,21 @@ public class Functions{
 	public void fcm_token(final TokenCallback callback) {
 		FirebaseMessaging.getInstance().getToken()
 				.addOnSuccessListener(token -> {
-					if (!SmartWebView.ASWP_OFFLINE) {
+					if (!SWVContext.ASWP_OFFLINE) {
 						set_cookie("FCM_TOKEN=" + token);
-						if (SmartWebView.SWV_DEBUGMODE) {
+						if (SWVContext.SWV_DEBUGMODE) {
 							Log.d("SLOG_FCM_BAKED", "YES");
-							Log.d("SLOG_COOKIES", get_cookies(SmartWebView.ASWV_URL));
+							Log.d("SLOG_COOKIES", get_cookies(SWVContext.ASWV_URL));
 						}
 					}
-					SmartWebView.fcm_token = token;
-					if (SmartWebView.SWV_DEBUGMODE) {
+					SWVContext.fcm_token = token;
+					if (SWVContext.SWV_DEBUGMODE) {
 						Log.d("SLOG_REQ_FCM_TOKEN", token);
 					}
 					callback.onTokenReceived(token); // Pass token to callback
 				})
 				.addOnFailureListener(e -> {
-					SmartWebView.fcm_token = "";
+					SWVContext.fcm_token = "";
 					Log.e("SLOG_REQ_FCM_TOKEN", "FAILED", e);
 					callback.onTokenFailed(e); // Pass exception to callback
 				});
@@ -498,30 +446,12 @@ public class Functions{
 		webView.evaluateJavascript(gtag_code, null);
 	}
 
-	// Launching app rating dialog [developed by github.com/hotchemi]
-	public Runnable get_rating(Activity activity) {
-		if (isInternetAvailable(activity)) {
-			AppRate.with(activity)
-					.setInstallDays(SmartWebView.ASWR_DAYS)
-					.setLaunchTimes(SmartWebView.ASWR_TIMES)
-					.setRemindInterval(SmartWebView.ASWR_INTERVAL)
-					.setTitle(R.string.rate_dialog_title)
-					.setMessage(R.string.rate_dialog_message)
-					.setTextLater(R.string.rate_dialog_cancel)
-					.setTextNever(R.string.rate_dialog_no)
-					.setTextRateNow(R.string.rate_dialog_ok)
-					.monitor();
-			AppRate.showRateDialogIfMeetsConditions(activity);
-		}
-		return null;
-	}
-
 	// Creating custom notifications with IDs
 	public void show_notification(int type, int id, Context context) {
 		long when = System.currentTimeMillis();
 		String cont_title = "", cont_text = "", cont_desc = "";
 
-		SmartWebView.asw_notification = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		SWVContext.asw_notification = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		Intent i = new Intent();
 		if (type == 1) {
 			i.setClass(context, MainActivity.class);
@@ -567,8 +497,8 @@ public class Functions{
 		builder.setAutoCancel(true);
 		builder.setWhen(when);
 		builder.setContentIntent(pendingIntent);
-		SmartWebView.asw_notification_new = builder.build();
-		SmartWebView.asw_notification.notify(id, SmartWebView.asw_notification_new);
+		SWVContext.asw_notification_new = builder.build();
+		SWVContext.asw_notification.notify(id, SWVContext.asw_notification_new);
 	}
 
 	// Exit app
