@@ -18,7 +18,7 @@
 # Android Smart WebView
 
 <a href="https://github.com/mgks/Android-SmartWebView/">
-  <img align="right" src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="150" alt="Smart WebView Icon">
+  <img align="right" src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp" width="175" alt="Smart WebView Logo">
 </a>
 
 <p>
@@ -34,15 +34,15 @@
 
 ## Core Features
 
-*   **Plugin Architecture:** Extend app functionality with self-registering plugins. See the `PluginInterface.java`, `PluginManager.java`, and existing plugins in `/plugins/` for details.
+*   **Plugin Architecture:** Extend app functionality with self-registering plugins. See `PluginInterface.java`, `PluginManager.java`, and existing plugins in `/plugins/` for details.
 *   **File Uploads & Camera Access:** Support for file selection and direct camera capture in WebView.
 *   **Push Notifications:** Integrated Firebase Cloud Messaging (requires `google-services.json`).
-*   **Google Analytics:** Built-in support (configure GTAG ID in `SmartWebView.java`).
-*   **Custom UI Modes:** Fullscreen and drawer layouts (configurable in `SmartWebView.java`).
+*   **Google Analytics:** Built-in support (configure GTAG ID in `swv.properties`).
+*   **Custom UI Modes:** Fullscreen and drawer layouts (configurable in `swv.properties`).
 *   **Location & Permissions:** Access device GPS/location and manage permissions.
 *   **Content Sharing:** Receive and handle shared content from other apps via `ShareActivity.java`.
 *   **Downloads & Printing:** Handle file downloads and print web content.
-*   **Modern WebView:** Secure, up-to-date, and highly configurable via `SmartWebView.java` and `MainActivity.java`.
+*   **Modern WebView:** Secure, up-to-date, and highly configurable via `swv.properties` and `MainActivity.java`.
 
 ## Plugins
 
@@ -51,10 +51,10 @@ Smart WebView features a plugin system to add new features with minimal effort.
 *   **Understanding Plugins:**
     *   The core contract is defined in `PluginInterface.java`.
     *   Plugin lifecycle and registration are managed by `PluginManager.java`.
-    *   Example plugins (`ToastPlugin.java`, `JSInterfacePlugin.java`) are located in `/plugins/`. These serve as excellent references for creating new plugins.
+    *   Example plugins (`ToastPlugin.java`, `LocationPlugin.java`) are located in `/plugins/`. These serve as excellent references for creating new plugins.
 
-*   **Testing Plugins:**
-    *   `Playground.java` is used to configure, test, and demonstrate plugin functionality during development.
+*   **Configuring & Testing Plugins:**
+    *   `Playground.java` is used to configure, test, and demonstrate plugin functionality during development. This is where you set plugin-specific options like AdMob IDs or enable Biometric Auth on launch.
 
 *  **Premium Plugins ⭐:** List of premium plugins for **[Project Sponsors](https://github.com/sponsors/mgks)**.
     - ✅ **AdMob**: Integrate Google AdMob into your app; Includes Banner, Interstitial and Rewarded ad units.
@@ -79,20 +79,23 @@ Smart WebView features a plugin system to add new features with minimal effort.
     ```
 2.  **Open in Android Studio:**
     *   `File > Open > Select the project folder`
-3.  **Add `google-services.json`:**
+3.  **Configure `swv.properties`:**
+    *   Open `app/src/main/assets/swv.properties`.
+    *   Change `app.url` to your website's URL and adjust other settings as needed. This is the main configuration file for the app.
+4.  **Add `google-services.json` (Optional):**
     *   If you plan to use Firebase services (like FCM for push notifications), obtain your `google-services.json` file from the Firebase console and place it in the `app/` directory.
-4.  **Build & Run:**
+5.  **Build & Run:**
     *   `Build > Clean Project` then `Build > Rebuild Project`
 
 ## Basic Configuration
 
-Most configuration is done within `SmartWebView.java`:
+All primary configuration is done within `app/src/main/assets/swv.properties`:
 
 *   **Main Application URL:**
-    *   Set `ASWV_APP_URL` to your web application's address.
-    *   `ASWV_OFFLINE_URL` (`file:///android_asset/offline.html`) is used if `ASWV_APP_URL` points to a local file or if no internet is detected (and `ASWP_OFFLINE` logic permits).
+    *   Set `app.url` to your web application's address.
+    *   `offline.url` (`file:///android_asset/web/offline.html`) is used if no internet is detected.
 *   **Feature Toggles:**
-    *   Enable or disable features (file uploads, camera access, location services, pull-to-refresh, etc.) by modifying the boolean `ASWP_*` variables.
+    *   Enable or disable features (file uploads, camera access, location services, pull-to-refresh, etc.) by modifying the `feature.*` boolean properties.
 *   **Permissions:**
     *   Review and adjust permissions in `AndroidManifest.xml` based on the features you enable. For example, `CAMERA` for camera uploads, `ACCESS_FINE_LOCATION` for GPS.
 *   **Plugin Configuration:**
@@ -101,7 +104,8 @@ Most configuration is done within `SmartWebView.java`:
 ## Further Information & Understanding the Code
 
 The best way to understand the project in depth is to explore the source code:
-*   **`SmartWebView.java`**: Contains most global configurations and constants.
+*   **`app/src/main/assets/swv.properties`**: Contains all global configurations.
+*   **`SWVContext.java`**: The central class that loads the configuration and holds app state.
 *   **`MainActivity.java`**: The main entry point, handles WebView setup, and integrates core features.
 *   **`Functions.java`**: Utility functions used throughout the app.
 *   **`PluginInterface.java`, `PluginManager.java`**: Key components of the plugin architecture.
