@@ -46,8 +46,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
+import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
 import android.webkit.ServiceWorkerClient;
@@ -76,6 +78,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -95,9 +98,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Class members
     private static final String TAG = "MainActivity";
 
+    private boolean isPageLoaded = false;
+
     static Functions fns = new Functions();
     private FileProcessing fileProcessing;
     private LinearLayout adContainer;
+    private PermissionManager permissionManager;
     private ActivityResultLauncher<Intent> fileUploadLauncher;
 
     @Override
@@ -109,8 +115,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final SplashScreen splashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
+
         super.onCreate(savedInstanceState);
 
+        // If extending splash is enabled, set up a listener
+        if (SmartWebView.ASWP_EXTEND_SPLASH) {
+            final View content = findViewById(android.R.id.content);
+            content.getViewTreeObserver().addOnPreDrawListener(
+                    new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            // Check if the page is loaded.
+                            if (isPageLoaded) {
+                                // The content is ready; remove the listener and draw the content.
+                                content.getViewTreeObserver().removeOnPreDrawListener(this);
+                                return true;
+                            } else {
+                                // The content is not ready; don't draw anything.
+                                return false;
+                            }
+                        }
+                    }
+            );
+        }
+
+        permissionManager = new PermissionManager(this);
         SmartWebView.loadPlugins(this);
 
         // Initialize the ActivityResultLauncher here, before it's needed
@@ -208,36 +238,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set content view based on configuration
         if (SmartWebView.ASWV_LAYOUT == 1) {
             setContentView(R.layout.drawer_main);
-            findViewById(R.id.app_bar).setVisibility(View.VISIBLE);
+            // Conditionally show or hide the header based on config
+            if (SmartWebView.ASWP_DRAWER_HEADER) {
+                // Header is enabled: Setup Toolbar and Toggle
+                findViewById(R.id.app_bar).setVisibility(View.VISIBLE);
+                Toolbar toolbar = findViewById(R.id.toolbar);
+                setSupportActionBar(toolbar);
+                Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                final SwipeRefreshLayout pullRefresh = findViewById(R.id.pullfresh);
 
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            final SwipeRefreshLayout pullRefresh = findViewById(R.id.pullfresh);
-
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close) {
-                @Override
-                public void onDrawerSlide(View drawerView, float slideOffset) {
-                    super.onDrawerSlide(drawerView, slideOffset);
-                    // Disable pull-to-refresh while the drawer is being dragged
-                    if (slideOffset > 0 && pullRefresh.isEnabled()) {
-                        pullRefresh.setEnabled(false);
+                ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close) {
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+                        super.onDrawerSlide(drawerView, slideOffset);
+                        // This is the key part: disable pull-to-refresh while drawer is opening.
+                        if (slideOffset > 0 && pullRefresh.isEnabled()) {
+                            pullRefresh.setEnabled(false);
+                        }
                     }
-                }
 
-                @Override
-                public void onDrawerClosed(View drawerView) {
-                    super.onDrawerClosed(drawerView);
-                    // Re-enable pull-to-refresh when the drawer is closed
-                    if (!pullRefresh.isEnabled() && SmartWebView.ASWP_PULLFRESH) {
-                        pullRefresh.setEnabled(true);
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        super.onDrawerClosed(drawerView);
+                        // Re-enable pull-to-refresh only if the feature is globally enabled.
+                        if (!pullRefresh.isEnabled() && SmartWebView.ASWP_PULLFRESH) {
+                            pullRefresh.setEnabled(true);
+                        }
                     }
-                }
-            };
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
+                };
+                drawer.addDrawerListener(toggle);
+                toggle.syncState();
+                drawer.addDrawerListener(toggle);
+                toggle.syncState();
+
+            } else {
+                // Header is disabled: Hide the AppBarLayout completely
+                findViewById(R.id.app_bar).setVisibility(View.GONE);
+            }
 
             NavigationView navigationView = findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
@@ -333,13 +372,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void setupDownloadListener() {
         SmartWebView.asw_view.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {
-            if (!fns.check_permission(2, getApplicationContext()) && !fns.check_permission(3, getApplicationContext())) {
-                fns.get_permissions(3, MainActivity.this);
+            // We only need storage permission for downloads on older Android versions.
+            // On modern Android, DownloadManager handles it. But a check is still good practice.
+            if (!permissionManager.isStoragePermissionGranted()) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionManager.STORAGE_REQUEST_CODE);
+                Toast.makeText(this, "Storage permission is required to download files.", Toast.LENGTH_LONG).show();
             } else {
                 DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
                 request.setMimeType(mimeType);
-                request.addRequestHeader("cookie", fns.get_cookies(""));
+                String cookies = CookieManager.getInstance().getCookie(url);
+                request.addRequestHeader("cookie", cookies);
                 request.addRequestHeader("User-Agent", userAgent);
                 request.setDescription(getString(R.string.dl_downloading));
                 request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
@@ -389,10 +432,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-                if (fns.check_permission(1, getApplicationContext())) {
+                if (permissionManager.isLocationPermissionGranted()) {
                     callback.invoke(origin, true, false);
                 } else {
-                    fns.get_permissions(1, MainActivity.this);
+                    // If permission is not granted, we should request it.
+                    // We can re-use the initial request logic.
+                    permissionManager.requestInitialPermissions();
                 }
             }
         };
@@ -437,7 +482,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Log device info and handle location permissions
         fns.get_info(this);
-        handleLocationPermission();
+
+        // A Centralized Permission Request on Launch
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            permissionManager.requestInitialPermissions();
+        }, 1500);
 
         // Get FCM token for notifications
         setupFirebaseMessaging();
@@ -588,20 +637,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Handle location permission and tracking
-     */
-    private void handleLocationPermission() {
-        if (SmartWebView.ASWP_LOCATION && !fns.check_permission(1, getApplicationContext())) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    SmartWebView.loc_perm);
-        } else if (SmartWebView.ASWP_LOCATION) {
-            fns.get_location(getApplicationContext());
-        }
-    }
-
-    /**
      * Setup Firebase Cloud Messaging
      */
     private void setupFirebaseMessaging() {
@@ -685,10 +720,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     newMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
                 }
-
                 if (AppCompatDelegate.getDefaultNightMode() != newMode) {
                     AppCompatDelegate.setDefaultNightMode(newMode);
-                    recreate();
                 }
             });
         }
@@ -715,7 +748,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Update location if enabled
         if (SmartWebView.ASWP_LOCATION) {
-            fns.get_location(getApplicationContext());
+            fns.get_location(this);
         }
     }
 
@@ -786,29 +819,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         SmartWebView.getPluginManager().onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == SmartWebView.loc_perm) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (SmartWebView.ASWP_LOCATION) {
-                    new Handler(Looper.getMainLooper()).post(() ->
-                            fns.get_location(getApplicationContext()));
+        if (requestCode == PermissionManager.INITIAL_REQUEST_CODE) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (permissions[i].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        Log.d(TAG, "Location permission granted.");
+                        // We can now safely get the location
+                        fns.get_location(this);
+                    } else {
+                        Log.w(TAG, "Location permission denied.");
+                    }
+                } else if (permissions[i].equals(Manifest.permission.POST_NOTIFICATIONS)) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        Log.d(TAG, "Notification permission granted.");
+                        // Send a test notification
+                        Firebase firebase = new Firebase();
+                        firebase.sendMyNotification(
+                                "Yay! Firebase is working",
+                                "This is a test notification in action.",
+                                "OPEN_URI",
+                                SmartWebView.ASWV_URL,
+                                null,
+                                String.valueOf(SmartWebView.ASWV_FCM_ID),
+                                getApplicationContext());
+                    } else {
+                        Log.w(TAG, "Notification permission denied.");
+                    }
                 }
-            }
-        } else if (requestCode == SmartWebView.file_perm || requestCode == SmartWebView.cam_perm) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Could re-trigger file chooser here if needed, but for now we let the user re-initiate
-            }
-        } else if (requestCode == SmartWebView.noti_perm) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Send a test notification
-                Firebase firebase = new Firebase();
-                firebase.sendMyNotification(
-                        "Yay! Firebase is working",
-                        "This is a test notification in action.",
-                        "OPEN_URI",
-                        SmartWebView.ASWV_URL,
-                        null,
-                        String.valueOf(SmartWebView.ASWV_FCM_ID),
-                        getApplicationContext());
             }
         }
     }
@@ -821,19 +858,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             SmartWebView.getPluginManager().onPageStarted(url);
-            fns.get_location(getApplicationContext());
+            fns.get_location(MainActivity.this);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
+
             SmartWebView.getPluginManager().onPageFinished(url);
 
             findViewById(R.id.msw_welcome).setVisibility(View.GONE);
             findViewById(R.id.msw_view).setVisibility(View.VISIBLE);
+            isPageLoaded = true;
 
             // Inject Google Analytics if configured
-            if(SmartWebView.ASWV_GTAG != null && !SmartWebView.ASWV_GTAG.isEmpty()) {
+            if (!url.startsWith("file://") && SmartWebView.ASWV_GTAG != null && !SmartWebView.ASWV_GTAG.isEmpty()) {
                 fns.inject_gtag(view, SmartWebView.ASWV_GTAG);
             }
 
