@@ -820,16 +820,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (permissions[i].equals(Manifest.permission.POST_NOTIFICATIONS)) {
                     if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                         Log.d(TAG, "Notification permission granted.");
-                        // Send a test notification
-                        Firebase firebase = new Firebase();
-                        firebase.sendMyNotification(
-                                "Yay! Firebase is working",
-                                "This is a test notification in action.",
-                                "OPEN_URI",
-                                SWVContext.ASWV_URL,
-                                null,
-                                String.valueOf(SWVContext.ASWV_FCM_ID),
-                                getApplicationContext());
+
+                        // Send a test notification under debug mode
+                        if(SWVContext.SWV_DEBUGMODE) {
+                            Firebase firebase = new Firebase();
+                            firebase.sendMyNotification(
+                                    "Yay! Firebase is working",
+                                    "This is a test notification in action.",
+                                    "OPEN_URI",
+                                    SWVContext.ASWV_URL,
+                                    null,
+                                    String.valueOf(SWVContext.ASWV_FCM_ID),
+                                    getApplicationContext());
+                        }
                     } else {
                         Log.w(TAG, "Notification permission denied.");
                     }

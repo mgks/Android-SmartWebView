@@ -96,7 +96,9 @@ public class Playground {
 
             // Test for ToastPlugin
             runPluginDiagnostic("ToastPlugin", plugin -> {
-                webView.evaluateJavascript("window.Toast && window.Toast.show('ToastPlugin is Active!')", null);
+                if(SWVContext.SWV_DEBUGMODE) {
+                    webView.evaluateJavascript("window.Toast && window.Toast.show('ToastPlugin is Active!')", null);
+                }
                 Log.i(TAG, "SUCCESS: ToastPlugin is available.");
             });
 
@@ -146,7 +148,7 @@ public class Playground {
     }
 
     public void onPageFinished(String url) {
-        if (SWVContext.SWV_PLAYGROUND) {
+        if (SWVContext.SWV_PLAYGROUND && SWVContext.SWV_DEBUGMODE) {
             mainHandler.postDelayed(() -> {
                 Log.d(TAG, "Attempting to inject Playground UI...");
                 setupPluginDemoUI();
