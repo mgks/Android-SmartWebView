@@ -13,23 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const gallery = document.querySelector('.gallery');
     const MAX_WIDTH = 240;
 
-    if (window.swvPlatform === 'ios') {
-        const header = document.querySelector('.footer-hlink');
-        if (header) {
-            header.href = 'https://github.com/mgks/iOS-SmartWebView/issues';
-        }
-        const logo = document.querySelector('.header-logo');
-        if (logo) {
-            logo.src = 'ios_swv_splash_white.png';
-        }
-        /*
-        const fcmButton = document.querySelector('a[href="fcm:"]');
-        if (fcmButton) {
-            fcmButton.innerHTML = 'Send iOS Test Notification';
-        }
-        */
-    }
-
     // Handle image previews
     imageInput.addEventListener('change', function() {
         // The 'gallery' element might not exist on all pages (like error pages).
@@ -100,6 +83,27 @@ document.addEventListener('DOMContentLoaded', function() {
         setTheme(nativeThemePreference, true);
     }
 });
+
+function setPlatform(platform) {
+    if (platform === 'ios') {
+        console.log("Platform detected: iOS. Customizing UI.");
+        const header = document.querySelector('.footer-hlink');
+        if (header) {
+            header.href = 'https://github.com/mgks/iOS-SmartWebView/issues';
+        }
+        const logo = document.querySelector('.header-logo');
+        if (logo) {
+            logo.src = 'ios_swv_splash_white.png';
+        }
+        /*
+        const fcmButton = document.querySelector('a[href="fcm:"]');
+        if (fcmButton) {
+            fcmButton.innerHTML = 'Send iOS Test Notification';
+        }
+        */
+    }
+}
+
 
 function get_cookies(name) {
 	const value = `; ${document.cookie}`;
