@@ -87,20 +87,19 @@ document.addEventListener('DOMContentLoaded', function() {
 function setPlatform(platform) {
     if (platform === 'ios') {
         console.log("Platform detected: iOS. Customizing UI.");
-        const header = document.querySelector('.footer-hlink');
-        if (header) {
-            header.href = 'https://github.com/mgks/iOS-SmartWebView/issues';
+        // Use the new ID for the footer link
+        const footerLink = document.querySelector('#footer-link');
+        if (footerLink) {
+            footerLink.href = 'https://github.com/mgks/iOS-SmartWebView/issues';
         }
+
+        // Target the header logo
         const logo = document.querySelector('.header-logo');
         if (logo) {
+            // Make sure you have a file named 'ios_swv_splash_white.png' in the same directory as your index.html
             logo.src = 'ios_swv_splash_white.png';
+            logo.alt = 'iOS Smart WebView Logo';
         }
-        /*
-        const fcmButton = document.querySelector('a[href="fcm:"]');
-        if (fcmButton) {
-            fcmButton.innerHTML = 'Send iOS Test Notification';
-        }
-        */
     }
 }
 
