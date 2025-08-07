@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Dark Mode version of the Base Theme -->
+    <style name="Base.Theme.SmartWebView" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- In dark mode, status bar icons should be light -->
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- Use the primary dark color for the status bar for a seamless look -->
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+    </style>
+</resources>

@@ -6,6 +6,7 @@
 		<item name="android:windowBackground">@drawable/background_splash</item>
 		<item name="android:windowActionBar">false</item>
 		<item name="popupTheme">@style/AppTheme.PopupOverlay</item>
+		<item name="android:windowLightStatusBar">true</item>
 	</style>
 
 	<style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">

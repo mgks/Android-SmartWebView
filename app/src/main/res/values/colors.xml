@@ -6,9 +6,9 @@
 	<color name="colorPrimaryDarker">#EAEAEA</color>
 	<color name="colorAccent">#4AAB33</color>
 	<color name="colorAccentDark">#399623</color>
-	<color name="textColorPrimary">#2a2a2a</color>
+	<color name="textColorPrimary">#1D1D1F</color>
 	<color name="textColorSecondary">#555555</color>
 	<color name="iconTint">#449a2f</color>
-	<color name="white">#ffffff</color>
+	<color name="white">#FFFFFF</color>
 	<color name="black">#000000</color>
 </resources>

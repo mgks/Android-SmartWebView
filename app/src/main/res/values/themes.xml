@@ -1,23 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="CustomLollipopDialogStyle" parent="android:Theme.Material.Light.Dialog.Alert">
-        <item name="android:buttonBarButtonStyle">@style/CustomButtonBarButtonStyle</item>
-        <item name="android:buttonBarStyle">@style/CustomButtonBarStyle</item>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.SmartWebView" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Brand Colors -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+
+        <!-- Make status bar transparent for edge-to-edge -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <!-- Set status bar icon color. true = dark icons (for light background) -->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="CustomButtonBarStyle" parent="@android:style/Widget.Material.Light.ButtonBar.AlertDialog">
-        <!-- Making sure, the button bar uses parent width and is not restricted in height -->
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:height">@null</item>
-        <item name="android:minHeight">@null</item>
+    <style name="Theme.SmartWebView" parent="Base.Theme.SmartWebView" />
+
+    <style name="Theme.SmartWebView.Fullscreen" parent="Base.Theme.SmartWebView" />
+
+    <!-- SPLASH SCREEN THEME -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/colorPrimary</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.SmartWebView</item>
     </style>
 
-    <style name="CustomButtonBarButtonStyle" parent="@android:style/Widget.Material.Light.Button.Borderless.Colored">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:width">100dp</item>
-    </style>
+    <!-- App Bar and Popup Themes -->
+    <style name="Theme.SmartWebView.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar" />
+    <style name="Theme.SmartWebView.PopupOverlay" parent="ThemeOverlay.Material3.Light" />
 
 </resources>
