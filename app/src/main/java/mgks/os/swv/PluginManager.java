@@ -158,6 +158,12 @@ public class PluginManager {
 		}
 	}
 
+	public void onPause() {
+		for (PluginInterface plugin : plugins) {
+			plugin.onPause();
+		}
+	}
+
 	public void onDestroy() {
 		for (PluginInterface plugin : plugins) {
 			plugin.onDestroy();

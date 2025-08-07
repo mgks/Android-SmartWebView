@@ -32,6 +32,7 @@ public interface PluginInterface {
 	void onPageStarted(String url);
 	void onPageFinished(String url);
 	void onResume();
+	void onPause();
 	void onDestroy();
 	void evaluateJavascript(String script);
 }

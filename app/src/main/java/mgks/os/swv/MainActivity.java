@@ -112,28 +112,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
+        if (SWVContext.ASWV_LAYOUT == 0 || (SWVContext.ASWV_LAYOUT == 1 && !SWVContext.ASWP_DRAWER_HEADER)) {
+            setTheme(R.style.Theme_SmartWebView_Fullscreen);
+        }
+
         final SplashScreen splashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
 
         super.onCreate(savedInstanceState);
 
         // If extending splash is enabled, set up a listener
+        // Keep the splash screen on-screen if the extend feature is enabled
         if (SWVContext.ASWP_EXTEND_SPLASH) {
             final View content = findViewById(android.R.id.content);
             content.getViewTreeObserver().addOnPreDrawListener(
-                    new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            // Check if the page is loaded.
-                            if (isPageLoaded) {
-                                // The content is ready; remove the listener and draw the content.
-                                content.getViewTreeObserver().removeOnPreDrawListener(this);
-                                return true;
-                            } else {
-                                // The content is not ready; don't draw anything.
-                                return false;
-                            }
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        // Check if the page is loaded.
+                        if (isPageLoaded) {
+                            // The content is ready; remove the listener and draw the content.
+                            content.getViewTreeObserver().removeOnPreDrawListener(this);
+                            return true;
+                        } else {
+                            // The content is not ready; don't draw anything, keeping the splash screen visible.
+                            return false;
                         }
                     }
+                }
             );
         }
 
@@ -231,19 +238,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Setup the UI layout based on configuration
      */
     private void setupLayout() {
+        final SwipeRefreshLayout pullRefresh = findViewById(R.id.pullfresh);
         // Set content view based on configuration
         if (SWVContext.ASWV_LAYOUT == 1) {
             setContentView(R.layout.drawer_main);
+
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+
             // Conditionally show or hide the header based on config
             if (SWVContext.ASWP_DRAWER_HEADER) {
                 // Header is enabled: Setup Toolbar and Toggle
                 findViewById(R.id.app_bar).setVisibility(View.VISIBLE);
-                Toolbar toolbar = findViewById(R.id.toolbar);
                 setSupportActionBar(toolbar);
                 Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
-                final SwipeRefreshLayout pullRefresh = findViewById(R.id.pullfresh);
 
                 ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close) {
                     @Override
@@ -266,8 +277,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 };
                 drawer.addDrawerListener(toggle);
                 toggle.syncState();
-                drawer.addDrawerListener(toggle);
-                toggle.syncState();
 
             } else {
                 // Header is disabled: Hide the AppBarLayout completely
@@ -279,11 +288,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // The footer is part of the NavigationView's own view hierarchy.
             MenuItem switchItem = navigationView.getMenu().findItem(R.id.nav_dark_mode_switch);
-            SwitchCompat themeSwitch = (SwitchCompat) switchItem.getActionView().findViewById(R.id.drawer_theme_switch);
+            SwitchCompat themeSwitch = (SwitchCompat) Objects.requireNonNull(switchItem.getActionView()).findViewById(R.id.drawer_theme_switch);
             if (themeSwitch != null) {
                 int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
                 themeSwitch.setChecked(currentNightMode == Configuration.UI_MODE_NIGHT_YES);
-
                 themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     AppCompatDelegate.setDefaultNightMode(
                             isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
@@ -525,7 +533,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fns.exit_app(this);
             return true;
         }
-        return onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -725,6 +733,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onPause() {
         super.onPause();
         SWVContext.asw_view.onPause();
+        SWVContext.getPluginManager().onPause();
     }
 
     @Override
