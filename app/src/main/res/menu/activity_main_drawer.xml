@@ -26,7 +26,11 @@
 			android:title="@string/need_help" />
 	</group>
 
-	<!-- Add this new item for the switch -->
+	<!--
+	 Temporarily disabled theme toggle due to state-loss issues on recreate().
+	 This can be re-enabled in the future when a non-recreate theme-switching
+	 solution (like a custom ThemeManager) is implemented.
+
 	<item android:title="@string/dark_mode"
 		android:iconTint="@color/textColorPrimary">
 		<menu>
@@ -37,4 +41,5 @@
 				app:showAsAction="always" />
 		</menu>
 	</item>
+	-->
 </menu>
