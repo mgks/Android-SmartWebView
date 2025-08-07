@@ -186,6 +186,7 @@ public class RatingPlugin implements PluginInterface {
     @Override public void onPageStarted(String url) {}
     @Override public void onPageFinished(String url) {}
     @Override public void onResume() {}
+    @Override public void onPause() {}
     @Override public void onDestroy() {}
     @Override public void evaluateJavascript(String script) {}
 }

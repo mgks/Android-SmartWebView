@@ -166,6 +166,7 @@ public class DialogPlugin implements PluginInterface {
     @Override public void onRequestPermissionsResult(int r, @NonNull String[] p, @NonNull int[] g) {}
     @Override public boolean shouldOverrideUrlLoading(WebView v, String u) { return false; }
     @Override public void onResume() {}
+    @Override public void onPause() {}
     @Override public void onPageStarted(String url) {}
     @Override public void onDestroy() {}
     @Override public void evaluateJavascript(String script) {

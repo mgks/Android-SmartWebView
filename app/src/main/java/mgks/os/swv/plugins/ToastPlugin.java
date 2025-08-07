@@ -122,6 +122,7 @@ public class ToastPlugin implements PluginInterface {
     }
 
     @Override public void onResume() {}
+    @Override public void onPause() {}
 
     @Override
     public void onDestroy() {

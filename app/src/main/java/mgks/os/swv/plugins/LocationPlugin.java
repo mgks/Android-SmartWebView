@@ -94,7 +94,7 @@ public class LocationPlugin implements PluginInterface, LocationListener {
     public void getLocation(String jsCallbackName) {
         pendingJsCallback = jsCallbackName;
         if (!permissionManager.isLocationPermissionGranted()) {
-            permissionManager.requestInitialPermissions(); // Rely on MainActivity's handling
+            permissionManager.requestInitialPermissions();
             return;
         }
 
@@ -112,24 +112,36 @@ public class LocationPlugin implements PluginInterface, LocationListener {
 
             // Prioritize GPS
             if (isGPSEnabled) {
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this, Looper.getMainLooper());
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                // Try-catch for the security exception here
+                try {
+                    if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this, Looper.getMainLooper());
+                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    }
+                } catch (SecurityException se) {
+                    Log.e(TAG, "SecurityException while accessing GPS. Mock locations might be enabled.", se);
+                    sendLocationError("Security error: Mock locations may be enabled in Developer Options.");
+                    return; // Stop further execution
                 }
             }
 
             // Fallback to Network if GPS location is null
             if (location == null && isNetworkEnabled) {
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this, Looper.getMainLooper());
-                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                try {
+                    if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this, Looper.getMainLooper());
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    }
+                } catch (SecurityException se) {
+                    Log.e(TAG, "SecurityException while accessing Network location. Mock locations might be enabled.", se);
+                    sendLocationError("Security error: Mock locations may be enabled in Developer Options.");
+                    return; // Stop further execution
                 }
             }
 
             if (location != null) {
                 handleNewLocation(location);
             } else {
-                // If getLastKnownLocation fails, we rely on requestLocationUpdates to call onLocationChanged later.
                 Log.d(TAG, "Last known location not available, waiting for updates...");
             }
 
@@ -143,13 +155,13 @@ public class LocationPlugin implements PluginInterface, LocationListener {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
-        // 1. Set Cookies (for legacy support)
+        // Set Cookies (for legacy support)
         if (SWVContext.true_online) {
             functions.set_cookie("lat=" + latitude);
             functions.set_cookie("long=" + longitude);
         }
 
-        // 2. Send via JS Callback if requested
+        // Send via JS Callback if requested
         if (pendingJsCallback != null) {
             sendLocationToJs(pendingJsCallback, location, null);
             pendingJsCallback = null;
@@ -176,7 +188,6 @@ public class LocationPlugin implements PluginInterface, LocationListener {
     public void onLocationChanged(@NonNull Location location) {
         handleNewLocation(location);
     }
-
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {}
     @Override
@@ -261,6 +272,7 @@ public class LocationPlugin implements PluginInterface, LocationListener {
     @Override public void onActivityResult(int r, int c, Intent d) {}
     @Override public boolean shouldOverrideUrlLoading(WebView v, String u) { return false; }
     @Override public void onResume() {}
+    @Override public void onPause() {}
     @Override public void onPageStarted(String url) {}
     @Override public void onDestroy() { stopListening(); }
     @Override public void evaluateJavascript(String script) {
