@@ -1,53 +1,53 @@
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:tools="http://schemas.android.com/tools"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/pullfresh"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/coordinator_layout"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:fitsSystemWindows="true"
-	app:layout_behavior="@string/appbar_scrolling_view_behavior">
-	<RelativeLayout
+	android:layout_height="match_parent"
+	android:background="?android:attr/colorBackground"
+	tools:context=".MainActivity">
+
+	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+		android:id="@+id/pullfresh"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:paddingLeft="0dip"
-		android:paddingRight="0dip"
-		android:paddingTop="0dip"
-		android:paddingBottom="0dip"
-		tools:context="MainActivity"
-		android:background="@color/colorPrimary">
+		android:layout_height="match_parent">
 
-		<include layout="@layout/welcome_splash" />
-
-		<WebView
-			android:id="@+id/msw_view"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:visibility="gone" />
-		<WebView
-			android:id="@+id/print_view"
-			android:layout_width="0dp"
-			android:layout_height="0dp"
-			android:visibility="gone" />
-
-		<LinearLayout
-			android:id="@+id/msw_ad_container"
+		<RelativeLayout
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:layout_alignParentBottom="true"
-			android:gravity="center_horizontal"/>
+			android:layout_height="match_parent">
 
-		<ProgressBar
-			android:id="@+id/msw_progress"
-			style="@android:style/Widget.ProgressBar.Horizontal"
-			android:layout_width="fill_parent"
-			android:layout_height="3dip"
-			android:progressDrawable="@drawable/progress_style"
-			android:layout_alignParentBottom="true"
-			android:layout_alignParentStart="true"
-			android:visibility="visible" />
+			<WebView
+				android:id="@+id/msw_view"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:visibility="gone" />
 
-		<include layout="@layout/security_overlay" />
+			<WebView
+				android:id="@+id/print_view"
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:visibility="gone" />
 
-	</RelativeLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+			<include layout="@layout/welcome_splash" />
+			<include layout="@layout/security_overlay" />
+		</RelativeLayout>
+	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+	<!-- Ad Container and Progress Bar -->
+	<LinearLayout
+		android:id="@+id/msw_ad_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+		android:orientation="vertical"/>
+	<ProgressBar
+		android:id="@+id/msw_progress"
+		style="?android:attr/progressBarStyleHorizontal"
+		android:layout_width="match_parent"
+		android:layout_height="3dp"
+		android:layout_gravity="bottom"
+		android:progressDrawable="@drawable/progress_style"
+		android:visibility="visible" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

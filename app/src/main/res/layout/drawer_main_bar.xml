@@ -3,25 +3,25 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/coordinator_layout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".MainActivity"
-	android:fitsSystemWindows="true">
+	android:background="?android:attr/colorBackground"
+	tools:context=".MainActivity">
 
 	<com.google.android.material.appbar.AppBarLayout
 		android:id="@+id/app_bar"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:theme="@style/AppTheme.AppBarOverlay"
-		android:visibility="visible">
+		android:theme="@style/Theme.SmartWebView.AppBarOverlay">
 
-		<androidx.appcompat.widget.Toolbar
+		<!-- CRITICAL CHANGE: Use MaterialToolbar instead of the AppCompat one -->
+		<com.google.android.material.appbar.MaterialToolbar
 			android:id="@+id/toolbar"
 			android:layout_width="match_parent"
 			android:layout_height="50dp"
 			android:background="@color/colorAccentDark"
-			app:popupTheme="@style/AppTheme.PopupOverlay"
-			android:theme="@style/AppTheme.Toolbar" />
+			app:popupTheme="@style/Theme.SmartWebView.PopupOverlay" />
 
 	</com.google.android.material.appbar.AppBarLayout>
 
