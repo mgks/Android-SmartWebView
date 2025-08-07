@@ -77,10 +77,16 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Arrays;
@@ -112,20 +118,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Secure the app on startup if biometric or auth is forced on launch
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
-        if (SWVContext.ASWV_LAYOUT == 0 || (SWVContext.ASWV_LAYOUT == 1 && !SWVContext.ASWP_DRAWER_HEADER)) {
-            setTheme(R.style.Theme_SmartWebView_Fullscreen);
-        }
-
-        final SplashScreen splashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
+        // Enable edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         super.onCreate(savedInstanceState);
 
+        // Handle splash screen
+        final SplashScreen splashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
+
         // If extending splash is enabled, set up a listener
         // Keep the splash screen on-screen if the extend feature is enabled
+        final View content = findViewById(android.R.id.content);
         if (SWVContext.ASWP_EXTEND_SPLASH) {
-            final View content = findViewById(android.R.id.content);
             content.getViewTreeObserver().addOnPreDrawListener(
                 new ViewTreeObserver.OnPreDrawListener() {
                     @Override
@@ -225,43 +232,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initializeWebView();
 
         // Setup features and handle intents
-        setupFeatures();
-        handleIncomingIntents();
+        if (savedInstanceState == null) {
+            setupFeatures();
+            handleIncomingIntents();
+        }
 
         // Debug mode logging
         if(SWVContext.SWV_DEBUGMODE){
             Log.d(TAG, "URL: "+ SWVContext.CURR_URL+"DEVICE INFO: "+ Arrays.toString(fns.get_info(this)));
         }
+
+        ViewCompat.setOnApplyWindowInsetsListener(content, (v, windowInsets) -> {
+            // Get the insets for the system bars (status bar, navigation bar)
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            // Apply the insets as padding to the root view.
+            // This pushes the entire layout down from the status bar and up from the nav bar.
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+
+            // Return the insets so that other views can also process them if needed.
+            return windowInsets;
+        });
     }
 
     /**
      * Setup the UI layout based on configuration
      */
     private void setupLayout() {
-        final SwipeRefreshLayout pullRefresh = findViewById(R.id.pullfresh);
-        // Set content view based on configuration
         if (SWVContext.ASWV_LAYOUT == 1) {
             setContentView(R.layout.drawer_main);
+            MaterialToolbar toolbar = findViewById(R.id.toolbar); // Use MaterialToolbar
+            final SwipeRefreshLayout pullRefresh = findViewById(R.id.pullfresh);
 
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-
-            // Conditionally show or hide the header based on config
             if (SWVContext.ASWP_DRAWER_HEADER) {
-                // Header is enabled: Setup Toolbar and Toggle
                 findViewById(R.id.app_bar).setVisibility(View.VISIBLE);
                 setSupportActionBar(toolbar);
                 Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
                 ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close) {
                     @Override
                     public void onDrawerSlide(View drawerView, float slideOffset) {
                         super.onDrawerSlide(drawerView, slideOffset);
-                        // This is the key part: disable pull-to-refresh while drawer is opening.
-                        if (slideOffset > 0 && pullRefresh.isEnabled()) {
+                        if (pullRefresh != null && slideOffset > 0 && pullRefresh.isEnabled()) {
                             pullRefresh.setEnabled(false);
                         }
                     }
@@ -269,24 +282,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onDrawerClosed(View drawerView) {
                         super.onDrawerClosed(drawerView);
-                        // Re-enable pull-to-refresh only if the feature is globally enabled.
-                        if (!pullRefresh.isEnabled() && SWVContext.ASWP_PULLFRESH) {
+                        if (pullRefresh != null && !pullRefresh.isEnabled() && SWVContext.ASWP_PULLFRESH) {
                             pullRefresh.setEnabled(true);
                         }
                     }
                 };
                 drawer.addDrawerListener(toggle);
                 toggle.syncState();
-
             } else {
-                // Header is disabled: Hide the AppBarLayout completely
                 findViewById(R.id.app_bar).setVisibility(View.GONE);
             }
 
             NavigationView navigationView = findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
 
-            // The footer is part of the NavigationView's own view hierarchy.
+            /*
+            // Temporarily disabled theme toggle logic
             MenuItem switchItem = navigationView.getMenu().findItem(R.id.nav_dark_mode_switch);
             SwitchCompat themeSwitch = (SwitchCompat) Objects.requireNonNull(switchItem.getActionView()).findViewById(R.id.drawer_theme_switch);
             if (themeSwitch != null) {
@@ -296,21 +307,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     AppCompatDelegate.setDefaultNightMode(
                             isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
                     );
+                    recreate();
                 });
             }
+            */
 
         } else {
             setContentView(R.layout.activity_main);
         }
 
-        // Initialize UI components
         SWVContext.asw_view = findViewById(R.id.msw_view);
         adContainer = findViewById(R.id.msw_ad_container);
         SWVContext.print_view = findViewById(R.id.print_view);
-
-        // Setup window appearance
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
     }
 
     /**
@@ -779,6 +787,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         SWVContext.asw_view.saveState(outState);
+        if (SWVContext.asw_view.getUrl() != null) {
+            outState.putString("swv_last_url", SWVContext.asw_view.getUrl());
+        }
     }
 
     @Override

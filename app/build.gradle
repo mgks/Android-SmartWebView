@@ -35,12 +35,12 @@ def swvProps = getSwvProperties()
 
 android {
 	namespace swvProps.getProperty('build.application.id', 'mgks.os.swv')
-	compileSdk swvProps.getProperty('build.sdk.compile', '35').toInteger()
+	compileSdk swvProps.getProperty('build.sdk.compile', '36').toInteger()
 
 	defaultConfig {
 		applicationId swvProps.getProperty('build.application.id', 'mgks.os.swv')
 		minSdk swvProps.getProperty('build.sdk.min', '24').toInteger()
-		targetSdk swvProps.getProperty('build.sdk.compile', '35').toInteger()
+		targetSdk swvProps.getProperty('build.sdk.compile', '36').toInteger()
 		versionCode swvProps.getProperty('build.version.code', '1').toInteger()
 		versionName swvProps.getProperty('build.version.name', '1.0')
 		multiDexEnabled true // enable if method count exceeds 64K
@@ -69,20 +69,20 @@ android {
 
 dependencies {
 	testImplementation 'junit:junit:4.13.2'
-	androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+	androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 
 	implementation 'androidx.multidex:multidex:2.0.1'
 
 	// Firebase
-	implementation 'com.google.firebase:firebase-auth:23.2.1'
-	implementation 'com.google.firebase:firebase-config:22.1.2'
-	implementation 'com.google.firebase:firebase-messaging:24.1.2'
-	implementation 'com.google.firebase:firebase-analytics:22.5.0'
+	implementation 'com.google.firebase:firebase-auth:24.0.1'
+	implementation 'com.google.firebase:firebase-config:23.0.0'
+	implementation 'com.google.firebase:firebase-messaging:25.0.0'
+	implementation 'com.google.firebase:firebase-analytics:23.0.0'
 
-	implementation 'com.google.android.gms:play-services-auth:21.3.0'
-	implementation 'com.google.android.gms:play-services-ads:24.4.0'
+	implementation 'com.google.android.gms:play-services-auth:21.4.0'
+	implementation 'com.google.android.gms:play-services-ads:24.5.0'
 	implementation 'com.google.android.gms:play-services-location:21.3.0'
 
 	implementation 'com.google.android.material:material:1.12.0'
@@ -91,8 +91,8 @@ dependencies {
 	implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
 	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 	implementation 'androidx.appcompat:appcompat:1.7.1'
-	implementation 'androidx.browser:browser:1.8.0'
-	implementation 'androidx.work:work-runtime:2.10.2'
+	implementation 'androidx.browser:browser:1.9.0'
+	implementation 'androidx.work:work-runtime:2.10.3'
 
 	// Plugins
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0' // ZXing library for QR code scanning
