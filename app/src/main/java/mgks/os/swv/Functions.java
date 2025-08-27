@@ -511,7 +511,7 @@ public class Functions{
 
 	// Creating exit dialogue
 	public void ask_exit(Activity activity) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AppTheme_AlertDialogStyle);
 		builder.setTitle(activity.getString(R.string.exit_title));
 		builder.setMessage(activity.getString(R.string.exit_subtitle));
 		builder.setCancelable(true);

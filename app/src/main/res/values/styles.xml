@@ -17,33 +17,37 @@
 		<item name="android:windowActionBar">false</item>
 	</style>
 
-	<!-- This is the theme for the Toolbar itself -->
 	<style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-		<!-- This sets the color for the three-dot icon and the title text -->
 		<item name="android:textColorPrimary">@color/iconTint</item>
 	</style>
 
-	<!-- This is the theme for the Overflow Menu (the dropdown) -->
 	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
 		<item name="android:background">@color/colorPrimary</item>
 		<item name="android:textColor">@color/textColorPrimary</item>
 	</style>
 
-	<!-- Other styles... -->
 	<style name="ProDialogue" parent="@android:style/Theme.Dialog">
 		<item name="colorAccent">@color/colorAccent</item>
 		<item name="android:windowBackground">@color/colorPrimary</item>
 		<item name="android:textColor">@color/white</item>
 	</style>
+
 	<style name="TransparentToolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 		<item name="android:windowActionBarOverlay">true</item>
 		<item name="windowActionBarOverlay">true</item>
 	</style>
+
 	<style name="DrawerSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
 		<item name="android:textColor">@color/textColorPrimary</item>
 		<item name="colorControlActivated">@color/colorAccent</item>
 		<item name="colorSwitchThumbNormal">#BDBDBD</item>
 		<item name="android:colorForeground">#999999</item>
 	</style>
+
+	<style name="AppTheme.AlertDialogStyle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+		<item name="colorPrimary">@color/colorAccent</item>
+		<item name="android:textColorPrimary">@color/textColorPrimary</item>
+	</style>
+
 	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 </resources>
