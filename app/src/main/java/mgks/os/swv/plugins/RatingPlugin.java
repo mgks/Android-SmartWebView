@@ -40,18 +40,17 @@ import java.util.Map;
 import mgks.os.swv.Functions;
 import mgks.os.swv.PluginInterface;
 import mgks.os.swv.PluginManager;
-import mgks.os.swv.R;
 import mgks.os.swv.SWVContext;
 
 public class RatingPlugin implements PluginInterface {
     private static final String TAG = "RatingPlugin";
     private Activity activity;
-    private Map<String, Object> config;
 
-    // Configuration defaults
-    private int installDays = 3;
-    private int launchTimes = 10;
-    private int remindInterval = 2;
+    private static final String DIALOG_TITLE = "Rate Our App";
+    private static final String DIALOG_MESSAGE = "If you enjoy using this app, would you mind taking a moment to rate it? Thanks for your support!";
+    private static final String BUTTON_RATE_NOW = "RATE NOW";
+    private static final String BUTTON_REMIND_LATER = "LATER";
+    private static final String BUTTON_NO_THANKS = "NO, THANKS";
 
     // SharedPreferences keys
     private static final String PREF_NAME = "swv_rating_plugin_prefs";
@@ -60,35 +59,20 @@ public class RatingPlugin implements PluginInterface {
     private static final String KEY_DONT_SHOW_AGAIN = "dont_show_again";
     private static final String KEY_REMIND_LATER_DATE = "remind_later_date";
 
-    // Static initializer for self-registration
     static {
-        Map<String, Object> defaultConfig = new HashMap<>();
-        defaultConfig.put("installDays", 3);
-        defaultConfig.put("launchTimes", 10);
-        defaultConfig.put("remindInterval", 2);
-        PluginManager.registerPlugin(new RatingPlugin(), defaultConfig);
+        // No default config needed as it's read from SWVContext
+        PluginManager.registerPlugin(new RatingPlugin(), new HashMap<>());
     }
 
     @Override
     public void initialize(Activity activity, WebView webView, Functions functions, Map<String, Object> config) {
         this.activity = activity;
-        this.config = config;
-
-        // Load configuration, use defaults if not provided
-        installDays = (int) config.getOrDefault("installDays", installDays);
-        launchTimes = (int) config.getOrDefault("launchTimes", launchTimes);
-        remindInterval = (int) config.getOrDefault("remindInterval", remindInterval);
-
-        Log.d(TAG, "RatingPlugin initialized. Config: Days=" + installDays + ", Times=" + launchTimes);
-
-        // Monitor usage and check conditions
+        Log.d(TAG, "RatingPlugin initialized.");
         monitor();
         if (shouldShowRateDialog()) {
             showRateDialog();
         }
     }
-
-    // --- Core Logic (Migrated from AppRate) ---
 
     private SharedPreferences getPrefs() {
         return activity.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -98,15 +82,12 @@ public class RatingPlugin implements PluginInterface {
         SharedPreferences prefs = getPrefs();
         SharedPreferences.Editor editor = prefs.edit();
 
-        // Increment launch times
         int currentLaunchTimes = prefs.getInt(KEY_LAUNCH_TIMES, 0) + 1;
         editor.putInt(KEY_LAUNCH_TIMES, currentLaunchTimes);
 
-        // Set install date if not set
         if (prefs.getLong(KEY_INSTALL_DATE, 0) == 0) {
             editor.putLong(KEY_INSTALL_DATE, System.currentTimeMillis());
         }
-
         editor.apply();
     }
 
@@ -116,9 +97,7 @@ public class RatingPlugin implements PluginInterface {
         if (prefs.getBoolean(KEY_DONT_SHOW_AGAIN, false)) {
             return false;
         }
-
-        // Check launch times
-        if (prefs.getInt(KEY_LAUNCH_TIMES, 0) < SWVContext.ASWR_TIMES) { // Use global config
+        if (prefs.getInt(KEY_LAUNCH_TIMES, 0) < SWVContext.ASWR_TIMES) {
             return false;
         }
 
@@ -126,20 +105,15 @@ public class RatingPlugin implements PluginInterface {
         long installDate = prefs.getLong(KEY_INSTALL_DATE, 0);
         long remindLaterDate = prefs.getLong(KEY_REMIND_LATER_DATE, 0);
 
-        // Check install days
-        if (currentTime < installDate + (long) SWVContext.ASWR_DAYS * 24 * 60 * 60 * 1000) { // Use global config
+        if (currentTime < installDate + (long) SWVContext.ASWR_DAYS * 24 * 60 * 60 * 1000) {
             return false;
         }
-
-        // Check remind interval
-        if (currentTime < remindLaterDate + (long) SWVContext.ASWR_INTERVAL * 24 * 60 * 60 * 1000) { // Use global config
+        if (remindLaterDate != 0 && currentTime < remindLaterDate + (long) SWVContext.ASWR_INTERVAL * 24 * 60 * 60 * 1000) {
             return false;
         }
 
         return true;
     }
-
-    // --- Dialog Logic (Migrated from DialogManager) ---
 
     @SuppressLint("NewApi")
     private void showRateDialog() {
@@ -147,22 +121,19 @@ public class RatingPlugin implements PluginInterface {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
-        builder.setTitle(R.string.rate_dialog_title);
-        builder.setMessage(R.string.rate_dialog_message);
+        builder.setTitle(DIALOG_TITLE);
+        builder.setMessage(DIALOG_MESSAGE);
 
-        // Rate Now (Positive)
-        builder.setPositiveButton(R.string.rate_dialog_ok, (dialog, which) -> {
+        builder.setPositiveButton(BUTTON_RATE_NOW, (dialog, which) -> {
             rateApp();
             getPrefs().edit().putBoolean(KEY_DONT_SHOW_AGAIN, true).apply();
         });
 
-        // Later (Neutral)
-        builder.setNeutralButton(R.string.rate_dialog_cancel, (dialog, which) -> {
+        builder.setNeutralButton(BUTTON_REMIND_LATER, (dialog, which) -> {
             getPrefs().edit().putLong(KEY_REMIND_LATER_DATE, System.currentTimeMillis()).apply();
         });
 
-        // Don't Ask Again (Negative)
-        builder.setNegativeButton(R.string.rate_dialog_no, (dialog, which) -> {
+        builder.setNegativeButton(BUTTON_NO_THANKS, (dialog, which) -> {
             getPrefs().edit().putBoolean(KEY_DONT_SHOW_AGAIN, true).apply();
         });
 
