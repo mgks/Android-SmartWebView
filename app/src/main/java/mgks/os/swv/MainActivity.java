@@ -119,7 +119,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Secure the app on startup if biometric or auth is forced on launch
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        if (SWVContext.ASWP_BLOCK_SCREENSHOTS) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        }
 
         // Enable edge-to-edge display
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
@@ -252,6 +254,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Return the insets so that other views can also process them if needed.
             return windowInsets;
+        });
+    }
+
+    /**
+     * Toggles the FLAG_SECURE on the window. Plugins can call this to temporarily
+     * enhance security. This method respects the global security.block.screenshots setting.
+     * @param secure true to add the secure flag, false to attempt to remove it.
+     */
+    public void setWindowSecure(boolean secure) {
+        runOnUiThread(() -> {
+            if (secure) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            } else {
+                if (!SWVContext.ASWP_BLOCK_SCREENSHOTS) {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+            }
         });
     }
 
