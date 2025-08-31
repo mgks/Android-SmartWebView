@@ -80,6 +80,7 @@ public class SWVContext {
     // Security
     public static boolean ASWP_CERT_VERI;
     public static boolean ASWP_BLOCK_SCREENSHOTS;
+    public static boolean ASWP_ACCEPT_THIRD_PARTY_COOKIES;
 
     // UI & Theme
     public static int ASWV_ORIENTATION;
@@ -210,6 +211,7 @@ public class SWVContext {
         // --- Security ---
         ASWP_CERT_VERI = config.getBoolean("security.verify.ssl", true);
         ASWP_BLOCK_SCREENSHOTS = config.getBoolean("security.block.screenshots", false);
+        ASWP_ACCEPT_THIRD_PARTY_COOKIES = config.getBoolean("security.accept.thirdparty.cookies", false);
 
         // --- UI & Theme ---
         ASWV_ORIENTATION = config.getInt("ui.orientation", 0);
