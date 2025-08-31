@@ -380,6 +380,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         webSettings.setDomStorageEnabled(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
+        // Allow third-party cookies for captcha, social logins, etc.
+        if (SWVContext.ASWP_ACCEPT_THIRD_PARTY_COOKIES) {
+            CookieManager.getInstance().setAcceptThirdPartyCookies(SWVContext.asw_view, true);
+        }
+
         // Disable copy-paste if configured
         if (!SWVContext.ASWP_COPYPASTE) {
             SWVContext.asw_view.setOnLongClickListener(v -> true);
@@ -759,6 +764,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPause() {
         super.onPause();
+        CookieManager.getInstance().flush(); // Flush cookies to persistent storage
         SWVContext.asw_view.onPause();
         SWVContext.getPluginManager().onPause();
     }
