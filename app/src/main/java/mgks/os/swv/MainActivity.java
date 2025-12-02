@@ -90,10 +90,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanIntentResult;
+import com.journeyapps.barcodescanner.ScanOptions;
+
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Matcher;
+
+import mgks.os.swv.plugins.QRScannerPlugin;
 
 /**
  * Main Activity for Smart WebView
@@ -110,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayout adContainer;
     private PermissionManager permissionManager;
     private ActivityResultLauncher<Intent> fileUploadLauncher;
+    private ActivityResultLauncher<ScanOptions> qrScannerLauncher;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -156,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         permissionManager = new PermissionManager(this);
-        SWVContext.loadPlugins(this);
 
         // Initialize the ActivityResultLauncher here, before it's needed
         fileUploadLauncher = registerForActivityResult(
@@ -218,24 +224,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         );
 
+        qrScannerLauncher = registerForActivityResult(new ScanContract(),
+                result -> {
+                    // The result is already a ScanIntentResult, no parsing needed
+                    PluginInterface plugin = SWVContext.getPluginManager().getPluginInstance("QRScannerPlugin");
+                    if (plugin instanceof QRScannerPlugin) {
+                        ((QRScannerPlugin) plugin).handleScanResult(result);
+                    }
+                }
+        );
 
-        // Initialize app context
         SWVContext.setAppContext(getApplicationContext());
-
-        // Initialize file processing, passing the new launcher
         fileProcessing = new FileProcessing(this, fileUploadLauncher);
 
-        // Set screen orientation from cookie or default
         String cookie_orientation = !SWVContext.ASWP_OFFLINE ? fns.get_cookies("ORIENT") : "";
         fns.set_orientation((!Objects.equals(cookie_orientation, "") ? Integer.parseInt(cookie_orientation) : SWVContext.ASWV_ORIENTATION), false, this);
 
-        // Setup layout based on configuration
         setupLayout();
-
-        // Initialize Smart WebView components
         initializeWebView();
 
-        // Setup features and handle intents
+        SWVContext.loadPlugins(this);
+        SWVContext.init(this, SWVContext.asw_view, fns); // This initializes the PluginManager and all queued plugins
+
+        PluginInterface qrPlugin = SWVContext.getPluginManager().getPluginInstance("QRScannerPlugin");
+        if (qrPlugin instanceof QRScannerPlugin) {
+            ((QRScannerPlugin) qrPlugin).setLauncher(qrScannerLauncher);
+        }
+
+        // Setup features and handle intents now that plugins are ready
         if (savedInstanceState == null) {
             setupFeatures();
             handleIncomingIntents();
