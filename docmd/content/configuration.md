@@ -79,6 +79,17 @@ ui.drawer.header=true
 ui.splash.extend=true
 ```
 
+### Behavior & Advanced Features
+```
+# [In v8.0+] Enable injection of a custom stylesheet.
+# The stylesheet must be placed at `app/src/main/assets/web/custom.css`.
+feature.custom.css=false
+
+# [In v8.0+] If true, pressing the back button will always exit the app
+# instead of navigating back in WebView history. Default is false.
+behavior.back.exits=false
+```
+
 ### Plugins
 Control which plugins are active and their core behaviors.
 ```bash

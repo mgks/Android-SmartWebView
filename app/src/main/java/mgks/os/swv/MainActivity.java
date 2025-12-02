@@ -40,6 +40,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -89,6 +90,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -829,6 +831,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            if (SWVContext.ASWP_EXIT_ON_BACK) {
+                if (SWVContext.ASWP_EXITDIAL) {
+                    fns.ask_exit(this);
+                } else {
+                    finish();
+                }
+                return true;
+            }
+
             if (SWVContext.asw_view.canGoBack()) {
                 SWVContext.asw_view.goBack();
             } else {
@@ -916,6 +927,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String theme = SWVContext.ASWP_DARK_MODE ? "dark" : "light";
             String script = "if(typeof applyInitialTheme === 'function') { applyInitialTheme('" + theme + "'); }";
             view.evaluateJavascript(script, null);
+
+            if (SWVContext.ASWP_CUSTOM_CSS) {
+                try {
+                    InputStream inputStream = getAssets().open("web/custom.css");
+                    byte[] buffer = new byte[inputStream.available()];
+                    inputStream.read(buffer);
+                    inputStream.close();
+                    String encoded = Base64.encodeToString(buffer, Base64.NO_WRAP);
+                    String js = "javascript:(function() {" +
+                            "var parent = document.getElementsByTagName('head').item(0);" +
+                            "var style = document.createElement('style');" +
+                            "style.type = 'text/css';" +
+                            "style.innerHTML = window.atob('" + encoded + "');" +
+                            "parent.appendChild(style)" +
+                            "})()";
+                    view.loadUrl(js);
+                    Log.d(TAG, "Custom CSS injected.");
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to inject custom CSS.", e);
+                }
+            }
         }
 
         @Override

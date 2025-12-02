@@ -68,6 +68,7 @@ public class SWVContext {
     public static boolean ASWP_FUPLOAD;
     public static boolean ASWP_CAMUPLOAD;
     public static boolean ASWP_MULFILE;
+    public static boolean ASWP_CUSTOM_CSS;
     public static boolean ASWP_COPYPASTE;
     public static boolean ASWP_PULLFRESH;
     public static boolean ASWP_PBAR;
@@ -75,6 +76,7 @@ public class SWVContext {
     public static boolean ASWP_SFORM;
     public static boolean ASWP_EXTURL;
     public static boolean ASWP_TAB;
+    public static boolean ASWP_EXIT_ON_BACK;
     public static boolean ASWP_EXITDIAL;
 
     // Security
@@ -199,6 +201,7 @@ public class SWVContext {
         ASWP_FUPLOAD = config.getBoolean("feature.uploads", true);
         ASWP_CAMUPLOAD = config.getBoolean("feature.camera.uploads", true);
         ASWP_MULFILE = config.getBoolean("feature.multiple.uploads", true);
+        ASWP_CUSTOM_CSS = config.getBoolean("feature.custom.css", false);
         ASWP_COPYPASTE = config.getBoolean("feature.copy.paste", true);
         ASWP_PULLFRESH = config.getBoolean("feature.pull.refresh", true);
         ASWP_PBAR = config.getBoolean("feature.progress.bar", true);
@@ -206,6 +209,7 @@ public class SWVContext {
         ASWP_SFORM = config.getBoolean("feature.save.form", false);
         ASWP_EXTURL = config.getBoolean("feature.open.external.urls", true);
         ASWP_TAB = config.getBoolean("feature.chrome.tabs", true);
+        ASWP_EXIT_ON_BACK = config.getBoolean("behavior.back.exits", false);
         ASWP_EXITDIAL = config.getBoolean("feature.exit.dialog", true);
 
         // --- Security ---
