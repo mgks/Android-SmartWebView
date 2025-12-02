@@ -44,13 +44,6 @@ createContext.js
 roadmap.md
 context.md
 PLUGINS.md
-
-AdMobPlugin.java
-JSInterfacePlugin.java
-GoogleAuthPlugin.java
-BiometricAuthPlugin.java
-QRBarcodeReaderPlugin.java
-ImageCompressPlugin.java
-CSSInjectorPlugin.java
-PaymentGatewayPlugin.java
-/app/src/main/java/mgks/os/swv/plugins
+aicontext.json
+/node_modules
+/site

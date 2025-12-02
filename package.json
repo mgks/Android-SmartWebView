@@ -1,0 +1,27 @@
+{
+  "name": "android-smartwebview",
+  "version": "1.0.0",
+  "description": "Smart WebView is a versatile and lightweight project designed to help you quickly convert your website or web application into a native mobile app.",
+  "homepage": "https://github.com/mgks/Android-SmartWebView#readme",
+  "bugs": {
+    "url": "https://github.com/mgks/Android-SmartWebView/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgks/Android-SmartWebView.git"
+  },
+  "author": "Ghazi Khan",
+  "scripts": {
+    "dev": "docmd dev",
+    "build": "docmd build",
+    "preview": "npx serve build"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@mgks/docmd": "^0.3.0"
+  }
+}
