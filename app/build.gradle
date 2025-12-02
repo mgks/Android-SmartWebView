@@ -77,22 +77,22 @@ dependencies {
 
 	// Firebase
 	implementation 'com.google.firebase:firebase-auth:24.0.1'
-	implementation 'com.google.firebase:firebase-config:23.0.0'
-	implementation 'com.google.firebase:firebase-messaging:25.0.0'
+	implementation 'com.google.firebase:firebase-config:23.0.1'
+	implementation 'com.google.firebase:firebase-messaging:25.0.1'
 	implementation 'com.google.firebase:firebase-analytics:23.0.0'
 
 	implementation 'com.google.android.gms:play-services-auth:21.4.0'
-	implementation 'com.google.android.gms:play-services-ads:24.5.0'
+	implementation 'com.google.android.gms:play-services-ads:24.8.0'
 	implementation 'com.google.android.gms:play-services-location:21.3.0'
 
-	implementation 'com.google.android.material:material:1.12.0'
+	implementation 'com.google.android.material:material:1.13.0'
 
-	implementation 'androidx.core:core-splashscreen:1.0.1'
+	implementation 'androidx.core:core-splashscreen:1.2.0'
 	implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
 	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 	implementation 'androidx.appcompat:appcompat:1.7.1'
 	implementation 'androidx.browser:browser:1.9.0'
-	implementation 'androidx.work:work-runtime:2.10.3'
+	implementation 'androidx.work:work-runtime:2.11.0'
 
 	// Plugins
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0' // ZXing library for QR code scanning
