@@ -1,0 +1,374 @@
+/*
+  Smart WebView v7
+  https://github.com/mgks/Android-SmartWebView
+*/
+
+:root {
+    --background-color: #f0f2f5;
+    --card-background: #ffffff;
+    --text-color: #1c1e21;
+    --primary-color: #449a2f;
+    --primary-dark: #3e862c;
+    --accent-color: #347e21;
+    --border-radius: 12px;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+/* Dark theme variables */
+body.dark-mode {
+    --background-color: #121212;
+    --card-background: #1e1e1e;
+    --text-color: #e0e0e0;
+    --primary-color: #4b9e37;
+    --primary-dark: #3c802b;
+
+}
+
+body.dark-mode .app-header {
+    background: linear-gradient(to bottom right, #0d5503, #0e150d);
+
+}
+
+body.dark-mode .card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .card h2, body.dark-mode .card h3 {
+    color: var(--primary-color);
+}
+
+body.dark-mode .fetch-loc, body.dark-mode .feature-list-block {
+    background-color: #2a2a2a;
+    border: 1px solid #333;
+}
+
+body.dark-mode .feature-list-block h3 {
+    color: #ccc;
+}
+
+body.dark-mode .file-input-label {
+    background-color: #333;
+    color: #e0e0e0;
+}
+body.dark-mode .file-input-label:hover {
+    background-color: #444;
+}
+
+body.dark-mode .app-footer {
+    color: #888;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    line-height: 1.6;
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    user-select: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+[contenteditable], input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.app-header {
+    background: linear-gradient(to bottom right, #559645, #187202);
+    color: white;
+    text-align: center;
+    padding: 2rem 1rem 1rem;
+
+}
+
+.header-logo {
+    max-width: 300px;
+    width: 80%;
+    margin: 1rem auto;
+    display: block;
+
+}
+
+.app-header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.app-header p {
+    margin: 0.5rem 0 0;
+    opacity: 0.9;
+}
+
+.container {
+    padding: 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.card {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.card h2, .card h3 {
+    margin-top: 0;
+    font-size: 1.4rem;
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+}
+
+.card h2 .icon, .card h3 .icon {
+    margin-right: 0.75rem;
+    font-size: 1.5rem;
+}
+
+.card p {
+    margin-bottom: 1rem;
+
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.file-input-label {
+    background-color: #e4e6eb;
+    color: #4b4f56;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 500;
+
+}
+
+.file-input-label:hover {
+    background-color: #d8dade;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: .5rem 0;
+}
+
+.gallery canvas {
+    max-width: 100px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.action-button, .plugin-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.action-button:hover, .plugin-button:hover {
+    opacity: 0.9;
+}
+
+.plugin-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.plugin-button.premium-button {
+    background-color: #f7b731;
+    margin-top: 1rem;
+}
+
+.fetch-loc, .feature-list-block {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: #e2eaf6;
+    border-radius: var(--border-radius);
+
+}
+
+.fetch-loc b {
+    font-weight: 600;
+}
+
+.premium-button {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: color(display-p3 0.39 0.246 0.012);
+
+}
+
+.sponsor-button {
+    background-color: #2b2e34;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.sponsor-logo {
+    height: 1.5rem;
+    width: auto;
+    margin-right: 0.5rem;
+}
+
+.feature-list {
+	margin: 0;
+	padding-left: 1.2em;
+	list-style: none;
+}
+
+.feature-list li {
+    margin: 0.5em 0;
+    font-size: 0.85em;
+    font-weight: 500;
+
+}
+
+.feature-list-block h3 {
+    color: #515152;
+    margin: .5rem 0;
+
+}
+
+.feature-list-block small {
+    font-size: .85em;
+    font-weight: bold;
+}
+
+.app-header b {
+    font-weight: 500;
+    font-size: .95em;
+}
+
+.alt-features small {
+	display: block;
+	margin-top: 0.5em;
+}
+
+/* Theme switcher styles */
+.theme-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 1rem;
+
+}
+
+.theme-switcher button {
+    padding: 8px 20px;
+    border: 1px solid var(--primary-color);
+    background-color: transparent;
+    color: var(--primary-color);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+
+}
+body.dark-mode .theme-switcher button {
+    color: #e0e0e0;
+    border-color: #e0e0e0;
+}
+.theme-switcher button.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+body.dark-mode .theme-switcher button.active {
+    background-color: var(--primary-color);
+    color: #121212;
+}
+
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    padding: 1rem;
+}
+
+.error-icon {
+    font-size: 4rem;
+    color: var(--error-color);
+    line-height: 1;
+}
+
+.error-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--error-color);
+    margin: 1rem 0 0.5rem;
+}
+
+.error-message {
+    font-size: 1rem;
+    color: #65676b;
+    max-width: 400px;
+    margin-bottom: 2rem;
+}
+
+.retry-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px; /* Pill shape */
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: var(--box-shadow);
+    transition: transform 0.2s ease;
+}
+
+.retry-button:hover {
+    transform: scale(1.05);
+}
+
+.retry-button svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    fill: white;
+}
+
+.app-footer {
+    text-align: center;
+    padding: 2rem 1rem 3rem;
+    font-size: 0.9rem;
+    color: #65676b;
+}

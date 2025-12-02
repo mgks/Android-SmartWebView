@@ -45,7 +45,7 @@ jobs:
           mkdir _final_build
           
           # A. Copy your EXISTING main site (from root docs/) to the root of the build
-          cp -r site/* _final_build/
+          cp -r demo/* _final_build/
           
           # B. Create the subfolder for documentation
           mkdir -p _final_build/documentation
