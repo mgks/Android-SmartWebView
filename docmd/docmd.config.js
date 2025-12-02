@@ -77,7 +77,7 @@ module.exports = {
     analytics: {
       // Google Analytics 4 (GA4)
       googleV4: {
-        measurementId: 'G-8QVBDQ4KM1' // Replace with your actual GA4 Measurement ID
+        measurementId: 'G-7XXC1C7CRQ' // Replace with your actual GA4 Measurement ID
       }
     },
     // Enable Sitemap plugin
