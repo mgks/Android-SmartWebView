@@ -1,18 +1,14 @@
 <!--
-  Smart WebView v7
+  Smart WebView v8 - The Complete Open Source Edition
   https://github.com/mgks/Android-SmartWebView
 
   A modern, open-source WebView wrapper for building advanced hybrid Android apps.
-  Native features, modular plugins, and full customisation—built for developers.
+  Native features, a powerful plugin architecture, and full customisation—built for developers.
 
-  - Documentation: https://docs.mgks.dev/smart-webview  
-  - Plugins: https://docs.mgks.dev/smart-webview/plugins  
-  - Discussions: https://github.com/mgks/Android-SmartWebView/discussions  
-  - Sponsor the Project: https://github.com/sponsors/mgks  
+  - Documentation: https://docs.mgks.dev/smart-webview
+  - Discussions: https://github.com/mgks/Android-SmartWebView/discussions
 
-  MIT License — https://opensource.org/licenses/MIT  
-
-  Mentioning Smart WebView in your project helps others find it and keeps the dev loop alive.
+  MIT License — https://opensource.org/licenses/MIT
 -->
 
 # Android Smart WebView
@@ -22,54 +18,40 @@
 </a>
 
 <p>
-  <a href="#features"><img alt="Variant" src="https://img.shields.io/badge/language-Java-red.svg"></a>
+  <a href="#features"><img alt="Language" src="https://img.shields.io/badge/language-Java-red.svg"></a>
   <a href="https://github.com/mgks/Android-SmartWebView/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/mgks/android-smartwebview"></a>
-  <a href="https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/mgks/android-smartwebview"></a>
+  <a href="https://github.com/mgks/Android-SmartWebView/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/mgks/android-smartwebview"></a>
 </p>
 
-**Android Smart WebView** is a modern, open-source solution for building advanced hybrid Android apps. It allows you to effortlessly extend your app with plugins, native features, and a customizable UI.
+**Android Smart WebView** is a modern, open-source solution for building advanced hybrid Android apps. It provides a robust foundation for converting any website into a feature-rich mobile application, complete with a powerful plugin system for extending native functionality.
 
-**[DOCUMENTATION](https://docs.mgks.dev/smart-webview/)** | **[GET PREMIUM PLUGINS](https://github.com/sponsors/mgks/sponsorships?sponsor=mgks&tier_id=468838)** | **[ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
-
+**[DOCUMENTATION](https://docs.mgks.dev/smart-webview/)** | **[DISCUSSIONS](https://github.com/mgks/Android-SmartWebView/discussions)** | **[ISSUES](https://github.com/mgks/Android-SmartWebView/issues)**
 
 ## Core Features
 
-*   **Plugin Architecture:** Extend app functionality with self-registering plugins. See `PluginInterface.java`, `PluginManager.java`, and existing plugins in `/plugins/` for details.
-*   **File Uploads & Camera Access:** Support for file selection and direct camera capture in WebView.
-*   **Push Notifications:** Integrated Firebase Cloud Messaging (requires `google-services.json`).
-*   **Google Analytics:** Built-in support (configure GTAG ID in `swv.properties`).
-*   **Custom UI Modes:** Fullscreen and drawer layouts (configurable in `swv.properties`).
-*   **Location & Permissions:** Access device GPS/location and manage permissions.
-*   **Content Sharing:** Receive and handle shared content from other apps via `ShareActivity.java`.
-*   **Downloads & Printing:** Handle file downloads and print web content.
-*   **Modern WebView:** Secure, up-to-date, and highly configurable via `swv.properties` and `MainActivity.java`.
+*   **Plugin Architecture:** Extend app functionality with self-registering, modular plugins.
+*   **File Uploads & Camera Access:** Full support for `<input type="file">`, including direct camera capture.
+*   **Push Notifications:** Integrated with Firebase Cloud Messaging (requires `google-services.json`).
+*   **Google Analytics:** Built-in support for usage tracking (configure GTAG ID in `swv.properties`).
+*   **Custom UI Modes:** Choose between a fullscreen immersive layout or a standard drawer navigation layout.
+*   **Location Services:** Access device GPS for location-aware web applications.
+*   **Content Sharing:** Natively receive and handle content shared from other apps.
+*   **Downloads & Printing:** Handle file downloads and print web content using native services.
+*   **Modern & Secure:** Built with up-to-date libraries, security best practices, and highly configurable via `swv.properties`.
 
-## Plugins
+## Included Plugins
 
-Smart WebView features a plugin system to add new features with minimal effort.
+Smart WebView now includes all plugins for free, providing a comprehensive toolkit to build powerful hybrid apps out of the box.
 
-*   **Understanding Plugins:**
-    *   The core contract is defined in `PluginInterface.java`.
-    *   Plugin lifecycle and registration are managed by `PluginManager.java`.
-    *   Example plugins (`ToastPlugin.java`, `LocationPlugin.java`) are located in `/plugins/`. These serve as excellent references for creating new plugins.
-
-*   **Configuring & Testing Plugins:**
-    *   `Playground.java` is used to configure, test, and demonstrate plugin functionality during development. This is where you set plugin-specific options like AdMob IDs or enable Biometric Auth on launch.
-
-*  **Premium Plugins ⭐:** List of premium plugins for **[Project Sponsors](https://github.com/sponsors/mgks)**.
-    - ✅ **AdMob**: Integrate Google AdMob into your app; Includes Banner, Interstitial and Rewarded ad units.
-    - ✅ **Biometric Auth**: Enable fingerprint or face authentication for overall app or trigger on demand with JavaScript.
-    - ✅ **QR & Barcode Reader**: Scan QR codes and barcodes directly from your app.
-    - ✅ **Image Compression**: Compress images before uploading for better performance.
-    - ✅ **JS Interface**: Allows JavaScript code to call native methods and receive callbacks.
-    - 🚧 **Google Auth**: Add Google authentication for seamless sign-in.
-    - 🚧 **Payment Gateway**: Integrate payment solutions for in-app purchases.
-    - 🚧 **Enhanced Video Player**: Handle requests for fullscreen video playback (e.g., from YouTube or Vimeo embeds).
-    - 🚧 **CSS Injection**: Dynamically inject custom CSS into your web pages.
-    - 🚧 **WebRTC**: Build rich, real-time communication features directly into your web app.
-    - 🚧 **Local Network Access**: Host app with local network (e.g., for a dev server or an enterprise intranet).
-
-   *<sup>🚧</sup> Currently in development; availability in final bundle is subject to change.*
+*   ✅ **AdMob:** Integrate Google AdMob banner, interstitial, and rewarded ads.
+*   ✅ **Biometric Authentication:** Secure your app with fingerprint or face unlock.
+*   ✅ **QR & Barcode Reader:** Natively scan QR codes and barcodes using the device camera.
+*   ✅ **Image Compression:** Automatically compress images before uploading to save bandwidth and improve performance.
+*   ✅ **JS Interface:** A powerful two-way bridge for seamless communication between your web app's JavaScript and native Android code.
+*   ✅ **Location:** On-demand access to the device's GPS location.
+*   ✅ **Native Dialogs:** Display native alert and confirmation dialogs from your JavaScript.
+*   ✅ **Toast Messages:** Show short, non-blocking native toast notifications.
+*   ✅ **In-App Review:** Prompt users to rate your app on the Google Play Store based on usage triggers.
 
 ## Quick Start
 
@@ -78,14 +60,14 @@ Smart WebView features a plugin system to add new features with minimal effort.
     git clone https://github.com/mgks/Android-SmartWebView.git
     ```
 2.  **Open in Android Studio:**
-    *   `File > Open > Select the project folder`
+    *   `File > Open > Select the cloned project folder`
 3.  **Configure `swv.properties`:**
     *   Open `app/src/main/assets/swv.properties`.
     *   Change `app.url` to your website's URL and adjust other settings as needed. This is the main configuration file for the app.
 4.  **Add `google-services.json` (Optional):**
-    *   If you plan to use Firebase services (like FCM for push notifications), obtain your `google-services.json` file from the Firebase console and place it in the `app/` directory.
+    *   If you plan to use Firebase services (like FCM for push notifications), place your `google-services.json` file from the Firebase console into the `app/` directory.
 5.  **Build & Run:**
-    *   `Build > Clean Project` then `Build > Rebuild Project`
+    *   `Build > Clean Project` then `Build > Rebuild Project`.
 
 ## Basic Configuration
 
@@ -95,29 +77,26 @@ All primary configuration is done within `app/src/main/assets/swv.properties`:
     *   Set `app.url` to your web application's address.
     *   `offline.url` (`file:///android_asset/web/offline.html`) is used if no internet is detected.
 *   **Feature Toggles:**
-    *   Enable or disable features (file uploads, camera access, location services, pull-to-refresh, etc.) by modifying the `feature.*` boolean properties.
+    *   Enable or disable core features (file uploads, camera access, location services, pull-to-refresh, etc.) by modifying the `feature.*` boolean properties.
 *   **Permissions:**
     *   Review and adjust permissions in `AndroidManifest.xml` based on the features you enable. For example, `CAMERA` for camera uploads, `ACCESS_FINE_LOCATION` for GPS.
 *   **Plugin Configuration:**
-    *   Plugin behavior (like AdMob IDs or Biometric Auth on launch) is configured in `Playground.java`. This allows you to change settings without modifying the plugin source code itself.
+    *   Plugin-specific behavior (like AdMob IDs or Biometric Auth on launch) is configured in `Playground.java`. This allows you to change settings without modifying the plugin source code itself.
 
-## Further Information & Understanding the Code
+## Further Information
 
 The best way to understand the project in depth is to explore the source code:
 *   **`app/src/main/assets/swv.properties`**: Contains all global configurations.
 *   **`SWVContext.java`**: The central class that loads the configuration and holds app state.
-*   **`MainActivity.java`**: The main entry point, handles WebView setup, and integrates core features.
-*   **`Functions.java`**: Utility functions used throughout the app.
-*   **`PluginInterface.java`, `PluginManager.java`**: Key components of the plugin architecture.
+*   **`MainActivity.java`**: The main entry point that handles WebView setup and integrates core features.
+*   **`PluginInterface.java` & `PluginManager.java`**: Key components of the plugin architecture.
 *   **`Playground.java`**: The central place for configuring and testing plugins.
-*   The `plugins/` directory: Contains example and premium plugin implementations.
-*   Inline comments throughout the code provide additional context.
+*   The `plugins/` directory: Contains the full source code for all included plugins.
 
-## Contributing & Support
-*   Found a bug or want to contribute? [Open an issue](https://github.com/mgks/Android-SmartWebView/issues) or [create a pull request](https://github.com/mgks/Android-SmartWebView/pulls).
-*   Support the project via [GitHub Sponsors](https://github.com/sponsors/mgks).
+## Contributing & Community
+
+*   Found a bug or have an idea? [Open an issue](https://github.com/mgks/Android-SmartWebView/issues) or [create a pull request](https://github.com/mgks/Android-SmartWebView/pulls).
+*   Have questions or want to share what you've built? [Join the discussion](https://github.com/mgks/Android-SmartWebView/discussions).
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
-
-> **For new developers:** Programming can be challenging at times, but with practice and persistence, you can develop the skills to create amazing things. The beauty of programming is that it empowers you to bring your ideas to life and create your own world. Keep exploring & experimenting, and all the best for your next project!
