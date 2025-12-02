@@ -1,0 +1,67 @@
+name: Deploy Hybrid Site
+
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # --- 1. Build docmd (The Documentation) ---
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install and Build docmd
+        working-directory: ./docmd
+        run: |
+          npm install
+          npm install -g @mgks/docmd
+          docmd build
+
+      # --- 2. Merge Sites into One Folder ---
+      - name: Assemble Final Site
+        run: |
+          # Create a temporary folder for the final website
+          mkdir _final_build
+          
+          # A. Copy your EXISTING main site (from root docs/) to the root of the build
+          cp -r site/* _final_build/
+          
+          # B. Create the subfolder for documentation
+          mkdir -p _final_build/documentation
+          
+          # C. Copy the docmd output into that subfolder
+          cp -r docmd/site/* _final_build/documentation/
+
+      # --- 3. Deploy ---
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_final_build # Upload the merged folder
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

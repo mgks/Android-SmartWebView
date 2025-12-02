@@ -4,7 +4,7 @@ module.exports = {
   siteTitle: 'Android Smart WebView',
   // Define a base URL for your site, crucial for SEO and absolute paths
   // No trailing slash
-  siteUrl: '/documentation', // Replace with your actual deployed URL
+  siteUrl: 'https://mgks.github.io/Android-SmartWebView/documentation', // Replace with your actual deployed URL
 
   // Logo Configuration
   logo: {
@@ -15,8 +15,8 @@ module.exports = {
   },
 
   // Directory Configuration
-  srcDir: 'docmd',       // Source directory for Markdown files
-  outputDir: 'documentation',    // Directory for generated static site
+  srcDir: 'content',       // Source directory for Markdown files
+  outputDir: 'site',    // Directory for generated static site
 
   // Search Configuration
   search: true,        // Enable/disable search functionality
