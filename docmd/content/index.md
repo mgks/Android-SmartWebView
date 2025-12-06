@@ -1,9 +1,7 @@
 ---
-title: 'Smart WebView'
+title: 'Android Smart WebView Project'
 description: 'Smart WebView is a versatile and lightweight **project** designed to help you quickly convert your website or web application into a native mobile app.'
 ---
-
-## Welcome to Smart WebView
 
 Smart WebView is a versatile and lightweight **project** designed to help you quickly convert your website or web application into a native mobile app. It provides a robust **foundation** with essential features built-in, saving you significant development time.
 

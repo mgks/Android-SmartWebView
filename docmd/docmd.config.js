@@ -11,7 +11,7 @@ module.exports = {
     light: '/assets/images/swv-logo.png', // Path relative to outputDir root
     dark: '/assets/images/swv-logo.png',   // Path relative to outputDir root
     alt: 'swv logo',                      // Alt text for the logo
-    href: '/',                              // Link for the logo, defaults to site root
+    href: 'https://mgks.github.io/Android-SmartWebView/documentation',
   },
 
   // Directory Configuration
