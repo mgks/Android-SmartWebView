@@ -1,14 +1,14 @@
 package mgks.os.swv;
 
 /*
-  Smart WebView v7
+  Smart WebView v8
   https://github.com/mgks/Android-SmartWebView
 
   A modern, open-source WebView wrapper for building advanced hybrid Android apps.
   Native features, modular plugins, and full customisation—built for developers.
 
-  - Documentation: https://docs.mgks.dev/smart-webview  
-  - Plugins: https://docs.mgks.dev/smart-webview/plugins  
+  - Documentation: https://mgks.github.io/Android-SmartWebView/documentation  
+  - Plugins: https://mgks.github.io/Android-SmartWebView/documentation/plugins  
   - Discussions: https://github.com/mgks/Android-SmartWebView/discussions  
   - Sponsor the Project: https://github.com/sponsors/mgks  
 

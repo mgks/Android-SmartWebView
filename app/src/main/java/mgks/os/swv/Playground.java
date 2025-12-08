@@ -1,14 +1,14 @@
 package mgks.os.swv;
 
 /*
-  Smart WebView v7
+  Smart WebView v8
   https://github.com/mgks/Android-SmartWebView
 
   A modern, open-source WebView wrapper for building advanced hybrid Android apps.
   Native features, modular plugins, and full customisation—built for developers.
 
-  - Documentation: https://docs.mgks.dev/smart-webview
-  - Plugins: https://docs.mgks.dev/smart-webview/plugins
+  - Documentation: https://mgks.github.io/Android-SmartWebView/documentation
+  - Plugins: https://mgks.github.io/Android-SmartWebView/documentation/plugins
   - Discussions: https://github.com/mgks/Android-SmartWebView/discussions
   - Sponsor the Project: https://github.com/sponsors/mgks
 
@@ -157,8 +157,6 @@ public class Playground {
     }
 
     private void setupPluginDemoUI() {
-        // This method will now be called from onPageFinished in PluginManager
-        // ensuring it runs for every new page.
         JSONObject pluginStatus = new JSONObject();
         PluginManager manager = SWVContext.getPluginManager();
         try {
@@ -174,77 +172,67 @@ public class Playground {
 
         String demoJs =
                 "// Create demo UI in web pages\n" +
-                        "function createDemoUI(pluginStatus) {\n" +
-                        "  if (document.getElementById('swv-pg-container-999')) return;\n" +
-                        "  \n" +
-                        "  const premiumUrl = 'https://github.com/sponsors/mgks/sponsorships?sponsor=mgks&tier_id=468838';\n" +
-                        "  const css = `\n" +
-                        "    #swv-pg-container-999 { all: initial; position: fixed; bottom: 15px; right: 15px; z-index: 2147483647; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }\n" +
-                        "    #swv-pg-toggle-999 { all: initial; width: 60px; height: 60px; background-color: #4285f4; color: white; border-radius: 50%; border: none; font-size: 28px; line-height: 60px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; }\n" +
-                        "    #swv-pg-panel-999 { all: initial; display: none; position: absolute; bottom: 75px; right: 0; width: 280px; background-color: rgba(20,20,20,0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }\n" +
-                        "    #swv-pg-panel-999.visible { display: block; }\n" +
-                        "    #swv-pg-panel-999 h4 { all: initial; margin: 5px 0 15px; text-align: center; font-weight: bold; font-size: 16px; color: white; display: block; }\n" +
-                        "    .swv-pg-btn-999 { all: initial; display: block; width: 94%; padding: 12px 3%; margin: 6px 0; background-color: #555; color: white; border: none; border-radius: 6px; text-align: left; cursor: pointer; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }\n" +
-                        "    .swv-pg-btn-999:disabled { background-color: #444; color: #888; cursor: not-allowed; }\n" +
-                        "    .swv-pg-btn-999.premium { background: linear-gradient(45deg, #FFD700, #FFA500); font-weight: bold; text-align: center; color: #333; }\n" +
-                        "    #swv-pg-panel-999 a { all: initial; text-decoration: none; display: block; }\n" +
-                        "  `;\n" +
-                        "  \n" +
-                        "  const style = document.createElement('style');\n" +
-                        "  style.id = 'swv-pg-styles-999';\n" +
-                        "  style.textContent = css;\n" +
-                        "  document.head.appendChild(style);\n" +
-                        "  \n" +
-                        "  const container = document.createElement('div');\n" +
-                        "  container.id = 'swv-pg-container-999';\n" +
-                        "  \n" +
-                        "  const panel = document.createElement('div');\n" +
-                        "  panel.id = 'swv-pg-panel-999';\n" +
-                        "  panel.innerHTML = '<h4>Plugin Playground</h4>';\n" +
-                        "  \n" +
-                        "  const toggleBtn = document.createElement('button');\n" +
-                        "  toggleBtn.id = 'swv-pg-toggle-999';\n" +
-                        "  toggleBtn.innerHTML = '⚙';\n" +
-                        "  toggleBtn.onclick = () => { panel.classList.toggle('visible'); };\n" +
-                        "  \n" +
-                        "  const buttons = [\n" +
-                        "    { text: 'Show Toast', action: `window.Toast && window.Toast.show('Hello from the web!')`, plugin: 'ToastPlugin' },\n" +
-                        "    { text: 'Get Device Info', action: `alert(window.JSBridge ? window.JSBridge.getDeviceInfo() : 'JSBridge not found')`, plugin: 'JSInterfacePlugin' },\n" +
-                        "    { text: 'Show Banner Ad', action: `window.AdMob && window.AdMob.showBanner()`, plugin: 'AdMobPlugin' },\n" +
-                        "    { text: 'Show Interstitial Ad', action: `window.AdMob && window.AdMob.showInterstitial()`, plugin: 'AdMobPlugin' },\n" +
-                        "    { text: 'Show Rewarded Ad', action: `window.AdMob && window.AdMob.showRewarded()`, plugin: 'AdMobPlugin' },\n" +
-                        "    { text: 'Scan QR Code', action: `if(window.QRScanner){window.QRScanner.onScanSuccess=function(c){alert('Scanned: '+c)};window.QRScanner.scan();}`, plugin: 'QRScannerPlugin' },\n" +
-                        "    { text: 'Biometric Auth', action: `if(window.Biometric){window.Biometric.onAuthSuccess=function(){alert('Auth OK!')};window.Biometric.authenticate();}`, plugin: 'BiometricPlugin' },\n" +
-                        "    { text: 'Show Native Dialog', action: `window.Dialog && window.Dialog.show({ title: 'Native Dialog', message: 'This was triggered from the web.', positiveText: 'Awesome!' }, (result) => alert('Dialog closed with: ' + result))`, plugin: 'DialogPlugin' }\n" +
-                        "  ];\n" +
-                        "  \n" +
-                        "  buttons.forEach(btn => {\n" +
-                        "    const button = document.createElement('button');\n" +
-                        "    button.className = 'swv-pg-btn-999';\n" +
-                        "    if (pluginStatus[btn.plugin]) {\n" +
-                        "      button.innerText = btn.text;\n" +
-                        "      button.onclick = () => { try { eval(btn.action); } catch(e) { alert('Error: ' + e.message); } };\n" +
-                        "    } else {\n" +
-                        "      button.innerText = btn.text + ' (Premium)';\n" +
-                        "      button.disabled = true;\n" +
-                        "      button.title = 'This is a premium plugin.';\n" +
-                        "      button.onclick = () => { window.open(premiumUrl, '_blank'); };\n" +
-                        "    }\n" +
-                        "    panel.appendChild(button);\n" +
-                        "  });\n" +
-                        "  \n" +
-                        "  const premiumLink = document.createElement('a');\n" +
-                        "  premiumLink.href = premiumUrl;\n" +
-                        "  premiumLink.target = '_blank';\n" +
-                        "  premiumLink.innerHTML = '<button class=\\\"swv-pg-btn-999 premium\\\">⭐ Get All Premium Plugins</button>';\n" +
-                        "  panel.appendChild(premiumLink);\n" +
-                        "  \n" +
-                        "  container.appendChild(panel);\n" +
-                        "  container.appendChild(toggleBtn);\n" +
-                        "  document.body.appendChild(container);\n" +
-                        "}\n" +
-                        "\n" +
-                        "createDemoUI(" + pluginStatus.toString() + ");\n";
+                "function createDemoUI(pluginStatus) {\n" +
+                "  if (document.getElementById('swv-pg-container-999')) return;\n" +
+                "  \n" +
+                "  const css = `\n" +
+                "    #swv-pg-container-999 { all: initial; position: fixed; bottom: 15px; right: 15px; z-index: 2147483647; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }\n" +
+                "    #swv-pg-toggle-999 { all: initial; width: 60px; height: 60px; background-color: #4285f4; color: white; border-radius: 50%; border: none; font-size: 28px; line-height: 60px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; }\n" +
+                "    #swv-pg-panel-999 { all: initial; display: none; position: absolute; bottom: 75px; right: 0; width: 280px; background-color: rgba(20,20,20,0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }\n" +
+                "    #swv-pg-panel-999.visible { display: block; }\n" +
+                "    #swv-pg-panel-999 h4 { all: initial; margin: 5px 0 15px; text-align: center; font-weight: bold; font-size: 16px; color: white; display: block; }\n" +
+                "    .swv-pg-btn-999 { all: initial; display: block; width: 94%; padding: 12px 3%; margin: 6px 0; background-color: #555; color: white; border: none; border-radius: 6px; text-align: left; cursor: pointer; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }\n" +
+                "    .swv-pg-btn-999:disabled { background-color: #444; color: #888; cursor: not-allowed; }\n" +
+                "    #swv-pg-panel-999 a { all: initial; text-decoration: none; display: block; }\n" +
+                "  `;\n" +
+                "  \n" +
+                "  const style = document.createElement('style');\n" +
+                "  style.id = 'swv-pg-styles-999';\n" +
+                "  style.textContent = css;\n" +
+                "  document.head.appendChild(style);\n" +
+                "  \n" +
+                "  const container = document.createElement('div');\n" +
+                "  container.id = 'swv-pg-container-999';\n" +
+                "  \n" +
+                "  const panel = document.createElement('div');\n" +
+                "  panel.id = 'swv-pg-panel-999';\n" +
+                "  panel.innerHTML = '<h4>Plugin Playground</h4>';\n" +
+                "  \n" +
+                "  const toggleBtn = document.createElement('button');\n" +
+                "  toggleBtn.id = 'swv-pg-toggle-999';\n" +
+                "  toggleBtn.innerHTML = '⚙';\n" +
+                "  toggleBtn.onclick = () => { panel.classList.toggle('visible'); };\n" +
+                "  \n" +
+                "  const buttons = [\n" +
+                "    { text: 'Show Toast', action: `window.Toast && window.Toast.show('Hello from the web!')`, plugin: 'ToastPlugin' },\n" +
+                "    { text: 'Get Device Info', action: `alert(window.JSBridge ? window.JSBridge.getDeviceInfo() : 'JSBridge not found')`, plugin: 'JSInterfacePlugin' },\n" +
+                "    { text: 'Show Banner Ad', action: `window.AdMob && window.AdMob.showBanner()`, plugin: 'AdMobPlugin' },\n" +
+                "    { text: 'Show Interstitial Ad', action: `window.AdMob && window.AdMob.showInterstitial()`, plugin: 'AdMobPlugin' },\n" +
+                "    { text: 'Show Rewarded Ad', action: `window.AdMob && window.AdMob.showRewarded()`, plugin: 'AdMobPlugin' },\n" +
+                "    { text: 'Scan QR Code', action: `if(window.QRScanner){window.QRScanner.onScanSuccess=function(c){alert('Scanned: '+c)};window.QRScanner.scan();}`, plugin: 'QRScannerPlugin' },\n" +
+                "    { text: 'Biometric Auth', action: `if(window.Biometric){window.Biometric.onAuthSuccess=function(){alert('Auth OK!')};window.Biometric.authenticate();}`, plugin: 'BiometricPlugin' },\n" +
+                "    { text: 'Show Native Dialog', action: `window.Dialog && window.Dialog.show({ title: 'Native Dialog', message: 'This was triggered from the web.', positiveText: 'Awesome!' }, (result) => alert('Dialog closed with: ' + result))`, plugin: 'DialogPlugin' }\n" +
+                "  ];\n" +
+                "  \n" +
+                "  buttons.forEach(btn => {\n" +
+                "    const button = document.createElement('button');\n" +
+                "    button.className = 'swv-pg-btn-999';\n" +
+                "    if (pluginStatus[btn.plugin]) {\n" +
+                "      button.innerText = btn.text;\n" +
+                "      button.onclick = () => { try { eval(btn.action); } catch(e) { alert('Error: ' + e.message); } };\n" +
+                "    } else {\n" +
+                "      button.innerText = btn.text + ' (Not Enabled)';\n" +
+                "      button.disabled = true;\n" +
+                "    }\n" +
+                "    panel.appendChild(button);\n" +
+                "  });\n" +
+                "  \n" +
+                "  container.appendChild(panel);\n" +
+                "  container.appendChild(toggleBtn);\n" +
+                "  document.body.appendChild(container);\n" +
+                "}\n" +
+                "\n" +
+                "createDemoUI(" + pluginStatus.toString() + ");\n";
 
         if (webView != null) {
             webView.evaluateJavascript(demoJs, null);

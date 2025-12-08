@@ -1,14 +1,14 @@
 package mgks.os.swv;
 
 /*
-  Smart WebView v7
+  Smart WebView v8
   https://github.com/mgks/Android-SmartWebView
 
   A modern, open-source WebView wrapper for building advanced hybrid Android apps.
   Native features, modular plugins, and full customisation—built for developers.
 
-  - Documentation: https://docs.mgks.dev/smart-webview
-  - Plugins: https://docs.mgks.dev/smart-webview/plugins
+  - Documentation: https://mgks.github.io/Android-SmartWebView/documentation
+  - Plugins: https://mgks.github.io/Android-SmartWebView/documentation/plugins
   - Discussions: https://github.com/mgks/Android-SmartWebView/discussions
   - Sponsor the Project: https://github.com/sponsors/mgks
 
@@ -195,7 +195,7 @@ public class SWVContext {
         ASWV_OFFLINE_URL = config.getString("offline.url", "file:///android_asset/web/offline.html");
         ASWV_SEARCH = config.getString("search.url", "https://www.google.com/search?q=");
         ASWV_SHARE_URL_SUFFIX = config.getString("share.url.suffix", "/?share=");
-        ASWV_EXC_LIST = config.getString("external.url.exception.list", "mgks.dev,docs.mgks.dev,mgks.github.io");
+        ASWV_EXC_LIST = config.getString("external.url.exception.list", "mgks.dev,mgks.github.io");
 
         // --- Feature Flags ---
         ASWP_FUPLOAD = config.getBoolean("feature.uploads", true);
@@ -266,8 +266,6 @@ public class SWVContext {
             SWVContext.setAppContext(this);
         }
     }
-
-    // --- The rest of the methods from the original SmartWebView.java ---
 
     public static void setAppContext(Context context) {
         appContext = context.getApplicationContext();
@@ -348,9 +346,9 @@ public class SWVContext {
     // For now, keeping it as is.
     public static final Map<Integer, NavItem> ASWV_DRAWER_MENU = new HashMap<Integer, NavItem>() {{
         put(R.id.nav_home, new NavItem(R.id.nav_home, "https://mgks.github.io/Android-SmartWebView/"));
-        put(R.id.nav_doc, new NavItem(R.id.nav_doc, "https://docs.mgks.dev/smart-webview/"));
-        put(R.id.nav_plugins, new NavItem(R.id.nav_plugins, "https://docs.mgks.dev/smart-webview/plugins/"));
-        put(R.id.nav_psg, new NavItem(R.id.nav_psg, "https://docs.mgks.dev/smart-webview/play-store-guide/"));
+        put(R.id.nav_doc, new NavItem(R.id.nav_doc, "https://mgks.github.io/Android-SmartWebView/documentation/"));
+        put(R.id.nav_plugins, new NavItem(R.id.nav_plugins, "https://mgks.github.io/Android-SmartWebView/documentation/plugins/"));
+        put(R.id.nav_psg, new NavItem(R.id.nav_psg, "https://mgks.github.io/Android-SmartWebView/documentation/play-store-guide/"));
         put(R.id.nav_support, new NavItem(R.id.nav_support, "mailto:hello@mgks.dev?subject=Help: Smart WebView"));
     }};
 }

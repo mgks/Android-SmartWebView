@@ -1,14 +1,14 @@
 package mgks.os.swv;
 
 /*
-  Smart WebView v7
+  Smart WebView v8
   https://github.com/mgks/Android-SmartWebView
 
   A modern, open-source WebView wrapper for building advanced hybrid Android apps.
   Native features, modular plugins, and full customisation—built for developers.
 
-  - Documentation: https://docs.mgks.dev/smart-webview
-  - Plugins: https://docs.mgks.dev/smart-webview/plugins
+  - Documentation: https://mgks.github.io/Android-SmartWebView/documentation
+  - Plugins: https://mgks.github.io/Android-SmartWebView/documentation/plugins
   - Discussions: https://github.com/mgks/Android-SmartWebView/discussions
   - Sponsor the Project: https://github.com/sponsors/mgks
 
@@ -45,14 +45,14 @@ public class PermissionManager {
     }
 
     /**
-     * Checks all configured features in SmartWebView.java and requests the
+     * Checks all configured features in swv.properties and requests the
      * required permissions in a single batch.
      * This should be called on app launch.
      */
     public void requestInitialPermissions() {
         List<String> permissionsToRequest = new ArrayList<>();
 
-        // Iterate through the permission groups defined in SmartWebView config.
+        // Iterate through the permission groups defined in SWVContext config.
         for (String permissionGroup : SWVContext.ASWP_REQUIRED_PERMISSIONS) {
             switch (permissionGroup) {
                 case "LOCATION":
