@@ -3,9 +3,6 @@ package mgks.os.swv.plugins;
 /*
   Image Compression Plugin for Smart WebView
 
-  PROPRIETARY LICENSE - NOT OPEN SOURCE
-  * This plugin is a premium component and is NOT covered by the MIT license of the core Smart WebView project. Usage requires a valid license from the author.
-
   This plugin compresses images before they are uploaded.
 
   FEATURES:

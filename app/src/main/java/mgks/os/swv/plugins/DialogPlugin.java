@@ -3,8 +3,6 @@ package mgks.os.swv.plugins;
 /*
   Dialog Plugin for Smart WebView
 
-  This is a core plugin and is covered by the MIT license of the Smart WebView project.
-
   This plugin provides a generic interface for showing native Android alert dialogs
   from JavaScript.
 

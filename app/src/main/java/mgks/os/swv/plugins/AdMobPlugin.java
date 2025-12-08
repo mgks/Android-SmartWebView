@@ -3,9 +3,6 @@ package mgks.os.swv.plugins;
 /*
   AdMob Plugin for Smart WebView
 
-  PROPRIETARY LICENSE - NOT OPEN SOURCE
-  * This plugin is a premium component and is NOT covered by the MIT license of the core Smart WebView project. Usage requires a valid license from the author.
-
   This premium plugin enables easy integration of Google AdMob ads into your Smart WebView app.
   It handles banner ads, interstitial ads, and rewarded ads with minimal configuration.
 

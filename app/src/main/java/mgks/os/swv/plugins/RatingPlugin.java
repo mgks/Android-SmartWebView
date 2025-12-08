@@ -3,8 +3,6 @@ package mgks.os.swv.plugins;
 /*
   Rating Plugin for Smart WebView
 
-  This is a core plugin and is covered by the MIT license of the Smart WebView project.
-
   This plugin prompts users to rate the application on the Google Play Store after
   certain usage conditions (e.g., number of launches, days since install) are met.
 

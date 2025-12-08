@@ -3,8 +3,6 @@ package mgks.os.swv.plugins;
 /*
   Toast Plugin for Smart WebView
 
-  This is a core plugin and is covered by the MIT license of the Smart WebView project.
-
   This plugin provides a simple way to display toast messages.
 
   FEATURES:

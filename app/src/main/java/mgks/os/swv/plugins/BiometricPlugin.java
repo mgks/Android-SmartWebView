@@ -3,9 +3,6 @@ package mgks.os.swv.plugins;
 /*
   Biometric Authentication Plugin for Smart WebView
 
-  PROPRIETARY LICENSE - NOT OPEN SOURCE
-  * This plugin is a premium component and is NOT covered by the MIT license of the core Smart WebView project. Usage requires a valid license from the author.
-
   This plugin provides access to fingerprint or face authentication.
 
   Features:

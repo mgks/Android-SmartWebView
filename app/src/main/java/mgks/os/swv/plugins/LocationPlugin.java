@@ -3,8 +3,6 @@ package mgks.os.swv.plugins;
 /*
   Location Plugin for Smart WebView
 
-  This is a core plugin and is covered by the MIT license of the Smart WebView project.
-
   This plugin provides access to the device's GPS location services, allowing the
   web application to retrieve the current latitude and longitude.
 

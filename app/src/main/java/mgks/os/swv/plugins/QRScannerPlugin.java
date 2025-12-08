@@ -1,5 +1,16 @@
 package mgks.os.swv.plugins;
 
+/*
+  QR/Barcode Scanner Plugin for Smart WebView
+
+  This plugin provides an interface to scan QR codes and barcodes using the device's camera.
+
+  FEATURES:
+  - Initiates a camera scanning view.
+  - Returns scanned data back to JavaScript.
+  - Configurable scanner prompt and options.
+*/
+
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
