@@ -86,7 +86,7 @@ You have two primary ways to trigger native code from your web content:
 ## 5. Enable and Test
 
 1.  **Enable the Plugin:** Open `app/src/main/assets/swv.properties`. Add your plugin's name (from `getPluginName()`) to the `plugins.enabled` list.
-    ```properties
+    ```bash
     # swv.properties
     plugins.enabled=...,MyCustomPlugin
     ```

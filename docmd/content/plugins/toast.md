@@ -19,7 +19,7 @@ The `ToastPlugin` is included as a basic example of how the plugin architecture 
 ## Setup & Configuration
 
 1.  **Enable Plugin:** Ensure `ToastPlugin` is listed in the `plugins.enabled` property in `app/src/main/assets/swv.properties`.
-    ```properties
+    ```bash
     plugins.enabled=...,ToastPlugin
     ```
 

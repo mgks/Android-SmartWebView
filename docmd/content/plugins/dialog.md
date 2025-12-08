@@ -18,7 +18,7 @@ The plugin injects a JavaScript object (`window.Dialog`) into your WebView. You 
 
 Ensure `DialogPlugin` is listed in the `plugins.enabled` property in `app/src/main/assets/swv.properties`.
 
-```properties
+```bash
 # In swv.properties
 plugins.enabled=DialogPlugin,ToastPlugin,...
 ```

@@ -15,7 +15,7 @@ All Premium Plugins are now available for free and open source to developers. Co
 ## Setup and Configuration
 
 1.  **Enable Plugin:** Add `QRScannerPlugin` to the `plugins.enabled` list in `app/src/main/assets/swv.properties`.
-    ```properties
+    ```bash
     # In swv.properties
     plugins.enabled=QRScannerPlugin,ToastPlugin,...
     ```

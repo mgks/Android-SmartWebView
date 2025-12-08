@@ -1,3 +1,4 @@
+---
 title: 'Biometric Auth Plugin'
 description: 'Securing the app with fingerprint or face unlock.'
 icon: 'fingerprint'
@@ -26,7 +27,7 @@ The authentication flow is designed to be a true security gate.
 1.  **Enable Plugin:** Ensure `BiometricPlugin` is listed in the `plugins.enabled` property in `app/src/main/assets/swv.properties`.
 2.  **Configure Auth on Launch:** To enable authentication every time the app starts, set the `biometric.trigger.launch` property to `true` in `swv.properties`.
 
-    ```properties
+    ```bash
     # In swv.properties
     plugins.enabled=BiometricPlugin,...
     

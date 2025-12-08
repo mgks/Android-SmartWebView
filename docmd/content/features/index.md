@@ -15,7 +15,7 @@ This functionality allows users to interact with `<input type="file">` elements 
 **Configuration:**
 
 Controlled by properties in `app/src/main/assets/swv.properties`:
-```properties
+```bash
 # Globally enable/disable file input.
 feature.uploads=true
 

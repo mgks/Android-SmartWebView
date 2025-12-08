@@ -15,7 +15,7 @@ All Premium Plugins are now available for free and open source to developers. Co
 ## Setup and Configuration
 
 1.  **Enable Plugin:** Ensure `ImageCompressionPlugin` is listed in the `plugins.enabled` property in `app/src/main/assets/swv.properties`.
-    ```properties
+    ```bash
     # In swv.properties
     plugins.enabled=ImageCompressionPlugin,...
     ```
