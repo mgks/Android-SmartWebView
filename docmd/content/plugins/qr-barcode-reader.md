@@ -1,32 +1,33 @@
 ---
-title: 'QR/Barcode Reader Plugin (Premium)'
+title: 'QR/Barcode Reader Plugin'
 description: 'Scanning QR codes and barcodes using the device camera.'
 icon: 'qrcode'
 ---
 
-This premium plugin integrates native QR code and barcode scanning functionality using the device's camera.
+This plugin integrates native QR code and barcode scanning functionality using the device's camera.
 
 ::: callout tip
-All Premium Plugins are now available for free and open source to developers. Consider becoming **[Project Sponsor](https://github.com/sponsors/mgks/sponsorships?sponsor=mgks&tier_id=468838)**.
+All Premium Plugins are now available for free and open source to developers. Consider becoming **[Project Sponsor](https://github.com/sponsors/mgks)**.
 :::
 
 ---
 
 ## Setup and Configuration
 
-1.  **Obtain the Plugin:** Acquire the plugin files through a GitHub sponsorship.
-2.  **Add to Project:** Place the `QRScannerPlugin.java` file in the `plugins/` directory.
-3.  **Enable Plugin:** Ensure the plugin is enabled in `SmartWebView.java`:
-    ```java
-    put("QRScannerPlugin", true);
+1.  **Enable Plugin:** Add `QRScannerPlugin` to the `plugins.enabled` list in `app/src/main/assets/swv.properties`.
+    ```properties
+    # In swv.properties
+    plugins.enabled=QRScannerPlugin,ToastPlugin,...
     ```
-4.  **Dependencies:** The plugin relies on the `zxing-android-embedded` library. Ensure this dependency is present in your `app/build.gradle` file:
+2.  **Dependencies:** This plugin relies on the `zxing-android-embedded` library. Ensure the following dependencies are present in your `app/build.gradle` file (they are included by default in v8.0.0+):
     ```groovy
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+    implementation 'com.google.zxing:core:3.5.2'
     ```
-5.  **Camera Permission:** The app already requests the `CAMERA` permission, which this plugin requires.
+3.  **Permissions:** The app automatically requests the `CAMERA` permission declared in `AndroidManifest.xml` when the scanner is invoked.
 
 ---
+
 ## Usage
 
 The plugin is controlled via a JavaScript interface.
@@ -49,7 +50,7 @@ Define callback functions in your JavaScript to handle the results of the scan.
 window.QRScanner.onScanSuccess = function(contents) {
   console.log('Scanned content:', contents);
   alert('Scanned: ' + contents);
-  // Process the scanned data in your web app
+  // Process the scanned data in your web app (e.g., redirect to URL)
 };
 
 // Called if the user cancels the scan (e.g., by pressing the back button)

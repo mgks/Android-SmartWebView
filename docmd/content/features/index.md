@@ -14,10 +14,17 @@ This functionality allows users to interact with `<input type="file">` elements 
 
 **Configuration:**
 
-Controlled by variables in `SmartWebView.java`:
-*   `ASWP_FUPLOAD` (`true`/`false`): Globally enable/disable file input.
-*   `ASWP_CAMUPLOAD` (`true`/`false`): Include a camera capture option in the chooser.
-*   `ASWP_MULFILE` (`true`/`false`): Allow multiple file selection if the HTML input tag supports it.
+Controlled by properties in `app/src/main/assets/swv.properties`:
+```properties
+# Globally enable/disable file input.
+feature.uploads=true
+
+# Include a camera capture option in the chooser.
+feature.camera.uploads=true
+
+# Allow multiple file selection if the HTML input tag supports it.
+feature.multiple.uploads=true
+```
 
 **Permissions:**
 
@@ -25,8 +32,7 @@ The following permissions are declared in `AndroidManifest.xml` and requested at
 *   `android.permission.CAMERA`
 *   `android.permission.READ_MEDIA_IMAGES`
 *   `android.permission.READ_MEDIA_VIDEO`
-*   `android.permission.READ_MEDIA_AUDIO`
-*   `android.permission.WRITE_EXTERNAL_STORAGE` (with `maxSdkVersion` for older Android versions)
+*   `android.permission.WRITE_EXTERNAL_STORAGE` (for older Android versions)
 
 **How it Works:**
 
@@ -34,7 +40,7 @@ The following permissions are declared in `AndroidManifest.xml` and requested at
 2.  The `onShowFileChooser` method in `FileProcessing.java` is triggered.
 3.  It constructs an `Intent` that opens a system chooser, allowing the user to select files or use the camera (if enabled).
 4.  The HTML `accept` attribute can filter the file types shown (e.g., `image/*`).
-5.  The HTML `multiple` attribute, combined with `ASWP_MULFILE`, allows for multi-file selection.
+5.  The HTML `multiple` attribute, combined with `feature.multiple.uploads`, allows for multi-file selection.
 6.  The selected file URIs are returned to the WebView to be processed by your web application.
 
 ---

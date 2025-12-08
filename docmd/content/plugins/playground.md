@@ -6,6 +6,10 @@ icon: 'flask'
 
 The `Playground.java` class is a dedicated component designed to facilitate plugin configuration, development, and testing. It acts as a sandbox where you can set plugin-specific options and experiment with features without modifying the core plugin source code.
 
+::: callout tip
+All Premium Plugins are now available for free and open source to developers. Consider becoming **[Project Sponsor](https://github.com/sponsors/mgks)**.
+:::
+
 ---
 
 ## Purpose

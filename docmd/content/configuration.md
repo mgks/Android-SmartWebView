@@ -4,7 +4,7 @@ description: 'Configuring your Smart WebView app using the swv.properties file.'
 icon: 'sliders'
 ---
 
-All core behaviors and feature toggles in Smart WebView are controlled from a single configuration file: `app/src/main/assets/swv.properties`. This allows you to customize your app without touching any Java or Gradle code.
+All core behaviors and feature toggles in Smart WebView are controlled from a single configuration file: `app/src/main/assets/swv.properties`. This modern approach separates configuration from code, allowing you to customize your app without touching any Java files.
 
 ---
 
@@ -55,11 +55,9 @@ Control app-wide security settings.
 security.verify.ssl=true
 
 # Block screenshots, screen recording, and content visibility in the "recents" screen.
-# Default is false. Set to true to enforce for the entire app session.
 security.block.screenshots=false
 
 # Allow the WebView to accept third-party cookies. Required for some captcha (like Google reCAPTCHA) and social login providers.
-# Default is false. Set to true to enable.
 security.accept.thirdparty.cookies=false
 ```
 
@@ -80,12 +78,12 @@ ui.splash.extend=true
 ```
 
 ### Behavior & Advanced Features
-```
-# [In v8.0+] Enable injection of a custom stylesheet.
+```bash
+# Enable injection of a custom stylesheet.
 # The stylesheet must be placed at `app/src/main/assets/web/custom.css`.
 feature.custom.css=false
 
-# [In v8.0+] If true, pressing the back button will always exit the app
+# If true, pressing the back button will always exit the app
 # instead of navigating back in WebView history. Default is false.
 behavior.back.exits=false
 ```
@@ -94,7 +92,7 @@ behavior.back.exits=false
 Control which plugins are active and their core behaviors.
 ```bash
 # Comma-separated list of plugins to enable. Case-sensitive.
-plugins.enabled=AdMobPlugin,JSInterfacePlugin,ToastPlugin,QRScannerPlugin,BiometricPlugin,ImageCompressionPlugin
+plugins.enabled=RatingPlugin,LocationPlugin,DialogPlugin,AdMobPlugin,JSInterfacePlugin,ToastPlugin,QRScannerPlugin,BiometricPlugin,ImageCompressionPlugin
 
 # Enable the Playground floating UI for testing plugins. Set to false for production.
 plugins.playground.enabled=true

@@ -10,7 +10,7 @@ Smart WebView integrates Firebase Cloud Messaging (FCM) to enable push notificat
 
 ## Setup
 
-Refer to the [Getting Started](/smart-webview/getting-started#step-2-add-firebase-configuration-important) guide for the initial step of adding the `google-services.json` file to your project. This is mandatory for FCM.
+Refer to the [Getting Started](/Android-SmartWebView/documentation/getting-started#step-2-add-firebase-configuration-important) guide for the initial step of adding the `google-services.json` file to your project. This is mandatory for FCM.
 
 ::: card
 [Official FCM Android Setup Guide](https://firebase.google.com/docs/cloud-messaging/android/client)

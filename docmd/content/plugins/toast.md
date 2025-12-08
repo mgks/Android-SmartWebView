@@ -16,15 +16,14 @@ The `ToastPlugin` is included as a basic example of how the plugin architecture 
 
 ---
 
-## Setup & Initialization
+## Setup & Configuration
 
-The `ToastPlugin.java` class uses a static initializer block to automatically register itself with the `PluginManager`.
+1.  **Enable Plugin:** Ensure `ToastPlugin` is listed in the `plugins.enabled` property in `app/src/main/assets/swv.properties`.
+    ```properties
+    plugins.enabled=...,ToastPlugin
+    ```
 
-During initialization, the plugin:
-1.  Stores the `Activity` and `WebView` context.
-2.  Reads its configuration (e.g., `defaultDuration`).
-3.  Adds a JavaScript interface named `ToastInterface` to the WebView.
-4.  After a page loads, it injects a helper JavaScript object, `window.Toast`, which makes calling the native code more convenient.
+2.  **Internal Logic:** The `ToastPlugin.java` class uses a static initializer block to automatically register itself. During initialization, it adds a JavaScript interface named `ToastInterface` to the WebView.
 
 ---
 
@@ -37,19 +36,15 @@ During initialization, the plugin:
 
 ```java
 // Example from another class, like Playground.java
-Object plugin = SmartWebView.getPluginManager().getPluginInstance("ToastPlugin");
-if (plugin instanceof mgks.os.swv.plugins.ToastPlugin toastPlugin) {
-    // Show a toast with the default duration
-    toastPlugin.showToast("Hello from Native!");
-
-    // Show a toast with a specific duration
-    toastPlugin.showToast("This is a long toast", Toast.LENGTH_LONG);
+PluginInterface plugin = SWVContext.getPluginManager().getPluginInstance("ToastPlugin");
+if (plugin instanceof mgks.os.swv.plugins.ToastPlugin) {
+    ((mgks.os.swv.plugins.ToastPlugin) plugin).showToast("Hello from Native!");
 }
 ```
 
 ### From JavaScript
 
-After the page has loaded, you can call the methods of the injected `window.Toast` helper object. This object provides a convenient wrapper around the actual native JavaScript interface, which is named `ToastInterface`.
+After the page has loaded, you can call the methods of the injected `window.Toast` helper object.
 
 ```javascript
 // Check if the interface is ready
@@ -61,5 +56,3 @@ if (window.Toast) {
   window.Toast.showLong("This JavaScript toast stays for longer.");
 }
 ```
-
-This plugin serves as a great starting point for understanding how to create your own custom plugins.

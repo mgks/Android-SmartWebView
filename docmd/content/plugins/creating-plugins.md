@@ -40,39 +40,8 @@ The Smart WebView plugin architecture allows you to extend the application's nat
             return "MyCustomPlugin"; // Must be a unique name
         }
 
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            // Handle results from activities started by this plugin
-        }
-
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            // Handle results from permission requests
-        }
-
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            // Example: Handle a custom URL scheme
-            if (url.startsWith("myplugin://dosomething")) {
-                // Perform a native action
-                return true; // We've handled the URL
-            }
-            return false; // Let other plugins or the default handler process it
-        }
-
-        @Override
-        public void onPageStarted(String url) { }
-
-        @Override
-        public void onPageFinished(String url) {
-            // Logic to run after a page loads, like injecting JS
-        }
-
-        @Override
-        public void onDestroy() {
-            // Clean up resources
-        }
-
+        // ... Implement other interface methods (onActivityResult, etc.) ...
+        
         @Override
         public void evaluateJavascript(String script) {
             if (webView != null) {
@@ -96,13 +65,10 @@ public class MyCustomPlugin implements PluginInterface {
         // Provide a default configuration for your plugin
         Map<String, Object> defaultConfig = new HashMap<>();
         defaultConfig.put("apiKey", "DEFAULT_KEY");
-        defaultConfig.put("enabled", true);
 
         // Register the plugin with the manager
         PluginManager.registerPlugin(new MyCustomPlugin(), defaultConfig);
     }
-
-    // ... (rest of the class) ...
 }
 ```
 
@@ -114,19 +80,18 @@ Fill in the methods from the `PluginInterface` to add your native functionality.
 
 You have two primary ways to trigger native code from your web content:
 
-*   **Custom URL Schemes:** Your web page can navigate to a unique URL like `myplugin://show-dialog?title=Hello`. Your plugin intercepts this in `shouldOverrideUrlLoading`, parses the URL, and performs the native action. This is simple but less flexible.
-*   **JavaScript Interface:** Add a dedicated class with methods annotated with `@JavascriptInterface`. Add an instance of this interface to the WebView in your plugin's `initialize` method (e.g., `webView.addJavascriptInterface(new MyJSInterface(), "MyPluginAndroid")`). This allows your JavaScript to directly call native methods (e.g., `window.MyPluginAndroid.performAction("data")`), which is more powerful and flexible.
-
-To send data from native back to JavaScript, use the `evaluateJavascript()` method.
+*   **Custom URL Schemes:** Your web page navigates to `myplugin://action`. Intercept this in `shouldOverrideUrlLoading`.
+*   **JavaScript Interface:** Add a class annotated with `@JavascriptInterface` and attach it to the WebView in your `initialize` method. This allows calls like `window.MyPlugin.performAction()`.
 
 ## 5. Enable and Test
 
-1.  **Enable the Plugin:** Ensure your plugin is enabled in the `ASWP_PLUGIN_SETTINGS` map in `SmartWebView.java`.
-    ```java
-    put("MyCustomPlugin", true);
+1.  **Enable the Plugin:** Open `app/src/main/assets/swv.properties`. Add your plugin's name (from `getPluginName()`) to the `plugins.enabled` list.
+    ```properties
+    # swv.properties
+    plugins.enabled=...,MyCustomPlugin
     ```
 2.  **Test with Playground:** Use the `Playground.java` class to test your plugin in a sandboxed environment. You can run diagnostic checks and add buttons to the demo UI to trigger your plugin's features.
 
 ::: card
-[Read more about the Playground](/smart-webview/plugins/playground)
+[Read more about the Playground](/Android-SmartWebView/documentation/plugins/playground)
 :::

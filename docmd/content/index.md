@@ -17,4 +17,4 @@ Smart WebView is a versatile and lightweight **project** designed to help you qu
 
 Whether you need a simple web wrapper or a more complex hybrid application with native integrations, Smart WebView provides a solid starting **point**.
 
-**Ready to get started?** Head over to the [Getting Started](/smart-webview/getting-started) guide.
+**Ready to get started?** Head over to the [Getting Started](/Android-SmartWebView/documentation/getting-started) guide.

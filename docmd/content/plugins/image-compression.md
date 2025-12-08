@@ -1,36 +1,36 @@
 ---
-title: 'Image Compression Plugin (Premium)'
+title: 'Image Compression Plugin'
 description: 'Compressing images before uploading.'
 icon: 'file-zipper'
 ---
 
-This premium plugin provides functionality to compress images selected for upload directly on the device, significantly reducing bandwidth usage and upload times.
+This plugin provides functionality to compress images selected for upload directly on the device, significantly reducing bandwidth usage and upload times.
 
 ::: callout tip
-All Premium Plugins are now available for free and open source to developers. Consider becoming **[Project Sponsor](https://github.com/sponsors/mgks/sponsorships?sponsor=mgks&tier_id=468838)**.
+All Premium Plugins are now available for free and open source to developers. Consider becoming **[Project Sponsor](https://github.com/sponsors/mgks)**.
 :::
 
 ---
 
 ## Setup and Configuration
 
-1.  **Obtain the Plugin:** Acquire the plugin files through a GitHub sponsorship.
-2.  **Add to Project:** Place the `ImageCompressionPlugin.java` file in the `plugins/` directory.
-3.  **Enable Plugin:** Ensure the plugin is enabled in `SmartWebView.java`:
-    ```java
-    put("ImageCompressionPlugin", true);
+1.  **Enable Plugin:** Ensure `ImageCompressionPlugin` is listed in the `plugins.enabled` property in `app/src/main/assets/swv.properties`.
+    ```properties
+    # In swv.properties
+    plugins.enabled=ImageCompressionPlugin,...
     ```
-4.  **Configure Quality:** The default compression quality is `80` (out of 100). You can change this default in the `static` block of the `ImageCompressionPlugin.java` file.
+2.  **Configure Quality:** The default compression quality is `80` (out of 100). To change this, you currently modify the static initializer block in `app/src/main/java/mgks/os/swv/plugins/ImageCompressionPlugin.java`.
     ```java
     // In ImageCompressionPlugin.java
     static {
         Map<String, Object> config = new HashMap<>();
-        config.put("quality", 75); // Change default quality
+        config.put("quality", 75); // Change default quality here
         PluginManager.registerPlugin(new ImageCompressionPlugin(), config);
     }
     ```
 
 ---
+
 ## Usage
 
 The plugin is designed to be used from JavaScript, typically after a user has selected an image file for upload and you have its `base64` representation.
