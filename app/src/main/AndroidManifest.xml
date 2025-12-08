@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  Smart WebView v7
+  Smart WebView v8
   https://github.com/mgks/Android-SmartWebView
 
   A modern, open-source WebView wrapper for building advanced hybrid Android apps.
   Native features, modular plugins, and full customisation—built for developers.
 
-  - Documentation: https://docs.mgks.dev/smart-webview  
-  - Plugins: https://docs.mgks.dev/smart-webview/plugins  
+  - Documentation: https://mgks.github.io/Android-SmartWebView/documentation  
+  - Plugins: https://mgks.github.io/Android-SmartWebView/documentation/plugins  
   - Discussions: https://github.com/mgks/Android-SmartWebView/discussions  
   - Sponsor the Project: https://github.com/sponsors/mgks  
 
@@ -89,8 +89,8 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 				<data android:scheme="https"
-					android:host="docs.mgks.dev"
-					android:pathPrefix="/smart-webview" />
+					android:host="mgks.github.io"
+					android:pathPrefix="/Android-SmartWebView" />
 			</intent-filter>
 			<intent-filter android:label="OpenURI">
 				<action android:name="OPEN_URI" />

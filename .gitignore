@@ -47,3 +47,4 @@ PLUGINS.md
 aicontext.json
 /node_modules
 /site
+genctx.json

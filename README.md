@@ -5,7 +5,7 @@
   A modern, open-source WebView wrapper for building advanced hybrid Android apps.
   Native features, a powerful plugin architecture, and full customisation—built for developers.
 
-  - Documentation: https://docs.mgks.dev/smart-webview
+  - Documentation: https://mgks.github.io/Android-SmartWebView/documentation
   - Discussions: https://github.com/mgks/Android-SmartWebView/discussions
 
   MIT License — https://opensource.org/licenses/MIT
