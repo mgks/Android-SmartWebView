@@ -1,5 +1,5 @@
 /*
-  Smart WebView v7
+  Smart WebView v8
   https://github.com/mgks/Android-SmartWebView
 */
 
