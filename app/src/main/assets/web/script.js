@@ -1,5 +1,5 @@
 /*
-  Smart WebView v7 - Offline Script
+  Smart WebView v8 - Offline Script
   https://github.com/mgks/Android-SmartWebView
 */
 
