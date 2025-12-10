@@ -56,3 +56,17 @@ window.AdMob.showInterstitial();
 // Show a rewarded ad (if one is loaded)
 window.AdMob.showRewarded();
 ```
+
+### Safe Calling Pattern (Avoiding Race Conditions)
+If you try to call `window.AdMob` immediately when your page loads (e.g., in a footer script), the object might not be injected yet. Use a timeout loop to ensure it is ready:
+
+```javascript
+function loadBanner() {
+    if (window.AdMob) {
+        window.AdMob.showBanner();
+    } else {
+        setTimeout(loadBanner, 500); // Retry in 500ms
+    }
+}
+loadBanner();
+```
