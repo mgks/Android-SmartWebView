@@ -53,6 +53,18 @@ Smart WebView now includes all plugins for free, providing a comprehensive toolk
 *   ✅ **Toast Messages:** Show short, non-blocking native toast notifications.
 *   ✅ **In-App Review:** Prompt users to rate your app on the Google Play Store based on usage triggers.
 
+## Standalone Libraries 📦
+
+We are modularizing the best parts of Smart WebView into lightweight, standalone libraries that you can use in **any** Android project (Native or Hybrid).
+
+| Library | Description |
+| :--- | :--- |
+| **[Biometric Gate](https://github.com/mgks/android-biometric-gate)** | 🛡️ Secure, lifecycle-aware lock screen for any Activity. |
+| **[File Handler](https://github.com/mgks/android-webview-file-handler)** | 📂 Painless file uploads & camera captures for WebViews. |
+| **[JS Bridge](https://github.com/mgks/android-webview-js-bridge)** | 🌉 Two-way, Promise-based communication between Kotlin & JS. |
+| **[Print Helper](https://github.com/mgks/android-webview-print-helper)** | 🖨️ One-line printing for Android WebViews. |
+| **[FCM Sync](https://github.com/mgks/android-webview-fcm-sync)** | ☁️ Sync Firebase Push Tokens to WebView Cookies. |
+
 ## Quick Start
 
 1.  **Clone the repository:**
