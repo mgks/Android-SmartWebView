@@ -12,6 +12,10 @@ updates:
       all-dependencies:
         patterns:
           - "*"
+    # Ignore major version jumps (e.g. v8 -> v9) to prevent breaking changes
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   # 2. GitHub Actions (Workflows)
   - package-ecosystem: "github-actions"
