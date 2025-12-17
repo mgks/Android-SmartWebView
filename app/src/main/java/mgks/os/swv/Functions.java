@@ -417,28 +417,40 @@ public class Functions{
 	}
 
 	// Get fresh firebase tokens
-	public void fcm_token(final TokenCallback callback) {
-		FirebaseMessaging.getInstance().getToken()
-				.addOnSuccessListener(token -> {
-					if (!SWVContext.ASWP_OFFLINE) {
-						set_cookie("FCM_TOKEN=" + token);
-						if (SWVContext.SWV_DEBUGMODE) {
-							Log.d("SLOG_FCM_BAKED", "YES");
-							Log.d("SLOG_COOKIES", get_cookies(SWVContext.ASWV_URL));
-						}
-					}
-					SWVContext.fcm_token = token;
-					if (SWVContext.SWV_DEBUGMODE) {
-						Log.d("SLOG_REQ_FCM_TOKEN", token);
-					}
-					callback.onTokenReceived(token); // Pass token to callback
-				})
-				.addOnFailureListener(e -> {
-					SWVContext.fcm_token = "";
-					Log.e("SLOG_REQ_FCM_TOKEN", "FAILED", e);
-					callback.onTokenFailed(e); // Pass exception to callback
-				});
-	}
+    public void fcm_token(final TokenCallback callback) {
+        try {
+            // Check if Firebase is initialized before proceeding
+            // This call throws IllegalStateException if google-services.json was missing
+            FirebaseMessaging.getInstance().getToken()
+                .addOnSuccessListener(token -> {
+                    if (!SWVContext.ASWP_OFFLINE) {
+                        set_cookie("FCM_TOKEN=" + token);
+                        if (SWVContext.SWV_DEBUGMODE) {
+                            Log.d("SLOG_FCM_BAKED", "YES");
+                            Log.d("SLOG_COOKIES", get_cookies(SWVContext.ASWV_URL));
+                        }
+                    }
+                    SWVContext.fcm_token = token;
+                    if (SWVContext.SWV_DEBUGMODE) {
+                        Log.d("SLOG_REQ_FCM_TOKEN", token);
+                    }
+                    if (callback != null) callback.onTokenReceived(token);
+                })
+                .addOnFailureListener(e -> {
+                    SWVContext.fcm_token = "";
+                    Log.e("SLOG_REQ_FCM_TOKEN", "FAILED", e);
+                    if (callback != null) callback.onTokenFailed(e);
+                });
+        } catch (IllegalStateException e) {
+            // This catches the crash when google-services.json is missing
+            Log.w("SWV_FCM", "Firebase not initialized. Setup skipped (google-services.json missing).");
+            if (callback != null) callback.onTokenFailed(e);
+        } catch (Exception e) {
+            // Catch generic errors
+            Log.e("SWV_FCM", "Error initializing FCM", e);
+            if (callback != null) callback.onTokenFailed(e);
+        }
+    }
 
 	// Injecting Google Analytics (gtag.js)
 	public void inject_gtag(WebView webView, String gaId) {

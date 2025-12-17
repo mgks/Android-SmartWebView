@@ -17,7 +17,6 @@
 
 plugins {
 	id 'com.android.application'
-	id 'com.google.gms.google-services'
 }
 
 def getSwvProperties() {
@@ -97,4 +96,10 @@ dependencies {
 	// Plugins
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0' // ZXing library for QR code scanning
 	implementation 'androidx.biometric:biometric:1.1.0' // Biometric authentication library
+}
+
+if (file('google-services.json').exists()) {
+    apply plugin: 'com.google.gms.google-services'
+} else {
+    println "swv-fcm-sync: google-services.json not found. Skipping Firebase Configuration."
 }
