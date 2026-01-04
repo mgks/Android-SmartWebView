@@ -22,6 +22,6 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@mgks/docmd": "^0.3.0"
+    "@mgks/docmd": "^0.3.6"
   }
 }
