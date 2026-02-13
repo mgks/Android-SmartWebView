@@ -49,3 +49,4 @@ aicontext.json
 /site
 genctx.json
 .vscode/
+/docmd/node_modules
