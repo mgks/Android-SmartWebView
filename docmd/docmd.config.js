@@ -9,14 +9,14 @@ module.exports = {
   // Logo Configuration
   logo: {
     light: '/assets/images/swv-logo.png', // Path relative to outputDir root
-    dark: '/assets/images/swv-logo.png',   // Path relative to outputDir root
+    dark: '/assets/images/swv-logo.png',  // Path relative to outputDir root
     alt: 'swv logo',                      // Alt text for the logo
     href: 'https://mgks.github.io/Android-SmartWebView/documentation',
   },
 
   // Directory Configuration
-  srcDir: 'content',       // Source directory for Markdown files
-  outputDir: 'site',    // Directory for generated static site
+  srcDir: 'content',   // Source directory for Markdown files
+  outputDir: 'site',   // Directory for generated static site
 
   // Search Configuration
   search: true,        // Enable/disable search functionality
