@@ -22,6 +22,6 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@docmd/core": "^0.4.4"
+    "@docmd/core": "^0.4.5"
   }
 }
