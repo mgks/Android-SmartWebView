@@ -86,6 +86,10 @@ feature.custom.css=false
 # If true, pressing the back button will always exit the app
 # instead of navigating back in WebView history. Default is false.
 behavior.back.exits=false
+
+# A list of external domains that should still open inside the app's WebView.
+# Comma-separated, no spaces. Example: domain1.com,sub.domain2.com
+external.url.exception.list=mgks.dev,mgks.github.io
 ```
 
 ### Plugins
