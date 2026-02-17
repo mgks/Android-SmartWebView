@@ -67,6 +67,7 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -131,6 +132,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (SWVContext.ASWP_BLOCK_SCREENSHOTS) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
+      
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (SWVContext.ASWP_EXIT_ON_BACK) {
+                    if (SWVContext.ASWP_EXITDIAL) {
+                        fns.ask_exit(MainActivity.this);
+                    } else {
+                        finish();
+                    }
+                    return;
+                }
+
+                if (SWVContext.asw_view.canGoBack()) {
+                    SWVContext.asw_view.goBack();
+                } else {
+                    if (SWVContext.ASWP_EXITDIAL) {
+                        fns.ask_exit(MainActivity.this);
+                    } else {
+                        finish();
+                    }
+                }
+            }
+        });
+
+
 
         // Enable edge-to-edge display
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
