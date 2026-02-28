@@ -45,7 +45,7 @@ module.exports = {
   // Custom JavaScript Files
   customJs: [  // Array of paths to custom JS files, loaded at end of body
     // '/assets/js/custom-script.js', // Paths relative to outputDir root
-    '/assets/js/docmd-image-lightbox.js', // Image lightbox functionality
+    // '/assets/js/docmd-image-lightbox.js', // Image lightbox functionality
   ],
 
   // Content Processing
@@ -148,14 +148,14 @@ module.exports = {
 
   // Sponsor Ribbon Configuration
   Sponsor: {
-    enabled: false,
+    enabled: true,
     title: 'Sponsor',
     link: 'https://github.com/sponsors/mgks',
   },
 
   // Footer Configuration
   // Markdown is supported here.
-  footer: '© ' + new Date().getFullYear() + ' Project.',
+  footer: '© ' + new Date().getFullYear() + ' Smart WebView Project.',
 
   // Favicon Configuration
   // Path relative to outputDir root
