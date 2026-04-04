@@ -1,163 +1,115 @@
-// docmd.config.js: basic config for docmd
+// docmd.config.js: configuración básica para docmd
 module.exports = {
-  // Core Site Metadata
-  siteTitle: 'Android Smart WebView',
-  // Define a base URL for your site, crucial for SEO and absolute paths
-  // No trailing slash
-  siteUrl: 'https://mgks.github.io/Android-SmartWebView/documentation', // Replace with your actual deployed URL
+  // Metadatos principales del sitio
+  siteTitle: 'ProfileBio Docs',        // Cambia según tu proyecto
+  siteUrl: 'https://www.profilebio.me', // Tu dominio (sin barra final)
 
-  // Logo Configuration
+  // Configuración del logo (debes agregar tus propias imágenes en /assets/images/)
   logo: {
-    light: '/assets/images/swv-logo.png', // Path relative to outputDir root
-    dark: '/assets/images/swv-logo.png',  // Path relative to outputDir root
-    alt: 'swv logo',                      // Alt text for the logo
-    href: 'https://mgks.github.io/Android-SmartWebView/documentation',
+    light: '/assets/images/logo-light.png', // Ruta relativa a la carpeta de salida (site/)
+    dark: '/assets/images/logo-dark.png',
+    alt: 'ProfileBio Logo',
+    href: 'https://www.profilebio.me',
   },
 
-  // Directory Configuration
-  srcDir: 'content',   // Source directory for Markdown files
-  outputDir: 'site',   // Directory for generated static site
+  // Directorios de trabajo
+  srcDir: 'content',   // Carpeta con los archivos Markdown
+  outputDir: 'site',   // Carpeta donde se generará el sitio estático
 
-  // Search Configuration
-  search: true,        // Enable/disable search functionality
+  // Búsqueda
+  search: true,
 
-  // Build Options
-  minify: true,        // Enable/disable HTML/CSS/JS minification
+  // Minificación
+  minify: true,
 
-  // Sidebar Configuration
+  // Barra lateral (sidebar)
   sidebar: {
-    collapsible: true,        // or false to disable
-    defaultCollapsed: false,  // or true to start collapsed
+    collapsible: true,
+    defaultCollapsed: false,
   },
 
-  // Theme Configuration
+  // Tema y apariencia
   theme: {
-    name: 'sky',            // Themes: 'default', 'sky'
-    defaultMode: 'light',   // Initial color mode: 'light' or 'dark'
-    enableModeToggle: true, // Show UI button to toggle light/dark modes
-    positionMode: 'top', // 'top' or 'bottom' for the theme toggle
-    codeHighlight: true,    // Enable/disable codeblock highlighting and import of highlight.js
-    customCss: [            // Array of paths to custom CSS files
-      // '/assets/css/custom.css', // Custom TOC styles
-    ]
+    name: 'sky',               // Temas: 'default', 'sky'
+    defaultMode: 'light',
+    enableModeToggle: true,
+    positionMode: 'top',
+    codeHighlight: true,
+    customCss: [],             // Agrega aquí tus CSS personalizados
   },
 
-  // Custom JavaScript Files
-  customJs: [  // Array of paths to custom JS files, loaded at end of body
-    // '/assets/js/custom-script.js', // Paths relative to outputDir root
-    // '/assets/js/docmd-image-lightbox.js', // Image lightbox functionality
-  ],
+  // JavaScript personalizado
+  customJs: [],
 
-  // Content Processing
-  autoTitleFromH1: true, // Set to true to automatically use the first H1 as page title
-  copyCode: true, // Enable/disable the copy code button on code blocks
+  // Procesamiento de contenido
+  autoTitleFromH1: true,
+  copyCode: true,
 
-  // Plugins Configuration
-  // Plugins are configured here. docmd will look for these keys.
+  // Plugins (SEO, Analytics, Sitemap)
   plugins: {
-    // SEO Plugin Configuration
-    // Most SEO data is pulled from page frontmatter (title, description, image, etc.)
-    // These are fallbacks or site-wide settings.
     seo: {
-      // Default meta description if a page doesn't have one in its frontmatter
-      defaultDescription: 'Smart WebView is a versatile and lightweight project designed to help you quickly convert your website or web application into a native mobile app.',
-      openGraph: { // For Facebook, LinkedIn, etc.
-        // siteName: 'docmd Documentation', // Optional, defaults to config.siteTitle
-        // Default image for og:image if not specified in page frontmatter
-        // Path relative to outputDir root
-        defaultImage: '/assets/images/cover-swv.png',
+      defaultDescription: 'Documentación y guías para ProfileBio.',
+      openGraph: {
+        defaultImage: '/assets/images/cover.png', // Imagen por defecto para redes sociales
       },
-      twitter: { // For Twitter Cards
-        cardType: 'summary_large_image',     // 'summary', 'summary_large_image'
-        // siteUsername: '@docmd_handle',    // Your site's Twitter handle (optional)
-        // creatorUsername: '@your_handle',  // Default author handle (optional, can be overridden in frontmatter)
-      }
+      twitter: {
+        cardType: 'summary_large_image',
+      },
     },
-    // Analytics Plugin Configuration
     analytics: {
-      // Google Analytics 4 (GA4)
       googleV4: {
-        measurementId: 'G-7XXC1C7CRQ' // Replace with your actual GA4 Measurement ID
-      }
+        measurementId: 'G-XXXXXXXXXX', // Reemplaza con tu ID de medición de GA4
+      },
     },
-    // Enable Sitemap plugin
     sitemap: {
       defaultChangefreq: 'weekly',
-      defaultPriority: 0.8
-    }
-    // Add other future plugin configurations here by their key
+      defaultPriority: 0.8,
+    },
   },
 
-  // "Edit this page" Link Configuration
+  // Enlace "Editar esta página" (deshabilitado hasta que tengas un repositorio)
   editLink: {
-    enabled: true,
-    // The URL to the folder containing your docs in the git repo
-    // Note: It usually ends with /edit/main/docs or /blob/main/docs
-    baseUrl: 'https://github.com/mgks/Android-SmartWebView/edit/main/docs',
-    text: 'Edit this page on GitHub'
+    enabled: false,              // Cambia a true y define baseUrl cuando tengas un repo
+    baseUrl: '',                // Ejemplo: 'https://github.com/tuusuario/tu-repo/edit/main/docs'
+    text: 'Editar esta página en GitHub',
   },
 
-  // Navigation Structure (Sidebar)
-  // Icons are kebab-case names from Lucide Icons (https://lucide.dev/)
+  // Navegación principal (barra lateral)
+  // Ajusta las rutas según los archivos .md que tengas en la carpeta 'content'
   navigation: [
-      { title: 'Welcome', path: '/', icon: 'home' }, // Corresponds to docs/index.md
-      { title: 'Getting Started', path: '/getting-started', icon: 'rocket'},
-      { title: 'Configuration', path: '/configuration', icon: 'settings'},
-      { title: 'Customization', path: '/customization', icon: 'settings-2'},
-      { title: 'Features',
-        path: '/features',
-        icon: 'zap',
-        collapsible: false,
-        children: [
-          { title: 'File Handling', path: '/features', icon: 'file'},
-          { title: 'Firebase Messaging', path: '/features/firebase-messaging', icon: 'bell'},
-          { title: 'Analytics', path: '/features/analytics', icon: 'chart-line'},
-          { title: 'Navigation', path: '/features/navigation', icon: 'arrow-right-from-line'},
-          { title: 'Sharing', path: '/features/sharing', icon: 'share-2'},
-          { title: 'Printing', path: '/features/printing', icon: 'printer'},
-          { title: 'Dark Mode & Theming', path: '/features/dark-mode', icon: 'moon'},
-        ]
-      },
-      { title: 'Plugins',
-        path: '/plugins',
-        icon: 'plug',
-        collapsible: true,
-        children: [
-          { title: 'Architecture', path: '/plugins', icon: 'file-code'},
-          { title: 'Creating Plugins', path: '/plugins/creating-plugins', icon: 'file-code'},
-          { title: 'Playground', path: '/plugins/playground', icon: 'file-code'},
-          { title: 'Toast', path: '/plugins/toast', icon: 'file-code'},
-          { title: 'Location Access', path: '/plugins/location', icon: 'file-code'},
-          { title: 'Rating System', path: '/plugins/rating-system', icon: 'file-code'},
-          { title: 'Dialogs & Alerts', path: '/plugins/dialog', icon: 'file-code'},
-          { title: 'Admob', path: '/plugins/admob', icon: 'file-code'},
-          { title: 'QR & Barcode Reader', path: '/plugins/qr-barcode-reader', icon: 'file-code'},
-          { title: 'Biometric Auth', path: '/plugins/biometric-auth', icon: 'file-code'},
-          { title: 'Image Compression', path: '/plugins/image-compression', icon: 'file-code'},
-        ]
-      },
-      { title: 'Play Store Guide', path: '/play-store-guide', icon: 'shield-check'},
-      { title: 'Contributing', path: '/contributing', icon: 'users'},
-      { title: 'License', path: '/license', icon: 'file-code'},
-      // External links:
-      { title: 'GitHub', path: 'https://github.com/mgks/Android-SmartWebView', icon: 'github', external: true },
-      { title: 'Support the Project', path: 'https://github.com/sponsors/mgks', icon: 'heart', external: true },
-    ],
-    
-  pageNavigation: true, // Enable previous / next page navigation at the bottom of each page
+    { title: 'Inicio', path: '/', icon: 'home' },
+    { title: 'Empezando', path: '/getting-started', icon: 'rocket' },
+    { title: 'Configuración', path: '/configuration', icon: 'settings' },
+    { title: 'Características', path: '/features', icon: 'zap' },
+    // Ejemplo de submenú:
+    // {
+    //   title: 'Guías',
+    //   path: '/guides',
+    //   icon: 'book-open',
+    //   collapsible: true,
+    //   children: [
+    //     { title: 'Guía 1', path: '/guides/guide1', icon: 'file-text' },
+    //     { title: 'Guía 2', path: '/guides/guide2', icon: 'file-text' },
+    //   ],
+    // },
+    // Enlaces externos
+    { title: 'GitHub', path: 'https://github.com/tuusuario/tu-repo', icon: 'github', external: true },
+    { title: 'Soporta el proyecto', path: 'https://github.com/sponsors/tuusuario', icon: 'heart', external: true },
+  ],
 
-  // Sponsor Ribbon Configuration
+  // Navegación entre páginas (anterior/siguiente)
+  pageNavigation: true,
+
+  // Cinta de patrocinio (opcional)
   Sponsor: {
-    enabled: true,
+    enabled: false,  // Actívalo si tienes enlace de patrocinio
     title: 'Sponsor',
-    link: 'https://github.com/sponsors/mgks',
+    link: 'https://github.com/sponsors/tuusuario',
   },
 
-  // Footer Configuration
-  // Markdown is supported here.
-  footer: '© ' + new Date().getFullYear() + ' Smart WebView Project.',
+  // Pie de página (soporta Markdown)
+  footer: '© ' + new Date().getFullYear() + ' ProfileBio. Todos los derechos reservados.',
 
-  // Favicon Configuration
-  // Path relative to outputDir root
+  // Favicon
   favicon: '/assets/favicon.ico',
 };
