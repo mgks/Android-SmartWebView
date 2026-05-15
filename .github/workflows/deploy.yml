@@ -35,7 +35,7 @@ jobs:
         working-directory: ./docmd
         run: |
           npm install
-          npm install -g @mgks/docmd
+          npm install -g @docmd/core
           docmd build
 
       # --- 2. Merge Sites into One Folder ---
