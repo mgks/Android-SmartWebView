@@ -75,14 +75,14 @@ dependencies {
 	implementation 'androidx.multidex:multidex:2.0.1'
 
 	// Firebase
-	implementation 'com.google.firebase:firebase-auth:24.1.0'
+	implementation 'com.google.firebase:firebase-auth:24.2.0'
 	implementation 'com.google.firebase:firebase-config:23.1.0'
-	implementation 'com.google.firebase:firebase-messaging:25.1.0'
+	implementation 'com.google.firebase:firebase-messaging:25.1.1'
 	implementation 'com.google.firebase:firebase-analytics:23.2.0'
 
 	implementation 'com.google.android.gms:play-services-auth:21.6.0'
 	implementation 'com.google.android.gms:play-services-ads:24.9.0'
-	implementation 'com.google.android.gms:play-services-location:21.3.0'
+	implementation 'com.google.android.gms:play-services-location:21.4.0'
 
 	implementation 'com.google.android.material:material:1.14.0'
 
