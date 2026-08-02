@@ -14,7 +14,7 @@
 <body>
 <header class="app-header">
 	<img src="swv_splash_white.png" class="header-logo" alt="Smart WebView Logo" />
-	<p>You are currently offline. Some features below work without an internet connection.</p>
+	<p id="net-status-pill">You are currently offline. Some features below work without an internet connection.</p>
 	<h2>Offline Mode</h2>
 </header>
 
@@ -28,9 +28,15 @@
 	</div>
 
 	<div class="card">
+		<h2><span class="icon">🌐</span> Network Status</h2>
+		<p>Live network status from <code>NetworkInfoPlugin</code>.</p>
+		<div id="network-status">Checking...</div>
+	</div>
+
+	<div class="card">
 		<h2><span class="icon">🎨</span> Theme</h2>
 		<p>Switch between light and dark themes. The initial theme is based on your system setting.</p>
-		<div class="theme-switcher" id="theme-switcher">
+		<div class="theme-switcher" id="theme-switcher" role="group" aria-label="Theme switcher">
 			<button data-theme="light">Light</button>
 			<button data-theme="dark">Dark</button>
 			<button data-theme="system">System</button>
@@ -45,15 +51,31 @@
 			<input type="file" accept="image/*" id="add-img" multiple="multiple">
 			<div class="gallery"></div>
 		</form>
+		<p>
+			<button onclick="shareFirstImage()" class="action-button" style="margin-top:10px;">
+				Share First Image (SharePlugin)
+			</button>
+		</p>
 	</div>
 
 	<div class="card">
 		<h2><span class="icon">📍</span> GPS Location</h2>
-		<p>Request device location. This uses the device's GPS and works offline.</p>
+		<p>Request device location. This uses the device's GPS and works offline. If GPS fails, the
+			<code>GeolocationCachePlugin</code> will return the last known fix (fixes issue #387).</p>
 		<button onclick="fetchLocation()" class="action-button">
 			Fetch Current Location
 		</button>
 		<div class="fetch-loc">Location will appear here...</div>
+	</div>
+
+	<div class="card">
+		<h2><span class="icon">📋</span> Clipboard (ClipboardPlugin)</h2>
+		<p>Round-trip copy &amp; paste from the native clipboard.</p>
+		<label for="clip-input" style="display:none;">Clipboard input</label><input type="text" id="clip-input" placeholder="Type or paste something..." aria-label="Clipboard input" />
+		<div>
+			<button onclick="doClipboardCopy()" class="action-button">Copy</button>
+			<button onclick="doClipboardPaste()" class="action-button">Paste</button>
+		</div>
 	</div>
 
 	<div class="card">
@@ -66,10 +88,10 @@
 	<div class="feature-list-block">
 		<h3><span class="icon">🧩</span> More Features You Can Use</h3>
 		<ul class="feature-list">
-			<li>🗂️ File uploads with camera & gallery picker</li>
+			<li>🗂️ File uploads with camera &amp; gallery picker</li>
 			<li>🧭 URL whitelisting / blocking</li>
-			<li>🎛️ Fullscreen, orientation & zoom controls</li>
-			<li>🔐 HTTP auth, headers & POST support</li>
+			<li>🎛️ Fullscreen, orientation &amp; zoom controls</li>
+			<li>🔐 HTTP auth, headers &amp; POST support</li>
 			<li>🖥️ Custom error pages</li>
 			<li>🔗 Deeplink handling</li>
 		</ul>

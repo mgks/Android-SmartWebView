@@ -140,6 +140,22 @@ public class LocationPlugin implements PluginInterface, LocationListener {
             if (location != null) {
                 handleNewLocation(location);
             } else {
+                Log.d(TAG, "No fresh fix; trying GeolocationCachePlugin fallback for #387.");
+                // Fix for issue #387: on offline / GPS-less tablets there is no fix.
+                // Fall back to the last cached location so the offline page shows
+                // something useful instead of "Error: 7".
+                GeolocationCachePlugin cachePlugin = (GeolocationCachePlugin)
+                        SWVContext.getPluginManager().getPluginInstance("GeolocationCachePlugin");
+                if (cachePlugin != null) {
+                    // The cache plugin persists the previous fix and we can synthesise
+                    // a Location from it. We only do this as a last resort.
+                    android.location.Location cachedLoc = readCachedLocation(cachePlugin);
+                    if (cachedLoc != null) {
+                        Log.d(TAG, "Using cached location as fallback for offline page.");
+                        handleNewLocation(cachedLoc);
+                        return;
+                    }
+                }
                 Log.d(TAG, "Last known location not available, waiting for updates...");
             }
 
@@ -152,6 +168,15 @@ public class LocationPlugin implements PluginInterface, LocationListener {
     private void handleNewLocation(Location location) {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
+
+        // Persist the fresh fix so the offline page has a fallback next time (#387).
+        try {
+            GeolocationCachePlugin cachePlugin = (GeolocationCachePlugin)
+                    SWVContext.getPluginManager().getPluginInstance("GeolocationCachePlugin");
+            if (cachePlugin != null) {
+                cachePlugin.cache(latitude, longitude);
+            }
+        } catch (Exception ignored) {}
 
         // Set Cookies (for legacy support)
         if (SWVContext.true_online) {
@@ -178,6 +203,31 @@ public class LocationPlugin implements PluginInterface, LocationListener {
     private void stopListening() {
         if (locationManager != null) {
             locationManager.removeUpdates(this);
+        }
+    }
+
+    /**
+     * Read the last cached location from the GeolocationCachePlugin (if enabled)
+     * and return it as a fresh Location object, or null if no cache exists.
+     * Used as a fallback when GPS/Network providers fail — fixes issue #387
+     * ("GPS Location not fetched in offline site").
+     */
+    private android.location.Location readCachedLocation(GeolocationCachePlugin cachePlugin) {
+        try {
+            android.content.Context ctx = activity.getApplicationContext();
+            android.content.SharedPreferences sp = ctx.getSharedPreferences("swv_geocache", android.content.Context.MODE_PRIVATE);
+            if (!sp.contains("last_lat")) return null;
+            double lat = Double.longBitsToDouble(sp.getLong("last_lat", 0));
+            double lng = Double.longBitsToDouble(sp.getLong("last_lng", 0));
+            long time = sp.getLong("last_time", 0);
+            android.location.Location l = new android.location.Location("swv_cache");
+            l.setLatitude(lat);
+            l.setLongitude(lng);
+            if (time != 0) l.setTime(time);
+            return l;
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to read cached location", e);
+            return null;
         }
     }
 

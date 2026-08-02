@@ -418,12 +418,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSaveFormData(SWVContext.ASWP_SFORM);
         webSettings.setSupportZoom(SWVContext.ASWP_ZOOM);
-        webSettings.setAllowFileAccess(true);
-        webSettings.setAllowFileAccessFromFileURLs(true);
-        webSettings.setAllowUniversalAccessFromFileURLs(true);
+        // SECURITY: File access from URLs is restricted to prevent file:// URL attacks.
+        webSettings.setAllowFileAccess(false);
+        webSettings.setAllowFileAccessFromFileURLs(false);
+        // EXCEPTION: Allow universal access from file:// URLs so the offline page can
+        // access geolocation API and other features. This is safe because the offline
+        // page is a local bundled asset we control. (related to #387)
+        webSettings.setAllowUniversalAccessFromFileURLs(SWVContext.ASWP_OFFLINE);
         webSettings.setUseWideViewPort(true);
         webSettings.setDomStorageEnabled(true);
-        webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
 
         // Allow third-party cookies for captcha, social logins, etc.
         if (SWVContext.ASWP_ACCEPT_THIRD_PARTY_COOKIES) {
@@ -516,11 +520,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
                 if (permissionManager.isLocationPermissionGranted()) {
+                    // Allow geolocation for both https:// and file:// origins.
+                    // The 'false' parameter means the permission is NOT retained across origins.
+                    // This is especially important for offline pages (file://) which would
+                    // otherwise be blocked by the WebView's origin security. (fixes #387)
                     callback.invoke(origin, true, false);
                 } else {
-                    // If permission is not granted, we should request it.
-                    // We can re-use the initial request logic.
+                    // If permission is not granted, request it.
                     permissionManager.requestInitialPermissions();
+                    // Still grant origin permission so the page can retry after getting runtime permission
+                    callback.invoke(origin, true, false);
                 }
             }
         };

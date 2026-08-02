@@ -1,17 +1,57 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in C:\Android\sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# ===========================================
+# Smart WebView ProGuard Rules
+# ===========================================
 
-# Add any project specific keep options here:
+# --- WebView & JavaScript Interface ---
+# Keep the JS interface class and all its public methods
+-keepclassmembers class mgks.os.swv.MainActivity$WebAppInterface {
+    public *;
+}
+# Keep any JS interfaces added by plugins
+-keepclassmembers class mgks.os.swv.plugins.** {
+    public *;
+}
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-# -keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-# }
+# --- Plugin System ---
+# Keep the plugin interface and all plugin implementations
+-keep interface mgks.os.swv.PluginInterface { *; }
+-keep class mgks.os.swv.plugins.** { *; }
+-keep class mgks.os.swv.PluginManager { *; }
+-keep class mgks.os.swv.SWVContext { *; }
+-keep class mgks.os.swv.SWVContext$* { *; }
+-keep class mgks.os.swv.Functions { *; }
+
+# --- Firebase ---
+-keep class com.google.firebase.** { *; }
+-keep class com.google.firebase.messaging.** { *; }
+-dontwarn com.google.firebase.**
+
+# --- Google Play Services (Ads, Auth, Location) ---
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
+-keep public class com.google.android.gms.ads.** { public *; }
+-dontwarn com.google.android.gms.ads.**
+
+# --- ZXing (QR Scanner) ---
+-keep class com.journeyapps.** { *; }
+-keep class com.google.zxing.** { *; }
+-dontwarn com.journeyapps.**
+-dontwarn com.google.zxing.**
+
+# --- AndroidX Biometric ---
+-keep class androidx.biometric.** { *; }
+-dontwarn androidx.biometric.**
+
+# --- Keep generic types needed for reflection ---
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
+-keepattributes SourceFile,LineNumberTable
+
+# --- Suppress warnings ---
+-dontwarn android.support.**
+-dontwarn org.slf4j.**

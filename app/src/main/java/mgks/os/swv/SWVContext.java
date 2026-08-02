@@ -34,13 +34,11 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import dalvik.system.DexFile;
 
 /**
  * Configuration and utility class for Smart WebView.
@@ -301,37 +299,54 @@ public class SWVContext {
         }
     }
 
+    /**
+     * Explicitly load and register all plugins.
+     * This replaces the deprecated DexFile-based class scanning.
+     * Each plugin's static initializer block calls PluginManager.registerPlugin().
+     * Using Class.forName() triggers that static block reliably on all Android versions.
+     */
     public static void loadPlugins(Context context) {
-        Map<String, Boolean> enabledPlugins = new HashMap<>();
-        for (String pluginName : ASWP_ENABLED_PLUGINS) {
-            enabledPlugins.put(pluginName, true);
-        }
+        // The complete list of available plugin classes in the project.
+        // (Plugins self-register via Class.forName() which triggers their static block.)
+        String[] pluginClasses = {
+            "mgks.os.swv.plugins.AdMobPlugin",
+            "mgks.os.swv.plugins.BiometricPlugin",
+            "mgks.os.swv.plugins.ClipboardPlugin",
+            "mgks.os.swv.plugins.DialogPlugin",
+            "mgks.os.swv.plugins.GeolocationCachePlugin",
+            "mgks.os.swv.plugins.ImageCompressionPlugin",
+            "mgks.os.swv.plugins.JSInterfacePlugin",
+            "mgks.os.swv.plugins.LocationPlugin",
+            "mgks.os.swv.plugins.NetworkInfoPlugin",
+            "mgks.os.swv.plugins.QRScannerPlugin",
+            "mgks.os.swv.plugins.RatingPlugin",
+            "mgks.os.swv.plugins.SharePlugin",
+            "mgks.os.swv.plugins.ToastPlugin"
+        };
 
-        try {
-            String packageCodePath = context.getPackageCodePath();
-            DexFile df = new DexFile(packageCodePath);
-            String pluginPackageName = "mgks.os.swv.plugins";
-
-            for (Enumeration<String> iter = df.entries(); iter.hasMoreElements(); ) {
-                String className = iter.nextElement();
-                if (className.startsWith(pluginPackageName) && !className.contains("$")) {
-                    try {
-                        final Class<?> pluginClass = Class.forName(className);
-                        if (PluginInterface.class.isAssignableFrom(pluginClass)) {
-                            // The static block of the plugin class will call PluginManager.registerPlugin()
-                            // We need to check if it's enabled in our config.
-                            // This part is tricky because the name is in the instance.
-                            // The static block registration needs to be modified to check against the config.
-                            // For now, this just loads the class.
-                            Log.d(TAG, "Plugin class loaded: " + pluginClass.getSimpleName());
-                        }
-                    } catch (ClassNotFoundException | NoClassDefFoundError e) {
-                        Log.e(TAG, "Could not load plugin class: " + className, e);
-                    }
+        for (String className : pluginClasses) {
+            // Check if this plugin is enabled in the config
+            String simpleName = className.substring(className.lastIndexOf('.') + 1);
+            boolean isEnabled = false;
+            for (String enabled : ASWP_ENABLED_PLUGINS) {
+                if (enabled.trim().equals(simpleName)) {
+                    isEnabled = true;
+                    break;
                 }
             }
-        } catch (IOException e) {
-            Log.e(TAG, "Error scanning for plugins", e);
+
+            if (isEnabled) {
+                try {
+                    // Class.forName() triggers the static initializer block
+                    // which calls PluginManager.registerPlugin()
+                    Class.forName(className);
+                    Log.d(TAG, "Plugin loaded: " + simpleName);
+                } catch (ClassNotFoundException e) {
+                    Log.e(TAG, "Plugin class not found: " + className, e);
+                }
+            } else {
+                Log.d(TAG, "Plugin skipped (not enabled): " + simpleName);
+            }
         }
     }
 
