@@ -81,7 +81,7 @@ dependencies {
 	// Firebase
 	implementation 'com.google.firebase:firebase-auth:24.2.0'
 	implementation 'com.google.firebase:firebase-config:23.1.0'
-	implementation 'com.google.firebase:firebase-messaging:25.1.2'
+	implementation 'com.google.firebase:firebase-messaging:25.1.3'
 	implementation 'com.google.firebase:firebase-analytics:23.2.0'
 
 	implementation 'com.google.android.gms:play-services-auth:21.6.0'
