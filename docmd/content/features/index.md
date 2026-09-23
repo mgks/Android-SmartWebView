@@ -6,8 +6,6 @@ icon: 'folder-open'
 
 Smart WebView provides robust support for handling file uploads initiated from your web content, including direct access to the device camera, and manages file downloads.
 
----
-
 ## File Uploads & Camera Access
 
 This functionality allows users to interact with `<input type="file">` elements in your web content.
@@ -42,8 +40,6 @@ The following permissions are declared in `AndroidManifest.xml` and requested at
 4.  The HTML `accept` attribute can filter the file types shown (e.g., `image/*`).
 5.  The HTML `multiple` attribute, combined with `feature.multiple.uploads`, allows for multi-file selection.
 6.  The selected file URIs are returned to the WebView to be processed by your web application.
-
----
 
 ## Downloads
 

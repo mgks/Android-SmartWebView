@@ -231,7 +231,7 @@ public class SWVContext {
         ASWV_GTAG = config.getString("analytics.gtag.id", "G-7XXC1C7CRQ");
 
         // --- Plugins & Permissions ---
-        ASWP_ENABLED_PLUGINS = config.getStringArray("plugins.enabled", new String[]{"AdMobPlugin","JSInterfacePlugin","ToastPlugin","QRScannerPlugin","BiometricPlugin","ImageCompressionPlugin"});
+        ASWP_ENABLED_PLUGINS = config.getStringArray("plugins.enabled", new String[]{"RatingPlugin","LocationPlugin","GeolocationCachePlugin","NetworkInfoPlugin","ClipboardPlugin","SharePlugin","DialogPlugin","AdMobPlugin","JSInterfacePlugin","ToastPlugin","QRScannerPlugin","BiometricPlugin","ImageCompressionPlugin"});
         SWV_PLAYGROUND = config.getBoolean("plugins.playground.enabled", true);
         ASWP_REQUIRED_PERMISSIONS = config.getStringArray("permissions.on.launch", new String[]{"NOTIFICATIONS", "LOCATION"});
         // Plugin Configurations
@@ -243,7 +243,7 @@ public class SWVContext {
         ASWP_BIOMETRIC_ON_LAUNCH = config.getBoolean("biometric.trigger.launch", false);
 
         // --- Initialize derived variables after loading config ---
-        ASWP_OFFLINE = ASWV_APP_URL.matches("^(file)://.*$") && !Functions.isInternetAvailable(context);
+        ASWP_OFFLINE = ASWV_APP_URL.matches("^(file)://.*$") || !Functions.isInternetAvailable(context);
         ASWV_URL = ASWP_OFFLINE ? ASWV_OFFLINE_URL : ASWV_APP_URL;
         ASWV_SHARE_URL = ASWV_URL + ASWV_SHARE_URL_SUFFIX;
         ASWV_HOST = Functions.aswm_host(ASWV_URL);

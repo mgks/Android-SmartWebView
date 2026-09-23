@@ -6,8 +6,6 @@ icon: 'compass'
 
 Smart WebView provides flexible options for handling URL navigation and choosing the app's primary UI layout.
 
----
-
 ## URL Handling
 
 This controls how the app treats different types of links.
@@ -31,8 +29,6 @@ The app intercepts URLs with specific prefixes to trigger native actions:
 *   `print:*`: Opens the native print dialog.
 
 These are handled in the `url_actions` method in `Functions.java`.
-
----
 
 ## UI Layout Modes
 

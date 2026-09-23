@@ -6,8 +6,6 @@ icon: 'chart-area'
 
 Smart WebView supports integration with Google Analytics using the gtag.js library to track user interactions within your web content.
 
----
-
 ## Configuration
 
 1.  **Get Your Measurement ID:** Obtain your Google Analytics Measurement ID (e.g., `G-XXXXXXXXXX`) from your Google Analytics property settings.
@@ -18,14 +16,10 @@ Smart WebView supports integration with Google Analytics using the gtag.js libra
     ```
     If the ID is left empty, Analytics integration will be disabled.
 
----
-
 ## How it Works
 
 *   **Dynamic Injection:** Instead of adding the gtag.js snippet to your HTML, Smart WebView injects it dynamically using JavaScript *after* the page has finished loading. This is handled by the `onPageFinished` event in `MainActivity.java`.
 *   **Improved Performance:** This approach prevents the Analytics script from blocking initial page rendering.
-
----
 
 ## Tracking Events
 

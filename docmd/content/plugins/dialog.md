@@ -6,13 +6,9 @@ icon: 'message-square'
 
 The `DialogPlugin` provides a generic interface for showing native Android alert dialogs from your web content, ensuring a consistent and platform-native user experience.
 
----
-
 ## How It Works
 
 The plugin injects a JavaScript object (`window.Dialog`) into your WebView. You can call its `show` method with a set of options and a callback function to display a dialog and handle the user's response asynchronously.
-
----
 
 ## Enabling the Plugin
 
@@ -22,8 +18,6 @@ Ensure `DialogPlugin` is listed in the `plugins.enabled` property in `app/src/ma
 # In swv.properties
 plugins.enabled=DialogPlugin,ToastPlugin,...
 ```
-
----
 
 ## Usage from JavaScript
 

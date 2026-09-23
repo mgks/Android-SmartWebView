@@ -6,8 +6,6 @@ icon: 'moon'
 
 Smart WebView includes a robust system for handling light and dark themes, allowing the app to automatically adapt to the user's device settings.
 
----
-
 ## How It Works
 
 The theming system operates on multiple levels to ensure a seamless experience:
@@ -21,8 +19,6 @@ The theming system operates on multiple levels to ensure a seamless experience:
 ::: callout warning
 The native theme toggle switch in the navigation drawer has been temporarily disabled in v7.5 to ensure stability. Theming is currently driven by the system setting and can be controlled by your web page's JavaScript.
 :::
-
----
 
 ## Configuration
 

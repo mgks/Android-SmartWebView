@@ -10,8 +10,6 @@ This plugin facilitates the integration of Google AdMob ads (Banner, Interstitia
 All Premium Plugins are now available for free and open source to developers. Consider becoming **[Project Sponsor](https://github.com/sponsors/mgks)**.
 :::
 
----
-
 ## Setup and Configuration
 
 1.  **AdMob App ID:**
@@ -34,7 +32,6 @@ All Premium Plugins are now available for free and open source to developers. Co
     });
     ```
 
----
 ## Usage
 
 The plugin can be controlled from native code or via a JavaScript interface.

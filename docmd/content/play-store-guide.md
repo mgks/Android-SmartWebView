@@ -6,8 +6,6 @@ icon: 'google-play'
 
 Publishing your Smart WebView application to the Google Play Store involves several key steps. This guide provides a checklist to help ensure a smooth submission process.
 
----
-
 ### Step 1: Final Configuration
 
 Before building your app for release, finalize its configuration in `app/src/main/assets/swv.properties`.
@@ -24,8 +22,6 @@ Before building your app for release, finalize its configuration in `app/src/mai
     ```
 *   **Set Production URL:** Ensure `app.url` points to your live website.
 *   **Review Feature Toggles:** Double-check all `feature.*` and `plugins.*` flags to make sure only the features you need are enabled. Disabling unused features reduces the number of permissions your app requests.
-
----
 
 ### Step 2: App Identity and Versioning
 
@@ -44,7 +40,10 @@ build.version.code=1
 build.version.name=1.0
 ```
 
----
+::: callout important
+**Google Play SDK Requirements (as of August 2026):**
+New apps and updates must target **API Level 36 (Android 16)** or higher. Smart WebView currently compiles against **API 37 (Android 17 / Cinnamon Bun)** to stay ahead of the curve. Do not lower `build.sdk.compile` below `36` or your submission may be rejected by the Play Store.
+:::
 
 ### Step 3: Build a Release App Bundle
 
@@ -56,8 +55,6 @@ Google Play requires you to upload your app as an **Android App Bundle (AAB)**.
     :::
 2.  **Build the AAB:** Use the `Build > Generate Signed Bundle / APK...` menu to build the signed AAB file. Android Studio will place it in `app/release/`.
 
----
-
 ### Step 4: Prepare Your Store Listing
 
 In the [Google Play Console](https://play.google.com/console):
@@ -65,8 +62,6 @@ In the [Google Play Console](https://play.google.com/console):
 *   **Create Your App:** Fill in the initial details like app name and language.
 *   **Set Up Store Listing:** Provide a compelling title, short description, and full description.
 *   **Upload Graphics:** You will need a high-resolution app icon (512x512) and at least two feature graphic screenshots.
-
----
 
 ### Step 5: Content and Policy Declarations
 
@@ -77,8 +72,6 @@ This is a critical section for WebView-based apps.
 *   **Content Rating:** Complete the content rating questionnaire. Answer honestly to avoid rejection.
 *   **Ads:** Declare whether your app contains ads. If you use the AdMob plugin, you must select "Yes".
 *   **Webviews and Spam Policy:** In your app's description, highlight the features that Smart WebView adds (e.g., push notifications, native sharing, QR scanning). This shows that your app provides more value than simply wrapping a website, which helps comply with Google's [Minimum Functionality Policy](https://support.google.com/googleplay/android-developer/answer/9898820).
-
----
 
 ### Step 6: Upload and Release
 

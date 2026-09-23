@@ -9,7 +9,8 @@ Follow these steps to get your Smart WebView project up and running.
 ## Prerequisites
 
 *   **Android Studio:** The official IDE for Android development. Download from the [Android Developers site](https://developer.android.com/studio).
-*   **Android SDK:** Minimum API Level 24 (Android 7.0 Nougat) or higher installed via the Android Studio SDK Manager.
+*   **Android SDK:** Minimum API Level 24 (Android 7.0 Nougat). Targets **API Level 37 (Android 17 / Cinnamon Bun)** for full compatibility with the latest platform APIs.
+*   **Java 17:** The project compiles with Java 17 source compatibility. Ensure JDK 17 is configured in Android Studio (`File > Project Structure > SDK Location > JDK Location`).
 
 ## Step 1: Download and Open
 

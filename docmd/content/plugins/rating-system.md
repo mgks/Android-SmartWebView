@@ -6,8 +6,6 @@ icon: 'star'
 
 The `RatingPlugin` prompts users to rate your application on the Google Play Store after certain usage conditions are met.
 
----
-
 ## How It Works
 
 This plugin is self-activating. Once enabled, it automatically tracks:
@@ -15,8 +13,6 @@ This plugin is self-activating. Once enabled, it automatically tracks:
 *   The number of days that have passed since the app was first installed.
 
 When the configured thresholds are met, the plugin displays a standard Android dialog asking the user to rate the app.
-
----
 
 ## Configuration
 
@@ -42,16 +38,12 @@ This plugin's behavior is controlled by properties in `app/src/main/assets/swv.p
     rating.remind.interval=2
     ```
 
----
-
 ## Dialog Options
 
 The user is presented with a non-intrusive dialog with three choices:
 *   **Rate Now:** Opens the app's page on the Google Play Store and permanently dismisses future prompts.
 *   **Later:** Dismisses the dialog and waits for the `rating.remind.interval` before potentially showing it again.
 *   **No, Thanks:** Permanently dismisses future prompts for the user.
-
----
 
 ## Customizing Dialog Text
 

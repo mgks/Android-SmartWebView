@@ -33,31 +33,30 @@ def getSwvProperties() {
 def swvProps = getSwvProperties()
 
 android {
-	namespace swvProps.getProperty('build.application.id', 'mgks.os.swv')
-	compileSdk swvProps.getProperty('build.sdk.compile', '36').toInteger()
+	namespace = swvProps.getProperty('build.application.id', 'mgks.os.swv')
+	compileSdk = swvProps.getProperty('build.sdk.compile', '36').toInteger()
 
 	defaultConfig {
-		applicationId swvProps.getProperty('build.application.id', 'mgks.os.swv')
-		minSdk swvProps.getProperty('build.sdk.min', '24').toInteger()
-		targetSdk swvProps.getProperty('build.sdk.compile', '36').toInteger()
-		versionCode swvProps.getProperty('build.version.code', '1').toInteger()
-		versionName swvProps.getProperty('build.version.name', '1.0')
-		multiDexEnabled true // enable if method count exceeds 64K
+		applicationId = swvProps.getProperty('build.application.id', 'mgks.os.swv')
+		minSdk = swvProps.getProperty('build.sdk.min', '24').toInteger()
+		targetSdk = swvProps.getProperty('build.sdk.compile', '36').toInteger()
+		versionCode = swvProps.getProperty('build.version.code', '1').toInteger()
+		versionName = swvProps.getProperty('build.version.name', '1.0')
 	}
 
 	buildTypes {
 		release {
-			minifyEnabled true
-			shrinkResources true
+			minifyEnabled = true
+			shrinkResources = true
 			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 		}
 		debug {
-			minifyEnabled false
+			minifyEnabled = false
 		}
 	}
 
 	buildFeatures {
-		buildConfig true
+		buildConfig = true
 	}
 
 	compileOptions {
@@ -76,20 +75,21 @@ dependencies {
 
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-	implementation 'androidx.multidex:multidex:2.0.1'
+	// Firebase (managed via Firebase Android BoM)
+	implementation platform('com.google.firebase:firebase-bom:34.19.0')
+	implementation 'com.google.firebase:firebase-auth'
+	implementation 'com.google.firebase:firebase-config'
+	implementation 'com.google.firebase:firebase-messaging'
+	implementation 'com.google.firebase:firebase-analytics'
 
-	// Firebase
-	implementation 'com.google.firebase:firebase-auth:24.2.0'
-	implementation 'com.google.firebase:firebase-config:23.1.0'
-	implementation 'com.google.firebase:firebase-messaging:25.1.2'
-	implementation 'com.google.firebase:firebase-analytics:23.2.0'
-
-	implementation 'com.google.android.gms:play-services-auth:21.6.0'
-	implementation 'com.google.android.gms:play-services-ads:25.4.0'
+	// Google Play Services
+	implementation 'com.google.android.gms:play-services-auth:22.0.0'
+	implementation 'com.google.android.gms:play-services-ads:25.5.0'
 	implementation 'com.google.android.gms:play-services-location:21.4.0'
 
+	// AndroidX & Material UI
 	implementation 'com.google.android.material:material:1.14.0'
-
+	implementation 'androidx.activity:activity:1.10.1'
 	implementation 'androidx.core:core-splashscreen:1.2.0'
 	implementation 'androidx.constraintlayout:constraintlayout:2.2.2'
 	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0'

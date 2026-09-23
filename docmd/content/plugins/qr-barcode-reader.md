@@ -10,8 +10,6 @@ This plugin integrates native QR code and barcode scanning functionality using t
 All Premium Plugins are now available for free and open source to developers. Consider becoming **[Project Sponsor](https://github.com/sponsors/mgks)**.
 :::
 
----
-
 ## Setup and Configuration
 
 1.  **Enable Plugin:** Add `QRScannerPlugin` to the `plugins.enabled` list in `app/src/main/assets/swv.properties`.
@@ -25,8 +23,6 @@ All Premium Plugins are now available for free and open source to developers. Co
     implementation 'com.google.zxing:core:3.5.2'
     ```
 3.  **Permissions:** The app automatically requests the `CAMERA` permission declared in `AndroidManifest.xml` when the scanner is invoked.
-
----
 
 ## Usage
 

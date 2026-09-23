@@ -10,8 +10,6 @@ This plugin allows you to add an extra layer of security by requiring biometric 
 All Premium Plugins are now available for free and open source to developers. Consider becoming **[Project Sponsor](https://github.com/sponsors/mgks)**.
 :::
 
----
-
 ## Secure, Non-Bypassable Gate
 
 The authentication flow is designed to be a true security gate.
@@ -19,8 +17,6 @@ The authentication flow is designed to be a true security gate.
 - **Total UI Lock:** When authentication is triggered, a full-screen overlay immediately blocks all app content. The native Toolbar and navigation drawer are also hidden and disabled.
 - **Guided Security Setup:** If the user has no screen lock, they are prompted to set one up and are guided to the Android Security Settings.
 - **Persistent Lock:** Resuming the app from the background will re-trigger authentication, preventing bypass.
-
----
 
 ## Setup and Configuration
 
@@ -35,8 +31,6 @@ The authentication flow is designed to be a true security gate.
     biometric.trigger.launch=true
     ```
     If `false` (the default), authentication will only be triggered manually from your JavaScript.
-
----
 
 ## Usage
 

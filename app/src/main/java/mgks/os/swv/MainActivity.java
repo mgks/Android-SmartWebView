@@ -72,6 +72,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         // Enable edge-to-edge display
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        EdgeToEdge.enable(this);
 
         super.onCreate(savedInstanceState);
 
@@ -423,8 +424,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         webSettings.setAllowFileAccessFromFileURLs(false);
         // EXCEPTION: Allow universal access from file:// URLs so the offline page can
         // access geolocation API and other features. This is safe because the offline
-        // page is a local bundled asset we control. (related to #387)
-        webSettings.setAllowUniversalAccessFromFileURLs(SWVContext.ASWP_OFFLINE);
+        // page is a local bundled asset we control. (fixes #387)
+        webSettings.setAllowUniversalAccessFromFileURLs(SWVContext.ASWP_OFFLINE || (SWVContext.ASWV_OFFLINE_URL != null && !SWVContext.ASWV_OFFLINE_URL.isEmpty()));
         webSettings.setUseWideViewPort(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
@@ -1041,7 +1042,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             view.loadUrl(SWVContext.ASWV_OFFLINE_URL);
                         } else {
                             // As a final fallback, load the basic error page
-                            view.loadUrl("file:///android_asset/error.html");
+                            view.loadUrl("file:///android_asset/web/error.html");
                         }
                     });
                 }

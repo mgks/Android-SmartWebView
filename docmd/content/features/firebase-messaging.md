@@ -6,8 +6,6 @@ icon: 'bell'
 
 Smart WebView integrates Firebase Cloud Messaging (FCM) to enable push notifications.
 
----
-
 ## Setup
 
 Refer to the [Getting Started](/Android-SmartWebView/documentation/getting-started#step-2-add-firebase-configuration-important) guide for the initial step of adding the `google-services.json` file to your project. This is mandatory for FCM.
@@ -16,8 +14,6 @@ Refer to the [Getting Started](/Android-SmartWebView/documentation/getting-start
 [Official FCM Android Setup Guide](https://firebase.google.com/docs/cloud-messaging/android/client)
 :::
 
----
-
 ## How it Works
 
 *   **Token Generation:** The Firebase SDK automatically generates a unique registration token. The `Firebase.java` service listens for new tokens (`onNewToken`) and stores the latest token in `SmartWebView.fcm_token`. The `Functions.fcm_token()` method attempts to retrieve this and set it as a cookie (`FCM_TOKEN=...`) for your web application to access.
@@ -25,8 +21,6 @@ Refer to the [Getting Started](/Android-SmartWebView/documentation/getting-start
     *   **Foreground:** `Firebase.java`'s `onMessageReceived` is triggered, and a notification is manually displayed.
     *   **Background/Closed:** The Firebase SDK automatically handles displaying notifications sent with a `notification` payload.
 *   **Handling Clicks:** Notifications can include a `data` payload with a `uri` key. When the user taps the notification, the app opens and loads the specified `uri`. If no `uri` is provided, it defaults to the main `ASWV_URL`.
-
----
 
 ## Sending Notifications
 
@@ -64,8 +58,6 @@ Use the Firebase Console or the FCM HTTP v1 API to send notifications.
 ::: callout tip
 The `FCM_TOKEN` cookie can be read by your website's JavaScript to send the token to your server.
 :::
-
----
 
 ## Customization
 

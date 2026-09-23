@@ -31,17 +31,16 @@
 		android:id="@+id/msw_ad_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
 		android:orientation="vertical"
-		android:layout_alignParentBottom="true"
-		android:gravity="center_horizontal"/>
+		android:gravity="center_horizontal" />
 
 	<ProgressBar
 		android:id="@+id/msw_progress"
-		style="@android:style/Widget.ProgressBar.Horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="2dip"
+		style="?android:attr/progressBarStyleHorizontal"
+		android:layout_width="match_parent"
+		android:layout_height="3dp"
 		android:layout_gravity="bottom"
-		android:layout_alignParentEnd="true"
 		android:progressDrawable="@drawable/progress_style"
 		android:visibility="visible" />
 

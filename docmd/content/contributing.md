@@ -6,8 +6,6 @@ icon: 'code-merge'
 
 Contributions to Smart WebView are welcome! Whether it's fixing bugs, improving documentation, or adding new features, your help is appreciated.
 
----
-
 ## How to Contribute
 
 1.  **Fork the Repository:**
@@ -54,12 +52,8 @@ Contributions to Smart WebView are welcome! Whether it's fixing bugs, improving 
     *   Provide a clear title and description for your PR.
     *   Reference any related issues (e.g., "Closes #123").
 
----
-
 ## Code of Conduct
 
 Please note that this project is released with a Contributor Code of Conduct. By participating, you agree to abide by its terms.
-
----
 
 Thank you for contributing!

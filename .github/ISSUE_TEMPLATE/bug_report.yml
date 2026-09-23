@@ -1,0 +1,104 @@
+name: 🐛 Bug Report
+description: Create a report to help improve Smart WebView
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report an issue!
+        Please make sure you have searched [existing issues](https://github.com/mgks/Android-SmartWebView/issues) before submitting.
+
+  - type: input
+    id: version
+    attributes:
+      label: Smart WebView Version
+      description: What version of Smart WebView are you using?
+      placeholder: "e.g., 8.0.1 or master"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: layout
+    attributes:
+      label: App Layout Mode
+      description: Which layout mode is configured in swv.properties (ui.layout)?
+      options:
+        - "0 = Fullscreen Layout"
+        - "1 = Drawer Layout"
+        - "Custom / Modified Layout"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: android_version
+    attributes:
+      label: Android Version / API Level
+      description: What Android version was the issue observed on?
+      options:
+        - "Android 16 (Baklava / API 36)"
+        - "Android 15 (Vanilla Ice Cream / API 35)"
+        - "Android 14 (Upside Down Cake / API 34)"
+        - "Android 13 (Tiramisu / API 33)"
+        - "Android 12 / 12L (API 31 / 32)"
+        - "Android 11 (API 30)"
+        - "Android 10 (API 29)"
+        - "Android 9.0 Pie (API 28) or older"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device Details
+      description: Device model and architecture.
+      placeholder: "e.g., Samsung Galaxy Tab S7 FE, Google Pixel 8, Emulator (arm64/x86_64)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the problem here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce the behavior?
+      placeholder: |
+        1. Open app with layout setting ...
+        2. Navigate to ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: A clear description of the expected result...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs, Code Snippets, or Screenshots
+      description: Please paste any Logcat errors or attach screenshots/screen recordings.
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have searched existing issues and verified this is not a duplicate.
+          required: true
+        - label: I have checked the [Smart WebView Documentation](https://mgks.github.io/Android-SmartWebView/documentation).
+          required: false

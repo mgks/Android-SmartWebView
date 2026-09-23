@@ -6,8 +6,6 @@ icon: 'share'
 
 Smart WebView can register as a target for Android's native sharing functionality, allowing users to share content like URLs and text directly *to* your application from other apps.
 
----
-
 ## How it Works
 
 1.  **Enabling via Manifest:** Sharing is enabled via `<intent-filter>` elements for the `ShareActivity` in `AndroidManifest.xml`. These filters specify that the app can handle `ACTION_SEND` intents for `text/*` and `image/*` MIME types.
@@ -16,8 +14,6 @@ Smart WebView can register as a target for Android's native sharing functionalit
 4.  **Data Handling:** `ShareActivity` extracts the shared text or link from the intent.
 5.  **Redirection:** It then constructs a URL based on the main app URL (`ASWV_URL`) and appends the shared content as query parameters. For example: `https://your-site.com/?s_uri=SHARED_CONTENT`.
 6.  **Loading in WebView:** Finally, it launches the `MainActivity` and instructs it to load this newly constructed URL, allowing your web application to process the shared content.
-
----
 
 ## Processing on Your Website
 
@@ -36,8 +32,6 @@ if (sharedContent) {
   document.getElementById('my-textarea').value = sharedContent;
 }
 ```
-
----
 
 ## Disabling Sharing
 

@@ -10,8 +10,6 @@ The `Playground.java` class is a dedicated component designed to facilitate plug
 All Premium Plugins are now available for free and open source to developers. Consider becoming **[Project Sponsor](https://github.com/sponsors/mgks)**.
 :::
 
----
-
 ## Purpose
 
 *   **Plugin Configuration:** The primary place to set runtime options for plugins (e.g., providing AdMob ad unit IDs, enabling biometric authentication on launch).
@@ -20,16 +18,12 @@ All Premium Plugins are now available for free and open source to developers. Co
 *   **Fail-Safe Diagnostics:** Contains a robust system (`runPluginDiagnostic`) to test plugins without crashing the app if a plugin is missing or fails.
 *   **Example Implementation:** Serves as a clear example of how to get a plugin instance from the `PluginManager` and interact with it.
 
----
-
 ## How It Works
 
 The `Playground` is initialized in `MainActivity`. The `PluginManager` calls its `onPageFinished` method after a page loads, which triggers two main actions if the playground is enabled in `swv.properties`:
 
 1.  **`configurePlugins()`:** This method applies configurations to any enabled plugins. For example, it sets the ad unit IDs for the `AdMobPlugin`.
 2.  **`runAllDiagnostics()` and `setupPluginDemoUI()`:** These methods inject a floating panel with buttons into the web page, allowing you to manually trigger and test each plugin's features.
-
----
 
 ## Configuring a Plugin
 

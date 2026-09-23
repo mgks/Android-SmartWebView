@@ -6,15 +6,11 @@ icon: 'bread-slice'
 
 The `ToastPlugin` is included as a basic example of how the plugin architecture works. It provides a simple way to display native "Toast" messages (short, non-blocking pop-ups).
 
----
-
 ## Features
 
 *   Display toasts from native Java code.
 *   Display toasts triggered from JavaScript in the WebView.
 *   Configurable default duration (short or long).
-
----
 
 ## Setup & Configuration
 
@@ -24,8 +20,6 @@ The `ToastPlugin` is included as a basic example of how the plugin architecture 
     ```
 
 2.  **Internal Logic:** The `ToastPlugin.java` class uses a static initializer block to automatically register itself. During initialization, it adds a JavaScript interface named `ToastInterface` to the WebView.
-
----
 
 ## Usage
 

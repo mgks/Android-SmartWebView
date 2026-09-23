@@ -121,12 +121,22 @@ function fetchLocation() {
             // In offline.html, updateLocationDisplay is global.
             // In docs/script.js, this logic is inside fetchLocation.
             // We'll make it robust for both.
-            const displayDiv = document.querySelector('.fetch-loc') || document.querySelector('.fetch-loc-area');
             if (error) {
-                displayDiv.innerHTML = "<div class='fetch-loc'><b>Error:</b> " + error + "</div>";
+                if (window.GeolocationCache) {
+                    window.GeolocationCache.getLastKnown(function(cLat, cLng, ageMs) {
+                        if (cLat !== null && cLng !== null && ageMs >= 0) {
+                            displayDiv.innerHTML = "<div class='fetch-loc'><b>Latitude:</b> " + cLat.toFixed(6) + "<br><b>Longitude:</b> " + cLng.toFixed(6) + " <small>(from cache)</small></div>";
+                            return;
+                        }
+                        displayDiv.innerHTML = "<div class='fetch-loc'><b>Error:</b> " + error + "</div>";
+                    });
+                } else {
+                    displayDiv.innerHTML = "<div class='fetch-loc'><b>Error:</b> " + error + "</div>";
+                }
                 return;
             }
             if (lat && lng) {
+                if (window.GeolocationCache) window.GeolocationCache.cache(lat, lng);
                 displayDiv.innerHTML = "<div class='fetch-loc'><b>Latitude:</b> " + lat.toFixed(6) + "<br><b>Longitude:</b> " + lng.toFixed(6) + "</div>";
             }
         });

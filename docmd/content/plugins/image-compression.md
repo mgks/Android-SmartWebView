@@ -10,8 +10,6 @@ This plugin provides functionality to compress images selected for upload direct
 All Premium Plugins are now available for free and open source to developers. Consider becoming **[Project Sponsor](https://github.com/sponsors/mgks)**.
 :::
 
----
-
 ## Setup and Configuration
 
 1.  **Enable Plugin:** Ensure `ImageCompressionPlugin` is listed in the `plugins.enabled` property in `app/src/main/assets/swv.properties`.
@@ -28,8 +26,6 @@ All Premium Plugins are now available for free and open source to developers. Co
         PluginManager.registerPlugin(new ImageCompressionPlugin(), config);
     }
     ```
-
----
 
 ## Usage
 

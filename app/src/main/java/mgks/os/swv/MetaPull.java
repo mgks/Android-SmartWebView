@@ -24,7 +24,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 
-import androidx.multidex.BuildConfig;
+import mgks.os.swv.BuildConfig;
 
 public class MetaPull {
 

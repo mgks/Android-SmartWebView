@@ -6,8 +6,6 @@ icon: 'map-pin'
 
 Smart WebView's `LocationPlugin` provides a modern, secure, and battery-efficient way to access the device's location from your web application.
 
----
-
 ## Enabling Location Services
 
 1.  **Enable in Configuration:** In `swv.properties`, ensure the `LOCATION` permission group is requested on launch.
@@ -21,13 +19,9 @@ Smart WebView's `LocationPlugin` provides a modern, secure, and battery-efficien
     plugins.enabled=LocationPlugin,ToastPlugin,...
     ```
 
----
-
 ## Permissions
 
 The app declares and requests `ACCESS_FINE_LOCATION`. The user must grant this permission at runtime for the feature to work.
-
----
 
 ## How it Works
 
@@ -35,7 +29,8 @@ The `LocationPlugin` provides a JavaScript interface that your web code can call
 
 1.  **JavaScript Call:** Your web app calls `window.SWVLocation.getCurrentPosition()`, passing a callback function.
 2.  **Native Request:** The plugin receives the request and asks the Android system for the current location.
-3.  **Callback Execution:** Once the location is retrieved (or if an error occurs), the plugin executes your JavaScript callback, passing the latitude, longitude, and any error message as arguments.
+3.  **Timeout & Cache Fallback:** The plugin waits up to **10 seconds** for a GPS fix. If no result is returned in time, it automatically falls back to the last known cached location (via `GeolocationCachePlugin`). This ensures your web app always receives *some* coordinates even in poor signal conditions.
+4.  **Callback Execution:** Once the location is retrieved (or if an error occurs), the plugin executes your JavaScript callback, passing the latitude, longitude, and any error message as arguments.
 
 **Accessing Coordinates in JavaScript:**
 
@@ -66,3 +61,13 @@ if (window.SWVLocation) {
 ::: callout warning
 The JavaScript object is `window.SWVLocation`, not `window.Location`. This is to avoid a critical conflict with the browser's built-in `window.location` object.
 :::
+
+## Required Plugins
+
+`LocationPlugin` depends on `GeolocationCachePlugin` to store and retrieve cached coordinates. Ensure **both** are listed in `plugins.enabled` in `swv.properties`:
+
+```bash
+plugins.enabled=LocationPlugin,GeolocationCachePlugin,...
+```
+
+If `GeolocationCachePlugin` is absent, the cache fallback will be silently skipped and only a live GPS fix will be attempted.

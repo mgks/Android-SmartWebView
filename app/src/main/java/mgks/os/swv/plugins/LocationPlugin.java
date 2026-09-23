@@ -67,6 +67,8 @@ public class LocationPlugin implements PluginInterface, LocationListener {
     private static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
 
     private String pendingJsCallback = null;
+    private final Handler locationTimeoutHandler = new Handler(Looper.getMainLooper());
+    private final Runnable locationTimeoutRunnable = this::onLocationTimeout;
 
     static {
         PluginManager.registerPlugin(new LocationPlugin(), new HashMap<>());
@@ -157,6 +159,9 @@ public class LocationPlugin implements PluginInterface, LocationListener {
                     }
                 }
                 Log.d(TAG, "Last known location not available, waiting for updates...");
+                // Set a timeout of 12 seconds so the request never hangs indefinitely
+                cancelLocationTimeout();
+                locationTimeoutHandler.postDelayed(locationTimeoutRunnable, 12000);
             }
 
         } catch (Exception e) {
@@ -165,7 +170,26 @@ public class LocationPlugin implements PluginInterface, LocationListener {
         }
     }
 
+    private void onLocationTimeout() {
+        if (pendingJsCallback != null) {
+            GeolocationCachePlugin cachePlugin = (GeolocationCachePlugin)
+                    SWVContext.getPluginManager().getPluginInstance("GeolocationCachePlugin");
+            Location cachedLoc = cachePlugin != null ? readCachedLocation(cachePlugin) : null;
+            if (cachedLoc != null) {
+                Log.d(TAG, "Location timeout reached, using cached location fallback.");
+                handleNewLocation(cachedLoc);
+            } else {
+                sendLocationError("Location request timed out. Please ensure GPS is active and you have a clear view of the sky.");
+            }
+        }
+    }
+
+    private void cancelLocationTimeout() {
+        locationTimeoutHandler.removeCallbacks(locationTimeoutRunnable);
+    }
+
     private void handleNewLocation(Location location) {
+        cancelLocationTimeout();
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
@@ -195,12 +219,14 @@ public class LocationPlugin implements PluginInterface, LocationListener {
     }
 
     private void sendLocationError(String message) {
+        cancelLocationTimeout();
         sendLocationToJs(pendingJsCallback, null, message);
         pendingJsCallback = null;
         stopListening();
     }
 
     private void stopListening() {
+        cancelLocationTimeout();
         if (locationManager != null) {
             locationManager.removeUpdates(this);
         }
@@ -320,8 +346,8 @@ public class LocationPlugin implements PluginInterface, LocationListener {
     @Override public void onActivityResult(int r, int c, Intent d) {}
     @Override public boolean shouldOverrideUrlLoading(WebView v, String u) { return false; }
     @Override public void onResume() {}
-    @Override public void onPause() {}
-    @Override public void onPageStarted(String url) {}
+    @Override public void onPause() { stopListening(); }
+    @Override public void onPageStarted(String url) { cancelLocationTimeout(); }
     @Override public void onDestroy() { stopListening(); }
     @Override public void evaluateJavascript(String script) {
         if (webView != null) webView.evaluateJavascript(script, null);

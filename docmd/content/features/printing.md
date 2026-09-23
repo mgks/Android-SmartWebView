@@ -6,8 +6,6 @@ icon: 'print'
 
 Smart WebView supports printing the content currently displayed in the WebView using the native Android print framework.
 
----
-
 ## How to Trigger Printing
 
 Printing is initiated from your web content by using a hyperlink with the special URL scheme `print:`.
@@ -21,8 +19,6 @@ Printing is initiated from your web content by using a hyperlink with the specia
 <button onclick="window.location.href='print:'">Print Report</button>
 ```
 
----
-
 ## How it Works
 
 1.  A user clicks a `print:` link in the WebView.
@@ -34,8 +30,6 @@ Printing is initiated from your web content by using a hyperlink with the specia
 ::: callout tip
 The quality of the printout depends on how well your webpage's CSS is optimized for print media (e.g., using `@media print` styles).
 :::
-
----
 
 ## Requirements
 

@@ -6,16 +6,12 @@ icon: 'sliders'
 
 All core behaviors and feature toggles in Smart WebView are controlled from a single configuration file: `app/src/main/assets/swv.properties`. This modern approach separates configuration from code, allowing you to customize your app without touching any Java files.
 
----
-
 ## How to Configure
 
 1.  Open your project in Android Studio.
 2.  Navigate to the `app/src/main/assets/` directory.
 3.  Open the `swv.properties` file and modify the values as needed.
 4.  Rebuild your project (`Build > Rebuild Project`) for the changes to take effect.
-
----
 
 ## Key Configuration Properties
 

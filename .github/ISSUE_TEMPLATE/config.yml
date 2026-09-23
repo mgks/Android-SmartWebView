@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Ask a Question & Discussions
+    url: https://github.com/mgks/Android-SmartWebView/discussions
+    about: Ask questions, get help from the community, or share what you've built.
+  - name: 📖 Smart WebView Documentation
+    url: https://mgks.github.io/Android-SmartWebView/documentation
+    about: Read full documentation, configuration options, and plugin guides.
