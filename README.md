@@ -14,7 +14,7 @@
 <div align="center">
 
   <!-- PROJECT TITLE -->
-  <img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp" width="150" alt="Smart WebView Logo">
+  <a href="#"><img src="https://raw.githubusercontent.com/mgks/Android-SmartWebView/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp" width="150" alt="Smart WebView Logo"></a>
 
   <h1>Android Smart WebView</h1>
   
@@ -25,11 +25,11 @@
   
   <!-- BADGES -->
   <p>
-    <img alt="Language" src="https://img.shields.io/badge/language-Java-red.svg?style=flat-square">
-    <img src="https://img.shields.io/github/v/release/mgks/android-smartwebview?style=flat-square&color=38bd24" alt="release version">
-    <img src="https://img.shields.io/github/actions/workflow/status/mgks/Android-SmartWebView/android-ci.yml?branch=master&style=flat-square&label=build" alt="build status">
-    <img src="https://img.shields.io/badge/API-24%2B-orange?style=flat-square" alt="min API">
-    <img src="https://img.shields.io/github/license/mgks/android-smartwebview.svg?style=flat-square&color=blue" alt="license">
+    <a href="#"><img alt="Language" src="https://img.shields.io/badge/language-Java-red.svg?style=flat-square"></a>
+    <a href="#"><img src="https://img.shields.io/github/v/release/mgks/android-smartwebview?style=flat-square&color=38bd24" alt="release version"></a>
+    <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/mgks/Android-SmartWebView/android-ci.yml?branch=master&style=flat-square&label=build" alt="build status"></a>
+    <a href="#"><img src="https://img.shields.io/badge/API-24%2B-orange?style=flat-square" alt="min API"></a>
+    <a href="#"><img src="https://img.shields.io/github/license/mgks/android-smartwebview.svg?style=flat-square&color=blue" alt="license"></a>
   </p>
 
   <!-- MENU -->
@@ -42,7 +42,7 @@
 
   <!-- PREVIEW -->
   <p>
-    <img width="850" alt="cover-swv" src="https://github.com/user-attachments/assets/615e82f1-18fe-42a7-bf98-0a4c53660995" />
+    <a href="#"><img width="850" alt="cover-swv" src="https://github.com/user-attachments/assets/615e82f1-18fe-42a7-bf98-0a4c53660995" /></a>
   </p>
 
 </div>
@@ -133,8 +133,8 @@ The core components of Smart WebView are also available as independent libraries
 
 ## Contributing
 
-Found a bug or have an idea? [Open an issue](https://github.com/mgks/Android-SmartWebView/issues) or [submit a pull request](https://github.com/mgks/Android-SmartWebView/pulls). Questions or want to show what you've built? [Join the discussion](https://github.com/mgks/Android-SmartWebView/discussions).
+Found a bug or have an idea? [Open an issue](https://github.com/mgks/Android-SmartWebView/issues) or [submit a pull request](https://github.com/mgks/Android-SmartWebView/pulls).
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License.
