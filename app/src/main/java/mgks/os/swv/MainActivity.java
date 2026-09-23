@@ -158,12 +158,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-
-
-        // Enable edge-to-edge display
-        EdgeToEdge.enable(this);
-
         super.onCreate(savedInstanceState);
+
+        // Enable edge-to-edge display (must be called after super.onCreate)
+        EdgeToEdge.enable(this);
 
         // Handle splash screen
         final SplashScreen splashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
@@ -390,9 +388,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Initialize WebView and its settings
      */
     private void initializeWebView() {
-        // Initialize Smart WebView with current context. This will set up the PluginManager.
-        SWVContext.init(this, SWVContext.asw_view, fns);
-
         // Instantiate Playground and register it with the manager
         Playground playground = new Playground(this, SWVContext.asw_view, fns);
         SWVContext.getPluginManager().setPlayground(playground);
