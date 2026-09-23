@@ -36,7 +36,6 @@
   <p>
     <h4>
       <a href="http://mgks.github.io/Android-SmartWebView/documentation/">Documentation</a> &bull;
-      <a href="https://github.com/mgks/Android-SmartWebView/discussions">Discussions</a> &bull;
       <a href="https://github.com/mgks/Android-SmartWebView/issues">Issues</a>
     </h4>
   </p>
