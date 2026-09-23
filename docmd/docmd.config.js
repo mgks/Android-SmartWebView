@@ -32,7 +32,7 @@ module.exports = {
 
   // Theme Configuration
   theme: {
-    name: 'sky',            // Themes: 'default', 'sky'
+    name: 'default',            // Themes: 'default', 'sky'
     defaultMode: 'light',   // Initial color mode: 'light' or 'dark'
     enableModeToggle: true, // Show UI button to toggle light/dark modes
     positionMode: 'top', // 'top' or 'bottom' for the theme toggle
